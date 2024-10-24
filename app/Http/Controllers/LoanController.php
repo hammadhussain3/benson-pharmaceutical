@@ -46,6 +46,12 @@ class LoanController extends Controller
         return view('admin.loans.edit', compact('loan', 'employees', 'companies'));
     }
 
+    public function getLoansByEmployee($employeeId)
+    {
+        $loan = Loan::where('employee_id',$employeeId)->first();
+        return response()->json(['loan' => $loan]);
+    }
+
     public function update(LoanRequest $request, $id)
     {
         $loan = Loan::findOrFail($id);

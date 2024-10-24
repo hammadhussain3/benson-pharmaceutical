@@ -8,6 +8,7 @@ use App\Models\Employee;
 use App\Models\Company;
 use App\Services\SalarySlipService;
 use Illuminate\Http\Request;
+use App\Models\Loan;
 
 class SalarySlipController extends Controller
 {

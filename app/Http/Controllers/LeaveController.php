@@ -55,4 +55,20 @@ class LeaveController extends Controller
         $leave->delete();
         return redirect()->route('leaves.index')->with('success', 'Leave deleted successfully.');
     }
+
+    public function getApprovedLeavesByEmployee($employeeId)
+    {
+        $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',1)->first();
+        return response()->json(['leaves' => $leaves]);
+    }
+    public function getUnauthorizedLeavesByEmployee($employeeId)
+    {
+        $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',2)->first();
+        return response()->json(['leaves' => $leaves]);
+    }
+    public function getApprovedWithPayLeavesByEmployee($employeeId)
+    {
+        $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',3)->first();
+        return response()->json(['leaves' => $leaves]);
+    }
 }

@@ -57,6 +57,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('permissions', PermissionController::class);
 
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
+    Route::get('/getloan/{employeeId}', [LoanController::class, 'getLoansByEmployee']);
+    Route::get('/getapprovedleaves/{employeeId}', [LeaveController::class, 'getApprovedLeavesByEmployee']);
+    Route::get('/getunauthleaves/{employeeId}', [LeaveController::class, 'getUnauthorizedLeavesByEmployee']);
+    Route::get('/getapprovedpayleaves/{employeeId}', [LeaveController::class, 'getApprovedWithPayLeavesByEmployee']);
 
 
 
