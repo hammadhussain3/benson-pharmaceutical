@@ -29,13 +29,14 @@ class EmployeeController extends Controller
 
     public function create()
     {
+        $uniqueId = 'ST-' . date('dmy') . mt_rand(1000, 9999);
         $designations = Designation::all();
         $departments = Department::all();
         $banks = Bank::all();
         $branches = Branch::all();
         $companies = Company::all();
 
-        return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies'));
+        return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'uniqueId'));
     }
 
     public function edit(Employee $employee)

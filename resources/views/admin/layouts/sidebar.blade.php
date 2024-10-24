@@ -230,6 +230,24 @@
                     </ul>
                 </li>
 
+                <li class="submenu">
+                    <a class=" {{ request()->is('roles*') ? 'active' : '' }}" href="javascript:void(0);">
+                        <i class="fa fa-lock"></i>
+                        <span>Roles</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('roles') ? 'active' : '' }}"
+                                href="{{ route('roles.index') }}">Roles List</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('roles/create') ? 'active' : '' }}"
+                                href="{{ route('roles.create') }}">Add Role</a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
         </div>
     </div>

@@ -17,6 +17,8 @@ use App\Http\Controllers\{
     LoanController,
     PartyController,
     PaymentTypeController,
+    RoleController,
+    PermissionController,
     SalarySlipController,
     SalaryTaxSlabController,
 };
@@ -51,6 +53,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('salary_slips', SalarySlipController::class);
     Route::resource('loans', LoanController::class);
     Route::resource('parties', PartyController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('permissions', PermissionController::class);
 
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
 

@@ -22,7 +22,7 @@
                         <div class="form-row row">
                             <div class="mb-3 col-md-6">
                                 <label for="code">Employee Code</label>
-                                <input type="text" class="form-control" name="code" id="code"
+                                <input type="text" class="form-control" name="code" id="code" value="{{ $uniqueId }}"
                                     placeholder="Employee Code" required>
                                 <div class="invalid-feedback">Please provide a valid employee code.</div>
                             </div>
