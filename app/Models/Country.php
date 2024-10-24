@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Country extends Model
+{
+    use HasFactory;
+    protected $fillable = ['name', 'created_by', 'updated_by'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->id();
+        });
+    }
+    // Define the relationship to City
+    public function cities()
+    {
+        return $this->hasMany(City::class);
+    }
+}

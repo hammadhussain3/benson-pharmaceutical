@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Party extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'code',
+        'contact_person_name',
+        'contact_person_phone',
+        'contact_person_email',
+        'phone',
+        'email',
+        'country_id',
+        'city_id',
+        'address',
+        'payment_type_id',
+        'is_supplier',
+        'is_distributor',
+        'company_id',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->id();
+        });
+    }
+    // Relationships can be defined here
+    public function paymentType()
+    {
+        return $this->belongsTo(PaymentType::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+}
