@@ -231,6 +231,24 @@
                 </li>
 
                 <li class="submenu">
+                    <a class=" {{ request()->is('users*') ? 'active' : '' }}" href="javascript:void(0);">
+                        <i class="fa fa-user"></i>
+                        <span>Users</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('users') ? 'active' : '' }}"
+                                href="{{ route('users.index') }}">User List</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('users/register') ? 'active' : '' }}"
+                                href="{{ route('users.register') }}">Add User</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
                     <a class=" {{ request()->is('roles*') ? 'active' : '' }}" href="javascript:void(0);">
                         <i class="fa fa-lock"></i>
                         <span>Roles</span>
@@ -239,7 +257,7 @@
                     <ul>
                         <li>
                             <a class="{{ request()->is('roles') ? 'active' : '' }}"
-                                href="{{ route('roles.index') }}">Roles List</a>
+                                href="{{ route('roles.index') }}">Role List</a>
                         </li>
                         <li>
                             <a class="{{ request()->is('roles/create') ? 'active' : '' }}"

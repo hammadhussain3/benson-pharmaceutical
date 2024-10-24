@@ -6,11 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RoleRequest extends FormRequest
 {
+    // In your RoleRequest file
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|unique:roles,name,' . $this->route('role') . ',id,guard_name,' . $this->input('guard_name'),
-            'guard_name' => 'required|string|max:255',
+            'name' => 'required|string|unique:roles,name,' . $this->role->id, // Ignore the current role's ID
+            'guard_name' => 'required|string',
         ];
     }
 

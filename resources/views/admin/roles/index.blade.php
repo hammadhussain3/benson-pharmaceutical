@@ -1,6 +1,11 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    <style>
+        .dt-buttons {
+            display: none;
+        }
+    </style>
     <div class="page-header">
         <div class="page-title">
             <h4>Roles List</h4>
@@ -28,7 +33,6 @@
                 <table class="table datanew dataTable no-footer table-striped">
                     <thead>
                         <tr>
-
                             <th>#</th>
                             <th>Name</th>
                             <th>Permissions</th>
@@ -40,7 +44,13 @@
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $role->name }}</td>
-                                <td></td>
+                                <td>
+                                    @foreach ($role->permissions as $permission)
+                                        <span class="badges bg-lightgreen">
+                                            {{ $permission->name }}
+                                        </span>
+                                    @endforeach
+                                </td>
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('roles.edit', $role->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">

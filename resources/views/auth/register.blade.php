@@ -1,117 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('admin.layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <meta name="description" content="POS - Bootstrap Admin Template">
-    <meta name="keywords"
-        content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
-    <meta name="author" content="Dreamguys - Bootstrap Admin Template">
-    <meta name="robots" content="noindex, nofollow">
-    <title>Register - Streamline</title>
+@section('content')
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3 class="page-title">Add New User</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('users.index') }}">user</a></li>
+                    <li class="breadcrumb-item active">Add User</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.jpg') }}">
-
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-</head>
-
-<body class="account-page">
-
-    <div class="main-wrapper">
-        <div class="account-content">
-            <div class="login-wrapper">
-                <div class="login-content">
-                    <div class="login-userset">
-                        <div class="login-logo">
-                            <img src="{{ asset('assets/img/logo.png') }}" alt="img">
-                        </div>
-                        <div class="login-userheading">
-                            <h3>Create an Account</h3>
-                            <h4>Continue where you left off</h4>
-                        </div>
-                        <form method="POST" action="{{ route('register') }}">
-                            @csrf
-                            <!-- Full Name -->
-                            <div class="form-login">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" action="{{ route('users.store') }}">
+                        @csrf
+                        <div class="form-row row">
+                            <div class="col-md-4 mb-3">
                                 <label for="name">Full Name</label>
-                                <div class="form-addons">
-                                    <input type="text" id="name" name="name"
+                                <div class="input-group">
+                                    <span class="input-group-text" id="name-addon"><img src="{{ asset('assets/img/icons/users1.svg') }}" alt="img"></span>
+                                    <input type="text" id="name" name="name" class="form-control"
                                         placeholder="Enter your full name" value="{{ old('name') }}" required
                                         autofocus>
-                                    <img src="{{ asset('assets/img/icons/users1.svg') }}" alt="img">
                                 </div>
                                 @error('name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            <!-- Email Address -->
-                            <div class="form-login">
+                            <div class="col-md-4 mb-3">
                                 <label for="email">Email</label>
-                                <div class="form-addons">
-                                    <input type="email" id="email" name="email"
+                                <div class="input-group">
+                                    <span class="input-group-text" id="email-addon"><img src="{{ asset('assets/img/icons/mail.svg') }}" alt="img"></span>
+                                    <input type="email" id="email" name="email" class="form-control"
                                         placeholder="Enter your email address" value="{{ old('email') }}" required>
-                                    <img src="{{ asset('assets/img/icons/mail.svg') }}" alt="img">
                                 </div>
                                 @error('email')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            <!-- Password -->
-                            <div class="form-login">
+                            <div class="col-md-4 mb-3">
+                                <label for="roles">Roles</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="roles" required name="role">
+                                        <option value="" selected disabled>Select Role</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('roles')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label for="password">Password</label>
-                                <div class="pass-group">
-                                    <input type="password" id="password" name="password"
+                                <div class="input-group">
+                                    <input type="password" id="password" name="password" class="form-control pass-input"
                                         placeholder="Enter your password" required>
-                                    <span class="fas toggle-password fa-eye-slash"></span>
+                                    <span class="input-group-text" id="password_addon"><span class="fas toggle-password fa-eye-slash"></span></span>
                                 </div>
                                 @error('password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            <!-- Confirm Password -->
-                            <div class="form-login">
+                            <div class="col-md-6 mb-3">
                                 <label for="password_confirmation">Confirm Password</label>
-                                <div class="pass-group">
-                                    <input type="password" id="password_confirmation" name="password_confirmation"
+                                <div class="input-group">
+                                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control pass-input"
                                         placeholder="Confirm your password" required>
                                 </div>
                                 @error('password_confirmation')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            <!-- Submit Button -->
-                            <div class="form-login">
-                                <button type="submit" class="btn btn-login">Sign Up</button>
-                            </div>
-                        </form>
-
-                        <div class="text-center signinform">
-                            <h4>Already a user? <a href="{{ route('login') }}" class="hover-a">Sign In</a></h4>
                         </div>
-
-                    </div>
-                </div>
-                <div class="login-img">
-                    <img src="{{ asset('assets/img/login.jpg') }}" alt="img">
+                        <!-- Submit Button -->
+                        <div class="form-login">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
-
-    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ asset('assets/js/feather.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/script.js') }}"></script>
-</body>
-
-</html>
+    </div>    
+@endsection

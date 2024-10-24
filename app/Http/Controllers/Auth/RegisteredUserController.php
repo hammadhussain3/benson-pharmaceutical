@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,9 +18,17 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
+
+    public function index(): View
+    {
+        $users = User::all();
+        return view('auth.index', compact('users'));
+    }
+    
     public function create(): View
     {
-        return view('auth.register');
+        $roles = Role::all();
+        return view('auth.register', compact('roles'));
     }
 
     /**
@@ -33,6 +42,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'exists:roles,id'],
         ]);
 
         $user = User::create([
@@ -41,10 +51,20 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        // Attach the single role to the user
+        $user->roles()->attach($request->role);
 
-        Auth::login($user);
+        // event(new Registered($user));
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('users.index')->with('success', 'User Created successfully.');
+    }
+
+    public function destroy($id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
+        $user->roles()->detach();
+        $user->delete();
+
+        return redirect()->back()->with('success', 'User deleted successfully along with their roles.');
     }
 }
