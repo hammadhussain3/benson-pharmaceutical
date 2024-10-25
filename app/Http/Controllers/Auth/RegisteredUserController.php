@@ -21,7 +21,7 @@ class RegisteredUserController extends Controller
 
     public function index(): View
     {
-        $users = User::all();
+        $users = User::with('roles')->where('id', '!=', '1')->get();
         return view('auth.index', compact('users'));
     }
     
@@ -59,7 +59,7 @@ class RegisteredUserController extends Controller
         return redirect()->route('users.index')->with('success', 'User Created successfully.');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->roles()->detach();

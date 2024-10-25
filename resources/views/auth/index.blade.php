@@ -31,6 +31,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -40,6 +41,13 @@
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>
+                                    @foreach ($user->roles as $role)
+                                        <span class="badges bg-lightgreen mb-1">
+                                            {{ $role->name }}
+                                        </span>
+                                    @endforeach
+                                </td>
                                 <td class="text-center">
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="event.preventDefault(); 

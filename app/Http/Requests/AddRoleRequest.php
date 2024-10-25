@@ -4,13 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleRequest extends FormRequest
+class AddRoleRequest extends FormRequest
 {
-    // In your RoleRequest file
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:roles,name,' . $this->role->id, // Ignore the current role's ID
+            'name' => 'required|string|unique:roles,name',
             'guard_name' => 'required|string',
         ];
     }

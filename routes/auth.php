@@ -38,12 +38,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('users/register', [RegisteredUserController::class, 'create'])
         ->name('users.register');
+    
+    Route::post('register', [RegisteredUserController::class, 'store'])
+    ->name('users.store');
 
     Route::delete('users/destroy/{id}', [RegisteredUserController::class, 'destroy'])
-        ->name('users.destroy');
-
-
-    Route::post('users/destroy', [RegisteredUserController::class, 'destroy'])
         ->name('users.destroy');
 
     Route::get('verify-email', EmailVerificationPromptController::class)

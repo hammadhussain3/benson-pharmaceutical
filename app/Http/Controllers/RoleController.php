@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\RoleRequest;
+use App\Http\Requests\AddRoleRequest;
+use App\Http\Requests\EditRoleRequest;
 use App\Services\RoleService;
 use App\Models\Role;
 use App\Models\Permission;
@@ -36,7 +37,7 @@ class RoleController extends Controller
         return view('admin.roles.edit', compact('role', 'permissions', 'role_has_permissions'));
     }
 
-    public function store(RoleRequest $request)
+    public function store(AddRoleRequest $request)
     {
         $data = $request->validated();
         $permissions = $request->input('permissions', []); // Get permission IDs from the request
@@ -45,7 +46,7 @@ class RoleController extends Controller
         return redirect()->route('roles.index')->with('success', 'Role created successfully.');
     }
 
-    public function update(RoleRequest $request, Role $role)
+    public function update(EditRoleRequest $request, Role $role)
     {
         $data = $request->validated();
         $permissions = $request->input('permissions', []); // Get permission IDs from the request

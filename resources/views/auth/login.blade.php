@@ -95,12 +95,6 @@
                                 <button type="submit" class="btn btn-login">{{ __('Sign In') }}</button>
                             </div>
                         </form>
-
-                        <!-- Sign Up Link -->
-                        <div class="text-center signinform">
-                            <h4>Don’t have an account? <a href="{{ route('register') }}" class="hover-a">Sign Up</a>
-                            </h4>
-                        </div>
                     </div>
                 </div>
 
