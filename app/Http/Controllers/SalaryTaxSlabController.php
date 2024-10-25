@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SalaryTaxSlabRequest;
 use App\Models\Company; // Include Company model
 use App\Models\SalaryTaxSlab;
+use App\Models\Employee;
 use App\Services\SalaryTaxSlabService;
 
 class SalaryTaxSlabController extends Controller
@@ -39,6 +40,28 @@ class SalaryTaxSlabController extends Controller
         $taxSlab = SalaryTaxSlab::findOrFail($id);
         $companies = Company::all();
         return view('admin.salary_tax_slabs.edit', compact('taxSlab', 'companies'));
+    }
+
+    public function getIncomeTaxByEmployee($employeeId)
+    {
+        // Fetch the basic pay for the given employee ID
+        $employee = Employee::where('id', $employeeId)->first();
+
+        // Fetch the tax value based on the employee's basic pay and company ID
+        $taxRate = SalaryTaxSlab::where('company_id', $employee->company_id)
+        ->where('slab_start', '<=', $employee->basic_pay)
+        ->where(function ($query) use ($employee) {
+            $query->where('slab_end', '>=', $employee->basic_pay)
+                ->orWhereNull('slab_end'); // For open-ended slabs
+        })
+        ->value('tax_value') ?? 0;
+
+        $incomeTax = $employee->basic_pay * ($taxRate / 100);
+
+        // Return 0 if no matching slab is found
+        $incomeTax = $incomeTax ?? 0;
+
+        return response()->json(['incomeTax' => $incomeTax]);
     }
 
 

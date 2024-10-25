@@ -50,7 +50,7 @@ function SelectLoan(employeeId)
         fetch(`/getloan/${employeeId}`)
             .then(response => response.json())
             .then(data => {
-                citySelect.value = data.loan['amount'];
+                citySelect.value = data.loan;
             })
             .catch(error => console.error('Error fetching cities:', error));
     }
@@ -109,11 +109,33 @@ function SelecLeaves(employeeId)
     }
 }
 
-// $(document).ready(function () {
-//     $('#example').DataTable({
-//         dom: 'Bfrtip',
-//         buttons: [
-//             'excel', 'pdf', 'print'
-//         ]
-//     });
-// });
+function SelectIncomeTax(employeeId)
+{
+    var employeeId = employeeId;
+    var incomeTax = document.getElementById('income_tax');
+    
+    if (employeeId) {
+        fetch(`/getincometax/${employeeId}`)
+            .then(response => response.json())
+            .then(data => {
+                incomeTax.value = data.incomeTax;
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function SelectCompany(employeeId)
+{
+    var employeeId = employeeId;
+    var company = document.getElementById('company');
+    
+    if (employeeId) {
+        fetch(`/getcompany/${employeeId}`)
+            .then(response => response.json())
+            .then(data => {
+                company.value = data.company;
+                $(company).trigger('change');
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}

@@ -48,8 +48,16 @@ class LoanController extends Controller
 
     public function getLoansByEmployee($employeeId)
     {
-        $loan = Loan::where('employee_id',$employeeId)->first();
-        return response()->json(['loan' => $loan]);
+        // Fetch the loan record for the given employee ID
+        $loan = Loan::where('employee_id', $employeeId)->first();
+
+        $monthlyPayment = 0;
+
+        if ($loan) {
+            $monthlyPayment = $loan->remaining == 0 ? 0 : $loan->amount / $loan->payback_months;
+        }
+
+        return response()->json(['loan' => $monthlyPayment]);
     }
 
     public function update(LoanRequest $request, $id)

@@ -55,6 +55,14 @@ class EmployeeController extends Controller
         return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
     }
 
+    public function getCompanyByEmployee($employeeId)
+    {
+        // Fetch the loan record for the given employee ID
+        $company = Employee::where('id', $employeeId)->value('id');
+
+        return response()->json(['company' => $company]);
+    }
+
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
         $this->employeeService->updateEmployee($employee, $request->validated());
