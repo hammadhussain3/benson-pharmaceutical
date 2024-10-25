@@ -54,7 +54,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('loans', LoanController::class);
     Route::resource('parties', PartyController::class);
     Route::resource('roles', RoleController::class);
-    Route::resource('permissions', PermissionController::class);
 
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
