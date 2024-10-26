@@ -20,6 +20,8 @@ class SalarySlip extends Model
         'income_tax',
         'loan_advance',
         'payment_mode',
+        'month',
+        'year',
         'company_id',
     ];
 

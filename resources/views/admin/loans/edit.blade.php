@@ -25,7 +25,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="employee_id">Employee</label>
                                 <select name="employee_id" id="employee_id" class="js-example-basic-single select2"
-                                    required>
+                                    required onchange="SelectCompany(this.value);">
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
@@ -54,9 +54,10 @@
                                     value="{{ $loan->remaining }}" required>
                                 <div class="invalid-feedback">Please provide the remaining amount.</div>
                             </div>
+                            @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <select name="company_id" id="company_id" class="js-example-basic-single select2" required>
+                                <select name="company_id" id="company_id" class="js-example-basic-single select2" required disabled>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -67,6 +68,9 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
+                            @else
+                                <input type="hidden" name="company_id" value="{{ $loan->company_id }}">
+                            @endrole
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>
                         <a class="btn btn-secondary" href="{{ route('loans.index') }}">Cancel</a>

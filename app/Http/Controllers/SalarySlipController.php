@@ -6,17 +6,23 @@ use App\Http\Requests\SalarySlipRequest;
 use App\Models\SalarySlip;
 use App\Models\Employee;
 use App\Models\Company;
+use App\Models\Branch;
+use App\Models\Department;
+use App\Models\Designation;
 use App\Services\SalarySlipService;
+use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 use App\Models\Loan;
 
 class SalarySlipController extends Controller
 {
     protected $salarySlipService;
+    protected $employeeService;
 
-    public function __construct(SalarySlipService $salarySlipService)
+    public function __construct(SalarySlipService $salarySlipService, EmployeeService $employeeService)
     {
         $this->salarySlipService = $salarySlipService;
+        $this->employeeService = $employeeService;
     }
 
     public function index()
@@ -28,10 +34,13 @@ class SalarySlipController extends Controller
     public function create()
     {
 
-        $employees = Employee::all();
+        $employees = $this->employeeService->getAllEmployees();
         $companies = Company::all();
+        $branches = Branch::all();
+        $departments = Department::all();
+        $designations = Designation::all();
 
-        return view('admin.salary_slips.create', compact('employees', 'companies'));
+        return view('admin.salary_slips.create', compact('employees', 'companies', 'branches', 'departments', 'designations'));
     }
 
     public function store(SalarySlipRequest $request)
@@ -44,11 +53,14 @@ class SalarySlipController extends Controller
     {
         $salarySlip = SalarySlip::findOrFail($id);
 
-
-        $employees = Employee::all();
+        $currentEmployee = Employee::findOrFail($salarySlip->employee_id);
+        $employees = $this->employeeService->getAllEmployees();
         $companies = Company::all();
+        $branches = Branch::all();
+        $departments = Department::all();
+        $designations = Designation::all();
 
-        return view('admin.salary_slips.edit', compact('salarySlip', 'employees', 'companies'));
+        return view('admin.salary_slips.edit', compact('salarySlip', 'currentEmployee', 'employees', 'companies', 'branches', 'departments', 'designations'));
     }
 
     public function update(SalarySlipRequest $request, $id)

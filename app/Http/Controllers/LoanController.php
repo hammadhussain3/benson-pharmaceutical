@@ -3,31 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoanRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Models\Loan;
 use App\Services\LoanService;
+use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
     protected $loanService;
+    protected $employeeService;
 
-    public function __construct(LoanService $loanService)
+    public function __construct(LoanService $loanService, EmployeeService $employeeService)
     {
         $this->loanService = $loanService;
+        $this->employeeService = $employeeService;
     }
 
     public function index()
     {
-        $loans = Loan::with(['employee', 'company'])->get();
+        $user = Auth::user();
+        if ($user->hasRole('Superadmin')) {
+            $loans = Loan::with(['employee', 'company'])->get();
+        } else {
+            $companyId = $user->employee->company_id;
+            $loans = Loan::with(['employee', 'company'])
+                ->whereHas('employee', function($query) use ($companyId) {
+                    $query->where('company_id', $companyId);
+                })
+                ->get();
+        }
+
         return view('admin.loans.index', compact('loans'));
     }
 
     public function create()
     {
 
-        $employees = Employee::all();
+        $employees = $this->employeeService->getAllEmployees();
         $companies = Company::all();
         return view('admin.loans.create', compact('employees', 'companies'));
     }
@@ -41,7 +56,7 @@ class LoanController extends Controller
     public function edit($id)
     {
         $loan = Loan::findOrFail($id);
-        $employees = Employee::all();
+        $employees = $this->employeeService->getAllEmployees();
         $companies = Company::all();
         return view('admin.loans.edit', compact('loan', 'employees', 'companies'));
     }

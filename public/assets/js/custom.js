@@ -127,7 +127,7 @@ function SelectIncomeTax(employeeId)
 function SelectCompany(employeeId)
 {
     var employeeId = employeeId;
-    var company = document.getElementById('company');
+    var company = document.getElementById('company_id');
     
     if (employeeId) {
         fetch(`/getcompany/${employeeId}`)
@@ -135,6 +135,40 @@ function SelectCompany(employeeId)
             .then(data => {
                 company.value = data.company;
                 $(company).trigger('change');
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function SelectEmployeeDetails(employeeId)
+{
+    var employeeId = employeeId;
+    var branch = document.getElementById('branch_id');
+    var department = document.getElementById('department_id');
+    var designation = document.getElementById('designation_id');
+    var basic_pay = document.getElementById('basic_pay');
+    var allowances = document.getElementById('allowances');
+    var monthInput = document.getElementById('month');
+    
+    if (employeeId) {
+        fetch(`/getemployee/${employeeId}`)
+            .then(response => response.json())
+            .then(data => {
+                branch.value = data.branch;
+                $(branch).trigger('change');
+                department.value = data.department;
+                $(department).trigger('change');
+                designation.value = data.designation;
+                $(designation).trigger('change');
+                basic_pay.value = data.basic_pay;
+                allowances.value = data.allowances;
+
+                if (data.date_of_joining) {
+                    // Assuming date_of_joining is in the format 'YYYY-MM-DD'
+                    var joiningDate = new Date(data.date_of_joining);
+                    var formattedJoiningMonth = joiningDate.toISOString().slice(0, 7); // Get 'YYYY-MM' part
+                    monthInput.min = formattedJoiningMonth;
+                }
             })
             .catch(error => console.error('Error fetching cities:', error));
     }

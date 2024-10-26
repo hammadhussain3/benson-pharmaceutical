@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Employee;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,7 +29,9 @@ class RegisteredUserController extends Controller
     public function create(): View
     {
         $roles = Role::all();
-        return view('auth.register', compact('roles'));
+        $employees = Employee::all();
+
+        return view('auth.register', compact('roles', 'employees'));
     }
 
     /**
@@ -39,6 +42,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
+            'employee_id' => ['required', 'integer', 'exists:employees,id'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -46,6 +50,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $user = User::create([
+            'employee_id' => $request->employee_id,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),

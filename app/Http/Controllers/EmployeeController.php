@@ -29,14 +29,21 @@ class EmployeeController extends Controller
 
     public function create()
     {
-        $uniqueId = 'ST-' . date('dmy') . mt_rand(1000, 9999);
+        $lastEmployeeCode = Employee::latest('id')->value('code');
+        if ($lastEmployeeCode) {
+            $numberPart = (int) substr($lastEmployeeCode, 3);
+            $newNumberPart = $numberPart + 1;
+            $newEmployeeCode = 'EMP' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+        } else {
+            $newEmployeeCode = 'EMP00001';
+        }
         $designations = Designation::all();
         $departments = Department::all();
         $banks = Bank::all();
         $branches = Branch::all();
         $companies = Company::all();
 
-        return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'uniqueId'));
+        return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'newEmployeeCode'));
     }
 
     public function edit(Employee $employee)
@@ -58,9 +65,24 @@ class EmployeeController extends Controller
     public function getCompanyByEmployee($employeeId)
     {
         // Fetch the loan record for the given employee ID
-        $company = Employee::where('id', $employeeId)->value('id');
+        $company = Employee::where('id', $employeeId)->value('company_id');
 
         return response()->json(['company' => $company]);
+    }
+
+    public function getEmployeeDetails($employeeId)
+    {
+        // Fetch the loan record for the given employee ID
+        $employee = Employee::findOrFail($employeeId);
+
+        return response()->json([
+            'branch' => $employee->branch_id,
+            'department' => $employee->department_id,
+            'designation' => $employee->designation_id,
+            'basic_pay' => $employee->basic_pay,
+            'allowances' => $employee->allowances,
+            'date_of_joining' => $employee->date_of_joining,
+        ]);
     }
 
     public function update(UpdateEmployeeRequest $request, Employee $employee)

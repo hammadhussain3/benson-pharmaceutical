@@ -39,7 +39,9 @@
                             <th>Income Tax</th>
                             <th>Loan/Advance</th>
                             <th>Payment Mode</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -57,16 +59,18 @@
                                 <td>{{ $salarySlip->income_tax }}</td>
                                 <td>{{ $salarySlip->loan_advance }}</td>
                                 <td>{{ $salarySlip->payment_mode }}</td>
+                                @role('Superadmin')
                                 <td>{{ $salarySlip->company->name }}</td>
+                                @endrole
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('salary_slips.edit', $salarySlip->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="event.preventDefault(); 
-    if (confirm('Are you sure you want to delete this salary slip?')) {
-        document.getElementById('delete-form-{{ $salarySlip->id }}').submit();
-    }">
+                                        if (confirm('Are you sure you want to delete this salary slip?')) {
+                                            document.getElementById('delete-form-{{ $salarySlip->id }}').submit();
+                                        }">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                     </a>
                                     <form id="delete-form-{{ $salarySlip->id }}"

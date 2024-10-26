@@ -22,8 +22,8 @@
                         <div class="form-row row">
                             <div class="mb-3 col-md-6">
                                 <label for="code">Employee Code</label>
-                                <input type="text" class="form-control" name="code" id="code" value="{{ $uniqueId }}"
-                                    placeholder="Employee Code" required>
+                                <input type="text" class="form-control" name="code" id="code" value="{{ $newEmployeeCode }}"
+                                    placeholder="Employee Code" readonly required>
                                 <div class="invalid-feedback">Please provide a valid employee code.</div>
                             </div>
                             <div class="mb-3 col-md-6">
@@ -100,6 +100,7 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a branch.</div>
                             </div>
+                            @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
                                 <select name="company_id" id="company_id" class="form-control" required>
@@ -110,6 +111,9 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
+                            @else
+                                <input type="hidden" name="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="is_active">Is Active</label>
                                 <select name="is_active" id="is_active" class="form-control" required>

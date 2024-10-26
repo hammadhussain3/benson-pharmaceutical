@@ -29,12 +29,17 @@ class SalarySheetController extends Controller
         ]);
 
         $employee = Employee::find($request->employee_id);
-        $month = $request->month;
-        $startOfMonth = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
-        $endOfMonth = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
-        $formattedMonth = Carbon::createFromFormat('Y-m', $month)->format('F Y');
+        $date = \DateTime::createFromFormat('Y-m', $request->month);
+
+        $month = $date->format('m');
+        $year = $date->format('Y');
+
+        // $startOfMonth = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        // $endOfMonth = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+        $formattedMonth = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT);
         $salarySlip = SalarySlip::where('employee_id', $employee->id)
-            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->where('month', $month)
+            ->where('year', $year)
             ->first();
 
         if (!$salarySlip) {

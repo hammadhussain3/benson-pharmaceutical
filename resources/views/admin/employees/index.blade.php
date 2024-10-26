@@ -35,7 +35,9 @@
                             <th>Designation</th>
                             <th>Department</th>
                             <th>Branch</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Bank</th>
                             <th>Net Salary</th>
                             <th>Status</th>
@@ -51,7 +53,9 @@
                                 <td>{{ $employee->designation->name ?? 'N/A' }}</td>
                                 <td>{{ $employee->department->name ?? 'N/A' }}</td>
                                 <td>{{ $employee->branch->name ?? 'N/A' }}</td>
+                                @role('Superadmin')
                                 <td>{{ $employee->company->name ?? 'N/A' }}</td>
+                                @endrole
                                 <td>{{ $employee->bank->name ?? 'N/A' }}</td>
                                 <td>{{ number_format($employee->net_salary, 2) }}</td>
                                 <td>
@@ -65,9 +69,9 @@
                                     </a>
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="event.preventDefault(); 
-    if (confirm('Are you sure you want to delete this employee?')) {
-        document.getElementById('delete-form-{{ $employee->id }}').submit();
-    }">
+                                        if (confirm('Are you sure you want to delete this employee?')) {
+                                            document.getElementById('delete-form-{{ $employee->id }}').submit();
+                                        }">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                     </a>
                                     <form id="delete-form-{{ $employee->id }}"

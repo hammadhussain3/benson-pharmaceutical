@@ -47,16 +47,17 @@ class SalaryTaxSlabController extends Controller
         // Fetch the basic pay for the given employee ID
         $employee = Employee::where('id', $employeeId)->first();
 
+        $employee_salary = 12 * ($employee->basic_pay + $employee->allowances);
         // Fetch the tax value based on the employee's basic pay and company ID
         $taxRate = SalaryTaxSlab::where('company_id', $employee->company_id)
-        ->where('slab_start', '<=', $employee->basic_pay)
-        ->where(function ($query) use ($employee) {
-            $query->where('slab_end', '>=', $employee->basic_pay)
+        ->where('slab_start', '<=', $employee_salary)
+        ->where(function ($query) use ($employee_salary) {
+            $query->where('slab_end', '>=', $employee_salary)
                 ->orWhereNull('slab_end'); // For open-ended slabs
         })
         ->value('tax_value') ?? 0;
 
-        $incomeTax = $employee->basic_pay * ($taxRate / 100);
+        $incomeTax = ($employee->basic_pay + $employee->allowances) * ($taxRate / 100);
 
         // Return 0 if no matching slab is found
         $incomeTax = $incomeTax ?? 0;

@@ -57,6 +57,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
+    Route::get('/getemployee/{employeeId}', [EmployeeController::class, 'getEmployeeDetails']);
     Route::get('/getloan/{employeeId}', [LoanController::class, 'getLoansByEmployee']);
     Route::get('/getincometax/{employeeId}', [SalaryTaxSlabController::class, 'getIncomeTaxByEmployee']);
     Route::get('/getapprovedleaves/{employeeId}', [LeaveController::class, 'getApprovedLeavesByEmployee']);

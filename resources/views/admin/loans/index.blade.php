@@ -33,7 +33,9 @@
                             <th>Amount</th>
                             <th>Payback Months</th>
                             <th>Remaining</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -41,12 +43,14 @@
                         @foreach ($loans as $loan)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $loan->employee->code }} - {{ $loan->employee->first_name }}
+                                <td>{{ $loan->employee->first_name }}
                                     {{ $loan->employee->last_name }}</td>
                                 <td>{{ number_format($loan->amount, 2) }}</td>
                                 <td>{{ $loan->payback_months }}</td>
                                 <td>{{ $loan->remaining }}</td>
+                                @role('Superadmin')
                                 <td>{{ $loan->company->name }}</td>
+                                @endrole
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('loans.edit', $loan->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">

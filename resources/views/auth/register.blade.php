@@ -20,7 +20,30 @@
                     <form method="POST" action="{{ route('users.store') }}">
                         @csrf
                         <div class="form-row row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label>Select Employee </label>
+                                <select name="employee_id" id="employee" class="js-example-basic-single select2" required>
+                                    <option value="">--Select Employee--</option>
+                                    @foreach ($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="roles">Roles</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="roles" required name="role">
+                                        <option value="" selected disabled>Select Role</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('roles')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label for="name">Full Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="name-addon"><img src="{{ asset('assets/img/icons/users1.svg') }}" alt="img"></span>
@@ -32,7 +55,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="email">Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="email-addon"><img src="{{ asset('assets/img/icons/mail.svg') }}" alt="img"></span>
@@ -40,20 +63,6 @@
                                         placeholder="Enter your email address" value="{{ old('email') }}" required>
                                 </div>
                                 @error('email')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="roles">Roles</label>
-                                <div class="input-group">
-                                    <select class="form-select" id="roles" required name="role">
-                                        <option value="" selected disabled>Select Role</option>
-                                        @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('roles')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
