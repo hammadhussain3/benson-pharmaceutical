@@ -3,12 +3,12 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Salary Slips List</h4>
-            <h6>Manage your salary slips</h6>
+            <h4>Salary List</h4>
+            <h6>Manage your salaries</h6>
         </div>
         <div class="page-btn">
             <a href="{{ route('salary_slips.create') }}" class="btn btn-added">
-                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Salary Slip
+                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Salary
             </a>
         </div>
     </div>

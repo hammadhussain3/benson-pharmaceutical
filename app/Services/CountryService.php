@@ -9,7 +9,7 @@ class CountryService
 {
     public function getAllCountries()
     {
-        return Country::all();
+        return Country::orderBy('name', 'asc')->get();
     }
 
     public function createCountry(array $data)

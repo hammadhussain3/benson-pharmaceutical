@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoanRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Models\Loan;
@@ -25,14 +26,22 @@ class LoanController extends Controller
     public function index()
     {
         $user = Auth::user();
+
         if ($user->hasRole('Superadmin')) {
-            $loans = Loan::with(['employee', 'company'])->get();
+            $loans = Loan::with(['employee', 'company'])
+                ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
+                    ->whereColumn('employees.id', 'loans.employee_id')
+                )
+                ->get();
         } else {
             $companyId = $user->employee->company_id;
             $loans = Loan::with(['employee', 'company'])
                 ->whereHas('employee', function($query) use ($companyId) {
                     $query->where('company_id', $companyId);
                 })
+                ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
+                    ->whereColumn('employees.id', 'loans.employee_id')
+                )
                 ->get();
         }
 
@@ -43,7 +52,7 @@ class LoanController extends Controller
     {
 
         $employees = $this->employeeService->getAllEmployees();
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.loans.create', compact('employees', 'companies'));
     }
 
@@ -57,7 +66,7 @@ class LoanController extends Controller
     {
         $loan = Loan::findOrFail($id);
         $employees = $this->employeeService->getAllEmployees();
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.loans.edit', compact('loan', 'employees', 'companies'));
     }
 

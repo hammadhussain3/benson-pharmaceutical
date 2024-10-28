@@ -9,7 +9,7 @@ class BranchService
 {
     public function getAllBranches()
     {
-        return Branch::all();
+        return Branch::orderBy('name', 'asc')->get();
     }
 
     public function createBranch(array $data)

@@ -23,7 +23,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="employee_id">Employee</label>
                                 <select name="employee_id" id="employee_id" class="js-example-basic-single select2"
-                                    required onchange="SelectCompany(this.value);">
+                                    required @role('Superadmin') onchange="SelectCompany(this.value);" @endrole>
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->code }} -
@@ -53,13 +53,8 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <select name="company_id" id="company_id" class="js-example-basic-single select2" required disabled>
-                                    <option value="">Select Company</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a company.</div>
+                                <input type="text" class="form-control" name="company" id="company" required readonly>
+                                <input type="hidden" name="company_id" id="company_id" required>
                             </div>
                             @else
                                 <input type="hidden" name="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">

@@ -37,22 +37,22 @@ class EmployeeController extends Controller
         } else {
             $newEmployeeCode = 'EMP00001';
         }
-        $designations = Designation::all();
-        $departments = Department::all();
-        $banks = Bank::all();
-        $branches = Branch::all();
-        $companies = Company::all();
+        $designations = Designation::orderBy('name', 'asc')->get();
+        $departments = Department::orderBy('name', 'asc')->get();
+        $banks = Bank::orderBy('name', 'asc')->get();
+        $branches = Branch::orderBy('name', 'asc')->get();
+        $companies = Company::orderBy('name', 'asc')->get();
 
         return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'newEmployeeCode'));
     }
 
     public function edit(Employee $employee)
     {
-        $designations = Designation::all();
-        $departments = Department::all();
-        $banks = Bank::all();
-        $branches = Branch::all();
-        $companies = Company::all();
+        $designations = Designation::orderBy('name', 'asc')->get();
+        $departments = Department::orderBy('name', 'asc')->get();
+        $banks = Bank::orderBy('name', 'asc')->get();
+        $branches = Branch::orderBy('name', 'asc')->get();
+        $companies = Company::orderBy('name', 'asc')->get();
 
         return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies'));
     }
@@ -65,20 +65,27 @@ class EmployeeController extends Controller
     public function getCompanyByEmployee($employeeId)
     {
         // Fetch the loan record for the given employee ID
-        $company = Employee::where('id', $employeeId)->value('company_id');
+        $company_id = Employee::where('id', $employeeId)->value('company_id');
+        $company = Company::findOrFail($company_id);
 
-        return response()->json(['company' => $company]);
+        return response()->json(['company_id' => $company_id, 'company' => $company->name]);
     }
 
     public function getEmployeeDetails($employeeId)
     {
         // Fetch the loan record for the given employee ID
         $employee = Employee::findOrFail($employeeId);
+        $branch = Branch::findOrFail($employee->branch_id);
+        $department = Department::findOrFail($employee->department_id);
+        $designation = Designation::findOrFail($employee->designation_id);
 
         return response()->json([
-            'branch' => $employee->branch_id,
-            'department' => $employee->department_id,
-            'designation' => $employee->designation_id,
+            'branch_id' => $employee->branch_id,
+            'department_id' => $employee->department_id,
+            'designation_id' => $employee->designation_id,
+            'branch' => $branch->name,
+            'department' => $department->name,
+            'designation' => $designation->name,
             'basic_pay' => $employee->basic_pay,
             'allowances' => $employee->allowances,
             'date_of_joining' => $employee->date_of_joining,

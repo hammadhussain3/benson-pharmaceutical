@@ -24,7 +24,7 @@ class DepartmentController extends Controller
 
     public function create()
     {
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.departments.create', compact('companies'));
     }
 
@@ -36,7 +36,7 @@ class DepartmentController extends Controller
 
     public function edit(Department $department)
     {
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.departments.edit', compact('department', 'companies'));
     }
 

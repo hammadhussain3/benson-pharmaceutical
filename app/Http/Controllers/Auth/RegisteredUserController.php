@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Services\EmployeeService;
 
 class RegisteredUserController extends Controller
 {
@@ -20,16 +21,23 @@ class RegisteredUserController extends Controller
      * Display the registration view.
      */
 
+    protected $employeeService;
+
+    public function __construct(EmployeeService $employeeService)
+    {
+        $this->employeeService = $employeeService;
+    }
+
     public function index(): View
     {
-        $users = User::with('roles')->where('id', '!=', '1')->get();
+        $users = User::with('roles', 'employee')->where('id', '!=', '1')->orderBy('name', 'asc')->get();
         return view('auth.index', compact('users'));
     }
     
     public function create(): View
     {
-        $roles = Role::all();
-        $employees = Employee::all();
+        $roles = Role::orderBy('name', 'asc')->get();
+        $employees = $this->employeeService->getAllEmployees();
 
         return view('auth.register', compact('roles', 'employees'));
     }

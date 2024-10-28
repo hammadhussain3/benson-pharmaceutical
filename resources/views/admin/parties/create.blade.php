@@ -34,7 +34,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required>
+                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry()">
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
@@ -61,6 +61,7 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a city.</div>
                             </div>
+                            @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company">Company</label>
                                 <select name="company_id" id="company" class="js-example-basic-single select2" required>
@@ -71,6 +72,9 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
+                            @else
+                                <input type="hidden" name="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_name">Contact Person Name</label>
                                 <input type="text" class="form-control" name="contact_person_name"

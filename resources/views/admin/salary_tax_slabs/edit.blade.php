@@ -43,6 +43,7 @@
                                 <div class="invalid-feedback">Please provide the tax value in percentage.</div>
                             </div>
 
+                            @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
                                 <select class="js-example-basic-single select2" name="company_id" required>
@@ -56,6 +57,9 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
+                            @else
+                                <input type="hidden" name="company_id" value="{{ $taxSlab->company_id }}">
+                            @endrole
                         </div>
 
                         <button class="btn btn-primary" type="submit">Update</button>

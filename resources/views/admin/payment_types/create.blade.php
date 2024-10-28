@@ -30,6 +30,7 @@
                                 <label for="description">Description</label>
                                 <textarea class="form-control" name="description" id="description" placeholder="Description"></textarea>
                             </div>
+                            @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company">Company</label>
                                 <select name="company_id" id="company" class="js-example-basic-single select2" required>
@@ -40,6 +41,9 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
+                            @else
+                                <input type="hidden" name="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('payment_types.index') }}">Cancel</a>

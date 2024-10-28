@@ -29,6 +29,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Employee Id</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -39,6 +40,7 @@
                         @foreach ($users as $key => $user)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
+                                <td>{{ $user->employee->code }}</td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
                                 <td>

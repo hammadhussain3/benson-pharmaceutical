@@ -9,60 +9,7 @@
                     </a>
                 </li>
 
-                <li>
-                    <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
-                        <i class="fa fa-users"></i>
-                        <span>Employees</span>
-                    </a>
-                </li>
-
-
-                <li>
-                    <a class="{{ request()->is('salary-sheet*') ? 'active' : '' }}"
-                        href="{{ route('salary.sheet.index') }}">
-                        <i class="fa fa-book"></i>
-                        <span>Salary Sheet</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
-                        <i class="fa fa-calendar"></i>
-                        <span>Leave</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="{{ request()->is('leave_types*') ? 'active' : '' }}"
-                        href="{{ route('leave_types.index') }}">
-                        <i class="fa fa-tags"></i>
-                        <span>Leave Type</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="{{ request()->is('banks*') ? 'active' : '' }}" href="{{ route('banks.index') }}">
-                        <i class="fa fa-building"></i>
-                        <span>Bank</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="{{ request()->is('salary_slips*') ? 'active' : '' }}"
-                        href="{{ route('salary_slips.index') }}">
-                        <i class="fa fa-calculator"></i>
-                        <span>Salary Slip</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="{{ request()->is('loans*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
-                        <i class="fa fa-handshake"></i>
-                        <span>Loan</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="{{ request()->is('parties*') ? 'active' : '' }}" href="{{ route('parties.index') }}">
-                        <i class="fa fa-users"></i>
-                        <span>Parties</span>
-                    </a>
-                </li>
+                <li><span class="text-muted">Admin</span></li>
 
                 <li class="submenu">
                     <a class=" {{ request()->is('countries*') ? 'active' : '' }}" href="javascript:void(0);">
@@ -119,6 +66,24 @@
                 </li>
 
                 <li class="submenu">
+                    <a class=" {{ request()->is('branches*') ? 'active' : '' }}" href="javascript:void(0);">
+                        <i class="fa fa-code-branch"></i>
+                        <span>Branches</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('branches') ? 'active' : '' }}"
+                                href="{{ route('branches.index') }}">Branch List</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('branches/create') ? 'active' : '' }}"
+                                href="{{ route('branches.create') }}">Add Branch</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
                     <a class=" {{ request()->is('departments*') ? 'active' : '' }}" href="javascript:void(0);">
                         <i class="fa fa-sitemap"></i>
                         <span>Departments</span>
@@ -136,7 +101,84 @@
                     </ul>
                 </li>
 
+                <li><span class="text-muted">Human Resource</span></li>
 
+                <li>
+                    <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
+                        <i class="fa fa-users"></i>
+                        <span>Employees</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="{{ request()->is('loans*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
+                        <i class="fa fa-handshake"></i>
+                        <span>Loan</span>
+                    </a>
+                </li>
+
+                <li class="submenu">
+                    <a class=" {{ request()->is('tax-slabs*') ? 'active' : '' }}" href="javascript:void(0);">
+                        <i class="fa fa-percent"></i>
+                        <span>Salary Tax Slabs</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('tax-slabs') ? 'active' : '' }}"
+                                href="{{ route('tax-slabs.index') }}">Tax Slab List</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('tax-slabs/create') ? 'active' : '' }}"
+                                href="{{ route('tax-slabs.create') }}">Add Tax Slab</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a class="{{ request()->is('leave_types*') ? 'active' : '' }}"
+                        href="{{ route('leave_types.index') }}">
+                        <i class="fa fa-tags"></i>
+                        <span>Leave Type</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
+                        <i class="fa fa-calendar"></i>
+                        <span>Leave</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="{{ request()->is('salary_slips*') ? 'active' : '' }}"
+                        href="{{ route('salary_slips.index') }}">
+                        <i class="fa fa-calculator"></i>
+                        <span>Salaries</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="{{ request()->is('salary-sheet*') ? 'active' : '' }}"
+                        href="{{ route('salary.sheet.index') }}">
+                        <i class="fa fa-book"></i>
+                        <span>Salary Sheet</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="{{ request()->is('banks*') ? 'active' : '' }}" href="{{ route('banks.index') }}">
+                        <i class="fa fa-building"></i>
+                        <span>Bank</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="{{ request()->is('parties*') ? 'active' : '' }}" href="{{ route('parties.index') }}">
+                        <i class="fa fa-users"></i>
+                        <span>Parties</span>
+                    </a>
+                </li>
 
                 <li class="submenu">
                     <a class=" {{ request()->is('chart_of_accounts*') ? 'active' : '' }}" href="javascript:void(0);">
@@ -175,24 +217,6 @@
                 </li>
 
                 <li class="submenu">
-                    <a class=" {{ request()->is('branches*') ? 'active' : '' }}" href="javascript:void(0);">
-                        <i class="fa fa-code-branch"></i>
-                        <span>Branches</span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a class="{{ request()->is('branches') ? 'active' : '' }}"
-                                href="{{ route('branches.index') }}">Branch List</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->is('branches/create') ? 'active' : '' }}"
-                                href="{{ route('branches.create') }}">Add Branch</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="submenu">
                     <a class=" {{ request()->is('designations*') ? 'active' : '' }}" href="javascript:void(0);">
                         <i class="fa fa-briefcase"></i>
                         <span>Designations</span>
@@ -206,26 +230,6 @@
                         <li>
                             <a class="{{ request()->is('designations/create') ? 'active' : '' }}"
                                 href="{{ route('designations.create') }}">Add Designation</a>
-                        </li>
-                    </ul>
-                </li>
-
-
-
-                <li class="submenu">
-                    <a class=" {{ request()->is('tax-slabs*') ? 'active' : '' }}" href="javascript:void(0);">
-                        <i class="fa fa-percent"></i>
-                        <span>Salary Tax Slabs</span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a class="{{ request()->is('tax-slabs') ? 'active' : '' }}"
-                                href="{{ route('tax-slabs.index') }}">Tax Slab List</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->is('tax-slabs/create') ? 'active' : '' }}"
-                                href="{{ route('tax-slabs.create') }}">Add Tax Slab</a>
                         </li>
                     </ul>
                 </li>

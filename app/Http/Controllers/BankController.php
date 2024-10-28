@@ -26,7 +26,7 @@ class BankController extends Controller
 
     public function create()
     {
-        $countries = Country::all(); // Fetch all countries for the dropdown
+        $countries = Country::orderBy('name', 'asc')->get(); // Fetch all countries for the dropdown
         return view('admin.banks.create', compact('countries'));
     }
 
@@ -39,7 +39,7 @@ class BankController extends Controller
     public function edit($id)
     {
         $bank = Bank::findOrFail($id); // Use findOrFail to fetch the bank
-        $countries = Country::all(); // Fetch all countries for the dropdown
+        $countries = Country::orderBy('name', 'asc')->get(); // Fetch all countries for the dropdown
         return view('admin.banks.edit', compact('bank', 'countries'));
     }
 

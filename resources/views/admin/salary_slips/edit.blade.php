@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Edit Salary Slip</h3>
+                <h3 class="page-title">Edit Salary</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('salary_slips.index') }}">Salary Slips</a></li>
-                    <li class="breadcrumb-item active">Edit Salary Slip</li>
+                    <li class="breadcrumb-item"><a href="{{ route('salary_slips.index') }}">Salaries</a></li>
+                    <li class="breadcrumb-item active">Edit Salary</li>
                 </ul>
             </div>
         </div>

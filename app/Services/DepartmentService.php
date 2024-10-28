@@ -9,7 +9,7 @@ class DepartmentService
 {
     public function getAllDepartments()
     {
-        return Department::all();
+        return Department::orderBy('name', 'asc')->get();
     }
 
     public function createDepartment(array $data)

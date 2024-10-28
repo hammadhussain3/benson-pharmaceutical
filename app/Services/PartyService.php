@@ -8,7 +8,7 @@ class PartyService
 {
     public function getAllParties()
     {
-        return Party::all();
+        return Party::orderBy('name', 'asc')->get();
     }
 
     public function createParty(array $data)

@@ -23,6 +23,6 @@ class ChartOfAccountService
     // In ChartOfAccountService.php
     public function getAllChartOfAccounts()
     {
-        return ChartOfAccount::all(); // Or implement pagination as needed
+        return ChartOfAccount::orderBy('name', 'asc')->get(); // Or implement pagination as needed
     }
 }

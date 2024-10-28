@@ -26,8 +26,8 @@ class CompanyController extends Controller
 
     public function create()
     {
-        $countries = Country::all();
-        $cities = City::all();
+        $countries = Country::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
         return view('admin.companies.create', compact('countries', 'cities'));
     }
 
@@ -40,8 +40,8 @@ class CompanyController extends Controller
     public function edit($id)
     {
         $company = Company::findOrFail($id);
-        $countries = Country::all();
-        $cities = City::all();
+        $countries = Country::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
         return view('admin.companies.edit', compact('company', 'countries', 'cities'));
     }
 

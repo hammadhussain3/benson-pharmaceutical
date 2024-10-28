@@ -58,7 +58,7 @@ class CityController extends Controller
     public function getCitiesByCountry($countryId)
     {
 
-        $cities = City::where('country_id', $countryId)->get();
+        $cities = City::where('country_id', $countryId)->orderBy('name', 'asc')->get();
         return response()->json(['cities' => $cities]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SalarySlipRequest;
+use Illuminate\Support\Facades\DB;
 use App\Models\SalarySlip;
 use App\Models\Employee;
 use App\Models\Company;
@@ -27,7 +28,10 @@ class SalarySlipController extends Controller
 
     public function index()
     {
-        $salarySlips = SalarySlip::with(['employee', 'company'])->get();
+        $salarySlips = SalarySlip::with(['employee', 'company'])
+        ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
+            ->whereColumn('employees.id', 'salary_slips.employee_id')
+        )->get();
         return view('admin.salary_slips.index', compact('salarySlips'));
     }
 
@@ -46,7 +50,10 @@ class SalarySlipController extends Controller
     public function store(SalarySlipRequest $request)
     {
         $this->salarySlipService->createSalarySlip($request->validated());
-        return redirect()->route('salary_slips.index')->with('success', 'Salary Slip created successfully.');
+        return redirect()->route('salary.sheet.show', [
+            'employee_id' => $request->employee_id,
+            'month' => $request->month
+        ])->with('success', 'Salary Slip created successfully.');
     }
 
     public function edit($id)

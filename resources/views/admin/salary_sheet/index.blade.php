@@ -17,7 +17,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('salary.sheet.show') }}" method="POST" class="needs-validation" novalidate>
+                    <form action="{{ route('salary.sheet.show') }}" method="GET" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-row">
                             <div class="col-md-12">

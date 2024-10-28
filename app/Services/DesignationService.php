@@ -8,7 +8,7 @@ class DesignationService
 {
     public function getAllDesignations()
     {
-        return Designation::with('company')->get();
+        return Designation::with('company')->orderBy('name', 'asc')->get();
     }
 
     public function createDesignation(array $data)

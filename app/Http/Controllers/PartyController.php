@@ -29,20 +29,20 @@ class PartyController extends Controller
 
     public function create()
     {
-        $countries = Country::all();
-        $cities = City::all();
-        $companies = Company::all();
-        $paymentTypes = PaymentType::all();
+        $countries = Country::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
+        $companies = Company::orderBy('name', 'asc')->get();
+        $paymentTypes = PaymentType::orderBy('name', 'asc')->get();
         return view('admin.parties.create', compact('countries', 'cities', 'companies', 'paymentTypes'));
     }
 
     public function edit($id)
     {
         $party = Party::findOrFail($id);
-        $countries = Country::all();
-        $cities = City::all();
-        $companies = Company::all();
-        $paymentTypes = PaymentType::all();
+        $countries = Country::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
+        $companies = Company::orderBy('name', 'asc')->get();
+        $paymentTypes = PaymentType::orderBy('name', 'asc')->get();
         return view('admin.parties.edit', compact('party', 'countries', 'cities', 'companies', 'paymentTypes'));
     }
     public function store(StorePartyRequest $request)

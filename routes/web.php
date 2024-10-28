@@ -64,15 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/getunauthleaves/{employeeId}', [LeaveController::class, 'getUnauthorizedLeavesByEmployee']);
     Route::get('/getapprovedpayleaves/{employeeId}', [LeaveController::class, 'getApprovedWithPayLeavesByEmployee']);
 
-
-
-
-
-
-
-
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');
-    Route::post('salary-sheet', [SalarySheetController::class, 'showSalarySheet'])->name('salary.sheet.show');
+    Route::get('salary-sheet/generate', [SalarySheetController::class, 'showSalarySheet'])->name('salary.sheet.show');
 });
 
 require __DIR__ . '/auth.php';

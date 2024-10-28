@@ -9,7 +9,7 @@ class CityService
 {
     public function getAllCities()
     {
-        return City::all();
+        return City::orderBy('name', 'asc')->get();
     }
 
     public function createCity(array $data)

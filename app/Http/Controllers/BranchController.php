@@ -26,9 +26,9 @@ class BranchController extends Controller
 
     public function create()
     {
-        $companies = Company::all();
-        $countries = Country::all();
-        $cities = City::all();
+        $companies = Company::orderBy('name', 'asc')->get();
+        $countries = Country::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
 
         return view('admin.branches.create', compact('companies', 'countries', 'cities')); // Pass companies, countries, and cities to the view
     }
@@ -41,9 +41,9 @@ class BranchController extends Controller
 
     public function edit(Branch $branch)
     {
-        $companies = Company::all();
-        $countries = Country::all();
-        $cities = City::all();
+        $companies = Company::orderBy('name', 'asc')->get();
+        $countries = Country::orderBy('name', 'asc')->get();
+        $cities = City::orderBy('name', 'asc')->get();
 
         return view('admin.branches.edit', compact('branch', 'companies', 'countries', 'cities')); // Pass branch, companies, countries, and cities to the view
     }

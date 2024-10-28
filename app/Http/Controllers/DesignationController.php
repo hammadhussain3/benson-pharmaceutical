@@ -25,7 +25,7 @@ class DesignationController extends Controller
 
     public function create()
     {
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.designations.create', compact('companies'));
     }
 
@@ -37,7 +37,7 @@ class DesignationController extends Controller
 
     public function edit(Designation $designation)
     {
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.designations.edit', compact('designation', 'companies'));
     }
 

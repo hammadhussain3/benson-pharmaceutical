@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Add New Salary Slip</h3>
+                <h3 class="page-title">Add New Salary</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('salary_slips.index') }}">Salary Slips</a></li>
-                    <li class="breadcrumb-item active">Add Salary Slip</li>
+                    <li class="breadcrumb-item"><a href="{{ route('salary_slips.index') }}">Salaries</a></li>
+                    <li class="breadcrumb-item active">Add Salary</li>
                 </ul>
             </div>
         </div>
@@ -113,47 +113,27 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="company">Company</label>
-                                <select name="company_id" id="company_id" class="js-example-basic-single select2" required disabled>
-                                    <option value="">Select Company</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a company.</div>
+                                <input type="text" class="form-control" name="company" id="company" required readonly>
+                                <input type="hidden" name="company_id" id="company_id" required>
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="branch_id">Branch</label>
-                                <select name="branch_id" id="branch_id" class="js-example-basic-single select2" required disabled>
-                                    <option value="">Select Branch</option>
-                                    @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a Branch.</div>
+                                <label for="branch">Branch</label>
+                                <input type="text" class="form-control" name="branch" id="branch" required readonly>
+                                <input type="hidden" name="branch_id" id="branch_id" required>
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="department_id">Department</label>
-                                <select name="department_id" id="department_id" class="js-example-basic-single select2" required disabled>
-                                    <option value="">Select Department</option>
-                                    @foreach ($departments as $department)
-                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a Department.</div>
+                                <label for="department">Department</label>
+                                <input type="text" class="form-control" name="department" id="department" required readonly>
+                                <input type="hidden" name="department_id" id="department_id" required>
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="designation_id">Designation</label>
-                                <select name="designation_id" id="designation_id" class="js-example-basic-single select2" required disabled>
-                                    <option value="">Select Designation</option>
-                                    @foreach ($designations as $designation)
-                                        <option value="{{ $designation->id }}">{{ $designation->name }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a Designation.</div>
-                            </div> 
+                                <label for="designation">Designation</label>
+                                <input type="text" class="form-control" name="designation" id="designation" required readonly>
+                                <input type="hidden" name="designation_id" id="designation_id" required>
+                            </div>
 
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

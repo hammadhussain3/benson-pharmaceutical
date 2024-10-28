@@ -8,7 +8,7 @@ class BankService
 {
     public function getAllBanks()
     {
-        return Bank::all();
+        return Bank::orderBy('name', 'asc')->get();
     }
 
     public function createBank(array $data)

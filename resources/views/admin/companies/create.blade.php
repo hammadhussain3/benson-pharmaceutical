@@ -34,7 +34,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required>
+                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry(this.value)">
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"

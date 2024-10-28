@@ -8,7 +8,7 @@ class PaymentTypeService
 {
     public function getAllPaymentTypes()
     {
-        return PaymentType::all();
+        return PaymentType::orderBy('name', 'asc')->get();
     }
     public function createPaymentType($data)
     {

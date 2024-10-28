@@ -25,7 +25,7 @@ class ChartOfAccountController extends Controller
 
     public function create()
     {
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.chart_of_accounts.create', compact('companies'));
     }
 
@@ -38,7 +38,7 @@ class ChartOfAccountController extends Controller
     public function edit($id)
     {
         $chartOfAccount = ChartOfAccount::findOrFail($id);
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.chart_of_accounts.edit', compact('chartOfAccount', 'companies'));
     }
 

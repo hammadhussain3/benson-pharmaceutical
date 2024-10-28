@@ -34,6 +34,7 @@
                                     value="{{ $chartOfAccount->code }}" required>
                                 <div class="invalid-feedback">Please provide a valid code.</div>
                             </div>
+                            @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company">Company</label>
                                 <select name="company_id" id="company" class="js-example-basic-single select2" required>
@@ -47,6 +48,9 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
+                            @else
+                                <input type="hidden" name="company_id" value="{{ $chartOfAccount->company_id }}">
+                            @endrole
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>
                         <a class="btn btn-secondary" href="{{ route('chart_of_accounts.index') }}">Cancel</a>

@@ -29,10 +29,13 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Code</th>
                             <th>Employee</th>
                             <th>Leave Type</th>
                             <th>Days</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -40,20 +43,22 @@
                         @foreach ($leaves as $leave)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $leave->employee->first_name }}</td>
+                                <td>{{ $leave->employee->code }}</td>
+                                <td>{{ $leave->employee->first_name }} {{ $leave->employee->last_name }}</td>
                                 <td>{{ $leave->leaveType->name }}</td>
                                 <td>{{ $leave->days }}</td>
+                                @role('Superadmin')
                                 <td>{{ $leave->company->name }}</td>
-
+                                @endrole
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('leaves.edit', $leave->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="event.preventDefault(); 
-    if (confirm('Are you sure you want to delete this leave?')) {
-        document.getElementById('delete-form-{{ $leave->id }}').submit();
-    }">
+                                        if (confirm('Are you sure you want to delete this leave?')) {
+                                            document.getElementById('delete-form-{{ $leave->id }}').submit();
+                                        }">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                     </a>
                                     <form id="delete-form-{{ $leave->id }}"

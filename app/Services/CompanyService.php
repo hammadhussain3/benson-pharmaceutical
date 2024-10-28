@@ -8,7 +8,7 @@ class CompanyService
 {
     public function getAllCompanies()
     {
-        return Company::all();
+        return Company::orderBy('name', 'asc')->get();
     }
 
     public function createCompany(array $data)

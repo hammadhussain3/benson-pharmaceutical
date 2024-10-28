@@ -25,7 +25,7 @@ class PaymentTypeController extends Controller
 
     public function create()
     {
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.payment_types.create', compact('companies'));
     }
 
@@ -38,7 +38,7 @@ class PaymentTypeController extends Controller
     public function edit($id)
     {
         $paymentType = PaymentType::findOrFail($id);
-        $companies = Company::all();
+        $companies = Company::orderBy('name', 'asc')->get();
 
         return view('admin.payment_types.edit', compact('paymentType', 'companies')); // Return the edit view
     }
