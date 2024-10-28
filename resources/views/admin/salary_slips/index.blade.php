@@ -29,7 +29,9 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Employee</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Month</th>
                             <th>Approved Leave</th>
                             <th>Unauthorized Leave</th>
                             <th>Approved with Pay</th>
@@ -49,7 +51,9 @@
                         @foreach ($salarySlips as $salarySlip)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $salarySlip->employee->code }} - {{ $salarySlip->employee->first_name }}</td>
+                                <td>{{ $salarySlip->employee->code }}</td>
+                                <td>{{ $salarySlip->employee->first_name }} {{ $salarySlip->employee->last_name }}</td>
+                                <td>{{ DateTime::createFromFormat('!m', $salarySlip->month)->format('F') }} {{ $salarySlip->year }}</td>
                                 <td>{{ $salarySlip->auth_leave }}</td>
                                 <td>{{ $salarySlip->unauth_leave }}</td>
                                 <td>{{ $salarySlip->approved_with_pay }}</td>
