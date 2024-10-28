@@ -30,7 +30,9 @@
                         <tr>
                             <th>#</th>
                             <th>Designation Name</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -39,7 +41,9 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $designation->name }}</td>
+                                @role('Superadmin')
                                 <td>{{ $designation->company->name }}</td>
+                                @endrole
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('designations.edit', $designation->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">

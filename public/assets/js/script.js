@@ -1,7 +1,65 @@
 $(document).ready(function(){var $wrapper=$('.main-wrapper');var $slimScrolls=$('.slimscroll');var $pageWrapper=$('.page-wrapper');feather.replace();$(window).resize(function(){if($('.page-wrapper').length>0){var height=$(window).height();$(".page-wrapper").css("min-height",height);}});$('body').append('<div class="sidebar-overlay"></div>');$(document).on('click','#mobile_btn',function(){$wrapper.toggleClass('slide-nav');$('.sidebar-overlay').toggleClass('opened');$('html').addClass('menu-opened');$('#task_window').removeClass('opened');return false;});$(".sidebar-overlay").on("click",function(){$('html').removeClass('menu-opened');$(this).removeClass('opened');$wrapper.removeClass('slide-nav');$('.sidebar-overlay').removeClass('opened');$('#task_window').removeClass('opened');});$(document).on("click",".hideset",function(){$(this).parent().parent().parent().hide();});$(document).on("click",".delete-set",function(){$(this).parent().parent().hide();});if($('.product-slide').length>0){$('.product-slide').owlCarousel({items:1,margin:30,dots:false,nav:true,loop:false,responsiveClass:true,responsive:{0:{items:1},800:{items:1},1170:{items:1}}});}
 if($('.owl-product').length>0){var owl=$('.owl-product');owl.owlCarousel({margin:10,dots:false,nav:true,loop:false,touchDrag:false,mouseDrag:false,responsive:{0:{items:2},768:{items:4},1170:{items:8}}});}
-if($('.datanew').length>0){$('.datanew').DataTable({"bFilter":true,"sDom":'fBtlpi','pagingType':'numbers',"ordering":false,"language":{search:' ',sLengthMenu:'_MENU_',searchPlaceholder:"Search...",info:"_START_ - _END_ of _TOTAL_ items",},initComplete:(settings,json)=>{$('.dataTables_filter').appendTo('#tableSearch');$('.dataTables_filter').appendTo('.search-input');},});}
-function readURL(input){if(input.files&&input.files[0]){var reader=new FileReader();reader.onload=function(e){$('#blah').attr('src',e.target.result);}
+if ($(".datanew").length > 0) {
+    $(".datanew").DataTable({
+        bFilter: true,
+        dom: '<"top"fB>t<"bottom"lpi><"clear">', // Include buttons (B) in the layout
+        pagingType: "numbers",
+        ordering: false,
+        language: {
+            search: " ",
+            sLengthMenu: "_MENU_",
+            searchPlaceholder: "Search...",
+            info: "_START_ - _END_ of _TOTAL_ items",
+        },
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                text: 'PDF',
+                title: 'Streamline',
+                orientation: 'portrait',
+                pageSize: 'A4',
+                customize: function (doc) {
+                    doc.content[0].alignment = 'center'; // Center the title
+
+                    // Set margins and layout for the table
+                    doc.content[1].margin = [20, 10, 20, 10];
+                    var objLayout = {};
+                    objLayout['hLineWidth'] = function(i) { return 0.5; };
+                    objLayout['vLineWidth'] = function(i) { return 0.5; };
+                    objLayout['hLineColor'] = function(i) { return '#aaa'; };
+                    objLayout['vLineColor'] = function(i) { return '#aaa'; };
+                    objLayout['paddingLeft'] = function(i) { return 8; };
+                    objLayout['paddingRight'] = function(i) { return 8; };
+                    objLayout['paddingTop'] = function(i) { return 6; };
+                    objLayout['paddingBottom'] = function(i) { return 6; };
+                    doc.content[1].layout = objLayout;
+
+                    // Center align the headers and content
+                    doc.content[1].table.body[0].forEach(function(header) {
+                        header.alignment = 'center';
+                    });
+                    doc.content[1].table.body.forEach(function(row, index) {
+                        if(index !== 0) { // Skip the header row
+                            row.forEach(function(cell) {
+                                cell.alignment = 'center';
+                            });
+                        }
+                    });
+
+                    // Set font sizes for headers and content
+                    doc.styles.tableHeader.fontSize = 12;
+                    doc.defaultStyle.fontSize = 10;
+                }
+            },
+            'copy', 'excel', 'csv', 'print' // Include other buttons if needed
+        ],
+        initComplete: (settings, json) => {
+            $(".dataTables_filter").appendTo("#tableSearch");
+            $(".dataTables_filter").appendTo(".search-input");
+        },
+    });
+}function readURL(input){if(input.files&&input.files[0]){var reader=new FileReader();reader.onload=function(e){$('#blah').attr('src',e.target.result);}
 reader.readAsDataURL(input.files[0]);}}
 $("#imgInp").change(function(){readURL(this);});if($('.datatable').length>0){$('.datatable').DataTable({"bFilter":false});}
 setTimeout(function(){$('#global-loader');setTimeout(function(){$("#global-loader").fadeOut("slow");},100);},500);if($('.datetimepicker').length>0){$('.datetimepicker').datetimepicker({format:'DD-MM-YYYY',icons:{up:"fas fa-angle-up",down:"fas fa-angle-down",next:'fas fa-angle-right',previous:'fas fa-angle-left'}});}

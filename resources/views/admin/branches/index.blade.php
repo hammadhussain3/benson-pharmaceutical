@@ -30,7 +30,9 @@
                         <tr>
                             <th>#</th>
                             <th>Branch Name</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Country</th>
                             <th>City</th>
                             <th>Phone</th>
@@ -44,7 +46,9 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $branch->name }}</td>
+                                @role('Superadmin')
                                 <td>{{ $branch->company->name }}</td>
+                                @endrole
                                 <td>{{ $branch->country->name }}</td>
                                 <td>{{ $branch->city->name }}</td>
                                 <td>{{ $branch->phone }}</td>

@@ -30,7 +30,9 @@
                         <tr>
                             <th>#</th>
                             <th>Leave Type</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -39,7 +41,9 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $leaveType->name }}</td>
+                                @role('Superadmin')
                                 <td>{{ $leaveType->company->name }}</td>
+                                @endrole
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('leave_types.edit', $leaveType->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">

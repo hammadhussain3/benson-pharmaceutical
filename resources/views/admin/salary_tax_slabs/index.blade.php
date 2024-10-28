@@ -32,7 +32,9 @@
                             <th>Slab Start</th>
                             <th>Slab End</th>
                             <th>Tax Value</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -43,7 +45,9 @@
                                 <td>{{ $slab->slab_start }}</td>
                                 <td>{{ $slab->slab_end }}</td>
                                 <td>{{ $slab->tax_value }}%</td>
+                                @role('Superadmin')
                                 <td>{{ $slab->company->name }}</td>
+                                @endrole
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('tax-slabs.edit', $slab->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">

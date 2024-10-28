@@ -42,7 +42,9 @@
                             <th>Payment Type</th>
                             <th>Supplier</th>
                             <th>Distributor</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -63,7 +65,9 @@
                                 <td>{{ $party->paymentType->name ?? 'N/A' }}</td> <!-- Assuming relationship exists -->
                                 <td>{{ $party->is_supplier ? 'Yes' : 'No' }}</td>
                                 <td>{{ $party->is_distributor ? 'Yes' : 'No' }}</td>
+                                @role('Superadmin')
                                 <td>{{ $party->company->name ?? 'N/A' }}</td>
+                                @endrole
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('parties.edit', $party->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">

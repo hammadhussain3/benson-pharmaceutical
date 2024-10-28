@@ -31,7 +31,9 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Description</th>
+                            @role('Superadmin')
                             <th>Company</th>
+                            @endrole
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -41,7 +43,9 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $paymentType->name }}</td>
                                 <td>{{ $paymentType->description }}</td>
+                                @role('Superadmin')
                                 <td>{{ $paymentType->company->name }}</td>
+                                @endrole
                                 <td class="text-center">
                                     <a class="me-3" href="{{ route('payment_types.edit', $paymentType->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
