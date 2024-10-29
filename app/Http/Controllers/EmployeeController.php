@@ -60,11 +60,12 @@ class EmployeeController extends Controller
         if (!auth()->user()->hasRole('Superadmin')) {
             $branches = Branch::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
             $departments = Department::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
-
-            return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies'));
         }
 
-        return view('admin.employees.edit', compact('employee', 'designations', 'banks', 'companies'));
+        $branches = Branch::orderBy('name', 'asc')->where('company_id', $employee->company_id)->get();
+        $departments = Department::orderBy('name', 'asc')->where('company_id', $employee->company_id)->get();
+
+        return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies'));
     }
     public function store(StoreEmployeeRequest $request)
     {

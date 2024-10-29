@@ -25,7 +25,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select class="js-example-basic-single select2" name="company_id" required>
+                                <select class="js-example-basic-single select2" name="company" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -46,7 +46,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required>
+                                <select name="country" id="country_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
@@ -59,7 +59,7 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="city_id">City</label>
-                                <select name="city_id" id="city_id" class="js-example-basic-single select2" required>
+                                <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
                                     @if (isset($company->city_id))
                                         @foreach ($cities as $city)

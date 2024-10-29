@@ -20,13 +20,13 @@ class StoreEmployeeRequest extends FormRequest
             'basic_pay' => 'required|numeric',
             'allowances' => 'required|numeric',
             'date_of_joining' => 'required|date',
-            'designation_id' => 'required|exists:designations,id',
-            'department_id' => 'required|exists:departments,id',
-            'bank_id' => 'nullable|exists:banks,id',
+            'designation' => 'required|exists:designations,id',
+            'department' => 'required|exists:departments,id',
+            'bank' => 'nullable|exists:banks,id',
             'bank_account' => 'nullable|string|max:255',
             'is_active' => 'boolean',
-            'branch_id' => 'required|exists:branches,id',
-            'company_id' => 'required|exists:companies,id',
+            'branch' => 'required|exists:branches,id',
+            'company' => 'required|exists:companies,id',
         ];
     }
 }

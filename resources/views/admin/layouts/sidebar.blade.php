@@ -9,6 +9,8 @@
                     </a>
                 </li>
 
+                @role('Superadmin')
+
                 <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Admin</span></li>
 
                 <li class="submenu">
@@ -101,6 +103,44 @@
                     </ul>
                 </li>
 
+                <li class="submenu">
+                    <a class=" {{ request()->is('users*') ? 'active' : '' }}" href="javascript:void(0);">
+                        <i class="fa fa-user"></i>
+                        <span>Users</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('users') ? 'active' : '' }}"
+                                href="{{ route('users.index') }}">User List</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('users/register') ? 'active' : '' }}"
+                                href="{{ route('users.register') }}">Add User</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a class=" {{ request()->is('roles*') ? 'active' : '' }}" href="javascript:void(0);">
+                        <i class="fa fa-lock"></i>
+                        <span>Roles</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{{ request()->is('roles') ? 'active' : '' }}"
+                                href="{{ route('roles.index') }}">Role List</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('roles/create') ? 'active' : '' }}"
+                                href="{{ route('roles.create') }}">Add Role</a>
+                        </li>
+                    </ul>
+                </li>
+
+                @endrole
+
                 <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Human Resource</span></li>
 
                 <li>
@@ -158,13 +198,13 @@
                     </a>
                 </li>
 
-                <li>
+                {{-- <li>
                     <a class="{{ request()->is('salary-sheet*') ? 'active' : '' }}"
                         href="{{ route('salary.sheet.index') }}">
                         <i class="fa fa-book"></i>
                         <span>Salary Sheet</span>
                     </a>
-                </li>
+                </li> --}}
                 
                 <li>
                     <a class="{{ request()->is('banks*') ? 'active' : '' }}" href="{{ route('banks.index') }}">
@@ -230,42 +270,6 @@
                         <li>
                             <a class="{{ request()->is('designations/create') ? 'active' : '' }}"
                                 href="{{ route('designations.create') }}">Add Designation</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="submenu">
-                    <a class=" {{ request()->is('users*') ? 'active' : '' }}" href="javascript:void(0);">
-                        <i class="fa fa-user"></i>
-                        <span>Users</span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a class="{{ request()->is('users') ? 'active' : '' }}"
-                                href="{{ route('users.index') }}">User List</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->is('users/register') ? 'active' : '' }}"
-                                href="{{ route('users.register') }}">Add User</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="submenu">
-                    <a class=" {{ request()->is('roles*') ? 'active' : '' }}" href="javascript:void(0);">
-                        <i class="fa fa-lock"></i>
-                        <span>Roles</span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a class="{{ request()->is('roles') ? 'active' : '' }}"
-                                href="{{ route('roles.index') }}">Role List</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->is('roles/create') ? 'active' : '' }}"
-                                href="{{ route('roles.create') }}">Add Role</a>
                         </li>
                     </ul>
                 </li>

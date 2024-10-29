@@ -10,11 +10,21 @@ class EmployeeService
 {
     public function createEmployee(array $data)
     {
+        $data['company_id'] = $data['company'];
+        $data['branch_id'] = $data['branch'];
+        $data['department_id'] = $data['department'];
+        $data['designation_id'] = $data['designation'];
+        $data['bank_id'] = $data['bank'];
         return Employee::create($data);
     }
 
     public function updateEmployee(Employee $employee, array $data)
     {
+        $data['company_id'] = $data['company'];
+        $data['branch_id'] = $data['branch'];
+        $data['department_id'] = $data['department'];
+        $data['designation_id'] = $data['designation'];
+        $data['bank_id'] = $data['bank'];
         $employee->update($data);
         return $employee;
     }

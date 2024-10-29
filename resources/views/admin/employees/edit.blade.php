@@ -58,22 +58,39 @@
                                     value="{{ old('date_of_joining', $employee->date_of_joining) }}" required>
                                 <div class="invalid-feedback">Please select a date.</div>
                             </div>
+                            @role('Superadmin')
                             <div class="mb-3 col-md-6">
-                                <label for="designation_id">Designation</label>
-                                <select name="designation_id" id="designation_id" class="form-control" required>
-                                    <option value="">Select Designation</option>
-                                    @foreach ($designations as $designation)
-                                        <option value="{{ $designation->id }}"
-                                            {{ $designation->id == $employee->designation_id ? 'selected' : '' }}>
-                                            {{ $designation->name }}
+                                <label for="company_id">Company</label>
+                                <select name="company" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value);" @endrole>
+                                    <option value="">Select Company</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}"
+                                            {{ $company->id == $employee->company_id ? 'selected' : '' }}>
+                                            {{ $company->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                <div class="invalid-feedback">Please select a designation.</div>
+                                <div class="invalid-feedback">Please select a company.</div>
+                            </div>
+                            @else
+                                <input type="hidden" name="company_id" value="{{ $employee->company_id }}">
+                            @endrole
+                            <div class="mb-3 col-md-6">
+                                <label for="branch_id">Branch</label>
+                                <select name="branch" id="branch_id" class="form-control" required>
+                                    <option value="">Select Branch</option>
+                                    @foreach ($branches as $branch)
+                                        <option value="{{ $branch->id }}"
+                                            {{ $branch->id == $employee->branch_id ? 'selected' : '' }}>
+                                            {{ $branch->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Please select a branch.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="department_id">Department</label>
-                                <select name="department_id" id="department_id" class="form-control" required>
+                                <select name="department" id="department_id" class="form-control" required>
                                     <option value="">Select Department</option>
                                     @foreach ($departments as $department)
                                         <option value="{{ $department->id }}"
@@ -85,8 +102,21 @@
                                 <div class="invalid-feedback">Please select a department.</div>
                             </div>
                             <div class="mb-3 col-md-6">
+                                <label for="designation_id">Designation</label>
+                                <select name="designation" id="designation_id" class="form-control" required>
+                                    <option value="">Select Designation</option>
+                                    @foreach ($designations as $designation)
+                                        <option value="{{ $designation->id }}"
+                                            {{ $designation->id == $employee->designation_id ? 'selected' : '' }}>
+                                            {{ $designation->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Please select a designation.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="bank_id">Bank (optional)</label>
-                                <select name="bank_id" id="bank_id" class="form-control">
+                                <select name="bank" id="bank_id" class="form-control">
                                     <option value="">Select Bank</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}"
@@ -101,36 +131,6 @@
                                 <input type="text" class="form-control" name="bank_account" id="bank_account"
                                     value="{{ old('bank_account', $employee->bank_account) }}">
                             </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="branch_id">Branch</label>
-                                <select name="branch_id" id="branch_id" class="form-control" required>
-                                    <option value="">Select Branch</option>
-                                    @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}"
-                                            {{ $branch->id == $employee->branch_id ? 'selected' : '' }}>
-                                            {{ $branch->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a branch.</div>
-                            </div>
-                            @role('Superadmin')
-                            <div class="mb-3 col-md-6">
-                                <label for="company_id">Company</label>
-                                <select name="company_id" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value);" @endrole>
-                                    <option value="">Select Company</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}"
-                                            {{ $company->id == $employee->company_id ? 'selected' : '' }}>
-                                            {{ $company->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a company.</div>
-                            </div>
-                            @else
-                                <input type="hidden" name="company_id" value="{{ $employee->company_id }}">
-                            @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="is_active">Is Active</label>
                                 <select name="is_active" id="is_active" class="form-control" required>
