@@ -39,7 +39,7 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="month">Month</label>
-                                <input type="month" name="month" id="month" class="form-control" min="{{ date('Y-m', strtotime($currentEmployee->date_of_joining)) }}" max="{{ date('Y-m', strtotime('-1 month')) }}"
+                                <input type="month" name="month" id="month" class="form-control" min="{{ date('Y-m', strtotime($currentEmployee->date_of_joining)) }}" max="{{ date('Y-m', strtotime('-1 month')) }}" onchange="SelectLoanDate(this.value);"
                                        value="{{ $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT) }}" required>
                                 <div class="invalid-feedback">Please select a month.</div>
                             </div>

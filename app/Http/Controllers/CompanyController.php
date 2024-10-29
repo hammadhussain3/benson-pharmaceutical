@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Company;
 use App\Models\Country; // Assuming you have a Country model
 use App\Models\City; // Assuming you have a City model
@@ -33,7 +34,25 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request)
     {
-        $this->companyService->createCompany($request->validated());
+        $data = [
+            'name' => $request->name,
+            'address' => $request->address,
+            'country_id' => $request->country,
+            'city_id' => $request->city,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'website' => $request->website,
+            'ntn' => $request->ntn,
+            'strn' => $request->strn,
+            'is_active' => $request->is_active,
+        ];
+        if ($request->hasFile('logo')) {
+            $uploadedFile = $request->file('logo');
+            $filename = 'company_' . time() . '.' . $uploadedFile->getClientOriginalExtension();
+            $uploadedFile->move(public_path('images/company'), $filename);
+            $data['logo_path'] = $filename;
+        }
+        $this->companyService->createCompany($data);
         return redirect()->route('companies.index')->with('success', 'Company created successfully.');
     }
 
@@ -48,7 +67,25 @@ class CompanyController extends Controller
     public function update(UpdateCompanyRequest $request, $id)
     {
         $company = Company::findOrFail($id);
-        $this->companyService->updateCompany($company, $request->validated());
+        $data = [
+            'name' => $request->name,
+            'address' => $request->address,
+            'country_id' => $request->country,
+            'city_id' => $request->city,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'website' => $request->website,
+            'ntn' => $request->ntn,
+            'strn' => $request->strn,
+            'is_active' => $request->is_active,
+        ];
+        if ($request->hasFile('logo')) {
+            $uploadedFile = $request->file('logo');
+            $filename = 'company_' . time() . '.' . $uploadedFile->getClientOriginalExtension();
+            $uploadedFile->move(public_path('images/company'), $filename);
+            $data['logo_path'] = $filename;
+        }
+        $this->companyService->updateCompany($company, $data);
         return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
     }
 

@@ -55,6 +55,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('parties', PartyController::class);
     Route::resource('roles', RoleController::class);
 
+    Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
+    Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
     Route::get('/getemployee/{employeeId}', [EmployeeController::class, 'getEmployeeDetails']);

@@ -29,7 +29,6 @@ function Selectcountry()
         fetch(`/countries/${countryId}/cities`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 data.cities.forEach(function (city) {
                     var option = document.createElement('option');
                     option.value = city.id;
@@ -54,6 +53,23 @@ function SelectLoan(employeeId)
                 citySelect.value = data.loan;
             })
             .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function SelectLoanDate(month)
+{
+    var month = month;
+    var employeeId = document.getElementById('employee_id').value;
+    var loan_advance = document.getElementById('loan_advance');
+
+    if (month && employeeId) {
+        fetch(`/getloan/${employeeId}?month=${month}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log
+                loan_advance.value = data.loan;
+            })
+            .catch(error => console.error('Error fetching loan data:', error));
     }
 }
 
@@ -183,6 +199,49 @@ function SelectEmployeeDetails(employeeId)
                     var formattedMinMonth = minDate.toISOString().slice(0, 7); // Get 'YYYY-MM' part
                     monthInput.min = formattedMinMonth;
                 }
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function selectBranches(companyId)
+{
+    var branchSelect = document.getElementById('branch_id');
+    branchSelect.innerHTML = '<option value="">Select Branch</option>';
+    
+    if (companyId) {
+        
+        fetch(`/companies/${companyId}/branches`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.branches.forEach(function (branch) {
+                    var option = document.createElement('option');
+                    option.value = branch.id;
+                    option.textContent = branch.name;
+                    branchSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function selectDepartments(companyId)
+{
+    var departmentSelect = document.getElementById('department_id');
+    departmentSelect.innerHTML = '<option value="">Select Department</option>';
+    
+    if (companyId) {
+        fetch(`/companies/${companyId}/departments`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.departments.forEach(function (department) {
+                    var option = document.createElement('option');
+                    option.value = department.id;
+                    option.textContent = department.name;
+                    departmentSelect.appendChild(option);
+                });
             })
             .catch(error => console.error('Error fetching cities:', error));
     }

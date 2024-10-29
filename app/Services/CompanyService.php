@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Company;
+use Illuminate\Support\Facades\File;
 
 class CompanyService
 {
@@ -24,6 +25,10 @@ class CompanyService
 
     public function deleteCompany(Company $company)
     {
+        $filePath = public_path('images/company/' . $company['logo_path']);
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
         $company->delete();
     }
 }

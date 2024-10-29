@@ -14,6 +14,7 @@ use App\Services\SalarySlipService;
 use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 use App\Models\Loan;
+use Carbon\Carbon;
 
 class SalarySlipController extends Controller
 {
@@ -37,7 +38,6 @@ class SalarySlipController extends Controller
 
     public function create()
     {
-
         $employees = $this->employeeService->getAllEmployees();
         $companies = Company::all();
         $branches = Branch::all();
@@ -49,6 +49,16 @@ class SalarySlipController extends Controller
 
     public function store(SalarySlipRequest $request)
     {
+        $date = \DateTime::createFromFormat('Y-m', $request['month']);
+    
+        $month = $date->format('m');
+        $year = $date->format('Y');
+
+        $salarySlip = SalarySlip::where('employee_id', $request->employee_id)->where('month', $month)->where('year', $year)->first();
+
+        if ($salarySlip) {
+            return back()->with('error', 'salary slip already created for the selected employee and month.');
+        }
         $this->salarySlipService->createSalarySlip($request->validated());
         return redirect()->route('salary.sheet.show', [
             'employee_id' => $request->employee_id,
@@ -74,7 +84,10 @@ class SalarySlipController extends Controller
     {
         $salarySlip = SalarySlip::findOrFail($id);
         $this->salarySlipService->updateSalarySlip($salarySlip, $request->validated());
-        return redirect()->route('salary_slips.index')->with('success', 'Salary Slip updated successfully.');
+        return redirect()->route('salary.sheet.show', [
+            'employee_id' => $request->employee_id,
+            'month' => $request->month
+        ])->with('success', 'Salary Slip updated successfully.');
     }
 
     public function destroy($id)

@@ -36,7 +36,7 @@ class SalarySheetController extends Controller
 
         // $startOfMonth = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
         // $endOfMonth = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
-        $formattedMonth = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT);
+        $formattedMonth = Carbon::createFromFormat('Y-m', $request->month)->format('M Y');
         $salarySlip = SalarySlip::where('employee_id', $employee->id)
             ->where('month', $month)
             ->where('year', $year)
@@ -46,10 +46,13 @@ class SalarySheetController extends Controller
             return back()->with('error', 'No salary slip found for the selected employee and month.');
         }
 
-        $salaryPerDay = $employee->net_salary / 30;
+        // Calculate the number of days in the given month and year
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+
+        $salaryPerDay = $employee->net_salary / $daysInMonth;
         $salaryPerHour = $salaryPerDay / 8;
         $authorizedAbsenceDeduction = $salaryPerDay * $salarySlip->auth_leave;
-        $unauthorizedAbsenceDeduction = ($salaryPerDay * $salarySlip->unauth_leave) + (0.25 * $salaryPerDay);
+        $unauthorizedAbsenceDeduction = $salarySlip->unauth_leave * (1.25 * $salaryPerDay);
         $lateDeduction = $salaryPerHour * $salarySlip->late_in_early_out_deduction;
         $overtimePay = ($salaryPerHour * $salarySlip->overtime + (0.25 * $salaryPerHour));
         $loan = Loan::where('employee_id', $employee->id)
@@ -86,7 +89,8 @@ class SalarySheetController extends Controller
             'overtimePay',
             'loanDeduction',
             'incomeTax',
-            'totalSalaryInWords'
+            'totalSalaryInWords',
+            'daysInMonth'
         ));
     }
 }

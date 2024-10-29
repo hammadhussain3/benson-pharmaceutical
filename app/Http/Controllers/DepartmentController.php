@@ -51,4 +51,10 @@ class DepartmentController extends Controller
         $this->departmentService->deleteDepartment($department);
         return redirect()->route('departments.index')->with('success', 'Department deleted successfully.');
     }
+
+    public function getDepartmentsByCompany($companyId)
+    {
+        $departments = Department::where('company_id', $companyId)->get();
+        return response()->json(['departments' => $departments]);
+    }
 }

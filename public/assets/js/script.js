@@ -5,7 +5,7 @@ if ($(".datanew").length > 0) {
         bFilter: true,
         dom: '<"top"fB>t<"bottom"lpi><"clear">', // Include buttons (B) in the layout
         pagingType: "numbers",
-        ordering: false,
+        ordering: true,
         language: {
             search: " ",
             sLengthMenu: "_MENU_",

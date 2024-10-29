@@ -14,11 +14,13 @@ class CityService
 
     public function createCity(array $data)
     {
+        $data['country_id'] = $data['country'];
         return City::create($data);
     }
 
     public function updateCity(City $city, array $data)
     {
+        $data['country_id'] = $data['country'];
         $city->update($data);
         return $city;
     }
@@ -32,7 +34,7 @@ class CityService
     {
         $validator = \Validator::make($data, [
             'name' => 'required|string|max:255',
-            'country_id' => 'required|exists:countries,id',
+            'country' => 'required|exists:countries,id',
         ]);
 
         if ($validator->fails()) {

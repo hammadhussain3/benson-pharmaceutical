@@ -17,15 +17,15 @@ class StoreCompanyRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'country_id' => 'required|exists:countries,id',
-            'city_id' => 'required|exists:cities,id',
-            'phone' => 'nullable|string|max:20',
+            'country' => 'required|exists:countries,id',
+            'city' => 'required|exists:cities,id',
+            'phone' => 'nullable|string|max:20|regex:/^(\+?\d{1,3}[- ]?)?\d{10,15}$/',
             'email' => 'nullable|email|max:255',
             'website' => 'nullable|url|max:255',
             'ntn' => 'nullable|string|max:20',
             'strn' => 'nullable|string|max:20',
             'is_active' => 'boolean',
-            'logo_path' => 'nullable|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:512',
         ];
     }
 }

@@ -17,7 +17,7 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('companies.store') }}" method="POST" class="needs-validation" novalidate>
+                    <form action="{{ route('companies.store') }}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                         @csrf
                         <div class="form-row row">
                             <div class="mb-3 col-md-12">
@@ -34,7 +34,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry(this.value)">
+                                <select name="country" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry(this.value)">
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
@@ -47,7 +47,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="city_id">City</label>
-                                <select name="city_id" id="city_id" class="js-example-basic-single select2" required>
+                                <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
                                     @if (old('country_id'))
                                         @foreach ($cities as $city)
@@ -94,9 +94,9 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="logo_path">Logo Path</label>
-                                <input type="text" class="form-control" name="logo_path" id="logo_path"
-                                    placeholder="Logo Path" value="{{ old('logo_path') }}">
+                                <label for="logo_path">Logo</label>
+                                <input type="file" class="form-control" name="logo" id="logo_path"
+                                    placeholder="Logo" value="{{ old('logo_path') }}">
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

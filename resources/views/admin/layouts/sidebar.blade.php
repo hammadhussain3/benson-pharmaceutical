@@ -9,7 +9,7 @@
                     </a>
                 </li>
 
-                <li><span class="text-muted">Admin</span></li>
+                <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Admin</span></li>
 
                 <li class="submenu">
                     <a class=" {{ request()->is('countries*') ? 'active' : '' }}" href="javascript:void(0);">
@@ -101,7 +101,7 @@
                     </ul>
                 </li>
 
-                <li><span class="text-muted">Human Resource</span></li>
+                <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Human Resource</span></li>
 
                 <li>
                     <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">

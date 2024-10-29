@@ -63,7 +63,7 @@
                             <div class="form-login">
                                 <label for="password">{{ __('Password') }}</label>
                                 <div class="pass-group">
-                                    <input id="password" type="password" name="password" required
+                                    <input id="password" class="pass-input" type="password" name="password" required
                                         placeholder="Enter your password" />
                                     <span class="fas toggle-password fa-eye-slash"></span>
                                 </div>

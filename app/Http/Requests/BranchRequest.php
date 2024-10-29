@@ -14,7 +14,7 @@ class BranchRequest extends FormRequest
             'address' => 'required|string',
             'country_id' => 'required|exists:countries,id',
             'city_id' => 'required|exists:cities,id',
-            'phone' => 'required|string',
+            'phone' => 'required|string|max:20|regex:/^(\+?\d{1,3}[- ]?)?\d{10,15}$/',
             'email' => 'nullable|email',
             'contact_person_name' => 'nullable|string',
             'contact_person_phone' => 'nullable|string',

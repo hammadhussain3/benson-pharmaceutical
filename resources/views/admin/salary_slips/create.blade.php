@@ -23,7 +23,7 @@
 
                             <div class="col-md-6">
                                 <label>Select Employee </label>
-                                <select name="employee_id" id="employee" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelecLeaves(this.value); SelectIncomeTax(this.value); SelectCompany(this.value); SelectEmployeeDetails(this.value);">
+                                <select name="employee_id" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelecLeaves(this.value); SelectIncomeTax(this.value); SelectCompany(this.value); SelectEmployeeDetails(this.value);">
                                     <option value="">--Select Employee--</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->code }} -
@@ -35,7 +35,7 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="month">Month</label>
-                                <input type="month" name="month" id="month" class="form-control" max="{{ date('Y-m', strtotime('-1 month')) }}" required>
+                                <input type="month" name="month" id="month" class="form-control" max="{{ date('Y-m', strtotime('-1 month')) }}" required onchange="SelectLoanDate(this.value);">
                                 <div class="invalid-feedback">Please select a month.</div>
                             </div>
 

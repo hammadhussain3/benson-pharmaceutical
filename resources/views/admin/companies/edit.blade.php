@@ -36,7 +36,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry(this.value)">
+                                <select name="country" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry(this.value)">
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
@@ -49,7 +49,7 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="city_id">City</label>
-                                <select name="city_id" id="city_id" class="js-example-basic-single select2" required>
+                                <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
                                     @if (isset($company->city_id))
                                         @foreach ($cities as $city)
@@ -95,8 +95,8 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="logo_path">Logo Path</label>
-                                <input type="text" class="form-control" name="logo_path" id="logo_path"
+                                <label for="logo_path">Logo</label>
+                                <input type="file" class="form-control" name="logo" id="logo_path"
                                     value="{{ old('logo_path', $company->logo_path) }}" placeholder="Logo Path">
                             </div>
                         </div>

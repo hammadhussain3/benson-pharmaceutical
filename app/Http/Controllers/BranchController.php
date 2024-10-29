@@ -59,4 +59,10 @@ class BranchController extends Controller
         $this->branchService->deleteBranch($branch);
         return redirect()->route('branches.index')->with('success', 'Branch deleted successfully.');
     }
+
+    public function getBranchesByCompany($companyId)
+    {
+        $branches = Branch::where('company_id', $companyId)->get();
+        return response()->json(['branches' => $branches]);
+    }
 }

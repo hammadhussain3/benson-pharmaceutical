@@ -12,7 +12,7 @@ class UpdateSupplierRequest extends FormRequest
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:suppliers,code,' . $this->route('supplier'),
             'contact_person_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|string|max:20|regex:/^(\+?\d{1,3}[- ]?)?\d{10,15}$/',
             'email' => 'nullable|email',
             'country_id' => 'required|exists:countries,id',
             'city_id' => 'required|exists:cities,id',

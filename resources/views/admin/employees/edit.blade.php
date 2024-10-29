@@ -117,7 +117,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select name="company_id" id="company_id" class="form-control" required>
+                                <select name="company_id" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"

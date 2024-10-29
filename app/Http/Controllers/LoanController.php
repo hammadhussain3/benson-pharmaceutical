@@ -11,6 +11,7 @@ use App\Models\Loan;
 use App\Services\LoanService;
 use App\Services\EmployeeService;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class LoanController extends Controller
 {
@@ -50,7 +51,6 @@ class LoanController extends Controller
 
     public function create()
     {
-
         $employees = $this->employeeService->getAllEmployees();
         $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.loans.create', compact('employees', 'companies'));
@@ -70,18 +70,32 @@ class LoanController extends Controller
         return view('admin.loans.edit', compact('loan', 'employees', 'companies'));
     }
 
-    public function getLoansByEmployee($employeeId)
+    public function getLoansByEmployee($employeeId, Request $request)
     {
-        // Fetch the loan record for the given employee ID
-        $loan = Loan::where('employee_id', $employeeId)->first();
+        $previousMonth = $request->has('month') ? Carbon::createFromFormat('Y-m', $request->input('month')) : Carbon::now()->subMonth();
 
-        $monthlyPayment = 0;
+        $loans = Loan::where('employee_id', $employeeId)
+            ->where('remaining', '>=', 0)
+            ->whereMonth('created_at', '<=', $previousMonth->month)
+            ->whereYear('created_at', '<=', $previousMonth->year)
+            ->get();
 
-        if ($loan) {
-            $monthlyPayment = $loan->remaining == 0 ? 0 : $loan->amount / $loan->payback_months;
+        $totalMonthlyPayment = 0;
+
+        foreach ($loans as $loan) {
+            // Calculate the difference in months between the current month and the loan creation month
+            $loanStartMonth = Carbon::parse($loan->created_at);
+            $monthsElapsed = $loanStartMonth->diffInMonths($previousMonth);
+
+            // Check if the loan is still within its payback period
+            if ($monthsElapsed <= $loan->payback_months) {
+                $installment = $loan->amount / $loan->payback_months;
+                // Add the smaller value between the installment and the remaining balance to the total
+                $totalMonthlyPayment += min($installment, $loan->remaining);
+            }
         }
 
-        return response()->json(['loan' => $monthlyPayment]);
+        return response()->json(['loan' => $totalMonthlyPayment]);
     }
 
     public function update(LoanRequest $request, $id)

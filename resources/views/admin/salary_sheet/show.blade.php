@@ -67,27 +67,27 @@
                 <tbody>
                     <tr>
                         <td>Gross Salary</td>
-                        <td>30</td>
-                        <td></td>
+                        <td>{{ $daysInMonth }}</td>
+                        <td>-</td>
                         <td>{{ number_format($salaryPerDay, 2) }}</td>
-                        <td></td>
+                        <td>-</td>
                         <td>{{ number_format($netSalary, 2) }}</td>
                     </tr>
                     <tr>
                         <td>Authorized Absence</td>
                         <td>{{ $salarySlip->auth_leave }}</td>
-                        <td></td>
+                        <td>-</td>
                         <td>{{ number_format($salaryPerDay, 2) }}</td>
                         <td>{{ number_format($authorizedAbsenceDeduction, 2) }}</td>
-                        <td></td>
+                        <td>-</td>
                     </tr>
                     <tr>
                         <td>Unauth. Absence</td>
                         <td>{{ $salarySlip->unauth_leave }}</td>
-                        <td></td>
+                        <td>-</td>
                         <td>{{ number_format($salaryPerDay * 1.25, 2) }}</td>
                         <td>{{ number_format($unauthorizedAbsenceDeduction, 2) }}</td>
-                        <td></td>
+                        <td>-</td>
                     </tr>
                     <tr>
                         <td>Late In / Early Out</td>

@@ -70,9 +70,12 @@
                                 <label for="department_id">Department</label>
                                 <select name="department_id" id="department_id" class="form-control" required>
                                     <option value="">Select Department</option>
+                                    @role('Superadmin')
+                                    @else
                                     @foreach ($departments as $department)
                                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                                     @endforeach
+                                    @endrole
                                 </select>
                                 <div class="invalid-feedback">Please select a department.</div>
                             </div>
@@ -94,16 +97,19 @@
                                 <label for="branch_id">Branch</label>
                                 <select name="branch_id" id="branch_id" class="form-control" required>
                                     <option value="">Select Branch</option>
+                                    @role('Superadmin')
+                                    @else
                                     @foreach ($branches as $branch)
                                         <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                     @endforeach
+                                    @endrole
                                 </select>
                                 <div class="invalid-feedback">Please select a branch.</div>
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select name="company_id" id="company_id" class="form-control" required>
+                                <select name="company_id" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}">{{ $company->name }}</option>

@@ -38,23 +38,33 @@ class EmployeeController extends Controller
             $newEmployeeCode = 'EMP00001';
         }
         $designations = Designation::orderBy('name', 'asc')->get();
-        $departments = Department::orderBy('name', 'asc')->get();
         $banks = Bank::orderBy('name', 'asc')->get();
-        $branches = Branch::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
 
-        return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'newEmployeeCode'));
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $branches = Branch::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
+            $departments = Department::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
+
+            return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'newEmployeeCode'));
+        }
+
+        return view('admin.employees.create', compact('designations', 'banks', 'companies', 'newEmployeeCode'));
     }
 
     public function edit(Employee $employee)
     {
         $designations = Designation::orderBy('name', 'asc')->get();
-        $departments = Department::orderBy('name', 'asc')->get();
         $banks = Bank::orderBy('name', 'asc')->get();
-        $branches = Branch::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
 
-        return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies'));
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $branches = Branch::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
+            $departments = Department::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
+
+            return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies'));
+        }
+
+        return view('admin.employees.edit', compact('employee', 'designations', 'banks', 'companies'));
     }
     public function store(StoreEmployeeRequest $request)
     {
