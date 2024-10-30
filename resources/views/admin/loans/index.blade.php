@@ -36,6 +36,7 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -51,7 +52,8 @@
                                 @role('Superadmin')
                                 <td>{{ $loan->company->name }}</td>
                                 @endrole
-                                <td class="text-center">
+                                <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('F j, Y') }}</td>
+                                <td>
                                     <a class="me-3" href="{{ route('loans.edit', $loan->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

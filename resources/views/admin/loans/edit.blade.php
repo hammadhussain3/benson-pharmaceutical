@@ -57,11 +57,11 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <input type="text" class="form-control" name="company" id="company" value="{{ App\Models\Company::where('id', $loan->company_id)->value('name') }}" required readonly>
-                                <input type="hidden" name="company_id" id="company_id" value="{{ $loan->company_id }}" required>
+                                <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $loan->company_id)->value('name') }}" required readonly>
+                                <input type="hidden" name="company" id="company_id" value="{{ $loan->company_id }}" required>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ $loan->company_id }}">
+                                <input type="hidden" name="company" value="{{ $loan->company_id }}">
                             @endrole
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

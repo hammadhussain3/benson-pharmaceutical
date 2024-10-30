@@ -46,7 +46,7 @@
                                 @role('Superadmin')
                                 <td>{{ $chartOfAccount->company->name }}</td>
                                 @endrole
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3" href="{{ route('chart_of_accounts.edit', $chartOfAccount->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

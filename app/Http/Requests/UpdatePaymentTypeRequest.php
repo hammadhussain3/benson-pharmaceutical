@@ -11,7 +11,7 @@ class UpdatePaymentTypeRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'company_id' => 'required|exists:companies,id',
+            'company' => 'required|exists:companies,id',
         ];
     }
 }

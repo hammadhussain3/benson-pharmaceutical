@@ -72,7 +72,7 @@
                                                     @endif
                                                 @endforeach
                                             </td>
-                                            <td class="text-center">
+                                            <td>
                                                 <a class="me-3" href="{{ route('users.edit', $user->id) }}">
                                                     <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                                 </a>

@@ -18,7 +18,7 @@ class SalarySlipFactory extends Factory
         $companyIds = Company::pluck('id')->toArray();
 
         return [
-            'Employee_id' => $this->faker->randomElement($employeeIds), // Use an existing Employee ID
+            'Employee' => $this->faker->randomElement($employeeIds), // Use an existing Employee ID
             'Auth_leave' => $this->faker->numberBetween(0, 10),
             'Unauth_leave' => $this->faker->numberBetween(0, 10),
             'Approved_with_pay' => $this->faker->numberBetween(0, 10),

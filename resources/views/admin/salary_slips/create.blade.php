@@ -23,21 +23,45 @@
 
                             <div class="col-md-6">
                                 <label>Select Employee </label>
-                                <select name="employee_id" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelecLeaves(this.value); SelectIncomeTax(this.value); SelectCompany(this.value); SelectEmployeeDetails(this.value);">
+                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelecLeaves(this.value); SelectIncomeTax(this.value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
                                     <option value="">--Select Employee--</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->code }} -
                                             {{ $employee->first_name }}
-                                            {{ $employee->last_name }}</option>
+                                            {{ $employee->last_name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
 
+                            @php
+                                $currentMonth = date('n');
+                                $currentYear = date('Y');
+                            @endphp
+
                             <div class="mb-3 col-md-6">
+                                <label for="month">Month and Year</label>
+                                <select class="form-select" name="month" id="month">
+                                    @foreach(['1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April', '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August', '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'] as $key => $month)
+                                        @php
+                                            // Determine the year for each month
+                                            $year = $key > $currentMonth ? $currentYear - 1 : $currentYear;
+                                            // Format the value as YYYY-MM
+                                            $formattedValue = sprintf('%04d-%02d', $year, $key);
+                                        @endphp
+                                        <option value="{{ $formattedValue }}" {{ $key == $currentMonth && $year == $currentYear ? 'selected' : '' }}>
+                                            {{ $month }} {{ $year }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Please select a month.</div>
+                            </div>                         
+
+                            {{-- <div class="mb-3 col-md-6">
                                 <label for="month">Month</label>
                                 <input type="month" name="month" id="month" class="form-control" max="{{ date('Y-m', strtotime('-1 month')) }}" required onchange="SelectLoanDate(this.value);">
                                 <div class="invalid-feedback">Please select a month.</div>
-                            </div>
+                            </div> --}}
 
                             <div class="mb-3 col-md-6">
                                 <label for="payment_mode">Payment Mode</label>
@@ -111,11 +135,15 @@
                                 <div class="invalid-feedback">Please provide the number of allowances.</div>
                             </div>
 
+                            @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company">Company</label>
-                                <input type="text" class="form-control" name="company" id="company" required readonly>
-                                <input type="hidden" name="company_id" id="company_id" required>
+                                <input type="text" class="form-control" id="company" required readonly>
+                                <input type="hidden" name="company" id="company_id" required>
                             </div>
+                            @else
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
 
                             <div class="mb-3 col-md-6">
                                 <label for="branch">Branch</label>

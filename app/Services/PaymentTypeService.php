@@ -12,11 +12,13 @@ class PaymentTypeService
     }
     public function createPaymentType($data)
     {
+        $data['company_id'] = $data['company'];
         return PaymentType::create($data);
     }
 
     public function updatePaymentType(PaymentType $paymentType, $data)
     {
+        $data['company_id'] = $data['company'];
         return $paymentType->update($data);
     }
 

@@ -14,7 +14,7 @@ class SalarySlipRequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_id' => 'required|exists:employees,id',
+            'employee' => 'required|exists:employees,id',
             'auth_leave' => 'required|integer|min:0',
             'unauth_leave' => 'required|integer|min:0',
             'approved_with_pay' => 'required|numeric|min:0',
@@ -25,7 +25,7 @@ class SalarySlipRequest extends FormRequest
             'loan_advance' => 'required|numeric|min:0',
             'payment_mode' => 'required|in:bank_transfer,cash',
             'month' => 'required',
-            'company_id' => 'required|exists:companies,id',
+            'company' => 'required|exists:companies,id',
         ];
     }
 }

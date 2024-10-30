@@ -61,7 +61,7 @@
                                     </span>
                                 </td>
 
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3" href="{{ route('companies.edit', $company->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

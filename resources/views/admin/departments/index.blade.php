@@ -30,6 +30,7 @@
                         <tr>
                             <th>#</th>
                             <th>Department Name</th>
+                            <th>Description</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
@@ -41,10 +42,11 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $department->name }}</td>
+                                <td>{{ \Illuminate\Support\Str::words($department->description, 10) }}</td>
                                 @role('Superadmin')
                                 <td>{{ $department->company->name }}</td>
                                 @endrole
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3" href="{{ route('departments.edit', $department->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
@@ -61,7 +63,6 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
                                 </td>
                             </tr>
                         @endforeach

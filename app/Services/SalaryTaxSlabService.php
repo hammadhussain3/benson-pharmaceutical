@@ -13,11 +13,13 @@ class SalaryTaxSlabService
 
     public function createSlab(array $data)
     {
+        $data['company_id'] = $data['company'];
         return SalaryTaxSlab::create($data);
     }
 
     public function updateSlab(SalaryTaxSlab $slab, array $data)
     {
+        $data['company_id'] = $data['company'];
         $slab->update($data);
         return $slab;
     }

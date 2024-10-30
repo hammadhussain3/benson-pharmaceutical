@@ -52,4 +52,10 @@ class DesignationController extends Controller
         $this->designationService->deleteDesignation($designation);
         return redirect()->route('designations.index')->with('success', 'Designation deleted successfully.');
     }
+
+    public function getDesignationsByCompany($companyId)
+    {
+        $designations = Designation::where('company_id', $companyId)->get();
+        return response()->json(['designations' => $designations]);
+    }
 }

@@ -46,7 +46,7 @@
                                 @role('Superadmin')
                                 <td>{{ $paymentType->company->name }}</td>
                                 @endrole
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3" href="{{ route('payment_types.edit', $paymentType->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

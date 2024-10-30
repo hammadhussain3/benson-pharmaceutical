@@ -14,11 +14,11 @@ class LoanRequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_id' => 'required|exists:employees,id',
+            'employee' => 'required|exists:employees,id',
             'amount' => 'required|numeric|min:0',
             'payback_months' => 'required|integer|min:1',
             'remaining' => 'required|numeric|min:0',
-            'company_id' => 'required|exists:companies,id',
+            'company' => 'required|exists:companies,id',
         ];
     }
 }

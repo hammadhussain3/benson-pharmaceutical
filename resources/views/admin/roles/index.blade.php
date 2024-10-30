@@ -51,7 +51,7 @@
                                         </span>
                                     @endforeach
                                 </td>
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3" href="{{ route('roles.edit', $role->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

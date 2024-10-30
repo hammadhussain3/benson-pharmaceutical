@@ -58,6 +58,10 @@ class LoanController extends Controller
 
     public function store(LoanRequest $request)
     {
+        $loan = Loan::where('employee_id', $request->employee)->where('remaining', '>=', '1')->first();
+        if($loan){
+            return back()->with('error', 'Loan found for the selected employee.');
+        }
         $this->loanService->createLoan($request->validated());
         return redirect()->route('loans.index')->with('success', 'Loan created successfully.');
     }
@@ -72,28 +76,39 @@ class LoanController extends Controller
 
     public function getLoansByEmployee($employeeId, Request $request)
     {
-        $previousMonth = $request->has('month') ? Carbon::createFromFormat('Y-m', $request->input('month')) : Carbon::now()->subMonth();
+        $totalMonthlyPayment = 0;
 
         $loans = Loan::where('employee_id', $employeeId)
             ->where('remaining', '>=', 0)
-            ->whereMonth('created_at', '<=', $previousMonth->month)
-            ->whereYear('created_at', '<=', $previousMonth->year)
-            ->get();
+            ->sum('amount');
 
-        $totalMonthlyPayment = 0;
+        if ($loans > 0) {
+            $payback_months = Loan::where('employee_id', $employeeId)
+                ->orderBy('created_at', 'desc')
+                ->value('payback_months');
 
-        foreach ($loans as $loan) {
-            // Calculate the difference in months between the current month and the loan creation month
-            $loanStartMonth = Carbon::parse($loan->created_at);
-            $monthsElapsed = $loanStartMonth->diffInMonths($previousMonth);
-
-            // Check if the loan is still within its payback period
-            if ($monthsElapsed <= $loan->payback_months) {
-                $installment = $loan->amount / $loan->payback_months;
-                // Add the smaller value between the installment and the remaining balance to the total
-                $totalMonthlyPayment += min($installment, $loan->remaining);
+            if ($payback_months > 0) {
+                $totalMonthlyPayment = $loans / $payback_months;
             }
         }
+        
+        // $previousMonth = $request->has('month') ? Carbon::createFromFormat('Y-m', $request->input('month')) : Carbon::now()->subMonth();
+
+        // $loans = Loan::where('employee_id', $employeeId)
+        //     ->where('remaining', '>=', 0)
+        //     ->whereMonth('created_at', '<=', $previousMonth->month)
+        //     ->whereYear('created_at', '<=', $previousMonth->year)
+        //     ->get();
+
+        // foreach ($loans as $loan) {
+        //     $loanStartMonth = Carbon::parse($loan->created_at);
+        //     $monthsElapsed = $loanStartMonth->diffInMonths($previousMonth);
+
+        //     if ($monthsElapsed <= $loan->payback_months) {
+        //         $installment = $loan->amount / $loan->payback_months;
+        //         $totalMonthlyPayment += min($installment, $loan->remaining);
+        //     }
+        // }
 
         return response()->json(['loan' => $totalMonthlyPayment]);
     }

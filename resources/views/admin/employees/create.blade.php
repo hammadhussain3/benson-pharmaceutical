@@ -59,7 +59,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select name="company" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value);" @endrole>
+                                <select name="company" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value); selectDesignations(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}">{{ $company->name }}</option>
@@ -100,9 +100,12 @@
                                 <label for="designation_id">Designation</label>
                                 <select name="designation" id="designation_id" class="form-control" required>
                                     <option value="">Select Designation</option>
+                                    @role('Superadmin')
+                                    @else
                                     @foreach ($designations as $designation)
                                         <option value="{{ $designation->id }}">{{ $designation->name }}</option>
                                     @endforeach
+                                    @endrole
                                 </select>
                                 <div class="invalid-feedback">Please select a designation.</div>
                             </div>

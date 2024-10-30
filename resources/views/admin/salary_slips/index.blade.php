@@ -66,7 +66,7 @@
                                 @role('Superadmin')
                                 <td>{{ $salarySlip->company->name }}</td>
                                 @endrole
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3"
                                         href="{{ route('salary.sheet.show', ['employee_id' => $salarySlip->employee_id, 'month' => $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT)]) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">

@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\Loan;
 use App\Models\Salary;
 use App\Models\SalarySlip;
+use App\Models\Company;
 use App\Models\SalaryTaxSlab;
 use Carbon\Carbon;
 use NumberFormatter;
@@ -73,6 +74,8 @@ class SalarySheetController extends Controller
         $formatter = new NumberFormatter('en', NumberFormatter::SPELLOUT);
         $integerPart = floor($totalSalaryRounded);
         $totalSalaryInWords = $formatter->format($integerPart);
+        $company = Company::where('id',$employee->company_id)->first();
+
         return view('admin.salary_sheet.show', compact(
             'employee',
             'salarySlip',
@@ -90,7 +93,8 @@ class SalarySheetController extends Controller
             'loanDeduction',
             'incomeTax',
             'totalSalaryInWords',
-            'daysInMonth'
+            'daysInMonth',
+            'company'
         ));
     }
 }

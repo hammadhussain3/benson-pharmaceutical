@@ -56,22 +56,22 @@ function SelectLoan(employeeId)
     }
 }
 
-function SelectLoanDate(month)
-{
-    var month = month;
-    var employeeId = document.getElementById('employee_id').value;
-    var loan_advance = document.getElementById('loan_advance');
+// function SelectLoanDate(month)
+// {
+//     var month = month;
+//     var employeeId = document.getElementById('employee_id').value;
+//     var loan_advance = document.getElementById('loan_advance');
 
-    if (month && employeeId) {
-        fetch(`/getloan/${employeeId}?month=${month}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log
-                loan_advance.value = data.loan;
-            })
-            .catch(error => console.error('Error fetching loan data:', error));
-    }
-}
+//     if (month && employeeId) {
+//         fetch(`/getloan/${employeeId}?month=${month}`)
+//             .then(response => response.json())
+//             .then(data => {
+//                 console.log
+//                 loan_advance.value = data.loan;
+//             })
+//             .catch(error => console.error('Error fetching loan data:', error));
+//     }
+// }
 
 
 function SelecLeaves(employeeId)
@@ -214,7 +214,6 @@ function selectBranches(companyId)
         fetch(`/companies/${companyId}/branches`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 data.branches.forEach(function (branch) {
                     var option = document.createElement('option');
                     option.value = branch.id;
@@ -235,12 +234,32 @@ function selectDepartments(companyId)
         fetch(`/companies/${companyId}/departments`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 data.departments.forEach(function (department) {
                     var option = document.createElement('option');
                     option.value = department.id;
                     option.textContent = department.name;
                     departmentSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function selectDesignations(companyId)
+{
+    var designationSelect = document.getElementById('designation_id');
+    designationSelect.innerHTML = '<option value="">Select Designation</option>';
+    
+    if (companyId) {
+        fetch(`/companies/${companyId}/designations`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.designations.forEach(function (designation) {
+                    var option = document.createElement('option');
+                    option.value = designation.id;
+                    option.textContent = designation.name;
+                    designationSelect.appendChild(option);
                 });
             })
             .catch(error => console.error('Error fetching cities:', error));

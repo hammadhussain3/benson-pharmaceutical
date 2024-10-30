@@ -12,7 +12,7 @@ class SalaryTaxSlabRequest extends FormRequest
             'slab_start' => 'required|numeric',
             'slab_end' => 'required|numeric',
             'tax_value' => 'required|numeric',
-            'company_id' => 'required|exists:companies,id',
+            'company' => 'required|exists:companies,id',
         ];
     }
 

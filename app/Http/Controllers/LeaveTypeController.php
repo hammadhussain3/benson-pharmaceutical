@@ -23,7 +23,11 @@ class LeaveTypeController extends Controller
 
     public function store(StoreLeaveTypeRequest $request)
     {
-        LeaveType::create($request->validated());
+        $data = [
+            'name' => $request->name,
+            'company_id' => $request->company
+        ];
+        LeaveType::create($data);
         return redirect()->route('leave_types.index')->with('success', 'Leave Type created successfully.');
     }
 
@@ -35,7 +39,11 @@ class LeaveTypeController extends Controller
 
     public function update(StoreLeaveTypeRequest $request, LeaveType $leaveType)
     {
-        $leaveType->update($request->validated());
+        $data = [
+            'name' => $request->name,
+            'company_id' => $request->company
+        ];
+        $leaveType->update($data);
         return redirect()->route('leave_types.index')->with('success', 'Leave Type updated successfully.');
     }
 

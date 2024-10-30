@@ -13,11 +13,13 @@ class BankService
 
     public function createBank(array $data)
     {
+        $data['country_id'] = $data['country'];
         return Bank::create($data);
     }
 
     public function updateBank(Bank $bank, array $data)
     {
+        $data['country_id'] = $data['country'];
         $bank->update($data);
         return $bank;
     }

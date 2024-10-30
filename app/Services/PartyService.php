@@ -13,11 +13,19 @@ class PartyService
 
     public function createParty(array $data)
     {
+        $data['country_id'] = $data['country'];
+        $data['city_id'] = $data['city'];
+        $data['company_id'] = $data['company'];
+        $data['payment_type_id'] = $data['payment_type'];
         return Party::create($data);
     }
 
     public function updateParty(Party $party, array $data)
     {
+        $data['country_id'] = $data['country'];
+        $data['city_id'] = $data['city'];
+        $data['company_id'] = $data['company'];
+        $data['payment_type_id'] = $data['payment_type'];
         $party->update($data);
         return $party;
     }

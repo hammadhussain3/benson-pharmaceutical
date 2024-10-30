@@ -40,7 +40,13 @@ class LeaveController extends Controller
 
     public function store(StoreLeaveRequest $request)
     {
-        Leave::create($request->validated());
+        $data = [
+            'employee_id' => $request->employee,
+            'company_id' => $request->company,
+            'leave_type_id' => $request->leave_type,
+            'days' => $request->days,
+        ];
+        Leave::create($data);
         return redirect()->route('leaves.index')->with('success', 'Leave created successfully.');
     }
 
@@ -57,7 +63,13 @@ class LeaveController extends Controller
     public function update(StoreLeaveRequest $request, $id)
     {
         $leave = Leave::findOrFail($id);
-        $leave->update($request->validated());
+        $data = [
+            'employee_id' => $request->employee,
+            'company_id' => $request->company,
+            'leave_type_id' => $request->leave_type,
+            'days' => $request->days,
+        ];
+        $leave->update($data);
         return redirect()->route('leaves.index')->with('success', 'Leave updated successfully.');
     }
 

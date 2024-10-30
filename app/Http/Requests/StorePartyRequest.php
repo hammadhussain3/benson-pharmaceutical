@@ -16,13 +16,13 @@ class StorePartyRequest extends FormRequest
             'contact_person_email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:20|regex:/^(\+?\d{1,3}[- ]?)?\d{10,15}$/',
             'email' => 'nullable|email|max:255',
-            'country_id' => 'required|exists:countries,id',
-            'city_id' => 'required|exists:cities,id',
+            'country' => 'required|exists:countries,id',
+            'city' => 'required|exists:cities,id',
             'address' => 'nullable|string|max:500',
-            'payment_type_id' => 'required|exists:payment_types,id',
+            'payment_type' => 'required|exists:payment_types,id',
             'is_supplier' => 'required|boolean',
             'is_distributor' => 'required|boolean',
-            'company_id' => 'nullable|exists:companies,id',
+            'company' => 'nullable|exists:companies,id',
         ];
     }
 }

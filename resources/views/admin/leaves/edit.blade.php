@@ -26,8 +26,8 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <input type="text" class="form-control" name="company" id="company" value="{{ App\Models\Company::where('id', $leave->company_id)->value('name') }}" required readonly>
-                                <input type="hidden" name="company_id" id="company_id" value="{{ $leave->company_id }}" required>
+                                <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $leave->company_id)->value('name') }}" required readonly>
+                                <input type="hidden" name="company" id="company_id" value="{{ $leave->company_id }}" required>
                             </div>
                             @else
                                 <input type="hidden" name="company_id" value="{{ $leave->company_id }}">
@@ -35,7 +35,7 @@
 
                             <div class="mb-3 col-md-12">
                                 <label for="employee">Employee</label>
-                                <select name="employee_id" id="employee" class="js-example-basic-single select2" required>
+                                <select name="employee" id="employee" class="js-example-basic-single select2" required>
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
@@ -48,7 +48,7 @@
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="leave_type">Leave Type</label>
-                                <select name="leave_type_id" id="leave_type" class="js-example-basic-single select2"
+                                <select name="leave_type" id="leave_type" class="js-example-basic-single select2"
                                     required>
                                     <option value="">Select Leave Type</option>
                                     @foreach ($leaveTypes as $leaveType)

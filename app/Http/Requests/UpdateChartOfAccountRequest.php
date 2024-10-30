@@ -13,7 +13,7 @@ class UpdateChartOfAccountRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:chart_of_accounts,code,' . $chartOfAccountId,
-            'company_id' => 'required|exists:companies,id',
+            'company' => 'required|exists:companies,id',
         ];
     }
 }

@@ -37,18 +37,19 @@ class EmployeeController extends Controller
         } else {
             $newEmployeeCode = 'EMP00001';
         }
-        $designations = Designation::orderBy('name', 'asc')->get();
+        
         $banks = Bank::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
 
         if (!auth()->user()->hasRole('Superadmin')) {
             $branches = Branch::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
             $departments = Department::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
+            $designations = Designation::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
 
             return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'newEmployeeCode'));
         }
 
-        return view('admin.employees.create', compact('designations', 'banks', 'companies', 'newEmployeeCode'));
+        return view('admin.employees.create', compact( 'banks', 'companies', 'newEmployeeCode'));
     }
 
     public function edit(Employee $employee)
@@ -60,10 +61,12 @@ class EmployeeController extends Controller
         if (!auth()->user()->hasRole('Superadmin')) {
             $branches = Branch::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
             $departments = Department::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
+            $designations = Designation::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
         }
 
         $branches = Branch::orderBy('name', 'asc')->where('company_id', $employee->company_id)->get();
         $departments = Department::orderBy('name', 'asc')->where('company_id', $employee->company_id)->get();
+        $designations = Designation::orderBy('name', 'asc')->where('company_id', $employee->company_id)->get();
 
         return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies'));
     }

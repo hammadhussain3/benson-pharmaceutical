@@ -68,7 +68,7 @@
                                 @role('Superadmin')
                                 <td>{{ $party->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3" href="{{ route('parties.edit', $party->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

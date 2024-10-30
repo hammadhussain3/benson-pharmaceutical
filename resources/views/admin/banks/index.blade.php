@@ -42,7 +42,7 @@
                                 <td>{{ $bank->name }}</td>
                                 <td>{{ $bank->acronym }}</td>
                                 <td>{{ $bank->country->name }}</td>
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3" href="{{ route('banks.edit', $bank->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

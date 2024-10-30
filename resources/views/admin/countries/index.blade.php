@@ -39,7 +39,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $country->name }}</td>
-                                <td class="text-center">
+                                <td>
                                     <a class="me-3" href="{{ route('countries.edit', $country->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

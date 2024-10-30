@@ -34,11 +34,11 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry()">
+                                <select name="country" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry()">
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                            {{ old('country') == $country->id ? 'selected' : '' }}>
                                             {{ $country->name }}
                                         </option>
                                     @endforeach
@@ -47,13 +47,13 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="city_id">City</label>
-                                <select name="city_id" id="city_id" class="js-example-basic-single select2" required>
+                                <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
                                     @if (old('country_id'))
                                         @foreach ($cities as $city)
                                             <!-- Assuming you pass cities based on old country -->
                                             <option value="{{ $city->id }}"
-                                                {{ old('city_id') == $city->id ? 'selected' : '' }}>
+                                                {{ old('city') == $city->id ? 'selected' : '' }}>
                                                 {{ $city->name }}
                                             </option>
                                         @endforeach
@@ -64,10 +64,13 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company">Company</label>
-                                <select name="company_id" id="company" class="js-example-basic-single select2" required>
+                                <select name="company" id="company" class="js-example-basic-single select2" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
@@ -108,12 +111,12 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="payment_type_id">Payment Type</label>
-                                <select name="payment_type_id" id="payment_type_id" class="form-control" required>
+                                <select name="payment_type" id="payment_type_id" class="form-control" required>
                                     <option value="">Select Payment Type</option>
 
                                     @foreach ($paymentTypes as $paymentType)
                                         <option value="{{ $paymentType->id }}"
-                                            {{ old('payment_type_id') == $paymentType->id ? 'selected' : '' }}>
+                                            {{ old('payment_type') == $paymentType->id ? 'selected' : '' }}>
                                             {{ $paymentType->name }}
                                         </option>
                                     @endforeach

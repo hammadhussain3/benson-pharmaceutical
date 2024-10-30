@@ -8,11 +8,13 @@ class ChartOfAccountService
 {
     public function createChartOfAccount($data)
     {
+        $data['company_id'] = $data['company'];
         return ChartOfAccount::create($data);
     }
 
     public function updateChartOfAccount(ChartOfAccount $chartOfAccount, $data)
     {
+        $data['company_id'] = $data['company'];
         return $chartOfAccount->update($data);
     }
 

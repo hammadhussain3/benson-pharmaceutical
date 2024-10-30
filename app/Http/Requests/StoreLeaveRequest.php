@@ -9,10 +9,10 @@ class StoreLeaveRequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_id' => 'required|exists:employees,id',
-            'leave_type_id' => 'required|exists:leave_types,id',
+            'employee' => 'required|exists:employees,id',
+            'leave_type' => 'required|exists:leave_types,id',
             'days' => 'required|integer|min:1',
-            'company_id' => 'required|exists:companies,id',
+            'company' => 'required|exists:companies,id',
         ];
     }
 

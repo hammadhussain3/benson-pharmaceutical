@@ -54,14 +54,14 @@ class SalarySlipController extends Controller
         $month = $date->format('m');
         $year = $date->format('Y');
 
-        $salarySlip = SalarySlip::where('employee_id', $request->employee_id)->where('month', $month)->where('year', $year)->first();
+        $salarySlip = SalarySlip::where('employee_id', $request->employee)->where('month', $month)->where('year', $year)->first();
 
         if ($salarySlip) {
             return back()->with('error', 'salary slip already created for the selected employee and month.');
         }
         $this->salarySlipService->createSalarySlip($request->validated());
         return redirect()->route('salary.sheet.show', [
-            'employee_id' => $request->employee_id,
+            'employee_id' => $request->employee,
             'month' => $request->month
         ])->with('success', 'Salary Slip created successfully.');
     }
@@ -85,7 +85,7 @@ class SalarySlipController extends Controller
         $salarySlip = SalarySlip::findOrFail($id);
         $this->salarySlipService->updateSalarySlip($salarySlip, $request->validated());
         return redirect()->route('salary.sheet.show', [
-            'employee_id' => $request->employee_id,
+            'employee_id' => $request->employee,
             'month' => $request->month
         ])->with('success', 'Salary Slip updated successfully.');
     }
@@ -93,6 +93,32 @@ class SalarySlipController extends Controller
     public function destroy($id)
     {
         $salarySlip = SalarySlip::findOrFail($id);
+    
+        if ($salarySlip->loan_advance > 0) {
+            $latestLoan = Loan::where('employee_id', $salarySlip->employee_id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($latestLoan) {
+                $newRemaining = $latestLoan->remaining + $salarySlip->loan_advance;
+
+                if ($newRemaining > $latestLoan->amount) {
+                    $excessAmount = $newRemaining - $latestLoan->amount;
+                    $latestLoan->update(['remaining' => $latestLoan->amount]);
+                    $secondLatestLoan = Loan::where('employee_id', $salarySlip->employee_id)
+                        ->where('id', '!=', $latestLoan->id)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
+                    if ($secondLatestLoan) {
+                        $newSecondRemaining = $secondLatestLoan->remaining + $excessAmount;
+                        $secondLatestLoan->update(['remaining' => $newSecondRemaining]);
+                    }
+                } else {
+                    $latestLoan->update(['remaining' => $newRemaining]);
+                }
+            }
+        }
         $salarySlip->delete();
         return redirect()->route('salary_slips.index')->with('success', 'Salary Slip deleted successfully.');
     }

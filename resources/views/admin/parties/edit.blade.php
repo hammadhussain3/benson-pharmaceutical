@@ -36,7 +36,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry()">
+                                <select name="country" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry()">
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
@@ -49,7 +49,7 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="city_id">City</label>
-                                <select name="city_id" id="city_id" class="js-example-basic-single select2" required>
+                                <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
                                     @if (isset($party->city_id))
                                         @foreach ($cities as $city)
@@ -64,7 +64,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <select name="company_id" id="company_id" class="js-example-basic-single select2" required>
+                                <select name="company" id="company_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -115,7 +115,7 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="payment_type_id">Payment Type</label>
-                                <select name="payment_type_id" id="payment_type_id" class="form-control" required>
+                                <select name="payment_type" id="payment_type_id" class="form-control" required>
                                     <option value="">Select Payment Type</option>
 
                                     @foreach ($paymentTypes as $paymentType)

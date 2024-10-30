@@ -16,14 +16,21 @@
     <!-- Card Component -->
     <div class="card">
         <div class="card-body">
-            <div class="text-center">
-                <h2>Salary Sheet</h2>
+
+            <div class="row justify-content-between">
+                <div class="col-auto">
+                    <img src="{{ asset($company->logo_path ? 'images/company/' . $company->logo_path : 'images/company/logo.png') }}" class="mb-2" style="height: 100px">
+                    <h5 class="fw-bold">{{ $company->name }}</h5>
+                    <h5>{{ $company->address }}</h5>
+                    <h5>{{ $company->phone }}</h5>
+                </div>
+                <div class="col-auto text-end">
+                    <h2>Salary Sheet</h2>
+                    <h5>Month: {{ $formattedMonth }}</h5>
+                </div>
             </div>
-
-            <h5 style="float:inline-end">Month: {{ $formattedMonth }}</h5>
-
-
-            <table class="table table-bordered">
+       
+            <table class="table mt-5">
                 <tr>
                     <th>Name</th>
                     <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
@@ -53,8 +60,8 @@
             </table>
 
             <hr>
-            <table class="table table-bordered">
-                <thead>
+            <table class="table table-striped">
+                <thead class="table-primary">
                     <tr>
                         <th>Description</th>
                         <th>Days</th>
@@ -115,13 +122,15 @@
                     </tr>
                     <tr>
                         <td>Loan/Advance</td>
-                        <td colspan="4"></td>
+                        <td colspan="3"></td>
                         <td>{{ number_format($salarySlip->loan_advance, 2) }}</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Income Tax Deducted</td>
-                        <td colspan="4"></td>
+                        <td colspan="3"></td>
                         <td>{{ number_format($incomeTax, 2) }}</td>
+                        <td></td>
                     </tr>
                 </tbody>
                 <tfoot>

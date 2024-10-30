@@ -16,7 +16,7 @@ class UpdateBankRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'acronym' => 'required|string|max:10',
-            'country_id' => 'required|exists:countries,id', // Adjust based on your countries table
+            'country' => 'required|exists:countries,id', // Adjust based on your countries table
         ];
     }
 }
