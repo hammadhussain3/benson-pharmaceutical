@@ -50,9 +50,9 @@
 
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $user->employee->code }}</td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->employee->code ?? 'N/A' }}</td>
+                                            <td>{{ $user->name ?? 'N/A' }}</td>
+                                            <td>{{ $user->email ?? 'N/A' }}</td>
                                             @role('Superadmin')
                                             <td>{{ $company ? $company->name : 'No Company' }}</td> <!-- Company Name -->
                                             @endrole

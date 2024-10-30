@@ -20,7 +20,7 @@ class RoleController extends Controller
 
     public function index()
     {
-        $roles = Role::with('permissions')->orderBy('name', 'asc')->get();
+        $roles = Role::with('permissions')->where('name', '!=', 'Superadmin')->orderBy('name', 'asc')->get();
         return view('admin.roles.index', compact('roles'));
     }
 
