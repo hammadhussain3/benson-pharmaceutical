@@ -29,7 +29,7 @@
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
-                                            {{ $salarySlip->employee_id == $employee->id ? 'selected' : '' }}>
+                                            {{ old('employee', $salarySlip->employee_id) == $employee->id ? 'selected' : '' }}>
                                             {{ $employee->code }} - {{ $employee->first_name }}
                                         </option>
                                     @endforeach
@@ -37,10 +37,28 @@
                                 <div class="invalid-feedback">Please select an employee.</div>
                             </div>
 
+                            @php
+                                $currentMonth = date('n');
+                                $currentYear = date('Y');
+                                $selectedMonth = old('month', $salarySlip->month ?? sprintf('%04d-%02d', $currentYear, $currentMonth)); // Use old value or the stored month, else default to current month
+                            @endphp
+
                             <div class="mb-3 col-md-6">
-                                <label for="month">Month</label>
-                                <input type="month" name="month" id="month" class="form-control" min="{{ date('Y-m', strtotime($currentEmployee->date_of_joining)) }}" max="{{ date('Y-m', strtotime('-1 month')) }}" onchange="SelectLoanDate(this.value);"
-                                       value="{{ $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT) }}" required>
+                                <label for="month">Month and Year</label>
+                                <select class="form-select" name="month" id="month">
+                                    @foreach(['1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April', '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August', '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'] as $key => $month)
+                                        @php
+                                            // Determine the year for each month
+                                            $year = $key > $currentMonth ? $currentYear - 1 : $currentYear;
+                                            // Format the value as YYYY-MM
+                                            $formattedValue = sprintf('%04d-%02d', $year, $key);
+                                        @endphp
+                                        <option value="{{ $formattedValue }}" 
+                                            {{ $formattedValue == $selectedMonth ? 'selected' : '' }}>
+                                            {{ $month }} {{ $year }}
+                                        </option>
+                                    @endforeach
+                                </select>
                                 <div class="invalid-feedback">Please select a month.</div>
                             </div>
 
@@ -49,9 +67,9 @@
                                 <select name="payment_mode" id="payment_mode" class="form-control" required>
                                     <option value="">Select Payment Mode</option>
                                     <option value="bank_transfer"
-                                        {{ $salarySlip->payment_mode == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer
+                                        {{ old('payment_mode', $salarySlip->payment_mode) == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer
                                     </option>
-                                    <option value="cash" {{ $salarySlip->payment_mode == 'cash' ? 'selected' : '' }}>Cash
+                                    <option value="cash" {{ old('payment_mode', $salarySlip->payment_mode) == 'cash' ? 'selected' : '' }}>Cash
                                     </option>
                                 </select>
                                 <div class="invalid-feedback">Please select a payment mode.</div>
@@ -60,14 +78,14 @@
                             <div class="mb-3 col-md-6">
                                 <label for="arrears">Arrears</label>
                                 <input type="number" class="form-control" name="arrears" id="arrears"
-                                    value="{{ $salarySlip->arrears }}" required>
+                                    value="{{ old('arrears', $salarySlip->arrears) }}" required>
                                 <div class="invalid-feedback">Please provide the arrears amount.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="late_in_early_out_deduction">Late/Early Out Deduction</label>
                                 <input type="number" class="form-control" name="late_in_early_out_deduction"
-                                    id="late_in_early_out_deduction" value="{{ $salarySlip->late_in_early_out_deduction }}"
+                                    id="late_in_early_out_deduction" value="{{ old('late_in_early_out_deduction', $salarySlip->late_in_early_out_deduction) }}"
                                     required>
                                 <div class="invalid-feedback">Please provide the deduction amount.</div>
                             </div>
@@ -75,7 +93,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="overtime">Overtime</label>
                                 <input type="number" class="form-control" name="overtime" id="overtime"
-                                    value="{{ $salarySlip->overtime }}" required>
+                                    value="{{ old('overtime', $salarySlip->overtime) }}" required>
                                 <div class="invalid-feedback">Please provide the overtime amount.</div>
                             </div>
 

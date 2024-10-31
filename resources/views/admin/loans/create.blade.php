@@ -26,8 +26,11 @@
                                     required @role('Superadmin') onchange="SelectCompany(this.value);" @endrole>
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->code }} -
-                                            {{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                        <option value="{{ $employee->id }}"
+                                            {{ old('employee') == $employee->id ? 'selected' : '' }}>
+                                            {{ $employee->code }} -
+                                            {{ $employee->first_name }} {{ $employee->last_name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select an employee.</div>
@@ -35,19 +38,19 @@
                             <div class="mb-3 col-md-12">
                                 <label for="amount">Amount</label>
                                 <input type="number" class="form-control" name="amount" id="amount"
-                                    placeholder="Loan Amount" required>
+                                    placeholder="Loan Amount" required value="{{ old('amount') }}">
                                 <div class="invalid-feedback">Please provide a valid amount.</div>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="payback_months">Payback Months</label>
                                 <input type="number" class="form-control" name="payback_months" id="payback_months"
-                                    placeholder="Payback Months" required>
+                                    placeholder="Payback Months" required value="{{ old('payback_months') }}">
                                 <div class="invalid-feedback">Please provide the number of payback months.</div>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="remaining">Remaining</label>
                                 <input type="number" class="form-control" name="remaining" id="remaining"
-                                    placeholder="Remaining Amount" required>
+                                    placeholder="Remaining Amount" required value="{{ old('remaining') }}">
                                 <div class="invalid-feedback">Please provide the remaining amount.</div>
                             </div>
                             @role('Superadmin')

@@ -25,13 +25,13 @@
                             <div class="mb-3 col-md-6">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ $chartOfAccount->name }}" required>
+                                    value="{{ old('name', $chartOfAccount->name) }}" required>
                                 <div class="invalid-feedback">Please provide a valid name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code"
-                                    value="{{ $chartOfAccount->code }}" required>
+                                    value="{{ old('code', $chartOfAccount->code) }}" required>
                                 <div class="invalid-feedback">Please provide a valid code.</div>
                             </div>
                             @role('Superadmin')
@@ -41,7 +41,7 @@
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
-                                            {{ $company->id == $chartOfAccount->company_id ? 'selected' : '' }}>
+                                            {{ $company->id == old('company', $chartOfAccount->company_id) ? 'selected' : '' }}>
                                             {{ $company->name }}
                                         </option>
                                     @endforeach

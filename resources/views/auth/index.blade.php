@@ -54,10 +54,9 @@
                                             <td>{{ $user->name ?? 'N/A' }}</td>
                                             <td>{{ $user->email ?? 'N/A' }}</td>
                                             @role('Superadmin')
-                                            <td>{{ $company ? $company->name : 'No Company' }}</td> <!-- Company Name -->
+                                            <td>{{ $company ? $company->name : 'N/A' }}</td>
                                             @endrole
-                                            <td>{{ $branch ? $branch->name : 'No Branch' }}</td> <!-- Branch Name -->
-
+                                            <td>{{ $branch ? $branch->name : 'N/A' }}</td>
                                             <td>
                                                 @foreach ($user->roles as $role)
                                                     @if($role->name == "Admin")

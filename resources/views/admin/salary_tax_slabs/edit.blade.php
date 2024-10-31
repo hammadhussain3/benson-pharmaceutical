@@ -25,21 +25,21 @@
                             <div class="mb-3 col-md-4">
                                 <label for="slab_start">Slab Start</label>
                                 <input type="number" class="form-control" name="slab_start" id="slab_start"
-                                    value="{{ $taxSlab->slab_start }}" required>
+                                    value="{{ old('slab_start', $taxSlab->slab_start) }}" required>
                                 <div class="invalid-feedback">Please provide the slab start value.</div>
                             </div>
 
                             <div class="mb-3 col-md-4">
                                 <label for="slab_end">Slab End</label>
                                 <input type="number" class="form-control" name="slab_end" id="slab_end"
-                                    value="{{ $taxSlab->slab_end }}" required>
+                                    value="{{ old('slab_end', $taxSlab->slab_end) }}" required>
                                 <div class="invalid-feedback">Please provide the slab end value.</div>
                             </div>
 
                             <div class="mb-3 col-md-4">
                                 <label for="tax_value">Tax Value (%)</label>
                                 <input type="number" class="form-control" name="tax_value" id="tax_value"
-                                    value="{{ $taxSlab->tax_value }}" required>
+                                    value="{{ old('tax_value', $taxSlab->tax_value) }}" required>
                                 <div class="invalid-feedback">Please provide the tax value in percentage.</div>
                             </div>
 
@@ -50,7 +50,7 @@
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
-                                            {{ $taxSlab->company_id == $company->id ? 'selected' : '' }}>
+                                            {{ old('company', $taxSlab->company_id) == $company->id ? 'selected' : '' }}>
                                             {{ $company->name }}
                                         </option>
                                     @endforeach

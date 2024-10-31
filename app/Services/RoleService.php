@@ -38,7 +38,7 @@ class RoleService
 
     public function getAllRoles()
     {
-        return Role::all();
+        return Role::where('name', '!=', 'Superadmin')->orderBy('name', 'asc')->get();
     }
 
     public function getRoleById($id)

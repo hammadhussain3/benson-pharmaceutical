@@ -29,7 +29,7 @@
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
-                                            {{ $employee->id == $loan->employee_id ? 'selected' : '' }}>
+                                            {{ $employee->id == old('employee', $loan->employee_id) ? 'selected' : '' }}>
                                             {{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}
                                         </option>
                                     @endforeach
@@ -39,19 +39,19 @@
                             <div class="mb-3 col-md-12">
                                 <label for="amount">Amount</label>
                                 <input type="number" class="form-control" name="amount" id="amount"
-                                    value="{{ $loan->amount }}" required>
+                                    value="{{ old('amount', $loan->amount) }}" required>
                                 <div class="invalid-feedback">Please provide a valid amount.</div>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="payback_months">Payback Months</label>
                                 <input type="number" class="form-control" name="payback_months" id="payback_months"
-                                    value="{{ $loan->payback_months }}" required>
+                                    value="{{ old('payback_months', $loan->payback_months) }}" required>
                                 <div class="invalid-feedback">Please provide the number of payback months.</div>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="remaining">Remaining</label>
                                 <input type="number" class="form-control" name="remaining" id="remaining"
-                                    value="{{ $loan->remaining }}" required>
+                                    value="{{ old('remaining', $loan->remaining) }}" required>
                                 <div class="invalid-feedback">Please provide the remaining amount.</div>
                             </div>
                             @role('Superadmin')

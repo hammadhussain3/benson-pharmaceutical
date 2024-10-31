@@ -65,9 +65,9 @@
                                     </a>
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="event.preventDefault(); 
-    if (confirm('Are you sure you want to delete this branch?')) {
-        document.getElementById('delete-form-{{ $branch->id }}').submit();
-    }">
+                                        if (confirm('Are you sure you want to delete this branch?')) {
+                                            document.getElementById('delete-form-{{ $branch->id }}').submit();
+                                        }">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                     </a>
                                     <form id="delete-form-{{ $branch->id }}"

@@ -25,13 +25,13 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name">Bank Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ $bank->name }}" required>
+                                    value="{{ old('name', $bank->name) }}" required>
                                 <div class="invalid-feedback">Please provide a valid bank name.</div>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="acronym">Acronym</label>
                                 <input type="text" class="form-control" name="acronym" id="acronym"
-                                    value="{{ $bank->acronym }}" required>
+                                    value="{{ old('acronym', $bank->acronym) }}" required>
                                 <div class="invalid-feedback">Please provide a valid acronym.</div>
                             </div>
                             <div class="mb-3 col-md-12">
@@ -40,7 +40,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ $country->id == $bank->country_id ? 'selected' : '' }}>
+                                            {{ $country->id == old('country', $bank->country_id) ? 'selected' : '' }}>
                                             {{ $country->name }}
                                         </option>
                                     @endforeach

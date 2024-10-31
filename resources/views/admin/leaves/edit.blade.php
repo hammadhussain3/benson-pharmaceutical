@@ -39,7 +39,7 @@
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
-                                            {{ $leave->employee_id == $employee->id ? 'selected' : '' }}>
+                                            {{ old('employee', $leave->employee_id) == $employee->id ? 'selected' : '' }}>
                                             {{ $employee->first_name }} {{ $employee->last_name }}
                                         </option>
                                     @endforeach
@@ -53,7 +53,7 @@
                                     <option value="">Select Leave Type</option>
                                     @foreach ($leaveTypes as $leaveType)
                                         <option value="{{ $leaveType->id }}"
-                                            {{ $leave->leave_type_id == $leaveType->id ? 'selected' : '' }}>
+                                            {{ old('leave_type', $leave->leave_type_id) == $leaveType->id ? 'selected' : '' }}>
                                             {{ $leaveType->name }}
                                         </option>
                                     @endforeach
@@ -63,7 +63,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="days">Number of Days</label>
                                 <input type="number" class="form-control" name="days" id="days" placeholder="Days"
-                                    value="{{ $leave->days }}" required>
+                                    value="{{ old('days', $leave->days) }}" required>
                                 <div class="invalid-feedback">Please provide a valid number of days.</div>
                             </div>
                         </div>

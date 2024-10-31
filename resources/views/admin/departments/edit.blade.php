@@ -25,17 +25,17 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name">Department Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ $department->name }}" required>
+                                    value="{{ old('name', $department->name) }}" required>
                                 <div class="invalid-feedback">Please provide a valid department name.</div>
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company">Company</label>
-                                <select name="company" id="company" class="js-example-basic-single select2" required>
+                                <select name="company" id="company_id" class="js-example-basic-single select2" onchange="selectBranches(this.value)" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
-                                            {{ $company->id == $department->company_id ? 'selected' : '' }}>
+                                            {{ old('company', $department->company_id ) == $company->id ? 'selected' : '' }}>
                                             {{ $company->name }}
                                         </option>
                                     @endforeach
@@ -43,11 +43,17 @@
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ $department->company_id }}">
+                                <input type="hidden" name="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-12">
+                                <label for="branch">Branch</label>
+                                <select id="branch_id" name="branch" class="js-example-basic-single select2">
+                                    <option value="">Select Branch</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-12">
                                 <label for="description">Description</label>
-                                <textarea class="form-control" name="description" id="description">{{ $department->description }}</textarea>
+                                <textarea class="form-control" name="description" id="description">{{ old('description', $department->description) }}</textarea>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

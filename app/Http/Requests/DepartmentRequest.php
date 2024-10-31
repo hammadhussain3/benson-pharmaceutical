@@ -12,6 +12,7 @@ class DepartmentRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'company' => 'required|exists:companies,id',
+            'branch' => 'required|exists:branches,id',
         ];
     }
 

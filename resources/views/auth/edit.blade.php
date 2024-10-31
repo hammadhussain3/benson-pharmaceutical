@@ -23,10 +23,19 @@
                         @method('PUT') <!-- Use PUT here instead of PATCH -->
                         
                         <div class="form-row row">
+                            <div class="col-md-6 mb-3">
+                                <label>Select Company </label>
+                                <select name="company" id="company" class="js-example-basic-single select2" required onchange="selectEmployee(this.value)">
+                                    <option value="">--Select Company--</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}" {{ $employee_details->company_id == $company->id ? 'selected' : '' }}>{{ $company->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <!-- Employee Select Dropdown -->
                             <div class="col-md-6 mb-3">
                                 <label>Select Employee</label>
-                                <select name="employee_id" id="employee" class="js-example-basic-single select2" required>
+                                <select name="employee" id="employee" class="js-example-basic-single select2" required>
                                     <option value="">--Select Employee--</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}" 
@@ -36,26 +45,6 @@
                                     @endforeach
                                 </select>
                             </div>
-
-                            <!-- Roles Select Dropdown -->
-                            <div class="col-md-6 mb-3">
-                                <label for="roles">Roles</label>
-                                <div class="input-group">
-                                    <select class="form-select" id="roles" required name="role">
-                                        <option value="" disabled>Select Role</option>
-                                        @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}" 
-                                                {{ $user->roles->contains($role->id) ? 'selected' : '' }}>
-                                                {{ $role->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('roles')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
                             <!-- Full Name Field -->
                             <div class="col-md-6 mb-3">
                                 <label for="name">Full Name</label>
@@ -86,6 +75,25 @@
                                 @enderror
                             </div>
 
+                            <!-- Roles Select Dropdown -->
+                            <div class="col-md-6 mb-3">
+                                <label for="roles">Roles</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="roles" required name="role">
+                                        <option value="" disabled>Select Role</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}" 
+                                                {{ $user->roles->contains($role->id) ? 'selected' : '' }}>
+                                                {{ $role->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('roles')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
                             <!-- Password Field (Optional for Edit) -->
                             <div class="col-md-6 mb-3">
                                 <label for="password">Password</label>
@@ -97,18 +105,6 @@
                                     </span>
                                 </div>
                                 @error('password')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            <!-- Confirm Password Field -->
-                            <div class="col-md-6 mb-3">
-                                <label for="password_confirmation">Confirm Password</label>
-                                <div class="input-group">
-                                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control pass-input"
-                                        placeholder="Confirm your password">
-                                </div>
-                                @error('password_confirmation')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

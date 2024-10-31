@@ -21,27 +21,19 @@
                         @csrf
                         <div class="form-row row">
                             <div class="col-md-6 mb-3">
-                                <label>Select Employee </label>
-                                <select name="employee_id" id="employee" class="js-example-basic-single select2" required>
-                                    <option value="">--Select Employee--</option>
-                                    @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                <label>Select Company </label>
+                                <select name="company" id="company" class="js-example-basic-single select2" required onchange="selectEmployee(this.value)">
+                                    <option value="">--Select Company--</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="roles">Roles</label>
-                                <div class="input-group">
-                                    <select class="form-select" id="roles" required name="role">
-                                        <option value="" selected disabled>Select Role</option>
-                                        @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('roles')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                <label>Select Employee </label>
+                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectEmployeeDetails(this.value)">
+                                    <option value="">--Select Employee--</option>
+                                </select>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="name">Full Name</label>
@@ -67,6 +59,20 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
+                                <label for="roles">Roles</label>
+                                <div class="input-group">
+                                    <select class="form-select" id="roles" required name="role">
+                                        <option value="" selected disabled>Select Role</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('roles')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label for="password">Password</label>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control pass-input"
@@ -74,16 +80,6 @@
                                     <span class="input-group-text" id="password_addon"><span class="fas toggle-password fa-eye-slash"></span></span>
                                 </div>
                                 @error('password')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="password_confirmation">Confirm Password</label>
-                                <div class="input-group">
-                                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-control pass-input"
-                                        placeholder="Confirm your password" required>
-                                </div>
-                                @error('password_confirmation')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

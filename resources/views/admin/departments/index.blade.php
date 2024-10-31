@@ -34,6 +34,7 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            <th>Branch</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -46,6 +47,7 @@
                                 @role('Superadmin')
                                 <td>{{ $department->company->name }}</td>
                                 @endrole
+                                <td>{{ $department->branch ? $department->branch->name : 'N/A' }}</td>
                                 <td>
                                     <a class="me-3" href="{{ route('departments.edit', $department->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">

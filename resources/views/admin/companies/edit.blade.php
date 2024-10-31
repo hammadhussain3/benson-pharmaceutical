@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <form action="{{ route('companies.update', $company->id) }}" method="POST" class="needs-validation"
-                        novalidate>
+                        novalidate enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="form-row row">
@@ -40,7 +40,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ $country->id == $company->country_id ? 'selected' : '' }}>
+                                            {{ old('country', $company->country_id) == $country->id ? 'selected' : '' }}>
                                             {{ $country->name }}</option>
                                     @endforeach
                                 </select>
@@ -51,13 +51,11 @@
                                 <label for="city_id">City</label>
                                 <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
-                                    @if (isset($company->city_id))
-                                        @foreach ($cities as $city)
-                                            <option value="{{ $city->id }}"
-                                                {{ $city->id == $company->city_id ? 'selected' : '' }}>{{ $city->name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
+                                    @foreach ($cities as $city)
+                                        <option value="{{ $city->id }}"
+                                            {{ $city->id == old('city', $company->city_id) ? 'selected' : '' }}>{{ $city->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a city.</div>
                             </div>
@@ -97,7 +95,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="logo_path">Logo</label>
                                 <input type="file" class="form-control" name="logo" id="logo_path"
-                                    value="{{ old('logo_path', $company->logo_path) }}" placeholder="Logo Path">
+                                    value="{{ old('logo', $company->logo_path) }}" placeholder="Logo Path">
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

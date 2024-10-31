@@ -15,12 +15,14 @@ class DepartmentService
     public function createDepartment(array $data)
     {
         $data['company_id'] = $data['company'];
+        $data['branch_id'] = $data['branch'];
         return Department::create($data);
     }
 
     public function updateDepartment(Department $department, array $data)
     {
         $data['company_id'] = $data['company'];
+        $data['branch_id'] = $data['branch'];
         $department->update($data);
         return $department;
     }

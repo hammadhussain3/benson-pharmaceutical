@@ -24,13 +24,13 @@
                             <div class="mb-3 col-md-6">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" placeholder="Name"
-                                    required>
+                                    required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a valid name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code" placeholder="Code"
-                                    required>
+                                    required value="{{ old('code') }}">
                                 <div class="invalid-feedback">Please provide a valid code.</div>
                             </div>
                             @role('Superadmin')
@@ -39,7 +39,10 @@
                                 <select name="company" id="company" class="js-example-basic-single select2" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>

@@ -38,7 +38,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                            {{ old('country') == $country->id ? 'selected' : '' }}>
                                             {{ $country->name }}
                                         </option>
                                     @endforeach
@@ -49,15 +49,13 @@
                                 <label for="city_id">City</label>
                                 <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
-                                    @if (old('country_id'))
-                                        @foreach ($cities as $city)
-                                            <!-- Assuming you pass cities based on old country -->
-                                            <option value="{{ $city->id }}"
-                                                {{ old('city_id') == $city->id ? 'selected' : '' }}>
-                                                {{ $city->name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
+                                    @foreach ($cities as $city)
+                                        <!-- Assuming you pass cities based on old country -->
+                                        <option value="{{ $city->id }}"
+                                            {{ old('city') == $city->id ? 'selected' : '' }}>
+                                            {{ $city->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a city.</div>
                             </div>
@@ -96,7 +94,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="logo_path">Logo</label>
                                 <input type="file" class="form-control" name="logo" id="logo_path"
-                                    placeholder="Logo" value="{{ old('logo_path') }}">
+                                    placeholder="Logo" value="{{ old('logo') }}">
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Department extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'description', 'company_id','branch_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -25,5 +25,9 @@ class Department extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
     }
 }

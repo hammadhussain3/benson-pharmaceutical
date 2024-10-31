@@ -25,13 +25,13 @@
                             <div class="mb-3 col-md-6">
                                 <label for="name">Party Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ $party->name }}" placeholder="Party Name" required>
+                                    value="{{ old('name', $party->name) }}" placeholder="Party Name" required>
                                 <div class="invalid-feedback">Please provide a valid party name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="code">Party Code</label>
                                 <input type="text" class="form-control" name="code" id="code"
-                                    value="{{ $party->code }}" placeholder="Party Code" required>
+                                    value="{{ old('code', $party->code) }}" placeholder="Party Code" required>
                                 <div class="invalid-feedback">Please provide a valid party code.</div>
                             </div>
                             <div class="mb-3 col-md-6">
@@ -40,7 +40,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ $country->id == $party->country_id ? 'selected' : '' }}>
+                                            {{ $country->id == old('country', $party->country_id) ? 'selected' : '' }}>
                                             {{ $country->name }}</option>
                                     @endforeach
                                 </select>
@@ -54,7 +54,7 @@
                                     @if (isset($party->city_id))
                                         @foreach ($cities as $city)
                                             <option value="{{ $city->id }}"
-                                                {{ $city->id == $party->city_id ? 'selected' : '' }}>{{ $city->name }}
+                                                {{ $city->id == old('city', $party->city_id) ? 'selected' : '' }}>{{ $city->name }}
                                             </option>
                                         @endforeach
                                     @endif
@@ -68,7 +68,7 @@
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
-                                            {{ $company->id == $party->company_id ? 'selected' : '' }}>
+                                            {{ $company->id == old('company', $party->company_id) ? 'selected' : '' }}>
                                             {{ $company->name }}
                                         </option>
                                     @endforeach
@@ -81,36 +81,36 @@
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_name">Contact Person Name</label>
                                 <input type="text" class="form-control" name="contact_person_name"
-                                    id="contact_person_name" value="{{ $party->contact_person_name }}"
+                                    id="contact_person_name" value="{{ old('contact_person_name', $party->contact_person_name) }}"
                                     placeholder="Contact Person Name">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_phone">Contact Person Phone</label>
                                 <input type="text" class="form-control" name="contact_person_phone"
-                                    id="contact_person_phone" value="{{ $party->contact_person_phone }}"
+                                    id="contact_person_phone" value="{{ old('contact_person_phone', $party->contact_person_phone) }}"
                                     placeholder="Contact Person Phone">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_email">Contact Person Email</label>
                                 <input type="email" class="form-control" name="contact_person_email"
-                                    id="contact_person_email" value="{{ $party->contact_person_email }}"
+                                    id="contact_person_email" value="{{ old('contact_person_email', $party->contact_person_email) }}"
                                     placeholder="Contact Person Email">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="phone">Phone</label>
                                 <input type="text" class="form-control" name="phone" id="phone"
-                                    value="{{ $party->phone }}" placeholder="Phone" required>
+                                    value="{{ old('phone', $party->phone) }}" placeholder="Phone" required>
                                 <div class="invalid-feedback">Please provide a valid phone number.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control" name="email" id="email"
-                                    value="{{ $party->email }}" placeholder="Email" required>
+                                    value="{{ old('email', $party->email) }}" placeholder="Email" required>
                                 <div class="invalid-feedback">Please provide a valid email address.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address">Address</label>
-                                <textarea class="form-control" name="address" id="address" placeholder="Address">{{ $party->address }}</textarea>
+                                <textarea class="form-control" name="address" id="address" placeholder="Address">{{ old('address', $party->address) }}</textarea>
                             </div>
 
                             <div class="mb-3 col-md-6">
@@ -120,7 +120,7 @@
 
                                     @foreach ($paymentTypes as $paymentType)
                                         <option value="{{ $paymentType->id }}"
-                                            {{ (old('payment_type_id') ?? $party->payment_type_id) == $paymentType->id ? 'selected' : '' }}>
+                                            {{ old('payment_type_id', $party->payment_type_id) == $paymentType->id ? 'selected' : '' }}>
                                             {{ $paymentType->name }}
                                         </option>
                                     @endforeach
@@ -131,15 +131,15 @@
                             <div class="mb-3 col-md-6">
                                 <label for="is_supplier">Is Supplier?</label>
                                 <select name="is_supplier" id="is_supplier" class="form-control" required>
-                                    <option value="0" {{ $party->is_supplier ? '' : 'selected' }}>No</option>
-                                    <option value="1" {{ $party->is_supplier ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('is_supplier', $party->is_supplier) == '0' ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('is_supplier', $party->is_supplier) == '1' ? 'selected' : '' }}>Yes</option>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="is_distributor">Is Distributor?</label>
                                 <select name="is_distributor" id="is_distributor" class="form-control" required>
-                                    <option value="0" {{ $party->is_distributor ? '' : 'selected' }}>No</option>
-                                    <option value="1" {{ $party->is_distributor ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('is_distributor', $party->is_distributor) == '0' ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('is_distributor', $party->is_distributor) == '1' ? 'selected' : '' }}>Yes</option>
                                 </select>
                             </div>
                         </div>

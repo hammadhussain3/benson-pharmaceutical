@@ -23,13 +23,13 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name">Bank Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Bank Name" required>
+                                    placeholder="Bank Name" required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a valid bank name.</div>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="acronym">Acronym</label>
                                 <input type="text" class="form-control" name="acronym" id="acronym"
-                                    placeholder="Acronym" required>
+                                    placeholder="Acronym" required value="{{ old('acronym') }}">
                                 <div class="invalid-feedback">Please provide a valid acronym.</div>
                             </div>
                             <div class="mb-3 col-md-12">
@@ -37,7 +37,10 @@
                                 <select name="country" id="country_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
-                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                        <option value="{{ $country->id }}"
+                                            {{ old('country') == $country->id ? 'selected' : '' }}>
+                                            {{ $country->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a country.</div>

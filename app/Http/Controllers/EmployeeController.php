@@ -76,6 +76,18 @@ class EmployeeController extends Controller
         return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
     }
 
+    public function update(UpdateEmployeeRequest $request, Employee $employee)
+    {
+        $this->employeeService->updateEmployee($employee, $request->validated());
+        return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
+    }
+
+    public function destroy(Employee $employee)
+    {
+        $this->employeeService->deleteEmployee($employee);
+        return redirect()->route('employees.index')->with('success', 'Employee deleted successfully.');
+    }
+
     public function getCompanyByEmployee($employeeId)
     {
         // Fetch the loan record for the given employee ID
@@ -94,6 +106,8 @@ class EmployeeController extends Controller
         $designation = Designation::findOrFail($employee->designation_id);
 
         return response()->json([
+            'first_name' => $employee->first_name,
+            'last_name' => $employee->last_name,
             'branch_id' => $employee->branch_id,
             'department_id' => $employee->department_id,
             'designation_id' => $employee->designation_id,
@@ -106,15 +120,9 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function update(UpdateEmployeeRequest $request, Employee $employee)
+    public function getEmployeesByCompany($companyId)
     {
-        $this->employeeService->updateEmployee($employee, $request->validated());
-        return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
-    }
-
-    public function destroy(Employee $employee)
-    {
-        $this->employeeService->deleteEmployee($employee);
-        return redirect()->route('employees.index')->with('success', 'Employee deleted successfully.');
+        $employees = Employee::where('company_id', $companyId)->get();
+        return response()->json(['employees' => $employees]);
     }
 }

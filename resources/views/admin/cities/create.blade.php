@@ -23,7 +23,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name">City Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="City Name" required>
+                                    placeholder="City Name" required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a valid city name.</div>
                             </div>
                             <div class="mb-3 col-md-12">
@@ -32,7 +32,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ isset($city) && $country->id == $city->country_id ? 'selected' : '' }}>
+                                            {{ old('country') == $country->id ? 'selected' : '' }}>
                                             {{ $country->name }}
                                         </option>
                                     @endforeach

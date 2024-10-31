@@ -26,7 +26,10 @@
                                 <select class="js-example-basic-single select2" name="company" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
@@ -37,7 +40,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="name">Designation Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Designation Name" required>
+                                    placeholder="Designation Name" required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a designation name.</div>
                             </div>
                         </div>

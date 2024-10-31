@@ -18,14 +18,41 @@
 //     }
 // });
 
+var countryId = document.getElementById('country_id');
+var employeeId = document.getElementById('employee_id');
+var companyId = document.getElementById('company_id');
+
+if (countryId) {
+    var selectedCountryValue = countryId.value;
+    Selectcountry(selectedCountryValue);
+}
+
+if (employeeId) {
+    var selectedEmployeeValue = employeeId.value;
+    SelectLoan(selectedEmployeeValue);
+    SelecLeaves(selectedEmployeeValue);
+    SelectIncomeTax(selectedEmployeeValue); 
+    SelectCompany(selectedEmployeeValue);
+    SelectEmployeeDetails(selectedEmployeeValue);
+}
+
+if (companyId) {
+    var selectedCompanyValue = companyId.value;
+    console.log(selectedCompanyValue);
+    selectBranches(selectedCompanyValue);
+    selectDepartments(selectedCompanyValue);
+    selectDesignations(selectedCompanyValue);
+    selectEmployee(selectedCompanyValue);
+}
+
 
 function Selectcountry()
 {
     var countryId = document.getElementById('country_id').value;
     var citySelect = document.getElementById('city_id');
-    citySelect.innerHTML = '<option value="">Select City</option>'; // Reset cities
     
-    if (countryId) {
+    if (countryId && citySelect) {
+        citySelect.innerHTML = '<option value="">Select City</option>';
         fetch(`/countries/${countryId}/cities`)
             .then(response => response.json())
             .then(data => {
@@ -43,14 +70,13 @@ function Selectcountry()
 
 function SelectLoan(employeeId)
 {
-    var employeeId = employeeId;
-    var citySelect = document.getElementById('loan_advance');
+    var loanAdvance = document.getElementById('loan_advance');
     
-    if (employeeId) {
+    if (employeeId && loanAdvance) {
         fetch(`/getloan/${employeeId}`)
             .then(response => response.json())
             .then(data => {
-                citySelect.value = data.loan;
+                loanAdvance.value = data.loan;
             })
             .catch(error => console.error('Error fetching cities:', error));
     }
@@ -76,7 +102,6 @@ function SelectLoan(employeeId)
 
 function SelecLeaves(employeeId)
 {
-    var employeeId = employeeId;
     var auth_leave = document.getElementById('auth_leave');
     var unauth_leave = document.getElementById('unauth_leave');
     var approved_with_pay = document.getElementById('approved_with_pay');
@@ -128,10 +153,9 @@ function SelecLeaves(employeeId)
 
 function SelectIncomeTax(employeeId)
 {
-    var employeeId = employeeId;
     var incomeTax = document.getElementById('income_tax');
     
-    if (employeeId) {
+    if (employeeId && incomeTax) {
         fetch(`/getincometax/${employeeId}`)
             .then(response => response.json())
             .then(data => {
@@ -143,24 +167,25 @@ function SelectIncomeTax(employeeId)
 
 function SelectCompany(employeeId)
 {
-    var employeeId = employeeId;
     var companyId = document.getElementById('company_id');
     var company = document.getElementById('company');
     
-    if (employeeId) {
+    if (employeeId && (companyId || company)) {
         fetch(`/getcompany/${employeeId}`)
             .then(response => response.json())
             .then(data => {
-                companyId.value = data.company_id;
-                company.value = data.company;
+                if (companyId) {
+                    companyId.value = data.company_id;
+                }
+                if (company) {
+                    company.value = data.company;
+                }
             })
             .catch(error => console.error('Error fetching cities:', error));
     }
 }
 
-function SelectEmployeeDetails(employeeId)
-{
-    var employeeId = employeeId;
+function SelectEmployeeDetails(employeeId) {
     var branchId = document.getElementById('branch_id');
     var departmentId = document.getElementById('department_id');
     var designationId = document.getElementById('designation_id');
@@ -170,22 +195,43 @@ function SelectEmployeeDetails(employeeId)
     var basic_pay = document.getElementById('basic_pay');
     var allowances = document.getElementById('allowances');
     var monthInput = document.getElementById('month');
-    
-    if (employeeId) {
+    var name = document.getElementById('name');
+
+    if (employeeId && (branchId || departmentId || designationId || branch || department || designation || basic_pay || allowances || monthInput || name)) {
         fetch(`/getemployee/${employeeId}`)
             .then(response => response.json())
             .then(data => {
-                branchId.value = data.branch_id;
-                departmentId.value = data.department_id;
-                designationId.value = data.designation_id;
-                branch.value = data.branch;
-                department.value = data.department;
-                designation.value = data.designation;
-                basic_pay.value = data.basic_pay;
-                allowances.value = data.allowances;
-
+                console.log(data);
+                if (branchId) {
+                    branchId.value = data.branch_id;
+                }
+                if (departmentId) {
+                    departmentId.value = data.department_id;
+                }
+                if (designationId) {
+                    designationId.value = data.designation_id;
+                }
+                if (branch) {
+                    branch.value = data.branch;
+                }
+                if (department) {
+                    department.value = data.department;
+                }
+                if (designation) {
+                    designation.value = data.designation;
+                }
+                if (basic_pay) {
+                    basic_pay.value = data.basic_pay;
+                }
+                if (allowances) {
+                    allowances.value = data.allowances;
+                }
+                if (name) {
+                    name.value = data.first_name+ ' ' +data.last_name;
+                }
+                
                 // Set the minimum month based on date of joining or last 3 years
-                if (data.date_of_joining) {
+                if (data.date_of_joining && monthInput) {
                     // Assuming date_of_joining is in the format 'YYYY-MM-DD'
                     var joiningDate = new Date(data.date_of_joining);
                     var today = new Date();
@@ -194,23 +240,22 @@ function SelectEmployeeDetails(employeeId)
                     var threeYearsAgo = new Date(today);
                     threeYearsAgo.setFullYear(today.getFullYear() - 3);
 
-                    // Compare joining date with three years ago
+                    // Compare joining date with three years ago to get the later date
                     var minDate = joiningDate > threeYearsAgo ? joiningDate : threeYearsAgo;
                     var formattedMinMonth = minDate.toISOString().slice(0, 7); // Get 'YYYY-MM' part
                     monthInput.min = formattedMinMonth;
                 }
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching employee details:', error));
     }
 }
 
 function selectBranches(companyId)
 {
     var branchSelect = document.getElementById('branch_id');
-    branchSelect.innerHTML = '<option value="">Select Branch</option>';
     
-    if (companyId) {
-        
+    if (companyId && branchSelect) {
+        branchSelect.innerHTML = '<option value="">Select Branch</option>';
         fetch(`/companies/${companyId}/branches`)
             .then(response => response.json())
             .then(data => {
@@ -228,9 +273,9 @@ function selectBranches(companyId)
 function selectDepartments(companyId)
 {
     var departmentSelect = document.getElementById('department_id');
-    departmentSelect.innerHTML = '<option value="">Select Department</option>';
     
-    if (companyId) {
+    if (companyId && departmentSelect) {
+        departmentSelect.innerHTML = '<option value="">Select Department</option>';
         fetch(`/companies/${companyId}/departments`)
             .then(response => response.json())
             .then(data => {
@@ -248,9 +293,9 @@ function selectDepartments(companyId)
 function selectDesignations(companyId)
 {
     var designationSelect = document.getElementById('designation_id');
-    designationSelect.innerHTML = '<option value="">Select Designation</option>';
     
-    if (companyId) {
+    if (companyId && designationSelect) {
+        designationSelect.innerHTML = '<option value="">Select Designation</option>';
         fetch(`/companies/${companyId}/designations`)
             .then(response => response.json())
             .then(data => {
@@ -260,6 +305,27 @@ function selectDesignations(companyId)
                     option.value = designation.id;
                     option.textContent = designation.name;
                     designationSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function selectEmployee(companyId)
+{
+    var employeeSelect = document.getElementById('employee_id');
+    
+    if (companyId && employeeSelect) {
+        employeeSelect.innerHTML = '<option value="">Select Employee</option>';
+        fetch(`/companies/${companyId}/employees`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.employees.forEach(function (employee) {
+                    var option = document.createElement('option');
+                    option.value = employee.id;
+                    option.textContent = employee.first_name+ ' ' +employee.last_name;
+                    employeeSelect.appendChild(option);
                 });
             })
             .catch(error => console.error('Error fetching cities:', error));

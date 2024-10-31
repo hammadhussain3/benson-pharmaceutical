@@ -25,8 +25,11 @@
                                 <select name="employee" id="employee" class="js-example-basic-single select2" required @role('Superadmin') onchange="SelectCompany(this.value);" @endrole>
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->first_name }}
-                                            {{ $employee->last_name }}</option>
+                                        <option value="{{ $employee->id }}"
+                                            {{ old('employee') == $employee->id ? 'selected' : '' }}>
+                                            {{ $employee->first_name }}
+                                            {{ $employee->last_name }}
+                                        </option>
                                         <!-- Assuming you have a full_name attribute -->
                                     @endforeach
                                 </select>
@@ -47,7 +50,10 @@
                                     required>
                                     <option value="">Select Leave Type</option>
                                     @foreach ($leaveTypes as $leaveType)
-                                        <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
+                                        <option value="{{ $leaveType->id }}"
+                                            {{ old('leave_type') == $leaveType->id ? 'selected' : '' }}>
+                                            {{ $leaveType->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a leave type.</div>
@@ -55,7 +61,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="days">Number of Days</label>
                                 <input type="number" class="form-control" name="days" id="days" placeholder="Days"
-                                    required>
+                                    required value="{{ old('days') }}">
                                 <div class="invalid-feedback">Please provide a valid number of days.</div>
                             </div>
                         </div>

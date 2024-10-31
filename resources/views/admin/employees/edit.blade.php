@@ -55,7 +55,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="date_of_joining">Date of Joining</label>
                                 <input type="date" class="form-control" name="date_of_joining" id="date_of_joining"
-                                    value="{{ old('date_of_joining', $employee->date_of_joining) }}" required>
+                                    value="{{ old('date_of_joining', $employee->date_of_joining) }}" required max="{{ date('Y-m-d') }}">
                                 <div class="invalid-feedback">Please select a date.</div>
                             </div>
                             @role('Superadmin')
@@ -65,7 +65,7 @@
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
-                                            {{ $company->id == $employee->company_id ? 'selected' : '' }}>
+                                            {{ $company->id == old('company', $employee->company_id) ? 'selected' : '' }}>
                                             {{ $company->name }}
                                         </option>
                                     @endforeach
@@ -81,7 +81,7 @@
                                     <option value="">Select Branch</option>
                                     @foreach ($branches as $branch)
                                         <option value="{{ $branch->id }}"
-                                            {{ $branch->id == $employee->branch_id ? 'selected' : '' }}>
+                                            {{ $branch->id == old('branch', $employee->branch_id) ? 'selected' : '' }}>
                                             {{ $branch->name }}
                                         </option>
                                     @endforeach
@@ -94,7 +94,7 @@
                                     <option value="">Select Department</option>
                                     @foreach ($departments as $department)
                                         <option value="{{ $department->id }}"
-                                            {{ $department->id == $employee->department_id ? 'selected' : '' }}>
+                                            {{ $department->id == old('department', $employee->department_id) ? 'selected' : '' }}>
                                             {{ $department->name }}
                                         </option>
                                     @endforeach
@@ -107,7 +107,7 @@
                                     <option value="">Select Designation</option>
                                     @foreach ($designations as $designation)
                                         <option value="{{ $designation->id }}"
-                                            {{ $designation->id == $employee->designation_id ? 'selected' : '' }}>
+                                            {{ $designation->id == old('designation', $employee->designation_id) ? 'selected' : '' }}>
                                             {{ $designation->name }}
                                         </option>
                                     @endforeach
@@ -120,7 +120,7 @@
                                     <option value="">Select Bank</option>
                                     @foreach ($banks as $bank)
                                         <option value="{{ $bank->id }}"
-                                            {{ $bank->id == $employee->bank_id ? 'selected' : '' }}>
+                                            {{ $bank->id == old('bank', $employee->bank_id) ? 'selected' : '' }}>
                                             {{ $bank->name }}
                                         </option>
                                     @endforeach
@@ -128,14 +128,14 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="bank_account">Bank Account (optional)</label>
-                                <input type="text" class="form-control" name="bank_account" id="bank_account"
+                                <input type="number" class="form-control" name="bank_account" id="bank_account"
                                     value="{{ old('bank_account', $employee->bank_account) }}">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="is_active">Is Active</label>
                                 <select name="is_active" id="is_active" class="form-control" required>
-                                    <option value="1" {{ $employee->is_active ? 'selected' : '' }}>Yes</option>
-                                    <option value="0" {{ !$employee->is_active ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('is_active', $employee->is_active) == '1' ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('is_active', $employee->is_active) == '0' ? 'selected' : '' }}>No</option>
                                 </select>
                                 <div class="invalid-feedback">Please select if the employee is active.</div>
                             </div>

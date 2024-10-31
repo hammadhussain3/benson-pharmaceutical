@@ -25,12 +25,12 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name">Payment Type Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ $paymentType->name }}" required>
+                                    value="{{ old('name', $paymentType->name) }}" required>
                                 <div class="invalid-feedback">Please provide a valid payment type name.</div>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="description">Description</label>
-                                <textarea class="form-control" name="description" id="description" placeholder="Description">{{ $paymentType->description }}</textarea>
+                                <textarea class="form-control" name="description" id="description" placeholder="Description">{{ old('description', $paymentType->description) }}</textarea>
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
@@ -39,7 +39,7 @@
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
-                                            {{ $company->id == $paymentType->company_id ? 'selected' : '' }}>
+                                            {{ $company->id == old('company', $paymentType->company_id) ? 'selected' : '' }}>
                                             {{ $company->name }}
                                         </option>
                                     @endforeach

@@ -18,8 +18,9 @@ class DepartmentController extends Controller
 
     public function index()
     {
+        $branch = Department::with('branch')->get();
         $departments = $this->departmentService->getAllDepartments();
-        return view('admin.departments.index', compact('departments'));
+        return view('admin.departments.index', compact('departments','branch'));
     }
 
     public function create()

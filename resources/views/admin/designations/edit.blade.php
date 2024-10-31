@@ -29,7 +29,7 @@
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
-                                            {{ $designation->company_id == $company->id ? 'selected' : '' }}>
+                                            {{ old('company', $designation->company_id) == $company->id ? 'selected' : '' }}>
                                             {{ $company->name }}</option>
                                     @endforeach
                                 </select>
@@ -41,7 +41,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="name">Designation Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ $designation->name }}" placeholder="Designation Name" required>
+                                    value="{{ old('name', $designation->name) }}" placeholder="Designation Name" required>
                                 <div class="invalid-feedback">Please provide a designation name.</div>
                             </div>
                         </div>

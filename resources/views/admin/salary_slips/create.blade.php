@@ -26,7 +26,9 @@
                                 <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelecLeaves(this.value); SelectIncomeTax(this.value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
                                     <option value="">--Select Employee--</option>
                                     @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->code }} -
+                                        <option value="{{ $employee->id }}"
+                                            {{ old('employee') == $employee->id ? 'selected' : '' }}>
+                                            {{ $employee->code }} -
                                             {{ $employee->first_name }}
                                             {{ $employee->last_name }}
                                         </option>
@@ -49,13 +51,14 @@
                                             // Format the value as YYYY-MM
                                             $formattedValue = sprintf('%04d-%02d', $year, $key);
                                         @endphp
-                                        <option value="{{ $formattedValue }}" {{ $key == $currentMonth && $year == $currentYear ? 'selected' : '' }}>
+                                        <option value="{{ $formattedValue }}" 
+                                            {{ old('month', sprintf('%04d-%02d', $currentYear, $currentMonth)) == $formattedValue ? 'selected' : '' }}>
                                             {{ $month }} {{ $year }}
                                         </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a month.</div>
-                            </div>                         
+                            </div>
 
                             {{-- <div class="mb-3 col-md-6">
                                 <label for="month">Month</label>
@@ -67,28 +70,28 @@
                                 <label for="payment_mode">Payment Mode</label>
                                 <select name="payment_mode" id="payment_mode" class="form-control" required>
                                     <option value="">Select Payment Mode</option>
-                                    <option value="bank_transfer">Bank Transfer</option>
-                                    <option value="cash">Cash</option>
+                                    <option value="bank_transfer" {{ old('payment_mode') == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
+                                    <option value="cash" {{ old('payment_mode') == 'cash' ? 'selected' : '' }}>Cash</option>
                                 </select>
                                 <div class="invalid-feedback">Please select a payment mode.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="arrears">Arrears</label>
-                                <input type="number" class="form-control" name="arrears" id="arrears" required>
+                                <input type="number" class="form-control" name="arrears" id="arrears" required value="{{ old('arrears') }}">
                                 <div class="invalid-feedback">Please provide the arrears amount.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="late_in_early_out_deduction">Late/Early Out Deduction</label>
                                 <input type="number" class="form-control" name="late_in_early_out_deduction"
-                                    id="late_in_early_out_deduction" required>
+                                    id="late_in_early_out_deduction" required value="{{ old('late_in_early_out_deduction') }}">
                                 <div class="invalid-feedback">Please provide the deduction amount.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="overtime">Overtime</label>
-                                <input type="number" class="form-control" name="overtime" id="overtime" required>
+                                <input type="number" class="form-control" name="overtime" id="overtime" required value="{{ old('overtime') }}">
                                 <div class="invalid-feedback">Please provide the overtime amount.</div>
                             </div>
 

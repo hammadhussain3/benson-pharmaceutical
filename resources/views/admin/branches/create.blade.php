@@ -26,7 +26,10 @@
                                 <select class="js-example-basic-single select2" name="company" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
@@ -38,7 +41,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="name">Branch Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Branch Name" required>
+                                    placeholder="Branch Name" required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a branch name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
@@ -47,7 +50,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                            {{ old('country') == $country->id ? 'selected' : '' }}>
                                             {{ $country->name }}
                                         </option>
                                     @endforeach
@@ -62,7 +65,7 @@
                                         @foreach ($cities as $city)
                                             <!-- Assuming you pass cities based on old country -->
                                             <option value="{{ $city->id }}"
-                                                {{ old('city_id') == $city->id ? 'selected' : '' }}>
+                                                {{ old('city') == $city->id ? 'selected' : '' }}>
                                                 {{ $city->name }}
                                             </option>
                                         @endforeach
@@ -73,28 +76,28 @@
                             <div class="mb-3 col-md-6">
                                 <label for="address">Address</label>
                                 <input type="text" class="form-control" name="address" placeholder="Branch Address"
-                                    required>
+                                    required value="{{ old('address') }}">
                                 <div class="invalid-feedback">Please provide an address.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="phone">Phone</label>
                                 <input type="text" class="form-control" name="phone" placeholder="Branch Phone"
-                                    required>
+                                    required value="{{ old('phone') }}">
                                 <div class="invalid-feedback">Please provide a phone number.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email">Email (Optional)</label>
-                                <input type="email" class="form-control" name="email" placeholder="Branch Email">
+                                <input type="email" class="form-control" name="email" placeholder="Branch Email" value="{{ old('email') }}">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_name">Contact Person Name (Optional)</label>
                                 <input type="text" class="form-control" name="contact_person_name"
-                                    placeholder="Contact Person Name">
+                                    placeholder="Contact Person Name" value="{{ old('contact_person_name') }}">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_phone">Contact Person Phone (Optional)</label>
                                 <input type="text" class="form-control" name="contact_person_phone"
-                                    placeholder="Contact Person Phone">
+                                    placeholder="Contact Person Phone" value="{{ old('contact_person_phone') }}">
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

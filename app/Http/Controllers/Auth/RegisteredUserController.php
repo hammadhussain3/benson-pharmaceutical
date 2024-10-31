@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Services\EmployeeService;
+use App\Services\CompanyService;
+use App\Services\RoleService;
 
 class RegisteredUserController extends Controller
 {
@@ -24,41 +26,40 @@ class RegisteredUserController extends Controller
      */
 
     protected $employeeService;
+    protected $companyService;
+    protected $roleService;
 
-    public function __construct(EmployeeService $employeeService)
+    public function __construct(EmployeeService $employeeService, CompanyService $companyService, RoleService $roleService)
     {
         $this->employeeService = $employeeService;
+        $this->companyService = $companyService;
+        $this->roleService = $roleService;
     }
 
     public function index(): View
     {
         $users = User::with('roles', 'employee')->where('id', '!=', '1')->orderBy('name', 'asc')->get();
-        // $company = Company::find($users->company_id);
-        // $branch = Branch::find($users->company_id);
-        // echo '<pre>';
-        // print_r($users);
-        // exit;
         return view('auth.index', compact('users'));
     }
 
     public function create(): View
     {
-        $roles = Role::orderBy('name', 'asc')->get();
-        $employees = $this->employeeService->getAllEmployees();
+        $roles = $this->roleService->getAllRoles();
+        $companies = $this->companyService->getAllCompanies();
 
-        return view('auth.register', compact('roles', 'employees'));
+        return view('auth.register', compact('roles', 'companies'));
     }
     public function edit($id)
     {
         // Fetch the user by the ID with roles and employee relationships
         $user = User::with('roles', 'employee')->findOrFail($id);
-    
-        // Fetch all employees and roles for the dropdowns
-        $employees = Employee::all();
-        $roles = Role::all();
+        $employees = Employee::where('company_id', $user->employee->company_id)->get();
+        $employee_details = Employee::where('id', $user->employee_id)->first();
+        $roles = $this->roleService->getAllRoles();
+        $companies = $this->companyService->getAllCompanies();
     
         // Return the edit view with the user, employees, and roles data
-        return view('auth.edit', compact('user', 'employees', 'roles'));
+        return view('auth.edit', compact('user', 'employees', 'roles', 'companies', 'employee_details'));
     }
     
 
@@ -71,15 +72,15 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'employee_id' => ['required', 'integer', 'exists:employees,id'],
+            'employee' => ['required', 'integer', 'exists:employees,id'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required'],
             'role' => ['required', 'exists:roles,id'],
         ]);
 
         $user = User::create([
-            'employee_id' => $request->employee_id,
+            'employee_id' => $request->employee,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -96,7 +97,7 @@ class RegisteredUserController extends Controller
     {
         // Validate the incoming request
         $request->validate([
-            'employee_id' => ['required', 'integer', 'exists:employees,id'],
+            'employee' => ['required', 'integer', 'exists:employees,id'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $id], // Ignore current user's email for uniqueness
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
@@ -108,7 +109,7 @@ class RegisteredUserController extends Controller
     
         // Update the user's basic details
         $user->update([
-            'employee_id' => $request->employee_id,
+            'employee_id' => $request->employee,
             'name' => $request->name,
             'email' => $request->email,
         ]);

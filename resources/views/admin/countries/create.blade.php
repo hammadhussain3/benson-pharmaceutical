@@ -23,7 +23,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name">Country Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Country Name" required>
+                                    placeholder="Country Name" required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a valid country name.</div>
                             </div>
                         </div>

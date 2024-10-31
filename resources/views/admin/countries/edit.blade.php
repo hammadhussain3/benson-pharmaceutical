@@ -25,7 +25,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name">Country Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ $country->name }}" required>
+                                    value="{{ old('name', $country->name) }}" required>
                                 <div class="invalid-feedback">Please provide a valid country name.</div>
                             </div>
                         </div>

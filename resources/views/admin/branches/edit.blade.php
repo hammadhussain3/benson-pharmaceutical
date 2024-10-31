@@ -29,7 +29,7 @@
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
-                                            {{ $branch->company_id == $company->id ? 'selected' : '' }}>{{ $company->name }}
+                                            {{ old('company', $branch->company_id) == $company->id ? 'selected' : '' }}>{{ $company->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -41,7 +41,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="name">Branch Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Branch Name" value="{{ $branch->name }}" required>
+                                    placeholder="Branch Name" value="{{ old('name', $branch->name) }}" required>
                                 <div class="invalid-feedback">Please provide a branch name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
@@ -50,7 +50,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ $country->id == $company->country_id ? 'selected' : '' }}>
+                                            {{ $country->id == old('country', $company->country_id) ? 'selected' : '' }}>
                                             {{ $country->name }}</option>
                                     @endforeach
                                 </select>
@@ -64,7 +64,7 @@
                                     @if (isset($company->city_id))
                                         @foreach ($cities as $city)
                                             <option value="{{ $city->id }}"
-                                                {{ $city->id == $company->city_id ? 'selected' : '' }}>{{ $city->name }}
+                                                {{ $city->id == old('city', $company->city_id) ? 'selected' : '' }}>{{ $city->name }}
                                             </option>
                                         @endforeach
                                     @endif
@@ -74,29 +74,29 @@
                             <div class="mb-3 col-md-6">
                                 <label for="address">Address</label>
                                 <input type="text" class="form-control" name="address" placeholder="Branch Address"
-                                    value="{{ $branch->address }}" required>
+                                    value="{{ old('address', $branch->address) }}" required>
                                 <div class="invalid-feedback">Please provide an address.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="phone">Phone</label>
                                 <input type="text" class="form-control" name="phone" placeholder="Branch Phone"
-                                    value="{{ $branch->phone }}" required>
+                                    value="{{ old('phone', $branch->phone) }}" required>
                                 <div class="invalid-feedback">Please provide a phone number.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email">Email (Optional)</label>
-                                <input type="email" class="form-control" name="email" value="{{ $branch->email }}"
+                                <input type="email" class="form-control" name="email" value="{{ old('email', $branch->email) }}"
                                     placeholder="Branch Email">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_name">Contact Person Name (Optional)</label>
                                 <input type="text" class="form-control" name="contact_person_name"
-                                    value="{{ $branch->contact_person_name }}" placeholder="Contact Person Name">
+                                    value="{{ old('contact_person_name', $branch->contact_person_name) }}" placeholder="Contact Person Name">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_phone">Contact Person Phone (Optional)</label>
                                 <input type="text" class="form-control" name="contact_person_phone"
-                                    value="{{ $branch->contact_person_phone }}" placeholder="Contact Person Phone">
+                                    value="{{ old('contact_person_phone', $branch->contact_person_phone) }}" placeholder="Contact Person Phone">
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

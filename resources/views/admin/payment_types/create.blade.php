@@ -23,12 +23,12 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name">Payment Type Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Payment Type Name" required>
+                                    placeholder="Payment Type Name" required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a valid payment type name.</div>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="description">Description</label>
-                                <textarea class="form-control" name="description" id="description" placeholder="Description"></textarea>
+                                <textarea class="form-control" name="description" id="description" placeholder="Description">{{ old('description') }}</textarea>
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
@@ -36,7 +36,10 @@
                                 <select name="company" id="company" class="js-example-basic-single select2" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
