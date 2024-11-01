@@ -25,7 +25,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="code">Employee Code</label>
                                 <input type="text" class="form-control" name="code" id="code"
-                                    value="{{ old('code', $employee->code) }}" required>
+                                    value="{{ old('code', $employee->code) }}" required readonly>
                                 <div class="invalid-feedback">Please provide a valid employee code.</div>
                             </div>
                             <div class="mb-3 col-md-6">
@@ -38,6 +38,18 @@
                                 <label for="last_name">Last Name</label>
                                 <input type="text" class="form-control" name="last_name" id="last_name"
                                     value="{{ old('last_name', $employee->last_name) }}" required>
+                                <div class="invalid-feedback">Please provide a valid last name.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="Email" required value="{{ old('email', $employee->email) }}">
+                                <div class="invalid-feedback">Please provide a valid first name.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="phone">Phone</label>
+                                <input type="tel" class="form-control" name="phone" id="phone"
+                                    placeholder="+123 1234567890" required value="{{ old('phone', $employee->phone) }}">
                                 <div class="invalid-feedback">Please provide a valid last name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
@@ -77,7 +89,7 @@
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="branch_id">Branch</label>
-                                <select name="branch" id="branch_id" class="form-control" required>
+                                <select name="branch" id="branch_id" class="form-control" required onchange="selectDepartmentsByBranch(this.value);">
                                     <option value="">Select Branch</option>
                                     @foreach ($branches as $branch)
                                         <option value="{{ $branch->id }}"

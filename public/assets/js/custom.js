@@ -18,32 +18,32 @@
 //     }
 // });
 
-var countryId = document.getElementById('country_id');
-var employeeId = document.getElementById('employee_id');
-var companyId = document.getElementById('company_id');
+// var countryId = document.getElementById('country_id');
+// var employeeId = document.getElementById('employee_id');
+// var companyId = document.getElementById('company_id');
 
-if (countryId) {
-    var selectedCountryValue = countryId.value;
-    Selectcountry(selectedCountryValue);
-}
+// if (countryId) {
+//     var selectedCountryValue = countryId.value;
+//     Selectcountry(selectedCountryValue);
+// }
 
-if (employeeId) {
-    var selectedEmployeeValue = employeeId.value;
-    SelectLoan(selectedEmployeeValue);
-    SelecLeaves(selectedEmployeeValue);
-    SelectIncomeTax(selectedEmployeeValue); 
-    SelectCompany(selectedEmployeeValue);
-    SelectEmployeeDetails(selectedEmployeeValue);
-}
+// if (employeeId) {
+//     var selectedEmployeeValue = employeeId.value;
+//     SelectLoan(selectedEmployeeValue);
+//     SelecLeaves(selectedEmployeeValue);
+//     SelectIncomeTax(selectedEmployeeValue); 
+//     SelectCompany(selectedEmployeeValue);
+//     SelectEmployeeDetails(selectedEmployeeValue);
+// }
 
-if (companyId) {
-    var selectedCompanyValue = companyId.value;
-    console.log(selectedCompanyValue);
-    selectBranches(selectedCompanyValue);
-    selectDepartments(selectedCompanyValue);
-    selectDesignations(selectedCompanyValue);
-    selectEmployee(selectedCompanyValue);
-}
+// if (companyId) {
+//     var selectedCompanyValue = companyId.value;
+//     console.log(selectedCompanyValue);
+//     selectBranches(selectedCompanyValue);
+//     selectDepartments(selectedCompanyValue);
+//     selectDesignations(selectedCompanyValue);
+//     selectEmployee(selectedCompanyValue);
+// }
 
 
 function Selectcountry()
@@ -82,22 +82,21 @@ function SelectLoan(employeeId)
     }
 }
 
-// function SelectLoanDate(month)
-// {
-//     var month = month;
-//     var employeeId = document.getElementById('employee_id').value;
-//     var loan_advance = document.getElementById('loan_advance');
+function SelectLoanDate(month)
+{
+    var employeeId = document.getElementById('employee_id').value;
+    var loan_advance = document.getElementById('loan_advance');
 
-//     if (month && employeeId) {
-//         fetch(`/getloan/${employeeId}?month=${month}`)
-//             .then(response => response.json())
-//             .then(data => {
-//                 console.log
-//                 loan_advance.value = data.loan;
-//             })
-//             .catch(error => console.error('Error fetching loan data:', error));
-//     }
-// }
+    if (month && employeeId) {
+        fetch(`/getloan/${employeeId}?month=${month}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log
+                loan_advance.value = data.loan;
+            })
+            .catch(error => console.error('Error fetching loan data:', error));
+    }
+}
 
 
 function SelecLeaves(employeeId)
@@ -196,12 +195,12 @@ function SelectEmployeeDetails(employeeId) {
     var allowances = document.getElementById('allowances');
     var monthInput = document.getElementById('month');
     var name = document.getElementById('name');
+    var email = document.getElementById('email');
 
-    if (employeeId && (branchId || departmentId || designationId || branch || department || designation || basic_pay || allowances || monthInput || name)) {
+    if (employeeId && (branchId || departmentId || designationId || branch || department || designation || basic_pay || allowances || monthInput || name || email)) {
         fetch(`/getemployee/${employeeId}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (branchId) {
                     branchId.value = data.branch_id;
                 }
@@ -228,6 +227,9 @@ function SelectEmployeeDetails(employeeId) {
                 }
                 if (name) {
                     name.value = data.first_name+ ' ' +data.last_name;
+                }
+                if (email) {
+                    email.value = data.email;
                 }
                 
                 // Set the minimum month based on date of joining or last 3 years
@@ -299,7 +301,6 @@ function selectDesignations(companyId)
         fetch(`/companies/${companyId}/designations`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 data.designations.forEach(function (designation) {
                     var option = document.createElement('option');
                     option.value = designation.id;
@@ -320,14 +321,37 @@ function selectEmployee(companyId)
         fetch(`/companies/${companyId}/employees`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 data.employees.forEach(function (employee) {
                     var option = document.createElement('option');
                     option.value = employee.id;
-                    option.textContent = employee.first_name+ ' ' +employee.last_name;
+                    option.textContent = employee.code+ ' - ' +employee.first_name+ ' ' +employee.last_name;
                     employeeSelect.appendChild(option);
                 });
             })
             .catch(error => console.error('Error fetching cities:', error));
     }
+}
+
+function selectDepartmentsByBranch(branchId)
+{
+    var departmentSelect = document.getElementById('department_id');
+    
+    if (branchId && departmentSelect) {
+        departmentSelect.innerHTML = '<option value="">Select Department</option>';
+        fetch(`/branches/${branchId}/departments`)
+            .then(response => response.json())
+            .then(data => {
+                data.departments.forEach(function (department) {
+                    var option = document.createElement('option');
+                    option.value = department.id;
+                    option.textContent = department.name;
+                    departmentSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function updateLoanRemaining(loanAmount) {
+    document.getElementById('loan_remaining').value = loanAmount;
 }

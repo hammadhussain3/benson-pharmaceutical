@@ -17,6 +17,8 @@ class StoreEmployeeRequest extends FormRequest
             'code' => 'required|string|max:255|unique:employees',
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email',
+            'phone' => 'required|string|max:20|regex:/^(\+?\d{1,3}[- ]?)?\d{10,15}$/',
             'basic_pay' => 'required|numeric',
             'allowances' => 'required|numeric',
             'date_of_joining' => 'required|date',

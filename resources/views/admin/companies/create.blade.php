@@ -61,7 +61,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="phone">Phone</label>
-                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone"
+                                <input type="tel" class="form-control" name="phone" id="phone" placeholder="+123 1234567890"
                                     value="{{ old('phone') }}">
                             </div>
                             <div class="mb-3 col-md-6">
@@ -87,8 +87,8 @@
                             <div class="mb-3 col-md-6">
                                 <label for="is_active">Is Active</label>
                                 <select name="is_active" id="is_active" class="form-control">
-                                    <option value="1" {{ old('is_active') == 1 ? 'selected' : '' }}>Yes</option>
-                                    <option value="0" {{ old('is_active') == 0 ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('is_active', 1) == 0 ? 'selected' : '' }}>No</option>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">

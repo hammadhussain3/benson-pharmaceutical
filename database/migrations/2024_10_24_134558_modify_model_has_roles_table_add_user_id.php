@@ -20,15 +20,18 @@ return new class extends Migration
             // Add the user_id column
             $table->unsignedBigInteger('user_id')->after('role_id');
 
-            // If you want to add a foreign key constraint:
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // Add foreign key constraint
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
     public function down(): void
     {
         Schema::table('model_has_roles', function (Blueprint $table) {
-            // Reverse the changes made in the 'up' method
+            // Drop the foreign key constraint on user_id
+            $table->dropForeign(['user_id']);
+            
+            // Drop the user_id column
             $table->dropColumn('user_id');
 
             // Re-add model_type and model_id columns if needed

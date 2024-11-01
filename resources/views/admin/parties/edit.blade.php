@@ -88,7 +88,7 @@
                                 <label for="contact_person_phone">Contact Person Phone</label>
                                 <input type="text" class="form-control" name="contact_person_phone"
                                     id="contact_person_phone" value="{{ old('contact_person_phone', $party->contact_person_phone) }}"
-                                    placeholder="Contact Person Phone">
+                                    placeholder="+123 1234567890">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_email">Contact Person Email</label>
@@ -98,8 +98,8 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="phone">Phone</label>
-                                <input type="text" class="form-control" name="phone" id="phone"
-                                    value="{{ old('phone', $party->phone) }}" placeholder="Phone" required>
+                                <input type="tel" class="form-control" name="phone" id="phone"
+                                    value="{{ old('phone', $party->phone) }}" placeholder="+123 1234567890" required>
                                 <div class="invalid-feedback">Please provide a valid phone number.</div>
                             </div>
                             <div class="mb-3 col-md-6">

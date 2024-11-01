@@ -39,6 +39,18 @@
                                 <div class="invalid-feedback">Please provide a valid last name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="Email" required value="{{ old('email') }}">
+                                <div class="invalid-feedback">Please provide a valid first name.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="phone">Phone</label>
+                                <input type="tel" class="form-control" name="phone" id="phone"
+                                    placeholder="+123 1234567890" required value="{{ old('phone') }}">
+                                <div class="invalid-feedback">Please provide a valid last name.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="basic_pay">Basic Pay</label>
                                 <input type="number" step="0.01" class="form-control" name="basic_pay" id="basic_pay"
                                     placeholder="Basic Pay" required value="{{ old('basic_pay') }}">
@@ -72,7 +84,7 @@
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="branch_id">Branch</label>
-                                <select name="branch" id="branch_id" class="form-control" required value="{{ old('branch') }}">
+                                <select name="branch" id="branch_id" class="form-control" required value="{{ old('branch') }}" onchange="selectDepartmentsByBranch(this.value);">
                                     <option value="">Select Branch</option>
                                     @role('Superadmin')
                                     @else
@@ -126,8 +138,8 @@
                             <div class="mb-3 col-md-6">
                                 <label for="is_active">Is Active</label>
                                 <select name="is_active" id="is_active" class="form-control" required>
-                                    <option value="1" {{ old('is_active') == '1' ? 'selected' : '' }}>Yes</option>
-                                    <option value="0" {{ old('is_active') == '0' ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ old('is_active', 1) == '1' ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('is_active', 1) == '0' ? 'selected' : '' }}>No</option>
                                 </select>
                                 <div class="invalid-feedback">Please select if the employee is active.</div>
                             </div>

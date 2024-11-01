@@ -77,9 +77,12 @@ class LoanController extends Controller
     public function getLoansByEmployee($employeeId, Request $request)
     {
         $totalMonthlyPayment = 0;
+        $currentMonth = $request->has('month') ? Carbon::createFromFormat('Y-m', $request->input('month')) : Carbon::now();
 
         $loans = Loan::where('employee_id', $employeeId)
             ->where('remaining', '>=', 0)
+            ->whereMonth('created_at', '<=', $currentMonth->month)
+            ->whereYear('created_at', '<=', $currentMonth->year)
             ->sum('amount');
 
         if ($loans > 0) {

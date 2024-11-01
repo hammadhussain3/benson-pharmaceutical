@@ -24,7 +24,7 @@
                         <div class="form-row row">
                             <div class="mb-3 col-md-12">
                                 <label for="employee_id">Employee</label>
-                                <select name="employee_id" id="employee_id" class="js-example-basic-single select2"
+                                <select name="employee" id="employee_id" class="js-example-basic-single select2"
                                     required @role('Superadmin') onchange="SelectCompany(this.value);" @endrole>
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
@@ -38,7 +38,7 @@
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="amount">Amount</label>
-                                <input type="number" class="form-control" name="amount" id="amount"
+                                <input type="number" class="form-control" name="amount" id="loan_amount"  oninput="updateLoanRemaining(this.value)"
                                     value="{{ old('amount', $loan->amount) }}" required>
                                 <div class="invalid-feedback">Please provide a valid amount.</div>
                             </div>
@@ -50,8 +50,8 @@
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="remaining">Remaining</label>
-                                <input type="number" class="form-control" name="remaining" id="remaining"
-                                    value="{{ old('remaining', $loan->remaining) }}" required>
+                                <input type="number" class="form-control" name="remaining" id="loan_remaining"
+                                    value="{{ old('remaining', $loan->remaining) }}" required readonly>
                                 <div class="invalid-feedback">Please provide the remaining amount.</div>
                             </div>
                             @role('Superadmin')

@@ -48,7 +48,7 @@
                                     {{ $loan->employee->last_name }}</td>
                                 <td>{{ number_format($loan->amount, 2) }}</td>
                                 <td>{{ $loan->payback_months }}</td>
-                                <td>{{ $loan->remaining }}</td>
+                                <td>{{ number_format($loan->remaining, 2) }}</td>
                                 @role('Superadmin')
                                 <td>{{ $loan->company->name }}</td>
                                 @endrole
@@ -58,10 +58,7 @@
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="event.preventDefault(); 
-    if (confirm('Are you sure you want to delete this loan?')) {
-        document.getElementById('delete-form-{{ $loan->id }}').submit();
-    }">
+                                        onclick="confirmDelete('{{ $loan->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                     </a>
                                     <form id="delete-form-{{ $loan->id }}"

@@ -19,10 +19,16 @@
 
             <div class="row justify-content-between">
                 <div class="col-auto">
-                    <img src="{{ asset($company->logo_path ? 'images/company/' . $company->logo_path : 'images/company/logo.png') }}" class="mb-2" style="height: 100px">
-                    <h5 class="fw-bold">{{ $company->name }}</h5>
-                    <h5>{{ $company->address }}</h5>
-                    <h5>{{ $company->phone }}</h5>
+                    <div class="d-flex">
+                        <div class="flex-shrink-0">
+                            <img src="{{ asset($company->logo_path ? 'images/company/' . $company->logo_path : 'images/company/logo.png') }}" class="mb-2" style="height: 80px">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="fw-bold">{{ $company->name }}</h5>
+                            <p class="fs-6 mb-0">{{ $company->address }}</p>
+                            <p class="fs-6 mb-0">{{ $company->phone }}</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-auto text-end">
                     <h2>Salary Sheet</h2>
@@ -30,7 +36,7 @@
                 </div>
             </div>
        
-            <table class="table mt-5">
+            <table class="table mt-3">
                 <tr>
                     <th>Name</th>
                     <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
@@ -59,8 +65,7 @@
                 </tr>
             </table>
 
-            <hr>
-            <table class="table table-striped">
+            <table class="table table-striped mt-3">
                 <thead class="table-primary">
                     <tr>
                         <th>Description</th>
@@ -149,8 +154,7 @@
                     </tr>
                 </tfoot>
             </table>
-            <hr>
-            <div class="text-right">
+            <div class="text-right ms-2 mt-1">
                 <strong>Payment Mode:</strong> {{ $salarySlip->payment_mode }}
             </div>
             <br>
@@ -184,19 +188,32 @@
 
 <style>
     @media print {
+
+        @page{
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
         body * {
             visibility: hidden;
         }
 
-        .card,
-        .card * {
+        .card-body,
+        .card-body * {
             visibility: visible;
         }
 
-        .card {
-            position: absolute;
+        .card-body {
+            position: fixed;
             left: 0;
             top: 0;
+            width: 100%;
         }
     }
 </style>

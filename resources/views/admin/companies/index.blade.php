@@ -66,10 +66,7 @@
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="event.preventDefault(); 
-    if (confirm('Are you sure you want to delete this company?')) {
-        document.getElementById('delete-form-{{ $company->id }}').submit();
-    }">
+                                        onclick="confirmDelete('{{ $company->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                     </a>
                                     <form id="delete-form-{{ $company->id }}"

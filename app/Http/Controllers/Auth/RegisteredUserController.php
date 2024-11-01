@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Employee;
 use App\Models\Branch;
+use App\Models\Department;
+use App\Models\Designation;
 use App\Models\Company;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -57,9 +59,12 @@ class RegisteredUserController extends Controller
         $employee_details = Employee::where('id', $user->employee_id)->first();
         $roles = $this->roleService->getAllRoles();
         $companies = $this->companyService->getAllCompanies();
+        $branch = Branch::where('id', $user->employee->branch_id)->value('name');
+        $department = Department::where('id', $user->employee->department_id)->value('name');
+        $designation = Designation::where('id', $user->employee->designation_id)->value('name');
     
         // Return the edit view with the user, employees, and roles data
-        return view('auth.edit', compact('user', 'employees', 'roles', 'companies', 'employee_details'));
+        return view('auth.edit', compact('user', 'employees', 'roles', 'companies', 'employee_details', 'branch', 'department', 'designation'));
     }
     
 
@@ -72,7 +77,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'employee' => ['required', 'integer', 'exists:employees,id'],
+            'user' => ['required', 'integer', 'unique:users,employee_id'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required'],
@@ -80,7 +85,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $user = User::create([
-            'employee_id' => $request->employee,
+            'employee_id' => $request->user,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -97,10 +102,10 @@ class RegisteredUserController extends Controller
     {
         // Validate the incoming request
         $request->validate([
-            'employee' => ['required', 'integer', 'exists:employees,id'],
+            'user' => ['required', 'integer', 'unique:users,employee_id,' . $id],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $id], // Ignore current user's email for uniqueness
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'password' => ['nullable'],
             'role' => ['required', 'exists:roles,id'],
         ]);
     
@@ -109,7 +114,7 @@ class RegisteredUserController extends Controller
     
         // Update the user's basic details
         $user->update([
-            'employee_id' => $request->employee,
+            'employee_id' => $request->user,
             'name' => $request->name,
             'email' => $request->email,
         ]);

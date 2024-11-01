@@ -60,12 +60,12 @@ class EmployeeController extends Controller
 
         if (!auth()->user()->hasRole('Superadmin')) {
             $branches = Branch::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
-            $departments = Department::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
+            $departments = Department::orderBy('name', 'asc')->where('branch_id', auth()->user()->employee->branch_id)->get();
             $designations = Designation::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
         }
 
         $branches = Branch::orderBy('name', 'asc')->where('company_id', $employee->company_id)->get();
-        $departments = Department::orderBy('name', 'asc')->where('company_id', $employee->company_id)->get();
+        $departments = Department::orderBy('name', 'asc')->where('branch_id', $employee->branch_id)->get();
         $designations = Designation::orderBy('name', 'asc')->where('company_id', $employee->company_id)->get();
 
         return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies'));
@@ -106,8 +106,10 @@ class EmployeeController extends Controller
         $designation = Designation::findOrFail($employee->designation_id);
 
         return response()->json([
+            'code' => $employee->code,
             'first_name' => $employee->first_name,
             'last_name' => $employee->last_name,
+            'email' => $employee->email,
             'branch_id' => $employee->branch_id,
             'department_id' => $employee->department_id,
             'designation_id' => $employee->designation_id,

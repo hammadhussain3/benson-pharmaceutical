@@ -14,9 +14,16 @@
                 <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Admin</span></li>
 
                 <li>
-                    <a class="{{ request()->is('countries*') ? 'active' : '' }}" href="{{ route('countries.index') }}">
-                        <i class="fa fa-globe"></i>
-                        <span>Countries</span>
+                    <a class="{{ request()->is('banks*') ? 'active' : '' }}" href="{{ route('banks.index') }}">
+                        <i class="fa fa-building"></i>
+                        <span>Bank</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="{{ request()->is('branches*') ? 'active' : '' }}" href="{{ route('branches.index') }}">
+                        <i class="fa fa-code-branch"></i>
+                        <span>Branchs</span>
                     </a>
                 </li>
 
@@ -35,9 +42,9 @@
                 </li>
 
                 <li>
-                    <a class="{{ request()->is('branches*') ? 'active' : '' }}" href="{{ route('branches.index') }}">
-                        <i class="fa fa-code-branch"></i>
-                        <span>Branchs</span>
+                    <a class="{{ request()->is('countries*') ? 'active' : '' }}" href="{{ route('countries.index') }}">
+                        <i class="fa fa-globe"></i>
+                        <span>Countries</span>
                     </a>
                 </li>
 
@@ -49,13 +56,6 @@
                 </li>
 
                 <li>
-                    <a class="{{ request()->is('users*') ? 'active' : '' }}" href="{{ route('users.index') }}">
-                        <i class="fa fa-user"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-
-                <li>
                     <a class="{{ request()->is('roles*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
                         <i class="fa fa-lock"></i>
                         <span>Roles</span>
@@ -63,15 +63,22 @@
                 </li>
 
                 <li>
-                    <a class="{{ request()->is('banks*') ? 'active' : '' }}" href="{{ route('banks.index') }}">
-                        <i class="fa fa-building"></i>
-                        <span>Bank</span>
+                    <a class="{{ request()->is('users*') ? 'active' : '' }}" href="{{ route('users.index') }}">
+                        <i class="fa fa-user"></i>
+                        <span>Users</span>
                     </a>
                 </li>
 
                 @endrole
 
                 <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Human Resource</span></li>
+
+                <li>
+                    <a class="{{ request()->is('designations*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
+                        <i class="fa fa-briefcase"></i>
+                        <span>Designations</span>
+                    </a>
+                </li>
 
                 <li>
                     <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
@@ -81,16 +88,9 @@
                 </li>
 
                 <li>
-                    <a class="{{ request()->is('loans*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
-                        <i class="fa fa-handshake"></i>
-                        <span>Loan</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
-                        <i class="fa fa-handshake"></i>
-                        <span>Salary Tax Slabs</span>
+                    <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
+                        <i class="fa fa-calendar"></i>
+                        <span>Leave</span>
                     </a>
                 </li>
 
@@ -103,9 +103,9 @@
                 </li>
 
                 <li>
-                    <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
-                        <i class="fa fa-calendar"></i>
-                        <span>Leave</span>
+                    <a class="{{ request()->is('loans*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
+                        <i class="fa fa-handshake"></i>
+                        <span>Loan</span>
                     </a>
                 </li>
 
@@ -117,6 +117,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
+                        <i class="fa fa-handshake"></i>
+                        <span>Salary Tax Slabs</span>
+                    </a>
+                </li>
+
                 {{-- <li>
                     <a class="{{ request()->is('salary-sheet*') ? 'active' : '' }}"
                         href="{{ route('salary.sheet.index') }}">
@@ -124,6 +131,13 @@
                         <span>Salary Sheet</span>
                     </a>
                 </li> --}}
+
+                <li>
+                    <a class="{{ request()->is('chart_of_accounts*') ? 'active' : '' }}" href="{{ route('chart_of_accounts.index') }}">
+                        <i class="fa fa-list-alt"></i>
+                        <span>Chart of Accounts</span>
+                    </a>
+                </li>
                 
                 <li>
                     <a class="{{ request()->is('parties*') ? 'active' : '' }}" href="{{ route('parties.index') }}">
@@ -133,23 +147,9 @@
                 </li>
 
                 <li>
-                    <a class="{{ request()->is('chart_of_accounts*') ? 'active' : '' }}" href="{{ route('chart_of_accounts.index') }}">
-                        <i class="fa fa-list-alt"></i>
-                        <span>Chart of Accounts</span>
-                    </a>
-                </li>
-
-                <li>
                     <a class="{{ request()->is('payment_types*') ? 'active' : '' }}" href="{{ route('payment_types.index') }}">
                         <i class="fa fa-credit-card"></i>
                         <span>Payment Types</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="{{ request()->is('designations*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
-                        <i class="fa fa-briefcase"></i>
-                        <span>Designations</span>
                     </a>
                 </li>
 

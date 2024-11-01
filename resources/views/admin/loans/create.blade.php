@@ -37,7 +37,7 @@
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="amount">Amount</label>
-                                <input type="number" class="form-control" name="amount" id="amount"
+                                <input type="number" class="form-control" name="amount" id="loan_amount" oninput="updateLoanRemaining(this.value)"
                                     placeholder="Loan Amount" required value="{{ old('amount') }}">
                                 <div class="invalid-feedback">Please provide a valid amount.</div>
                             </div>
@@ -49,8 +49,8 @@
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="remaining">Remaining</label>
-                                <input type="number" class="form-control" name="remaining" id="remaining"
-                                    placeholder="Remaining Amount" required value="{{ old('remaining') }}">
+                                <input type="number" class="form-control" name="remaining" id="loan_remaining"
+                                    placeholder="Remaining Amount" required value="{{ old('remaining') }}" readonly>
                                 <div class="invalid-feedback">Please provide the remaining amount.</div>
                             </div>
                             @role('Superadmin')

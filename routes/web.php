@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/getapprovedleaves/{employeeId}', [LeaveController::class, 'getApprovedLeavesByEmployee']);
     Route::get('/getunauthleaves/{employeeId}', [LeaveController::class, 'getUnauthorizedLeavesByEmployee']);
     Route::get('/getapprovedpayleaves/{employeeId}', [LeaveController::class, 'getApprovedWithPayLeavesByEmployee']);
+    Route::get('/branches/{branchId}/departments', [DepartmentController::class, 'getDepartmentsByBranch']);
 
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');
     Route::get('salary-sheet/generate', [SalarySheetController::class, 'showSalarySheet'])->name('salary.sheet.show');

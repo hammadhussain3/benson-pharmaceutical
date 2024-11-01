@@ -76,8 +76,11 @@ class SalarySlipController extends Controller
         $branches = Branch::all();
         $departments = Department::all();
         $designations = Designation::all();
+        $singleBranch = Branch::where('id', $currentEmployee->branch_id)->first();
+        $singleDepartment = Department::where('id', $currentEmployee->department_id)->first();
+        $singleDesignation = Designation::where('id', $currentEmployee->designation_id)->first();
 
-        return view('admin.salary_slips.edit', compact('salarySlip', 'currentEmployee', 'employees', 'companies', 'branches', 'departments', 'designations'));
+        return view('admin.salary_slips.edit', compact('salarySlip', 'currentEmployee', 'employees', 'companies', 'branches', 'departments', 'designations', 'singleBranch', 'singleDepartment', 'singleDesignation'));
     }
 
     public function update(SalarySlipRequest $request, $id)

@@ -6,6 +6,7 @@ use App\Http\Requests\DepartmentRequest;
 use App\Models\Company;
 use App\Services\DepartmentService;
 use App\Models\Department;
+use App\Models\Branch;
 
 class DepartmentController extends Controller
 {
@@ -38,7 +39,8 @@ class DepartmentController extends Controller
     public function edit(Department $department)
     {
         $companies = Company::orderBy('name', 'asc')->get();
-        return view('admin.departments.edit', compact('department', 'companies'));
+        $branches = Branch::where('company_id', $department->company_id)->orderBy('name', 'asc')->get();
+        return view('admin.departments.edit', compact('department', 'companies', 'branches'));
     }
 
     public function update(DepartmentRequest $request, Department $department)
@@ -56,6 +58,12 @@ class DepartmentController extends Controller
     public function getDepartmentsByCompany($companyId)
     {
         $departments = Department::where('company_id', $companyId)->get();
+        return response()->json(['departments' => $departments]);
+    }
+
+    public function getDepartmentsByBranch($branchId)
+    {
+        $departments = Department::where('branch_id', $branchId)->get();
         return response()->json(['departments' => $departments]);
     }
 }

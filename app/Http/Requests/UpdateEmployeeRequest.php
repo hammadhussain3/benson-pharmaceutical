@@ -8,7 +8,7 @@ class UpdateEmployeeRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // Adjust this based on your authorization logic
+        return true;
     }
 
     public function rules()
@@ -17,6 +17,8 @@ class UpdateEmployeeRequest extends FormRequest
             'code' => 'required|string|max:255|unique:employees,code,' . $this->route('employee')->id,
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:employees,email,' . $this->route('employee')->id,
+            'phone' => 'required|string|max:20|regex:/^(\+?\d{1,3}[- ]?)?\d{10,15}$/',
             'basic_pay' => 'required|numeric',
             'allowances' => 'required|numeric',
             'date_of_joining' => 'required|date',

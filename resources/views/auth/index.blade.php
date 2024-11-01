@@ -36,6 +36,7 @@
                         <th>Company</th>
                         @endrole
                         <th>Branch</th>
+                        <th>Department</th>
                         <th>Role</th>
                         <th>Action</th>
                     </tr>
@@ -46,6 +47,7 @@
                                             $employee = $user->employee;
                                             $company = $employee ? $employee->company : null;
                                             $branch = $employee ? $employee->branch : null;
+                                            $department = $employee ? $employee->department : null;
                                         @endphp
 
                                         <tr>
@@ -57,6 +59,7 @@
                                             <td>{{ $company ? $company->name : 'N/A' }}</td>
                                             @endrole
                                             <td>{{ $branch ? $branch->name : 'N/A' }}</td>
+                                            <td>{{ $department ? $department->name : 'N/A' }}</td>
                                             <td>
                                                 @foreach ($user->roles as $role)
                                                     @if($role->name == "Admin")
@@ -75,10 +78,7 @@
                                                 <a class="me-3" href="{{ route('users.edit', $user->id) }}">
                                                     <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                                 </a>
-                                                <a class="confirm-text" href="javascript:void(0);" onclick="event.preventDefault(); 
-                                                                                if (confirm('Are you sure you want to delete this user?')) {
-                                                                                    document.getElementById('delete-form-{{ $user->id }}').submit();
-                                                                                }">
+                                                <a class="confirm-text" href="javascript:void(0);" onclick="confirmDelete('{{ $user->id }}')">
                                                     <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                                 </a>
                                                 <form id="delete-form-{{ $user->id }}" action="{{ route('users.destroy', $user->id) }}"

@@ -22,7 +22,7 @@
                         <div class="form-row">
                             <div class="col-md-12">
                                 <label>Select Employee </label>
-                                <select name="employee_id" id="employee" class="js-example-basic-single select2">
+                                <select name="employee" id="employee" class="js-example-basic-single select2">
                                     <option value="">--Select Employee--</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->code }} -

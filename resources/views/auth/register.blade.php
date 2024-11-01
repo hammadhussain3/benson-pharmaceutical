@@ -31,32 +31,9 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Select Employee </label>
-                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectEmployeeDetails(this.value)">
+                                <select name="user" id="employee_id" class="js-example-basic-single select2" required onchange="SelectEmployeeDetails(this.value)">
                                     <option value="">--Select Employee--</option>
                                 </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="name">Full Name</label>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="name-addon"><img src="{{ asset('assets/img/icons/users1.svg') }}" alt="img"></span>
-                                    <input type="text" id="name" name="name" class="form-control"
-                                        placeholder="Enter your full name" value="{{ old('name') }}" required
-                                        autofocus>
-                                </div>
-                                @error('name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="email">Email</label>
-                                <div class="input-group">
-                                    <span class="input-group-text" id="email-addon"><img src="{{ asset('assets/img/icons/mail.svg') }}" alt="img"></span>
-                                    <input type="email" id="email" name="email" class="form-control"
-                                        placeholder="Enter your email address" value="{{ old('email') }}" required>
-                                </div>
-                                @error('email')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="roles">Roles</label>
@@ -82,6 +59,26 @@
                                 @error('password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" value="{{ old('name') }}" required readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" value="{{ old('email') }}" required readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="branch">Branch</label>
+                                <input type="text" id="branch" name="branch" class="form-control" placeholder="Enter Branch" value="{{ old('branch') }}" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="department">Department</label>
+                                <input type="text" id="department" name="department" class="form-control" placeholder="Enter Department" value="{{ old('branch') }}" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="designation">Designation</label>
+                                <input type="text" id="designation" name="designation" class="form-control" placeholder="Enter Designation" value="{{ old('branch') }}" readonly>
                             </div>
                         </div>
                         <!-- Submit Button -->

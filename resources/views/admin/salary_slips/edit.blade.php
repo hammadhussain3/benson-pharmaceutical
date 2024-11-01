@@ -30,7 +30,7 @@
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
                                             {{ old('employee', $salarySlip->employee_id) == $employee->id ? 'selected' : '' }}>
-                                            {{ $employee->code }} - {{ $employee->first_name }}
+                                            {{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -40,7 +40,7 @@
                             @php
                                 $currentMonth = date('n');
                                 $currentYear = date('Y');
-                                $selectedMonth = old('month', $salarySlip->month ?? sprintf('%04d-%02d', $currentYear, $currentMonth)); // Use old value or the stored month, else default to current month
+                                $selectedMonth = old('month', sprintf('%04d-%02d', $salarySlip->year ?? $currentYear, $salarySlip->month ?? $currentMonth));
                             @endphp
 
                             <div class="mb-3 col-md-6">
@@ -147,7 +147,7 @@
                             </div>
 
                             @role('Superadmin')
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
                                 <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $currentEmployee->company_id)->value('name') }}" required readonly>
                                 <input type="hidden" name="company" id="company_id" value="{{ $currentEmployee->company_id }}" required>
@@ -157,46 +157,22 @@
                             @endrole
 
                             <div class="mb-3 col-md-6">
-                                <label for="branch_id">Branch</label>
-                                <select name="branch_id" id="branch_id" class="js-example-basic-single select2" required disabled>
-                                    <option value="">Select Branch</option>
-                                    @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}"
-                                            {{ $currentEmployee->branch_id == $branch->id ? 'selected' : '' }}>
-                                            {{ $branch->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a Branch.</div>
+                                <label for="branch">Branch</label>
+                                <input type="text" class="form-control" name="branch" id="branch" required readonly value="{{ old('branch', $singleBranch->name) }}">
+                                <input type="hidden" name="branch_id" id="branch_id" required value="{{ old('branch_id', $singleBranch->id) }}">
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="department_id">Department</label>
-                                <select name="department_id" id="department_id" class="js-example-basic-single select2" required disabled>
-                                    <option value="">Select Department</option>
-                                    @foreach ($departments as $department)
-                                        <option value="{{ $department->id }}"
-                                            {{ $currentEmployee->department_id == $department->id ? 'selected' : '' }}>
-                                            {{ $department->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a Department.</div>
+                                <label for="department">Department</label>
+                                <input type="text" class="form-control" name="department" id="department" required readonly value="{{ old('department', $singleDepartment->name) }}">
+                                <input type="hidden" name="department_id" id="department_id" required value="{{ old('department_id', $singleDepartment->id) }}">
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="designation_id">Designation</label>
-                                <select name="designation_id" id="designation_id" class="js-example-basic-single select2" required disabled>
-                                    <option value="">Select Designation</option>
-                                    @foreach ($designations as $designation)
-                                        <option value="{{ $designation->id }}"
-                                            {{ $currentEmployee->designation_id == $designation->id ? 'selected' : '' }}>
-                                            {{ $designation->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a Designation.</div>
-                            </div>                                                 
+                                <label for="designation">Designation</label>
+                                <input type="text" class="form-control" name="designation" id="designation" required readonly value="{{ old('designation', $singleDesignation->name) }}">
+                                <input type="hidden" name="designation_id" id="designation_id" required value="{{ old('designation_id', $singleDesignation->id) }}">
+                            </div>                                               
 
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

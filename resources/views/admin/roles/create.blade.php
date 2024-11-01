@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <form action="{{ route('roles.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
-                        <input type="hidden" class="form-control" name="guard_name" value="\App\Models\User">
+                        <input type="hidden" class="form-control" name="guard_name" value="web">
                         <div class="form-row row">
                             <div class="mb-3 col-md-6">
                                 <label for="name">Name</label>

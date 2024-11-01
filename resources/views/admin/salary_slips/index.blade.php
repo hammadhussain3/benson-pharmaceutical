@@ -60,8 +60,8 @@
                                 <td>{{ $salarySlip->late_in_early_out_deduction }}</td>
                                 <td>{{ $salarySlip->overtime }}</td>
                                 <td>{{ $salarySlip->arrears }}</td>
-                                <td>{{ $salarySlip->income_tax }}</td>
-                                <td>{{ $salarySlip->loan_advance }}</td>
+                                <td>{{ number_format($salarySlip->income_tax, 2) }}</td>
+                                <td>{{ number_format($salarySlip->loan_advance, 2) }}</td>
                                 <td>{{ $salarySlip->payment_mode }}</td>
                                 @role('Superadmin')
                                 <td>{{ $salarySlip->company->name }}</td>
@@ -75,10 +75,7 @@
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="event.preventDefault(); 
-                                        if (confirm('Are you sure you want to delete this salary slip?')) {
-                                            document.getElementById('delete-form-{{ $salarySlip->id }}').submit();
-                                        }">
+                                        onclick="confirmDelete('{{ $salarySlip->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                     </a>
                                     <form id="delete-form-{{ $salarySlip->id }}"

@@ -62,8 +62,8 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="phone">Phone</label>
-                                <input type="text" class="form-control" name="phone" id="phone"
-                                    value="{{ old('phone', $company->phone) }}" placeholder="Phone">
+                                <input type="tel" class="form-control" name="phone" id="phone"
+                                    value="{{ old('phone', $company->phone) }}" placeholder="+123 1234567890">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email">Email</label>

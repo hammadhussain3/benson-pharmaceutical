@@ -43,7 +43,7 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="month">Month and Year</label>
-                                <select class="form-select" name="month" id="month">
+                                <select class="form-select" name="month" id="month" onchange="SelectLoanDate(this.value);">
                                     @foreach(['1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April', '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August', '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'] as $key => $month)
                                         @php
                                             // Determine the year for each month

@@ -42,8 +42,8 @@
                         @foreach ($taxSlabs as $slab)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $slab->slab_start }}</td>
-                                <td>{{ $slab->slab_end }}</td>
+                                <td>{{ number_format($slab->slab_start, 2) }}</td>
+                                <td>{{ number_format($slab->slab_end, 2) }}</td>
                                 <td>{{ $slab->tax_value }}%</td>
                                 @role('Superadmin')
                                 <td>{{ $slab->company->name }}</td>
