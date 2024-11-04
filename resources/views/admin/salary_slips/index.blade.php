@@ -51,7 +51,7 @@
                         @foreach ($salarySlips as $salarySlip)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $salarySlip->employee->code }}</td>
+                                <td><a class="me-3" href="{{ route('salary.sheet.show', ['employee_id' => $salarySlip->employee_id, 'month' => $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT)]) }}">{{ $salarySlip->employee->code }}</a></td>
                                 <td>{{ $salarySlip->employee->first_name }} {{ $salarySlip->employee->last_name }}</td>
                                 <td>{{ DateTime::createFromFormat('!m', $salarySlip->month)->format('F') }} {{ $salarySlip->year }}</td>
                                 <td>{{ $salarySlip->auth_leave }}</td>

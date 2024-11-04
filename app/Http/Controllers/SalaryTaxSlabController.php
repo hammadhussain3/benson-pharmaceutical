@@ -19,37 +19,76 @@ class SalaryTaxSlabController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Salary Tax Slabs List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $taxSlabs = $this->service->getAllSlabs();
         return view('admin.salary_tax_slabs.index', compact('taxSlabs'));
     }
 
     public function view($id)
     {
+        if (!auth()->user()->hasPermission('Salary Tax Slabs View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $taxSlabs =  $this->service->getSlabById($id);
         return view('admin.salary_tax_slabs.view', compact('taxSlabs'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Salary Tax Slabs Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = Company::all();
         return view('admin.salary_tax_slabs.create', compact('companies'));
     }
 
     public function store(SalaryTaxSlabRequest $request)
     {
+        if (!auth()->user()->hasPermission('Salary Tax Slabs Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->service->createSlab($request->validated());
         return redirect()->route('tax-slabs.index')->with('success', 'Salary Tax Slab created successfully');
     }
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Salary Tax Slabs Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $taxSlab = SalaryTaxSlab::findOrFail($id);
         $companies = Company::all();
         return view('admin.salary_tax_slabs.edit', compact('taxSlab', 'companies'));
     }
 
+    public function update(SalaryTaxSlabRequest $request, $id)
+    {
+        if (!auth()->user()->hasPermission('Salary Tax Slabs Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $taxSlab = SalaryTaxSlab::findOrFail($id);
+        $this->service->updateSlab($taxSlab, $request->validated());
+        return redirect()->route('tax-slabs.index')->with('success', 'Salary Tax Slab updated successfully');
+    }
+
+
+    public function destroy($id)
+    {
+        if (!auth()->user()->hasPermission('Salary Tax Slabs Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $taxSlab = SalaryTaxSlab::findOrFail($id);
+        $this->service->deleteSlab($taxSlab);
+        return redirect()->route('tax-slabs.index')->with('success', 'Salary Tax Slab deleted successfully');
+    }
+
     public function getIncomeTaxByEmployee($employeeId)
     {
+        if (!auth()->user()->hasPermission('Salary Tax Slabs List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         // Fetch the basic pay for the given employee ID
         $employee = Employee::where('id', $employeeId)->first();
 
@@ -69,21 +108,5 @@ class SalaryTaxSlabController extends Controller
         $incomeTax = $incomeTax ?? 0;
 
         return response()->json(['incomeTax' => $incomeTax]);
-    }
-
-
-    public function update(SalaryTaxSlabRequest $request, $id)
-    {
-        $taxSlab = SalaryTaxSlab::findOrFail($id);
-        $this->service->updateSlab($taxSlab, $request->validated());
-        return redirect()->route('tax-slabs.index')->with('success', 'Salary Tax Slab updated successfully');
-    }
-
-
-    public function destroy($id)
-    {
-        $taxSlab = SalaryTaxSlab::findOrFail($id);
-        $this->service->deleteSlab($taxSlab);
-        return redirect()->route('tax-slabs.index')->with('success', 'Salary Tax Slab deleted successfully');
     }
 }

@@ -26,6 +26,9 @@ class LoanController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Loan List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $loansQuery = Loan::with(['employee', 'company'])
             ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
                 ->whereColumn('employees.id', 'loans.employee_id')
@@ -45,12 +48,18 @@ class LoanController extends Controller
 
     public function view($id)
     {
+        if (!auth()->user()->hasPermission('Loan View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $loan = Loan::findOrFail($id);
         return view('admin.loans.view', compact('loan'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Loan Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $employees = $this->employeeService->getAllEmployees();
         $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.loans.create', compact('employees', 'companies'));
@@ -58,6 +67,9 @@ class LoanController extends Controller
 
     public function store(LoanRequest $request)
     {
+        if (!auth()->user()->hasPermission('Loan Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $loan = Loan::where('employee_id', $request->employee)->where('remaining', '>=', '1')->first();
         if($loan){
             return back()->with('error', 'Loan found for the selected employee.');
@@ -68,14 +80,39 @@ class LoanController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Loan Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $loan = Loan::findOrFail($id);
         $employees = $this->employeeService->getAllEmployees();
         $companies = Company::orderBy('name', 'asc')->get();
         return view('admin.loans.edit', compact('loan', 'employees', 'companies'));
     }
 
+    public function update(LoanRequest $request, $id)
+    {
+        if (!auth()->user()->hasPermission('Loan Update')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $loan = Loan::findOrFail($id);
+        $this->loanService->updateLoan($loan, $request->validated());
+        return redirect()->route('loans.index')->with('success', 'Loan updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        if (!auth()->user()->hasPermission('Loan Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $loan = Loan::findOrFail($id);
+        $loan->delete();
+        return redirect()->route('loans.index')->with('success', 'Loan deleted successfully.');
+    }
     public function getLoansByEmployee($employeeId, Request $request)
     {
+        if (!auth()->user()->hasPermission('Loan List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         $totalMonthlyPayment = 0;
         $currentMonth = $request->has('month') ? Carbon::createFromFormat('Y-m', $request->input('month')) : Carbon::now();
 
@@ -114,19 +151,5 @@ class LoanController extends Controller
         // }
 
         return response()->json(['loan' => $totalMonthlyPayment]);
-    }
-
-    public function update(LoanRequest $request, $id)
-    {
-        $loan = Loan::findOrFail($id);
-        $this->loanService->updateLoan($loan, $request->validated());
-        return redirect()->route('loans.index')->with('success', 'Loan updated successfully.');
-    }
-
-    public function destroy($id)
-    {
-        $loan = Loan::findOrFail($id);
-        $loan->delete();
-        return redirect()->route('loans.index')->with('success', 'Loan deleted successfully.');
     }
 }

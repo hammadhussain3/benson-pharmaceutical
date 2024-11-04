@@ -23,18 +23,27 @@ class PartyController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Parties List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $parties = $this->partyService->getAllParties();
         return view('admin.parties.index', compact('parties'));
     }
 
     public function view($id)
     {
+        if (!auth()->user()->hasPermission('Parties View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $party = $this->partyService->getPartyById($id);
         return view('admin.parties.view', compact('party'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Parties Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
@@ -44,6 +53,9 @@ class PartyController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Parties Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $party = Party::findOrFail($id);
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
@@ -53,15 +65,19 @@ class PartyController extends Controller
     }
     public function store(StorePartyRequest $request)
     {
+        if (!auth()->user()->hasPermission('Parties Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->partyService->createParty($request->validated());
         return redirect()->route('parties.index')->with('success', 'Party created successfully.');
     }
 
 
-
-
     public function update(UpdatePartyRequest $request, $id) // Accepting the ID
     {
+        if (!auth()->user()->hasPermission('Parties Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $party = Party::findOrFail($id); // Explicitly using findOrFail
         $this->partyService->updateParty($party, $request->validated());
         return redirect()->route('parties.index')->with('success', 'Party updated successfully.');
@@ -69,6 +85,9 @@ class PartyController extends Controller
 
     public function destroy($id) // Accepting the ID
     {
+        if (!auth()->user()->hasPermission('Parties Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $party = Party::findOrFail($id); // Explicitly using findOrFail
         $this->partyService->deleteParty($party);
         return redirect()->route('parties.index')->with('success', 'Party deleted successfully.');

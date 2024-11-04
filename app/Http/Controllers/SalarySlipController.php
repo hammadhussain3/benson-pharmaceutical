@@ -29,6 +29,9 @@ class SalarySlipController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Salaries List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $salarySlipsQuery = SalarySlip::with(['employee', 'company'])
             ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
                 ->whereColumn('employees.id', 'salary_slips.employee_id')
@@ -45,6 +48,9 @@ class SalarySlipController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Salaries Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $employees = $this->employeeService->getAllEmployees();
         $companies = Company::all();
         $branches = Branch::all();
@@ -56,6 +62,9 @@ class SalarySlipController extends Controller
 
     public function store(SalarySlipRequest $request)
     {
+        if (!auth()->user()->hasPermission('Salaries Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $date = \DateTime::createFromFormat('Y-m', $request['month']);
     
         $month = $date->format('m');
@@ -75,6 +84,9 @@ class SalarySlipController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Salaries Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $salarySlip = SalarySlip::findOrFail($id);
 
         $currentEmployee = Employee::findOrFail($salarySlip->employee_id);
@@ -92,6 +104,9 @@ class SalarySlipController extends Controller
 
     public function update(SalarySlipRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('Salaries Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $salarySlip = SalarySlip::findOrFail($id);
         $this->salarySlipService->updateSalarySlip($salarySlip, $request->validated());
         return redirect()->route('salary.sheet.show', [
@@ -102,6 +117,9 @@ class SalarySlipController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('Salaries Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $salarySlip = SalarySlip::findOrFail($id);
     
         if ($salarySlip->loan_advance > 0) {

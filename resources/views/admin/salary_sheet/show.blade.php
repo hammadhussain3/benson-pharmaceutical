@@ -4,7 +4,10 @@
     <div class="page-header">
         <div class="page-title">
             <h4>Salary Sheet</h4>
-            <h6>View your Salary Sheet</h6>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('salary_slips.index') }}">Salaries</a></li>
+                <li class="breadcrumb-item active">View Salary Sheet</li>
+            </ul>
         </div>
         <div class="text-right">
             <button class="btn btn-primary" onclick="window.print()">Print Salary Sheet</button>
@@ -188,32 +191,38 @@
 
 <style>
     @media print {
-
-        @page{
-            margin: 0;
-        }
-
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        body * {
-            visibility: hidden;
-        }
-
-        .card-body,
-        .card-body * {
-            visibility: visible;
-        }
-
-        .card-body {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-        }
-    }
-</style>
+       @page {
+           margin: 0;
+       }
+   
+       html, body {
+           height: 100%;
+           margin: 0;
+           padding: 0;
+           overflow: hidden;
+       }
+   
+       body * {
+           visibility: hidden;
+       }
+   
+       .card-body,
+       .card-body * {
+           visibility: visible;
+       }
+   
+       .card-body {
+           position: fixed;
+           left: 0;
+           top: 0;
+           width: 100%;
+       }
+   
+       .table-primary th {
+           background-color: #e3f2fd !important;
+           -webkit-print-color-adjust: exact;
+           color-adjust: exact;
+       }
+   }
+   
+   </style>

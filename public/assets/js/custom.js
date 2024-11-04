@@ -54,7 +54,12 @@ function Selectcountry()
     if (countryId && citySelect) {
         citySelect.innerHTML = '<option value="">Select City</option>';
         fetch(`/countries/${countryId}/cities`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 data.cities.forEach(function (city) {
                     var option = document.createElement('option');
@@ -74,7 +79,12 @@ function SelectLoan(employeeId)
     
     if (employeeId && loanAdvance) {
         fetch(`/getloan/${employeeId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 loanAdvance.value = data.loan;
             })
@@ -89,7 +99,12 @@ function SelectLoanDate(month)
 
     if (month && employeeId) {
         fetch(`/getloan/${employeeId}?month=${month}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 loan_advance.value = data.loan;
             })
@@ -106,7 +121,12 @@ function SelecLeaves(employeeId)
     
     if (employeeId) {
         fetch(`/getapprovedleaves/${employeeId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.leaves !== null) {
                     auth_leave.value = data.leaves['days'];
@@ -155,7 +175,12 @@ function SelectIncomeTax(employeeId)
     
     if (employeeId && incomeTax) {
         fetch(`/getincometax/${employeeId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 incomeTax.value = data.incomeTax;
             })
@@ -170,7 +195,12 @@ function SelectCompany(employeeId)
     
     if (employeeId && (companyId || company)) {
         fetch(`/getcompany/${employeeId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (companyId) {
                     companyId.value = data.company_id;
@@ -198,7 +228,12 @@ function SelectEmployeeDetails(employeeId) {
 
     if (employeeId && (branchId || departmentId || designationId || branch || department || designation || basic_pay || allowances || monthInput || name || email)) {
         fetch(`/getemployee/${employeeId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (branchId) {
                     branchId.value = data.branch_id;
@@ -258,7 +293,12 @@ function selectBranches(companyId)
     if (companyId && branchSelect) {
         branchSelect.innerHTML = '<option value="">Select Branch</option>';
         fetch(`/companies/${companyId}/branches`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 data.branches.forEach(function (branch) {
                     var option = document.createElement('option');
@@ -278,7 +318,12 @@ function selectDepartments(companyId)
     if (companyId && departmentSelect) {
         departmentSelect.innerHTML = '<option value="">Select Department</option>';
         fetch(`/companies/${companyId}/departments`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 data.departments.forEach(function (department) {
                     var option = document.createElement('option');
@@ -298,7 +343,12 @@ function selectDesignations(companyId)
     if (companyId && designationSelect) {
         designationSelect.innerHTML = '<option value="">Select Designation</option>';
         fetch(`/companies/${companyId}/designations`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 data.designations.forEach(function (designation) {
                     var option = document.createElement('option');
@@ -318,7 +368,12 @@ function selectEmployee(companyId)
     if (companyId && employeeSelect) {
         employeeSelect.innerHTML = '<option value="">Select Employee</option>';
         fetch(`/companies/${companyId}/employees`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 data.employees.forEach(function (employee) {
                     var option = document.createElement('option');
@@ -337,7 +392,12 @@ function createEmployeeCode(companyId)
     
     if (companyId && code) {
         fetch(`/companies/${companyId}/code`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 code.value = data.employee_code;
             })
@@ -352,7 +412,12 @@ function selectDepartmentsByBranch(branchId)
     if (branchId && departmentSelect) {
         departmentSelect.innerHTML = '<option value="">Select Department</option>';
         fetch(`/branches/${branchId}/departments`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
             .then(data => {
                 data.departments.forEach(function (department) {
                     var option = document.createElement('option');

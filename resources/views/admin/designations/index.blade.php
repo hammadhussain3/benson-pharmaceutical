@@ -29,7 +29,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th><a class="link-primary" href="{{ route('designations.view', $designation->id) }}">Designation Name</a></th>
+                            <th>Designation Name</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole

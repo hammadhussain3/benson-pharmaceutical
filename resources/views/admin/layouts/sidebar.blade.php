@@ -107,27 +107,34 @@
                     <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Human Resource</span></li>
                 @endif
 
+                @if(auth()->user()->hasPermission('Designation List'))
                 <li>
                     <a class="{{ request()->is('designations*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
                         <i class="fa fa-briefcase"></i>
                         <span>Designations</span>
                     </a>
                 </li>
+                @endif
 
+                @if(auth()->user()->hasPermission('Employee List'))
                 <li>
                     <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
                         <i class="fa fa-users"></i>
                         <span>Employees</span>
                     </a>
                 </li>
+                @endif
 
+                @if(auth()->user()->hasPermission('Leave List'))
                 <li>
                     <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
                         <i class="fa fa-calendar"></i>
                         <span>Leave</span>
                     </a>
                 </li>
+                @endif
 
+                @if(auth()->user()->hasPermission('Leave Type List'))
                 <li>
                     <a class="{{ request()->is('leave_types*') ? 'active' : '' }}"
                         href="{{ route('leave_types.index') }}">
@@ -135,14 +142,18 @@
                         <span>Leave Type</span>
                     </a>
                 </li>
+                @endif
 
+                @if(auth()->user()->hasPermission('Loan List'))
                 <li>
                     <a class="{{ request()->is('loans*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
                         <i class="fa fa-handshake"></i>
                         <span>Loan</span>
                     </a>
                 </li>
+                @endif
 
+                @if(auth()->user()->hasPermission('Salaries List'))
                 <li>
                     <a class="{{ request()->is('salary_slips*') ? 'active' : '' }}"
                         href="{{ route('salary_slips.index') }}">
@@ -150,13 +161,16 @@
                         <span>Salaries</span>
                     </a>
                 </li>
+                @endif
 
+                @if(auth()->user()->hasPermission('Salary Tax Slabs List'))
                 <li>
                     <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
                         <i class="fa fa-handshake"></i>
                         <span>Salary Tax Slabs</span>
                     </a>
                 </li>
+                @endif
 
                 {{-- <li>
                     <a class="{{ request()->is('salary-sheet*') ? 'active' : '' }}"
@@ -166,27 +180,32 @@
                     </a>
                 </li> --}}
 
+                @if(auth()->user()->hasPermission('Chart Of Accounts List'))
                 <li>
                     <a class="{{ request()->is('chart_of_accounts*') ? 'active' : '' }}" href="{{ route('chart_of_accounts.index') }}">
                         <i class="fa fa-list-alt"></i>
                         <span>Chart of Accounts</span>
                     </a>
                 </li>
-                
+                @endif
+
+                @if(auth()->user()->hasPermission('Parties List'))
                 <li>
                     <a class="{{ request()->is('parties*') ? 'active' : '' }}" href="{{ route('parties.index') }}">
                         <i class="fa fa-users"></i>
                         <span>Parties</span>
                     </a>
                 </li>
+                @endif
 
+                @if(auth()->user()->hasPermission('Payment Types List'))
                 <li>
                     <a class="{{ request()->is('payment_types*') ? 'active' : '' }}" href="{{ route('payment_types.index') }}">
                         <i class="fa fa-credit-card"></i>
                         <span>Payment Types</span>
                     </a>
                 </li>
-
+                @endif
             </ul>
         </div>
     </div>

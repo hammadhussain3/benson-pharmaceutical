@@ -24,6 +24,9 @@ class SalarySheetController extends Controller
     // Process the form and display the salary sheet
     public function showSalarySheet(Request $request)
     {
+        if (!auth()->user()->hasPermission('Salaries View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'month' => 'required|date_format:Y-m',

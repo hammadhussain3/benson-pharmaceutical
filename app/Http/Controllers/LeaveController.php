@@ -22,6 +22,9 @@ class LeaveController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Leave List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = Company::all();
         $leavesQuery = Leave::with(['employee', 'leaveType'])
             ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
@@ -39,12 +42,18 @@ class LeaveController extends Controller
 
     public function view($id)
     {
+        if (!auth()->user()->hasPermission('Leave View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $leave = Leave::findOrFail($id);
         return view('admin.leaves.view', compact('leave'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Leave Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $leaveTypes = LeaveType::all();
         $employees = $this->employeeService->getAllEmployees();
         $companies = Company::orderBy('name', 'asc')->get();
@@ -53,6 +62,9 @@ class LeaveController extends Controller
 
     public function store(StoreLeaveRequest $request)
     {
+        if (!auth()->user()->hasPermission('Leave Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = [
             'employee_id' => $request->employee,
             'company_id' => $request->company,
@@ -65,6 +77,9 @@ class LeaveController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Leave Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $leave = Leave::findOrFail($id);
         $leaveTypes = LeaveType::all();
         $employees = $this->employeeService->getAllEmployees();
@@ -75,6 +90,9 @@ class LeaveController extends Controller
 
     public function update(StoreLeaveRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('Leave Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $leave = Leave::findOrFail($id);
         $data = [
             'employee_id' => $request->employee,
@@ -88,6 +106,9 @@ class LeaveController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('Leave Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $leave = Leave::findOrFail($id);
         $leave->delete();
         return redirect()->route('leaves.index')->with('success', 'Leave deleted successfully.');
@@ -95,16 +116,25 @@ class LeaveController extends Controller
 
     public function getApprovedLeavesByEmployee($employeeId)
     {
+        if (!auth()->user()->hasPermission('Leave List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',1)->first();
         return response()->json(['leaves' => $leaves]);
     }
     public function getUnauthorizedLeavesByEmployee($employeeId)
     {
+        if (!auth()->user()->hasPermission('Leave List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',2)->first();
         return response()->json(['leaves' => $leaves]);
     }
     public function getApprovedWithPayLeavesByEmployee($employeeId)
     {
+        if (!auth()->user()->hasPermission('Leave List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',3)->first();
         return response()->json(['leaves' => $leaves]);
     }

@@ -20,18 +20,28 @@ class BranchController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Branches List')) {
+            abort(403, 'Unauthorized action.');
+        }
+        
         $branches = $this->branchService->getAllBranches();
         return view('admin.branches.index', compact('branches'));
     }
 
     public function view($id)
     {
+        if (!auth()->user()->hasPermission('Branches View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $branch = $this->branchService->getBranchById($id);
         return view('admin.branches.view', compact('branch'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Branches Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = Company::orderBy('name', 'asc')->get();
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
@@ -41,12 +51,18 @@ class BranchController extends Controller
 
     public function store(BranchRequest $request)
     {
+        if (!auth()->user()->hasPermission('Branches Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->branchService->createBranch($request->validated());
         return redirect()->route('branches.index')->with('success', 'Branch created successfully.');
     }
 
     public function edit(Branch $branch)
     {
+        if (!auth()->user()->hasPermission('Branches Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = Company::orderBy('name', 'asc')->get();
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
@@ -56,18 +72,27 @@ class BranchController extends Controller
 
     public function update(BranchRequest $request, Branch $branch)
     {
+        if (!auth()->user()->hasPermission('Branches Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->branchService->updateBranch($branch, $request->validated());
         return redirect()->route('branches.index')->with('success', 'Branch updated successfully.');
     }
 
     public function destroy(Branch $branch)
     {
+        if (!auth()->user()->hasPermission('Branches Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->branchService->deleteBranch($branch);
         return redirect()->route('branches.index')->with('success', 'Branch deleted successfully.');
     }
 
     public function getBranchesByCompany($companyId)
     {
+        if (!auth()->user()->hasPermission('Branches List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         $branches = Branch::where('company_id', $companyId)->get();
         return response()->json(['branches' => $branches]);
     }

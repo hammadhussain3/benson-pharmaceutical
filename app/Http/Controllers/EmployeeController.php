@@ -23,18 +23,27 @@ class EmployeeController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Employee List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $employees = $this->employeeService->getAllEmployees();
         return view('admin.employees.index', compact('employees'));
     }
 
     public function view($id)
     {
+        if (!auth()->user()->hasPermission('Employee View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $employees =  $this->employeeService->getemployeeById($id);
         return view('admin.employees.view', compact('employees'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Employee Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newEmployeeCode = "EMP";
         } else {
@@ -56,6 +65,9 @@ class EmployeeController extends Controller
 
     public function edit(Employee $employee)
     {
+        if (!auth()->user()->hasPermission('Employee Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $designations = Designation::orderBy('name', 'asc')->get();
         $banks = Bank::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
@@ -74,24 +86,36 @@ class EmployeeController extends Controller
     }
     public function store(StoreEmployeeRequest $request)
     {
+        if (!auth()->user()->hasPermission('Employee Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->employeeService->createEmployee($request->validated());
         return redirect()->route('employees.index')->with('success', 'Employee created successfully.');
     }
 
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
+        if (!auth()->user()->hasPermission('Employee Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->employeeService->updateEmployee($employee, $request->validated());
         return redirect()->route('employees.index')->with('success', 'Employee updated successfully.');
     }
 
     public function destroy(Employee $employee)
     {
+        if (!auth()->user()->hasPermission('Employee Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->employeeService->deleteEmployee($employee);
         return redirect()->route('employees.index')->with('success', 'Employee deleted successfully.');
     }
 
     public function getCompanyByEmployee($employeeId)
     {
+        if (!auth()->user()->hasPermission('Employee List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         // Fetch the loan record for the given employee ID
         $company_id = Employee::where('id', $employeeId)->value('company_id');
         $company = Company::findOrFail($company_id);
@@ -101,6 +125,9 @@ class EmployeeController extends Controller
 
     public function getEmployeeDetails($employeeId)
     {
+        if (!auth()->user()->hasPermission('Employee List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         // Fetch the loan record for the given employee ID
         $employee = Employee::findOrFail($employeeId);
         $branch = Branch::findOrFail($employee->branch_id);
@@ -126,12 +153,18 @@ class EmployeeController extends Controller
 
     public function getEmployeesByCompany($companyId)
     {
+        if (!auth()->user()->hasPermission('Employee List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         $employees = Employee::where('company_id', $companyId)->get();
         return response()->json(['employees' => $employees]);
     }
 
     public function createCodeByCompany($companyId)
     {
+        if (!auth()->user()->hasPermission('Employee List')) {
+            return response()->json(['error' => 'Unauthorized action.'], 403);
+        }
         $employee_code = $this->employeeService->createEmployeeCode($companyId);
         return response()->json(['employee_code' => $employee_code]);
     }

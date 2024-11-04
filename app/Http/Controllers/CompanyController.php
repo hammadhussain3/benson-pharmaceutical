@@ -21,18 +21,27 @@ class CompanyController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Companies List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllCompanies();
         return view('admin.companies.index', compact('companies'));
     }
 
     public function view($id)
     {
+        if (!auth()->user()->hasPermission('Companies View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $company = $this->companyService->getCompanyById($id);
         return view('admin.companies.view', compact('company'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Companies Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
         return view('admin.companies.create', compact('countries', 'cities'));
@@ -40,6 +49,9 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request)
     {
+        if (!auth()->user()->hasPermission('Companies Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $data = [
             'name' => $request->name,
             'address' => $request->address,
@@ -64,6 +76,9 @@ class CompanyController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Companies Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $company = Company::findOrFail($id);
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
@@ -72,6 +87,9 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('Companies Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $company = Company::findOrFail($id);
         $data = [
             'name' => $request->name,
@@ -97,6 +115,9 @@ class CompanyController extends Controller
 
     public function destroy(Company $company)
     {
+        if (!auth()->user()->hasPermission('Companies Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->companyService->deleteCompany($company);
         return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
     }
