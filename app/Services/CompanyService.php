@@ -31,4 +31,9 @@ class CompanyService
         }
         $company->delete();
     }
+
+    public function getCompanyById($id)
+    {
+        return Company::findOrFail($id);
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBankRequest;
 use App\Http\Requests\UpdateBankRequest;
 use App\Models\Bank;
-use App\Models\Country; // Import the Country model
+use App\Models\Country;
 use App\Services\BankService;
 use Illuminate\Http\Request;
 
@@ -22,6 +22,12 @@ class BankController extends Controller
     {
         $banks = $this->bankService->getAllBanks();
         return view('admin.banks.index', compact('banks'));
+    }
+
+    public function view($id)
+    {
+        $bank = $this->bankService->getBankById($id);
+        return view('admin.banks.view', compact('bank'));
     }
 
     public function create()

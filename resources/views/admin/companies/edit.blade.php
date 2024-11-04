@@ -73,7 +73,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="website">Website</label>
                                 <input type="url" class="form-control" name="website" id="website"
-                                    value="{{ old('website', $company->website) }}" placeholder="Website">
+                                    value="{{ old('website', $company->website) }}" placeholder="https://example.com">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="ntn">NTN</label>

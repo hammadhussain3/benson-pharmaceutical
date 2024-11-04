@@ -26,27 +26,27 @@ class LoanController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
+        $loansQuery = Loan::with(['employee', 'company'])
+            ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
+                ->whereColumn('employees.id', 'loans.employee_id')
+            );
 
-        if ($user->hasRole('Superadmin')) {
-            $loans = Loan::with(['employee', 'company'])
-                ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
-                    ->whereColumn('employees.id', 'loans.employee_id')
-                )
-                ->get();
-        } else {
-            $companyId = $user->employee->company_id;
-            $loans = Loan::with(['employee', 'company'])
-                ->whereHas('employee', function($query) use ($companyId) {
-                    $query->where('company_id', $companyId);
-                })
-                ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
-                    ->whereColumn('employees.id', 'loans.employee_id')
-                )
-                ->get();
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $companyId = auth()->user()->employee->company_id;
+            $loansQuery->whereHas('employee', function($query) use ($companyId) {
+                $query->where('company_id', $companyId);
+            });
         }
+    
+        $loans = $loansQuery->get();
 
         return view('admin.loans.index', compact('loans'));
+    }
+
+    public function view($id)
+    {
+        $loan = Loan::findOrFail($id);
+        return view('admin.loans.view', compact('loan'));
     }
 
     public function create()

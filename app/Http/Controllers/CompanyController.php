@@ -25,6 +25,12 @@ class CompanyController extends Controller
         return view('admin.companies.index', compact('companies'));
     }
 
+    public function view($id)
+    {
+        $company = $this->companyService->getCompanyById($id);
+        return view('admin.companies.view', compact('company'));
+    }
+
     public function create()
     {
         $countries = Country::orderBy('name', 'asc')->get();
@@ -49,7 +55,7 @@ class CompanyController extends Controller
         if ($request->hasFile('logo')) {
             $uploadedFile = $request->file('logo');
             $filename = 'company_' . time() . '.' . $uploadedFile->getClientOriginalExtension();
-            $uploadedFile->move(public_path('images/company'), $filename);
+            $uploadedFile->move('images/company', $filename);
             $data['logo_path'] = $filename;
         }
         $this->companyService->createCompany($data);
@@ -82,7 +88,7 @@ class CompanyController extends Controller
         if ($request->hasFile('logo')) {
             $uploadedFile = $request->file('logo');
             $filename = 'company_' . time() . '.' . $uploadedFile->getClientOriginalExtension();
-            $uploadedFile->move(public_path('images/company'), $filename);
+            $uploadedFile->move('images/company', $filename);
             $data['logo_path'] = $filename;
         }
         $this->companyService->updateCompany($company, $data);

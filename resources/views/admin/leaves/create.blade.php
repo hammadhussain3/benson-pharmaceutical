@@ -27,8 +27,7 @@
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
                                             {{ old('employee') == $employee->id ? 'selected' : '' }}>
-                                            {{ $employee->first_name }}
-                                            {{ $employee->last_name }}
+                                            {{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}
                                         </option>
                                         <!-- Assuming you have a full_name attribute -->
                                     @endforeach

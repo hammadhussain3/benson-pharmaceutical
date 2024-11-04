@@ -24,6 +24,12 @@ class RoleController extends Controller
         return view('admin.roles.index', compact('roles'));
     }
 
+    public function view($id)
+    {
+        $role =  Role::findOrFail($id);
+        return view('admin.roles.view', compact('role'));
+    }
+
     public function create()
     {
         $permissions = Permission::all();

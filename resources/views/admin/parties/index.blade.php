@@ -52,7 +52,7 @@
                         @foreach ($parties as $party)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $party->name }}</td>
+                                <td><a class="link-primary" href="{{ route('parties.view', $party->id) }}">{{ $party->name }}</a></td>
                                 <td>{{ $party->code }}</td>
                                 <td>{{ $party->contact_person_name }}</td>
                                 <td>{{ $party->contact_person_phone }}</td>
@@ -69,6 +69,9 @@
                                 <td>{{ $party->company->name ?? 'N/A' }}</td>
                                 @endrole
                                 <td>
+                                    <a class="me-3" href="{{ route('parties.view', $party->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('parties.edit', $party->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

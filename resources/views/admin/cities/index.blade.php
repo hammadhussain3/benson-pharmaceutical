@@ -39,9 +39,12 @@
                         @foreach ($cities as $city)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $city->name }}</td>
+                                <td><a class="link-primary" href="{{ route('cities.view', $city->id) }}">{{ $city->name }}</a></td>
                                 <td>{{ $city->country->name }}</td> <!-- Assuming there is a relationship -->
                                 <td>
+                                    <a class="me-3" href="{{ route('cities.view', $city->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('cities.edit', $city->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

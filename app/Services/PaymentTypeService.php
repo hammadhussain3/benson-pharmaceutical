@@ -26,4 +26,8 @@ class PaymentTypeService
     {
         return $paymentType->delete();
     }
+    public function getPaymentTypeById($id)
+    {
+        return PaymentType::findOrFail($id);
+    }
 }

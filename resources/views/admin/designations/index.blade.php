@@ -29,7 +29,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Designation Name</th>
+                            <th><a class="link-primary" href="{{ route('designations.view', $designation->id) }}">Designation Name</a></th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
@@ -40,11 +40,14 @@
                         @foreach ($designations as $designation)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $designation->name }}</td>
+                                <td><a class="me-3" href="{{ route('designations.view', $designation->id) }}">{{ $designation->name }}</a></td>
                                 @role('Superadmin')
                                 <td>{{ $designation->company->name }}</td>
                                 @endrole
                                 <td>
+                                    <a class="me-3" href="{{ route('designations.view', $designation->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                    </a>
                                     <a class="me-3" href="{{ route('designations.edit', $designation->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

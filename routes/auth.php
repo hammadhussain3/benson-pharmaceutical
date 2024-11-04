@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::get('users', [RegisteredUserController::class, 'index'])
         ->name('users.index');
 
+    Route::get('users/view/{id}', [RegisteredUserController::class, 'view'])
+        ->name('users.view');
+
     Route::get('users/register', [RegisteredUserController::class, 'create'])
         ->name('users.register');
     

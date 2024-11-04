@@ -42,13 +42,16 @@
                         @foreach ($departments as $department)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $department->name }}</td>
+                                <td><a class="link-primary" href="{{ route('departments.view', $department->id) }}">{{ $department->name }}</a></td>
                                 <td>{{ \Illuminate\Support\Str::words($department->description, 10) }}</td>
                                 @role('Superadmin')
                                 <td>{{ $department->company->name }}</td>
                                 @endrole
                                 <td>{{ $department->branch ? $department->branch->name : 'N/A' }}</td>
                                 <td>
+                                    <a class="me-3" href="{{ route('departments.view', $department->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('departments.edit', $department->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

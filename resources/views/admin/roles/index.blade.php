@@ -43,15 +43,29 @@
                         @foreach ($roles as $key => $role)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                <td>{{ $role->name }}</td>
-                                <td class="text-wrap">
-                                    @foreach ($role->permissions as $permission)
+                                <td><a class="link-primary" href="{{ route('roles.view', $role->id) }}">{{ $role->name }}</a></td>
+                                <td>
+                                    @php
+                                        $permissionsToShow = $role->permissions->take(4);
+                                        $remainingCount = $role->permissions->count() - $permissionsToShow->count();
+                                    @endphp
+                                
+                                    @foreach ($permissionsToShow as $permission)
                                         <span class="badges bg-lightgreen mb-1">
                                             {{ $permission->name }}
                                         </span>
                                     @endforeach
-                                </td>
+                                
+                                    @if ($remainingCount > 0)
+                                        <span class="badges bg-secondary mb-1">
+                                            +{{ $remainingCount }} more
+                                        </span>
+                                    @endif
+                                </td>                                
                                 <td>
+                                    <a class="me-3" href="{{ route('roles.view', $role->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('roles.edit', $role->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

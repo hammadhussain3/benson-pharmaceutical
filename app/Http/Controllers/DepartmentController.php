@@ -24,6 +24,12 @@ class DepartmentController extends Controller
         return view('admin.departments.index', compact('departments','branch'));
     }
 
+    public function view($id)
+    {
+        $department =  $this->departmentService->getDepartmentById($id);
+        return view('admin.departments.view', compact('department'));
+    }
+
     public function create()
     {
         $companies = Company::orderBy('name', 'asc')->get();

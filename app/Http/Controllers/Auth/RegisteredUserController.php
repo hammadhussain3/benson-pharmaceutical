@@ -40,22 +40,51 @@ class RegisteredUserController extends Controller
 
     public function index(): View
     {
-        $users = User::with('roles', 'employee')->where('id', '!=', '1')->orderBy('name', 'asc')->get();
+        $usersQuery = User::with('roles', 'employee')
+            ->where('id', '!=', 1) // Exclude user with ID 1 if needed
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'Superadmin');
+            })
+            ->orderBy('name', 'asc');
+
+        if (auth()->user()->hasRole('Superadmin')) {
+            $users = $usersQuery->get();
+        } else {
+            $users = $usersQuery->where('id', '!=', auth()->id())
+            ->whereHas('employee', function ($query) {
+                $query->where('company_id', auth()->user()->employee->company_id);
+            })->get();
+        }
         return view('auth.index', compact('users'));
+    }
+
+    public function view($id)
+    {
+        $user =  User::findOrFail($id);
+        return view('auth.view', compact('user'));
     }
 
     public function create(): View
     {
         $roles = $this->roleService->getAllRoles();
         $companies = $this->companyService->getAllCompanies();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $employees = $this->employeeService->getAllEmployees();
+        } else {
+            $employees = $this->employeeService->getAllEmployees()->where('id', '!=', auth()->user()->employee_id)->where('company_id', auth()->user()->employee->company_id);
+        }
 
-        return view('auth.register', compact('roles', 'companies'));
+        return view('auth.register', compact('roles', 'companies', 'employees'));
     }
     public function edit($id)
     {
         // Fetch the user by the ID with roles and employee relationships
         $user = User::with('roles', 'employee')->findOrFail($id);
-        $employees = Employee::where('company_id', $user->employee->company_id)->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $employees = $this->employeeService->getAllEmployees()->where('company_id', $user->employee->company_id);
+        } else {
+            $employees = $this->employeeService->getAllEmployees()->where('id', '!=', auth()->user()->employee_id)->where('company_id', auth()->user()->employee->company_id);
+        }
         $employee_details = Employee::where('id', $user->employee_id)->first();
         $roles = $this->roleService->getAllRoles();
         $companies = $this->companyService->getAllCompanies();

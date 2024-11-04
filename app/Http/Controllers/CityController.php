@@ -24,6 +24,12 @@ class CityController extends Controller
         return view('admin.cities.index', compact('cities'));
     }
 
+    public function view($id)
+    {
+        $city = $this->cityService->getCityById($id);
+        return view('admin.cities.view', compact('city'));
+    }
+
     public function create()
     {
         // Fetch the countries to be passed to the view

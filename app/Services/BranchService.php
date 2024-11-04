@@ -34,6 +34,11 @@ class BranchService
         $branch->delete();
     }
 
+    public function getBranchById($id)
+    {
+        return Branch::findOrFail($id);
+    }
+
     public function validateBranch(array $data)
     {
         $validator = \Validator::make($data, [

@@ -49,6 +49,9 @@
                                 <td>{{ $slab->company->name }}</td>
                                 @endrole
                                 <td>
+                                <a class="me-3" href="{{ route('tax-slabs.view', $slab->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                    </a>
                                     <a class="me-3" href="{{ route('tax-slabs.edit', $slab->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

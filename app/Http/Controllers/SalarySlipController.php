@@ -29,10 +29,17 @@ class SalarySlipController extends Controller
 
     public function index()
     {
-        $salarySlips = SalarySlip::with(['employee', 'company'])
-        ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
-            ->whereColumn('employees.id', 'salary_slips.employee_id')
-        )->get();
+        $salarySlipsQuery = SalarySlip::with(['employee', 'company'])
+            ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
+                ->whereColumn('employees.id', 'salary_slips.employee_id')
+            );
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $salarySlipsQuery->where('company_id', auth()->user()->employee->company_id);
+        }
+    
+        $salarySlips = $salarySlipsQuery->get();
+        
         return view('admin.salary_slips.index', compact('salarySlips'));
     }
 

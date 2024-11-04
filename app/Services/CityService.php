@@ -30,6 +30,11 @@ class CityService
         $city->delete();
     }
 
+    public function getCityById($id)
+    {
+        return City::findOrFail($id);
+    }
+
     public function validateCity(array $data)
     {
         $validator = \Validator::make($data, [

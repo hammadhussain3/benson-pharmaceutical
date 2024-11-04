@@ -16,7 +16,7 @@ class EmployeeRequest extends FormRequest
         $employeeId = $this->employee ? $this->employee->id : null;
 
         return [
-            'code' => 'required|string|unique:employees,code,' . $employeeId,
+            'code' => 'required|string|unique:employees,code,' . $employeeId . ',id,company_id,' . $this->company_id,
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'net_salary' => 'required|numeric|min:0',

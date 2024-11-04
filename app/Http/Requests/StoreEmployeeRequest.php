@@ -13,8 +13,9 @@ class StoreEmployeeRequest extends FormRequest
 
     public function rules()
     {
+        $employeeId = $this->employee ? $this->employee->id : null;
         return [
-            'code' => 'required|string|max:255|unique:employees',
+            'code' => 'required|string|max:255|unique:employees,code,' . $employeeId . ',id,company_id,' . $this->company_id,
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email',

@@ -43,7 +43,7 @@
                         @foreach ($leaves as $leave)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $leave->employee->code }}</td>
+                                <td><a class="me-3" href="{{ route('leaves.view', $leave->id) }}">{{ $leave->employee->code }}</a></td>
                                 <td>{{ $leave->employee->first_name }} {{ $leave->employee->last_name }}</td>
                                 <td>{{ $leave->leaveType->name }}</td>
                                 <td>{{ $leave->days }}</td>
@@ -51,6 +51,9 @@
                                 <td>{{ $leave->company->name }}</td>
                                 @endrole
                                 <td>
+                                <a class="me-3" href="{{ route('leaves.view', $leave->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                    </a>
                                     <a class="me-3" href="{{ route('leaves.edit', $leave->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

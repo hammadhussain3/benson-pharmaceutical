@@ -28,4 +28,9 @@ class BankService
     {
         return $bank->delete();
     }
+
+    public function getBankById($id)
+    {
+        return Bank::findOrFail($id);
+    }
 }

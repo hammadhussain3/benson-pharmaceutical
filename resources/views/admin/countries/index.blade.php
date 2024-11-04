@@ -38,8 +38,11 @@
                         @foreach ($countries as $country)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $country->name }}</td>
+                                <td><a class="link-primary" href="{{ route('countries.view', $country->id) }}">{{ $country->name }}</a></td>
                                 <td>
+                                    <a class="me-3" href="{{ route('countries.view', $country->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('countries.edit', $country->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

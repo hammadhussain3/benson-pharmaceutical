@@ -57,4 +57,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Employee::class, 'id', 'employee_id'); // Adjust foreign key as necessary
     }
+
+    public function hasPermission($permission)
+    {
+        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+            $query->where('name', $permission);
+        })->exists();
+    }
 }

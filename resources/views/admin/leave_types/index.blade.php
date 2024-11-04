@@ -40,11 +40,14 @@
                         @foreach ($leaveTypes as $leaveType)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $leaveType->name }}</td>
+                                <td><a class="me-3" href="{{ route('leave_types.view', $leaveType->id) }}">{{ $leaveType->name }}</a></td>
                                 @role('Superadmin')
                                 <td>{{ $leaveType->company->name }}</td>
                                 @endrole
                                 <td>
+                                <a class="me-3" href="{{ route('leave_types.view', $leaveType->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                    </a>
                                     <a class="me-3" href="{{ route('leave_types.edit', $leaveType->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

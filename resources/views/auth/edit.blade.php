@@ -23,6 +23,7 @@
                         @method('PUT') <!-- Use PUT here instead of PATCH -->
                         
                         <div class="form-row row">
+                            @role('Superadmin')
                             <div class="col-md-6 mb-3">
                                 <label>Select Company </label>
                                 <select name="company" id="company" class="js-example-basic-single select2" required onchange="selectEmployee(this.value)">
@@ -32,6 +33,7 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @endrole
                             <!-- Employee Select Dropdown -->
                             <div class="col-md-6 mb-3">
                                 <label>Select Employee</label>
@@ -89,6 +91,15 @@
                                 <label for="email">Email</label>
                                 <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" value="{{ old('email', $user->email) }}" required readonly>
                             </div>
+
+                            @role('Superadmin')
+                            @else
+                            <div class="col-md-6 mb-3">
+                                <label for="company">Company</label>
+                                <input type="text" class="form-control" value="{{ App\Models\Company::where('id', auth()->user()->employee->company_id)->value('name'); }}" required readonly>
+                                <input type="hidden" id="company" name="company" class="form-control" value="{{ auth()->user()->employee->company_id }}">
+                            </div>
+                            @endrole
 
                             <div class="col-md-6 mb-3">
                                 <label for="branch">Branch</label>

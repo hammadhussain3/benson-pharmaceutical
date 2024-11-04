@@ -23,6 +23,12 @@ class ChartOfAccountController extends Controller
         return view('admin.chart_of_accounts.index', compact('chartOfAccounts')); // Return the index view
     }
 
+    public function view($id)
+    {
+        $chartOfAccount = $this->chartOfAccountService->getChartOfAccountById($id);
+        return view('admin.chart_of_accounts.view', compact('chartOfAccount'));
+    }
+
     public function create()
     {
         $companies = Company::orderBy('name', 'asc')->get();

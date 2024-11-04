@@ -14,7 +14,7 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|string|max:255|unique:employees,code,' . $this->route('employee')->id,
+            'code' => 'required|string|max:255|unique:employees,code,' . $this->route('employee')->id . ',id,company_id,' . $this->company_id,
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email,' . $this->route('employee')->id,

@@ -23,6 +23,12 @@ class DesignationController extends Controller
         return view('admin.designations.index', compact('designations'));
     }
 
+    public function view($id)
+    {
+        $designations =  $this->designationService->getDesignationById($id);
+        return view('admin.designations.view', compact('designations'));
+    }
+
     public function create()
     {
         $companies = Company::orderBy('name', 'asc')->get();

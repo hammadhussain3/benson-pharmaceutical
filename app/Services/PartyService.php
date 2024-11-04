@@ -35,4 +35,9 @@ class PartyService
         $party->delete();
         return true;
     }
+
+    public function getPartyById($id)
+    {
+        return Party::findOrFail($id);
+    }
 }

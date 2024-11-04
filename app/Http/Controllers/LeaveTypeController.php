@@ -15,6 +15,12 @@ class LeaveTypeController extends Controller
         return view('admin.leave_types.index', compact('leaveTypes'));
     }
 
+    public function view($id)
+    {
+        $leave_type =  LeaveType::findorfail($id);
+        return view('admin.leave_types.view', compact('leave_type'));
+    }
+
     public function create()
     {
         $companies = Company::all(); // Assuming you have a Company model

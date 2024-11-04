@@ -71,7 +71,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value); selectDesignations(this.value);" @endrole>
+                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value); selectDesignations(this.value); createEmployeeCode(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}">{{ $company->name }}</option>
@@ -80,7 +80,7 @@
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="branch_id">Branch</label>

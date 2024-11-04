@@ -32,6 +32,11 @@ class DepartmentService
         $department->delete();
     }
 
+    public function getDepartmentById($id)
+    {
+        return Department::findOrFail($id);
+    }
+
     public function validateDepartment(array $data)
     {
         $validator = \Validator::make($data, [

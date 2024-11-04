@@ -39,10 +39,13 @@
                         @foreach ($banks as $bank)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $bank->name }}</td>
+                                <td><a class="link-info" href="{{ route('banks.view', $bank->id) }}">{{ $bank->name }}</a></td>
                                 <td>{{ $bank->acronym }}</td>
                                 <td>{{ $bank->country->name }}</td>
                                 <td>
+                                    <a class="me-3" href="{{ route('banks.view', $bank->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('banks.edit', $bank->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

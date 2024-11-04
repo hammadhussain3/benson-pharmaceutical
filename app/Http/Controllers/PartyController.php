@@ -27,6 +27,12 @@ class PartyController extends Controller
         return view('admin.parties.index', compact('parties'));
     }
 
+    public function view($id)
+    {
+        $party = $this->partyService->getPartyById($id);
+        return view('admin.parties.view', compact('party'));
+    }
+
     public function create()
     {
         $countries = Country::orderBy('name', 'asc')->get();

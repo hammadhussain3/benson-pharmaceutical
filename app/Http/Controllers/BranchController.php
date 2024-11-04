@@ -24,6 +24,12 @@ class BranchController extends Controller
         return view('admin.branches.index', compact('branches'));
     }
 
+    public function view($id)
+    {
+        $branch = $this->branchService->getBranchById($id);
+        return view('admin.branches.view', compact('branch'));
+    }
+
     public function create()
     {
         $companies = Company::orderBy('name', 'asc')->get();

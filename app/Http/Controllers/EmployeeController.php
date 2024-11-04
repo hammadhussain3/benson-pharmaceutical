@@ -27,17 +27,19 @@ class EmployeeController extends Controller
         return view('admin.employees.index', compact('employees'));
     }
 
+    public function view($id)
+    {
+        $employees =  $this->employeeService->getemployeeById($id);
+        return view('admin.employees.view', compact('employees'));
+    }
+
     public function create()
     {
-        $lastEmployeeCode = Employee::latest('id')->value('code');
-        if ($lastEmployeeCode) {
-            $numberPart = (int) substr($lastEmployeeCode, 3);
-            $newNumberPart = $numberPart + 1;
-            $newEmployeeCode = 'EMP' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newEmployeeCode = "EMP";
         } else {
-            $newEmployeeCode = 'EMP00001';
+            $newEmployeeCode = $this->employeeService->createEmployeeCode(auth()->user()->employee->company_id);
         }
-        
         $banks = Bank::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
 
@@ -126,5 +128,11 @@ class EmployeeController extends Controller
     {
         $employees = Employee::where('company_id', $companyId)->get();
         return response()->json(['employees' => $employees]);
+    }
+
+    public function createCodeByCompany($companyId)
+    {
+        $employee_code = $this->employeeService->createEmployeeCode($companyId);
+        return response()->json(['employee_code' => $employee_code]);
     }
 }

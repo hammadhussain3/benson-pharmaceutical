@@ -44,8 +44,7 @@
                         @foreach ($loans as $loan)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $loan->employee->first_name }}
-                                    {{ $loan->employee->last_name }}</td>
+                                <td><a class="link-primary" href="{{ route('loans.view', $loan->id) }}">{{ $loan->employee->first_name }} {{ $loan->employee->last_name }}</a></td>
                                 <td>{{ number_format($loan->amount, 2) }}</td>
                                 <td>{{ $loan->payback_months }}</td>
                                 <td>{{ number_format($loan->remaining, 2) }}</td>
@@ -54,6 +53,9 @@
                                 @endrole
                                 <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('F j, Y') }}</td>
                                 <td>
+                                    <a class="me-3" href="{{ route('loans.view', $loan->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('loans.edit', $loan->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

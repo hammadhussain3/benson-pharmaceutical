@@ -45,7 +45,7 @@
                         @foreach ($branches as $branch)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $branch->name }}</td>
+                                <td> <a class="link-primary" href="{{ route('branches.view', $branch->id) }}">{{ $branch->name }}</a></td>
                                 @role('Superadmin')
                                 <td>{{ $branch->company->name }}</td>
                                 @endrole
@@ -60,6 +60,9 @@
                                 </td>
 
                                 <td>
+                                    <a class="me-3" href="{{ route('branches.view', $branch->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('branches.edit', $branch->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

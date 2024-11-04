@@ -52,7 +52,7 @@
 
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $user->employee->code ?? 'N/A' }}</td>
+                                            <td><a class="link-primary" href="{{ route('users.view', $user->id) }}">{{ $user->employee->code ?? 'N/A' }}</a></td>
                                             <td>{{ $user->name ?? 'N/A' }}</td>
                                             <td>{{ $user->email ?? 'N/A' }}</td>
                                             @role('Superadmin')
@@ -75,6 +75,9 @@
                                                 @endforeach
                                             </td>
                                             <td>
+                                                <a class="me-3" href="{{ route('users.view', $user->id) }}">
+                                                    <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                                </a>
                                                 <a class="me-3" href="{{ route('users.edit', $user->id) }}">
                                                     <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                                 </a>

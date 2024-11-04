@@ -8,7 +8,15 @@ class SalaryTaxSlabService
 {
     public function getAllSlabs()
     {
-        return SalaryTaxSlab::all();
+        $salaryTaxSlabsQuery = SalaryTaxSlab::query();
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $salaryTaxSlabsQuery->where('company_id', auth()->user()->employee->company_id);
+        }
+
+        $salaryTaxSlabs = $salaryTaxSlabsQuery->get();
+
+        return $salaryTaxSlabs;
     }
 
     public function createSlab(array $data)
@@ -27,5 +35,9 @@ class SalaryTaxSlabService
     public function deleteSlab(SalaryTaxSlab $slab)
     {
         return $slab->delete();
+    }
+    public function getSlabById($id)
+    {
+        return SalaryTaxSlab::findOrFail($id);
     }
 }

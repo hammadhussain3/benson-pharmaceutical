@@ -41,12 +41,15 @@
                         @foreach ($chartOfAccounts as $chartOfAccount)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $chartOfAccount->name }}</td>
+                                <td><a class="link-primary" href="{{ route('chart_of_accounts.view', $chartOfAccount->id) }}">{{ $chartOfAccount->name }}</a></td>
                                 <td>{{ $chartOfAccount->code }}</td>
                                 @role('Superadmin')
                                 <td>{{ $chartOfAccount->company->name }}</td>
                                 @endrole
                                 <td>
+                                    <a class="me-3" href="{{ route('chart_of_accounts.view', $chartOfAccount->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('chart_of_accounts.edit', $chartOfAccount->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

@@ -48,8 +48,8 @@
                     <tbody>
                         @foreach ($employees as $employee)
                             <tr>
-                                <td>{{ $employee->code }}</td>
-                                <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
+                                <td><a class="link-primary" href="{{ route('employees.view', $employee->id) }}">{{ $employee->code }}</a></td>
+                                <td><a class="me-3" href="{{ route('employees.view', $employee->id) }}">{{ $employee->first_name }} {{ $employee->last_name }}</a></td>
                                 <td>{{ $employee->email }}<br><small class="text-muted">{{ $employee->phone }}</small></td>
                                 <td>{{ $employee->date_of_joining }}</td>
                                 <td>{{ $employee->designation->name ?? 'N/A' }}</td>
@@ -66,6 +66,9 @@
                                     </span>
                                 </td>
                                 <td>
+                                    <a class="me-3" href="{{ route('employees.view', $employee->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                    </a>
                                     <a class="me-3" href="{{ route('employees.edit', $employee->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

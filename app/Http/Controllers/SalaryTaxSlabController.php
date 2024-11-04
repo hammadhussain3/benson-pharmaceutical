@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SalaryTaxSlabRequest;
-use App\Models\Company; // Include Company model
+use App\Models\Company;
 use App\Models\SalaryTaxSlab;
 use App\Models\Employee;
 use App\Services\SalaryTaxSlabService;
@@ -21,6 +21,12 @@ class SalaryTaxSlabController extends Controller
     {
         $taxSlabs = $this->service->getAllSlabs();
         return view('admin.salary_tax_slabs.index', compact('taxSlabs'));
+    }
+
+    public function view($id)
+    {
+        $taxSlabs =  $this->service->getSlabById($id);
+        return view('admin.salary_tax_slabs.view', compact('taxSlabs'));
     }
 
     public function create()

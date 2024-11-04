@@ -28,6 +28,11 @@ class CountryService
         $country->delete();
     }
 
+    public function getCountryById($id)
+    {
+        return Country::findOrFail($id);
+    }
+
     public function validateCountry(array $data)
     {
         $validator = \Validator::make($data, [

@@ -22,9 +22,14 @@ class ChartOfAccountService
     {
         return $chartOfAccount->delete();
     }
-    // In ChartOfAccountService.php
+
     public function getAllChartOfAccounts()
     {
         return ChartOfAccount::orderBy('name', 'asc')->get(); // Or implement pagination as needed
+    }
+
+    public function getChartOfAccountById($id)
+    {
+        return ChartOfAccount::findOrFail($id);
     }
 }

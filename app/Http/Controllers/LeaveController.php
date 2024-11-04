@@ -23,11 +23,24 @@ class LeaveController extends Controller
     public function index()
     {
         $companies = Company::all();
-        $leaves = Leave::with(['employee', 'leaveType'])
+        $leavesQuery = Leave::with(['employee', 'leaveType'])
             ->orderBy(Employee::select(DB::raw("CONCAT(first_name, ' ', last_name)"))
                 ->whereColumn('employees.id', 'leaves.employee_id')
-            )->get();
+            );
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $leavesQuery->where('company_id', auth()->user()->employee->company_id);
+        }
+    
+        $leaves = $leavesQuery->get();
+    
         return view('admin.leaves.index', compact('leaves', 'companies'));
+    }
+
+    public function view($id)
+    {
+        $leave = Leave::findOrFail($id);
+        return view('admin.leaves.view', compact('leave'));
     }
 
     public function create()

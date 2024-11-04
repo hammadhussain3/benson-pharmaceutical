@@ -23,6 +23,12 @@ class PaymentTypeController extends Controller
         return view('admin.payment_types.index', compact('paymentTypes')); // Return the index view
     }
 
+    public function view($id)
+    {
+        $paymentType = $this->paymentTypeService->getPaymentTypeById($id);
+        return view('admin.payment_types.view', compact('paymentType'));
+    }
+
     public function create()
     {
         $companies = Company::orderBy('name', 'asc')->get();

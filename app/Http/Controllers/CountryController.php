@@ -21,6 +21,12 @@ class CountryController extends Controller
         return view('admin.countries.index', compact('countries'));
     }
 
+    public function view($id)
+    {
+        $country =  $this->countryService->getCountryById($id);
+        return view('admin.countries.view', compact('country'));
+    }
+
     public function create()
     {
         return view('admin.countries.create');

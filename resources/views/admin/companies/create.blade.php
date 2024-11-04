@@ -72,7 +72,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="website">Website</label>
                                 <input type="url" class="form-control" name="website" id="website"
-                                    placeholder="Website" value="{{ old('website') }}">
+                                    placeholder="https://example.com" value="{{ old('website') }}">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="ntn">NTN</label>

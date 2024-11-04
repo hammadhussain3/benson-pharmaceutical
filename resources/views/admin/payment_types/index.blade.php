@@ -41,12 +41,15 @@
                         @foreach ($paymentTypes as $paymentType)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $paymentType->name }}</td>
+                                <td><a class="link-primary" href="{{ route('payment_types.view', $paymentType->id) }}">{{ $paymentType->name }}</a></td>
                                 <td>{{ $paymentType->description }}</td>
                                 @role('Superadmin')
                                 <td>{{ $paymentType->company->name }}</td>
                                 @endrole
                                 <td>
+                                    <a class="me-3" href="{{ route('payment_types.view', $paymentType->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
+                                    </a>
                                     <a class="me-3" href="{{ route('payment_types.edit', $paymentType->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>

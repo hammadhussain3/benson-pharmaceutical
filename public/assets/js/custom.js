@@ -91,7 +91,6 @@ function SelectLoanDate(month)
         fetch(`/getloan/${employeeId}?month=${month}`)
             .then(response => response.json())
             .then(data => {
-                console.log
                 loan_advance.value = data.loan;
             })
             .catch(error => console.error('Error fetching loan data:', error));
@@ -327,6 +326,20 @@ function selectEmployee(companyId)
                     option.textContent = employee.code+ ' - ' +employee.first_name+ ' ' +employee.last_name;
                     employeeSelect.appendChild(option);
                 });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function createEmployeeCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/code`)
+            .then(response => response.json())
+            .then(data => {
+                code.value = data.employee_code;
             })
             .catch(error => console.error('Error fetching cities:', error));
     }
