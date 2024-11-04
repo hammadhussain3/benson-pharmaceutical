@@ -27,6 +27,7 @@ class EmployeeService
         $data['designation_id'] = $data['designation'];
         $data['bank_id'] = $data['bank'];
         User::where('employee_id', $employee->id)->update([
+            'name' => $data['first_name']. ' ' .$data['last_name'],
             'email' => $data['email']
         ]);
         $employee->update($data);
