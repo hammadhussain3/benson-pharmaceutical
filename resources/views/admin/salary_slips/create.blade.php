@@ -97,52 +97,51 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="income_tax">Income Tax</label>
-                                <input type="number" class="form-control" name="income_tax" id="income_tax" required readonly>
+                                <input type="number" class="form-control" name="income_tax" id="income_tax" required readonly value="{{ old('income_tax') }}">
                                 <div class="invalid-feedback">Please provide the income tax amount.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="loan_advance">Loan/Advance</label>
-                                <input type="number" class="form-control" name="loan_advance" id="loan_advance" required readonly>
+                                <input type="number" class="form-control" name="loan_advance" id="loan_advance" required readonly value="{{ old('loan_advance') }}">
                                 <div class="invalid-feedback">Please provide the loan/advance amount.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="auth_leave">Approved Leave</label>
-                                <input type="number" class="form-control" name="auth_leave" id="auth_leave" required readonly>
+                                <input type="number" class="form-control" name="auth_leave" id="auth_leave" required readonly value="{{ old('auth_leave') }}">
                                 <div class="invalid-feedback">Please provide the number of approved leaves.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="unauth_leave">Unauthorized Leave</label>
-                                <input type="number" class="form-control" name="unauth_leave" id="unauth_leave" required readonly>
+                                <input type="number" class="form-control" name="unauth_leave" id="unauth_leave" required readonly value="{{ old('unauth_leave') }}">
                                 <div class="invalid-feedback">Please provide the number of unauthorized leaves.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="approved_with_pay">Approved with Pay</label>
-                                <input type="number" class="form-control" name="approved_with_pay" id="approved_with_pay"
-                                    required readonly>
+                                <input type="number" class="form-control" name="approved_with_pay" id="approved_with_pay" required readonly value="{{ old('approved_with_pay') }}">
                                 <div class="invalid-feedback">Please provide the approved amount with pay.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="basic_pay">Basic Pay</label>
-                                <input type="number" class="form-control" name="basic_pay" id="basic_pay" required readonly>
+                                <input type="number" class="form-control" name="basic_pay" id="basic_pay" required readonly value="{{ old('basic_pay') }}">
                                 <div class="invalid-feedback">Please provide the number of basic pay.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="allowances">Allowances</label>
-                                <input type="number" class="form-control" name="allowances" id="allowances" required readonly>
+                                <input type="number" class="form-control" name="allowances" id="allowances" required readonly value="{{ old('allowances') }}">
                                 <div class="invalid-feedback">Please provide the number of allowances.</div>
                             </div>
 
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company">Company</label>
-                                <input type="text" class="form-control" id="company" required readonly>
-                                <input type="hidden" name="company" id="company_id" required>
+                                <input type="text" class="form-control" id="company" required readonly value="{{ old('company') ? App\Models\Company::where('id', old('company'))->value('name') : '' }}">
+                                <input type="hidden" name="company" id="company_id" required value="{{ old('company') }}">
                             </div>
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
@@ -150,19 +149,19 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="branch">Branch</label>
-                                <input type="text" class="form-control" name="branch" id="branch" required readonly>
+                                <input type="text" class="form-control" name="branch" id="branch" required readonly value="{{ old('branch') }}">
                                 <input type="hidden" name="branch_id" id="branch_id" required>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="department">Department</label>
-                                <input type="text" class="form-control" name="department" id="department" required readonly>
+                                <input type="text" class="form-control" name="department" id="department" required readonly value="{{ old('department') }}">
                                 <input type="hidden" name="department_id" id="department_id" required>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="designation">Designation</label>
-                                <input type="text" class="form-control" name="designation" id="designation" required readonly>
+                                <input type="text" class="form-control" name="designation" id="designation" required readonly value="{{ old('designation') }}">
                                 <input type="hidden" name="designation_id" id="designation_id" required>
                             </div>
 

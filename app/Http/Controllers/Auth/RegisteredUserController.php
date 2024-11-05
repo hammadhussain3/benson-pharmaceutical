@@ -81,7 +81,7 @@ class RegisteredUserController extends Controller
         // Fetch the user by the ID with roles and employee relationships
         $user = User::with('roles', 'employee')->findOrFail($id);
         if (auth()->user()->hasRole('Superadmin')) {
-            $employees = $this->employeeService->getAllEmployees()->where('company_id', $user->employee->company_id);
+            $employees = $this->employeeService->getAllEmployees();
         } else {
             $employees = $this->employeeService->getAllEmployees()->where('id', '!=', auth()->user()->employee_id)->where('company_id', auth()->user()->employee->company_id);
         }

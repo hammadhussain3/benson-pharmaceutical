@@ -26,7 +26,10 @@
                                 <select name="company" id="company" class="js-example-basic-single select2" required onchange="selectEmployee(this.value)">
                                     <option value="">--Select Company--</option>
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -35,9 +38,14 @@
                                 <label>Select Employee </label>
                                 <select name="user" id="employee_id" class="js-example-basic-single select2" required onchange="SelectEmployeeDetails(this.value)">
                                     <option value="">--Select Employee--</option>
-                                    @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}</option>
-                                    @endforeach
+                                    @if(old('user'))
+                                        @foreach ($employees->where('company_id', old('company')) as $employee)
+                                            <option value="{{ $employee->id }}"
+                                                {{ old('user') == $employee->id ? 'selected' : '' }}>
+                                                {{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -46,7 +54,10 @@
                                     <select class="form-select" id="roles" required name="role">
                                         <option value="" selected disabled>Select Role</option>
                                         @foreach ($roles as $role)
-                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                            <option value="{{ $role->id }}"
+                                                {{ old('role') == $role->id ? 'selected' : '' }}>
+                                                {{ $role->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>

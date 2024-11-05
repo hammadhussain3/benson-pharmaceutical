@@ -100,57 +100,60 @@
                             <div class="mb-3 col-md-6">
                                 <label for="income_tax">Income Tax</label>
                                 <input type="number" class="form-control" name="income_tax" id="income_tax"
-                                    value="{{ $salarySlip->income_tax }}" required readonly>
+                                    value="{{ old('income_tax', $salarySlip->income_tax) }}" required readonly>
                                 <div class="invalid-feedback">Please provide the income tax amount.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="loan_advance">Loan/Advance</label>
                                 <input type="number" class="form-control" name="loan_advance" id="loan_advance"
-                                    value="{{ $salarySlip->loan_advance }}" required readonly >
+                                    value="{{ old('loan_advance', $salarySlip->loan_advance) }}" required readonly >
                                 <div class="invalid-feedback">Please provide the loan/advance amount.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="auth_leave">Approved Leave</label>
                                 <input type="number" class="form-control" name="auth_leave" id="auth_leave"
-                                    value="{{ $salarySlip->auth_leave }}" required readonly>
+                                    value="{{ old('auth_leave', $salarySlip->auth_leave) }}" required readonly>
                                 <div class="invalid-feedback">Please provide the number of approved leaves.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="unauth_leave">Unauthorized Leave</label>
                                 <input type="number" class="form-control" name="unauth_leave" id="unauth_leave"
-                                    value="{{ $salarySlip->unauth_leave }}" required readonly>
+                                    value="{{ old('unauth_leave', $salarySlip->unauth_leave) }}" required readonly>
                                 <div class="invalid-feedback">Please provide the number of unauthorized leaves.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="approved_with_pay">Approved with Pay</label>
                                 <input type="number" class="form-control" name="approved_with_pay" id="approved_with_pay"
-                                    value="{{ $salarySlip->approved_with_pay }}" required readonly>
+                                    value="{{ old('approved_with_pay', $salarySlip->approved_with_pay) }}" required readonly>
                                 <div class="invalid-feedback">Please provide the approved amount with pay.</div>
                             </div> 
 
                             <div class="mb-3 col-md-6">
                                 <label for="basic_pay">Basic Pay</label>
                                 <input type="number" class="form-control" name="basic_pay" id="basic_pay"
-                                    value="{{ $currentEmployee->basic_pay }}" required readonly>
+                                    value="{{ old('basic_pay', $currentEmployee->basic_pay) }}" required readonly>
                                 <div class="invalid-feedback">Please provide the number of basic pay.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="allowances">Allowances</label>
                                 <input type="number" class="form-control" name="allowances" id="allowances"
-                                    value="{{ $currentEmployee->allowances }}" required readonly>
+                                    value="{{ old('allowances', $currentEmployee->allowances) }}" required readonly>
                                 <div class="invalid-feedback">Please provide the number of allowances.</div>
                             </div>
 
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $currentEmployee->company_id)->value('name') }}" required readonly>
-                                <input type="hidden" name="company" id="company_id" value="{{ $currentEmployee->company_id }}" required>
+                                @php
+                                    $selectedCompanyId = old('company', $currentEmployee->company_id);
+                                @endphp
+                                <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $selectedCompanyId)->value('name') }}" required readonly>
+                                <input type="hidden" name="company" id="company_id" value="{{ $selectedCompanyId }}" required>
                             </div>
                             @else
                                 <input type="hidden" name="company" value="{{ $currentEmployee->company_id }}">

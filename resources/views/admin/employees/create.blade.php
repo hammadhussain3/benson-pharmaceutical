@@ -74,7 +74,10 @@
                                 <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value); selectDesignations(this.value); createEmployeeCode(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
@@ -86,12 +89,14 @@
                                 <label for="branch_id">Branch</label>
                                 <select name="branch" id="branch_id" class="form-control" required value="{{ old('branch') }}" onchange="selectDepartmentsByBranch(this.value);">
                                     <option value="">Select Branch</option>
-                                    @role('Superadmin')
-                                    @else
-                                    @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                    @endforeach
-                                    @endrole
+                                    @if(old('branch') || old('company'))
+                                        @foreach ($branches->where('company_id', old('company')) as $branch)
+                                            <option value="{{ $branch->id }}"
+                                                {{ old('branch') == $branch->id ? 'selected' : '' }}>
+                                                {{ $branch->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <div class="invalid-feedback">Please select a branch.</div>
                             </div>
@@ -99,12 +104,14 @@
                                 <label for="department_id">Department</label>
                                 <select name="department" id="department_id" class="form-control" required value="{{ old('department') }}">
                                     <option value="">Select Department</option>
-                                    @role('Superadmin')
-                                    @else
-                                    @foreach ($departments as $department)
-                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                    @endforeach
-                                    @endrole
+                                    @if(old('department') || old('branch'))
+                                        @foreach ($departments->where('branch_id', old('branch')) as $department)
+                                            <option value="{{ $department->id }}"
+                                                {{ old('department') == $department->id ? 'selected' : '' }}>
+                                                {{ $department->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <div class="invalid-feedback">Please select a department.</div>
                             </div>
@@ -112,12 +119,14 @@
                                 <label for="designation_id">Designation</label>
                                 <select name="designation" id="designation_id" class="form-control" required value="{{ old('designation') }}">
                                     <option value="">Select Designation</option>
-                                    @role('Superadmin')
-                                    @else
-                                    @foreach ($designations as $designation)
-                                        <option value="{{ $designation->id }}">{{ $designation->name }}</option>
-                                    @endforeach
-                                    @endrole
+                                    @if(old('designation') || old('company'))
+                                        @foreach ($designations->where('company_id', old('company')) as $designation)
+                                            <option value="{{ $designation->id }}"
+                                                {{ old('designation') == $designation->id ? 'selected' : '' }}>
+                                                {{ $designation->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <div class="invalid-feedback">Please select a designation.</div>
                             </div>

@@ -29,7 +29,10 @@
                                 <select name="company" id="company" class="js-example-basic-single select2" required onchange="selectEmployee(this.value)">
                                     <option value="">--Select Company--</option>
                                     @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}" {{ $employee_details->company_id == $company->id ? 'selected' : '' }}>{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}" 
+                                            {{ old('company', $employee_details->company_id) == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -37,11 +40,14 @@
                             <!-- Employee Select Dropdown -->
                             <div class="col-md-6 mb-3">
                                 <label>Select Employee</label>
-                                <select name="user" id="employee" class="js-example-basic-single select2" required>
+                                <select name="user" id="employee_id" class="js-example-basic-single select2" required>
                                     <option value="">--Select Employee--</option>
-                                    @foreach ($employees as $employee)
-                                        <option value="{{ $employee->id }}" 
-                                            {{ $user->employee_id == $employee->id ? 'selected' : '' }}>
+                                    @php
+                                        $selectedCompanyId = old('company', $employee_details->company_id);
+                                    @endphp
+                                    @foreach ($employees->where('company_id', $selectedCompanyId) as $employee)
+                                        <option value="{{ $employee->id }}"
+                                            {{ $employee->id == old('user', $user->employee_id) ? 'selected' : '' }}>
                                             {{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}
                                         </option>
                                     @endforeach

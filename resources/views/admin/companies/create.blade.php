@@ -49,13 +49,14 @@
                                 <label for="city_id">City</label>
                                 <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
-                                    @foreach ($cities as $city)
-                                        <!-- Assuming you pass cities based on old country -->
-                                        <option value="{{ $city->id }}"
-                                            {{ old('city') == $city->id ? 'selected' : '' }}>
-                                            {{ $city->name }}
-                                        </option>
-                                    @endforeach
+                                    @if(old('city') || old('country'))
+                                        @foreach ($cities->where('country_id', old('country')) as $city)
+                                            <option value="{{ $city->id }}"
+                                                {{ old('city') == $city->id ? 'selected' : '' }}>
+                                                {{ $city->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <div class="invalid-feedback">Please select a city.</div>
                             </div>

@@ -57,8 +57,11 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $loan->company_id)->value('name') }}" required readonly>
-                                <input type="hidden" name="company" id="company_id" value="{{ $loan->company_id }}" required>
+                                @php
+                                    $selectedCompanyId = old('company', $loan->company_id);
+                                @endphp
+                                <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $selectedCompanyId)->value('name') }}" required readonly>
+                                <input type="hidden" name="company" id="company_id" value="{{ $selectedCompanyId }}" required>
                             </div>
                             @else
                                 <input type="hidden" name="company" value="{{ $loan->company_id }}">

@@ -26,8 +26,11 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $leave->company_id)->value('name') }}" required readonly>
-                                <input type="hidden" name="company" id="company_id" value="{{ $leave->company_id }}" required>
+                                @php
+                                    $selectedCompanyId = old('company', $leave->company_id);
+                                @endphp
+                                <input type="text" class="form-control" id="company" value="{{ App\Models\Company::where('id', $selectedCompanyId)->value('name') }}" required readonly>
+                                <input type="hidden" name="company" id="company_id" value="{{ $selectedCompanyId }}" required>
                             </div>
                             @else
                                 <input type="hidden" name="company_id" value="{{ $leave->company_id }}">
@@ -35,7 +38,7 @@
 
                             <div class="mb-3 col-md-12">
                                 <label for="employee">Employee</label>
-                                <select name="employee" id="employee" class="js-example-basic-single select2" required>
+                                <select name="employee" id="employee" class="js-example-basic-single select2" required @role('Superadmin') onchange="SelectCompany(this.value);" @endrole>
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"

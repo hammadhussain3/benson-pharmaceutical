@@ -37,8 +37,8 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <input type="text" class="form-control" id="company" required readonly>
-                                <input type="hidden" name="company" id="company_id" required>
+                                <input type="text" class="form-control" id="company" value="{{ old('company') ? App\Models\Company::where('id', old('company'))->value('name') : '' }}" required readonly>
+                                <input type="hidden" name="company" id="company_id" value="{{ old('company') }}" required>
                             </div>
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">

@@ -91,7 +91,10 @@
                                 <label for="branch_id">Branch</label>
                                 <select name="branch" id="branch_id" class="form-control" required onchange="selectDepartmentsByBranch(this.value);">
                                     <option value="">Select Branch</option>
-                                    @foreach ($branches as $branch)
+                                    @php
+                                        $selectedCompanyId = old('company', $employee->company_id);
+                                    @endphp
+                                    @foreach ($branches->where('company_id', $selectedCompanyId) as $branch)
                                         <option value="{{ $branch->id }}"
                                             {{ $branch->id == old('branch', $employee->branch_id) ? 'selected' : '' }}>
                                             {{ $branch->name }}
@@ -104,7 +107,10 @@
                                 <label for="department_id">Department</label>
                                 <select name="department" id="department_id" class="form-control" required>
                                     <option value="">Select Department</option>
-                                    @foreach ($departments as $department)
+                                    @php
+                                        $selectedBranchId = old('branch', $employee->branch_id);
+                                    @endphp
+                                    @foreach ($departments->where('branch_id', $selectedBranchId) as $department)
                                         <option value="{{ $department->id }}"
                                             {{ $department->id == old('department', $employee->department_id) ? 'selected' : '' }}>
                                             {{ $department->name }}
@@ -117,7 +123,10 @@
                                 <label for="designation_id">Designation</label>
                                 <select name="designation" id="designation_id" class="form-control" required>
                                     <option value="">Select Designation</option>
-                                    @foreach ($designations as $designation)
+                                    @php
+                                        $selectedCompanyId = old('company', $employee->company_id);
+                                    @endphp
+                                    @foreach ($designations->where('company_id', $selectedCompanyId) as $designation)
                                         <option value="{{ $designation->id }}"
                                             {{ $designation->id == old('designation', $employee->designation_id) ? 'selected' : '' }}>
                                             {{ $designation->name }}

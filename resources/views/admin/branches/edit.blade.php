@@ -46,7 +46,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
-                                <select name="country" id="country_id" class="js-example-basic-single select2" required>
+                                <select name="country" id="country_id" class="js-example-basic-single select2" required onchange="Selectcountry()">
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
@@ -61,13 +61,15 @@
                                 <label for="city_id">City</label>
                                 <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
-                                    @if (isset($company->city_id))
-                                        @foreach ($cities as $city)
-                                            <option value="{{ $city->id }}"
-                                                {{ $city->id == old('city', $company->city_id) ? 'selected' : '' }}>{{ $city->name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
+                                    @php
+                                        $selectedCountryId = old('country', $branch->country_id);
+                                    @endphp
+                                    @foreach ($cities->where('country_id', $selectedCountryId) as $city)
+                                        <option value="{{ $city->id }}"
+                                            {{ $city->id == old('city', $branch->city_id) ? 'selected' : '' }}>
+                                            {{ $city->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a city.</div>
                             </div>

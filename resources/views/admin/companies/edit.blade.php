@@ -51,9 +51,13 @@
                                 <label for="city_id">City</label>
                                 <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
-                                    @foreach ($cities as $city)
+                                    @php
+                                        $selectedCountryId = old('country', $company->country_id);
+                                    @endphp
+                                    @foreach ($cities->where('country_id', $selectedCountryId) as $city)
                                         <option value="{{ $city->id }}"
-                                            {{ $city->id == old('city', $company->city_id) ? 'selected' : '' }}>{{ $city->name }}
+                                            {{ $city->id == old('city', $company->city_id) ? 'selected' : '' }}>
+                                            {{ $city->name }}
                                         </option>
                                     @endforeach
                                 </select>
