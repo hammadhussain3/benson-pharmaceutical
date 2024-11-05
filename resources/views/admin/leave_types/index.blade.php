@@ -6,11 +6,13 @@
             <h4>Leave Types List</h4>
             <h6>Manage your leave types</h6>
         </div>
+        @if(auth()->user()->hasPermission('Leave Type Create'))
         <div class="page-btn">
             <a href="{{ route('leave_types.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Leave Type
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -33,7 +35,9 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            @if(auth()->user()->hasPermission('Leave Type View') || auth()->user()->hasPermission('Leave Type Update') || auth()->user()->hasPermission('Leave Type Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -44,13 +48,19 @@
                                 @role('Superadmin')
                                 <td>{{ $leaveType->company->name }}</td>
                                 @endrole
+                                @if(auth()->user()->hasPermission('Leave Type View') || auth()->user()->hasPermission('Leave Type Update') || auth()->user()->hasPermission('Leave Type Delete'))
                                 <td>
-                                <a class="me-3" href="{{ route('leave_types.view', $leaveType->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                    @if(auth()->user()->hasPermission('Leave Type View'))
+                                    <a class="me-3" href="{{ route('leave_types.view', $leaveType->id) }}">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Leave Type Update'))
                                     <a class="me-3" href="{{ route('leave_types.edit', $leaveType->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Leave Type Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $leaveType->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -61,8 +71,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

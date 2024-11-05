@@ -6,11 +6,13 @@
             <h4>Banks List</h4>
             <h6>Manage your banks</h6>
         </div>
+        @if(auth()->user()->hasPermission('Bank Create'))
         <div class="page-btn">
             <a href="{{ route('banks.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Bank
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -32,7 +34,9 @@
                             <th>Bank Name</th>
                             <th>Acronym</th>
                             <th>Country</th>
+                            @if(auth()->user()->hasPermission('Bank View') || auth()->user()->hasPermission('Bank Update') || auth()->user()->hasPermission('Bank Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -42,13 +46,19 @@
                                 <td><a class="link-info" href="{{ route('banks.view', $bank->id) }}">{{ $bank->name }}</a></td>
                                 <td>{{ $bank->acronym }}</td>
                                 <td>{{ $bank->country->name }}</td>
+                                @if(auth()->user()->hasPermission('Bank View') || auth()->user()->hasPermission('Bank Update') || auth()->user()->hasPermission('Bank Delete'))
                                 <td>
+                                    @if(auth()->user()->hasPermission('Bank View'))
                                     <a class="me-3" href="{{ route('banks.view', $bank->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Bank Update'))
                                     <a class="me-3" href="{{ route('banks.edit', $bank->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Bank Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $bank->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -59,7 +69,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

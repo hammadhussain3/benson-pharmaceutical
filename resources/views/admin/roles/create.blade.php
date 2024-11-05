@@ -194,6 +194,22 @@
                                         <td><input class="form-check-input" type="checkbox" value="89" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="90" name="permissions[]" id="permissions"></td>
                                     </tr>
+                                    <tr>
+                                        <td>Suppliers</td>
+                                        <td><input class="form-check-input" type="checkbox" value="91" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="92" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="93" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="94" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="95" name="permissions[]" id="permissions"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Franchises</td>
+                                        <td><input class="form-check-input" type="checkbox" value="96" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="97" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="98" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="99" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="100" name="permissions[]" id="permissions"></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

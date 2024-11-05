@@ -6,11 +6,13 @@
             <h4>Parties List</h4>
             <h6>Manage your parties</h6>
         </div>
+        @if(auth()->user()->hasPermission('Parties Create'))
         <div class="page-btn">
             <a href="{{ route('parties.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Party
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -45,7 +47,9 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            @if(auth()->user()->hasPermission('Parties View') || auth()->user()->hasPermission('Parties Update') || auth()->user()->hasPermission('Parties Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -68,13 +72,19 @@
                                 @role('Superadmin')
                                 <td>{{ $party->company->name ?? 'N/A' }}</td>
                                 @endrole
+                                @if(auth()->user()->hasPermission('Parties View') || auth()->user()->hasPermission('Parties Update') || auth()->user()->hasPermission('Parties Delete'))
                                 <td>
+                                    @if(auth()->user()->hasPermission('Parties View'))
                                     <a class="me-3" href="{{ route('parties.view', $party->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Parties Update'))
                                     <a class="me-3" href="{{ route('parties.edit', $party->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Parties Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $party->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -85,8 +95,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

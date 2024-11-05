@@ -6,11 +6,13 @@
             <h4>Departments List</h4>
             <h6>Manage your departments</h6>
         </div>
+        @if(auth()->user()->hasPermission('Departments View'))
         <div class="page-btn">
             <a href="{{ route('departments.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Department
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -35,7 +37,9 @@
                             <th>Company</th>
                             @endrole
                             <th>Branch</th>
+                            @if(auth()->user()->hasPermission('Departments View') || auth()->user()->hasPermission('Departments Update') || auth()->user()->hasPermission('Departments Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -48,13 +52,19 @@
                                 <td>{{ $department->company->name }}</td>
                                 @endrole
                                 <td>{{ $department->branch ? $department->branch->name : 'N/A' }}</td>
+                                @if(auth()->user()->hasPermission('Departments View') || auth()->user()->hasPermission('Departments Update') || auth()->user()->hasPermission('Departments Delete'))
                                 <td>
+                                    @if(auth()->user()->hasPermission('Departments View'))
                                     <a class="me-3" href="{{ route('departments.view', $department->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Departments Update'))
                                     <a class="me-3" href="{{ route('departments.edit', $department->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Departments Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $department->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -65,7 +75,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

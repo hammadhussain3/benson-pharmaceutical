@@ -105,6 +105,16 @@ class PermissionSeeder extends Seeder
             ['id' => 88, 'name' => 'Users Update', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 89, 'name' => 'Users Delete', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 90, 'name' => 'Users View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 91, 'name' => 'Supplier List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 92, 'name' => 'Supplier Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 93, 'name' => 'Supplier Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 94, 'name' => 'Supplier Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 95, 'name' => 'Supplier View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 96, 'name' => 'Franchise List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 97, 'name' => 'Franchise Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 98, 'name' => 'Franchise Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 99, 'name' => 'Franchise Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 100, 'name' => 'Franchise View', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }
 }

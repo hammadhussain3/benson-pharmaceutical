@@ -35,9 +35,12 @@
                     </div>
                     <div class="row justify-content-between align-items-center">
                         <div class="col-auto">
+                            @if(auth()->user()->hasPermission('Chart Of Accounts Update'))
                             <a class="btn btn-primary" href="{{ route('chart_of_accounts.edit', $chartOfAccount->id) }}">Update</a>
+                            @endif
                             <a class="btn btn-secondary" href="{{ route('chart_of_accounts.index') }}">Cancel</a>
                         </div>
+                        @if(auth()->user()->hasPermission('Chart Of Accounts Delete'))
                         <div class="col-auto">
                             <a class="btn btn-danger" href="javascript:void(0);"
                                 onclick="confirmDelete('{{ $chartOfAccount->id }}')">
@@ -50,6 +53,7 @@
                                 @method('DELETE')
                             </form>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

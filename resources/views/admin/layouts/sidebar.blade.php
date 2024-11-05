@@ -180,6 +180,31 @@
                     </a>
                 </li> --}}
 
+                @if(
+                    auth()->user()->hasPermission('Supplier List') ||
+                    auth()->user()->hasPermission('Franchise List')
+                )
+                    <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Procurement</span></li>
+                @endif
+
+                @if(auth()->user()->hasPermission('Supplier List'))
+                <li>
+                    <a class="{{ request()->is('suppliers*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
+                        <i class="fa fa-users"></i>
+                        <span>Suppliers</span>
+                    </a>
+                </li>
+                @endif
+
+                @if(auth()->user()->hasPermission('Franchise List'))
+                <li>
+                    <a class="{{ request()->is('franchises*') ? 'active' : '' }}" href="{{ route('franchises.index') }}">
+                        <i class="fa fa-users"></i>
+                        <span>Franchises</span>
+                    </a>
+                </li>
+                @endif
+
                 @if(auth()->user()->hasPermission('Chart Of Accounts List'))
                 <li>
                     <a class="{{ request()->is('chart_of_accounts*') ? 'active' : '' }}" href="{{ route('chart_of_accounts.index') }}">

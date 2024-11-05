@@ -6,11 +6,13 @@
             <h4>Payment Types List</h4>
             <h6>Manage your payment types</h6>
         </div>
+        @if(auth()->user()->hasPermission('Payment Types Create'))
         <div class="page-btn">
             <a href="{{ route('payment_types.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Payment Type
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -34,7 +36,9 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            @if(auth()->user()->hasPermission('Payment Types View') || auth()->user()->hasPermission('Payment Types Update') || auth()->user()->hasPermission('Payment Types Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -46,13 +50,19 @@
                                 @role('Superadmin')
                                 <td>{{ $paymentType->company->name }}</td>
                                 @endrole
+                                @if(auth()->user()->hasPermission('Payment Types View') || auth()->user()->hasPermission('Payment Types Update') || auth()->user()->hasPermission('Payment Types Delete'))
                                 <td>
+                                    @if(auth()->user()->hasPermission('Payment Types View'))
                                     <a class="me-3" href="{{ route('payment_types.view', $paymentType->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Payment Types Update'))
                                     <a class="me-3" href="{{ route('payment_types.edit', $paymentType->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Payment Types Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $paymentType->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -63,8 +73,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

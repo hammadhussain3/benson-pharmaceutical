@@ -6,11 +6,13 @@
             <h4>Chart of Accounts List</h4>
             <h6>Manage your chart of accounts</h6>
         </div>
+        @if(auth()->user()->hasPermission('Chart Of Accounts Create'))
         <div class="page-btn">
             <a href="{{ route('chart_of_accounts.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Chart of Account
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -34,7 +36,9 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            @if(auth()->user()->hasPermission('Chart Of Accounts View') || auth()->user()->hasPermission('Chart Of Accounts Update') || auth()->user()->hasPermission('Chart Of Accounts Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -46,13 +50,19 @@
                                 @role('Superadmin')
                                 <td>{{ $chartOfAccount->company->name }}</td>
                                 @endrole
+                                @if(auth()->user()->hasPermission('Chart Of Accounts View') || auth()->user()->hasPermission('Chart Of Accounts Update') || auth()->user()->hasPermission('Chart Of Accounts Delete'))
                                 <td>
+                                    @if(auth()->user()->hasPermission('Chart Of Accounts View'))
                                     <a class="me-3" href="{{ route('chart_of_accounts.view', $chartOfAccount->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Chart Of Accounts Update'))
                                     <a class="me-3" href="{{ route('chart_of_accounts.edit', $chartOfAccount->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Chart Of Accounts Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $chartOfAccount->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -63,8 +73,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

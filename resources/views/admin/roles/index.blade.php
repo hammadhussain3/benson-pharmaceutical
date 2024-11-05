@@ -1,21 +1,18 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <style>
-        .dt-buttons {
-            display: none;
-        }
-    </style>
     <div class="page-header">
         <div class="page-title">
             <h4>Roles List</h4>
             <h6>Manage your roles</h6>
         </div>
+        @if(auth()->user()->hasPermission('Roles Create'))
         <div class="page-btn">
             <a href="{{ route('roles.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Roles
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -36,7 +33,9 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Permissions</th>
+                            @if(auth()->user()->hasPermission('Roles View') || auth()->user()->hasPermission('Roles Update') || auth()->user()->hasPermission('Roles Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -61,14 +60,20 @@
                                             +{{ $remainingCount }} more
                                         </span>
                                     @endif
-                                </td>                                
+                                </td>  
+                                @if(auth()->user()->hasPermission('Roles View') || auth()->user()->hasPermission('Roles Update') || auth()->user()->hasPermission('Roles Delete'))                              
                                 <td>
+                                    @if(auth()->user()->hasPermission('Roles View'))
                                     <a class="me-3" href="{{ route('roles.view', $role->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Roles Update'))
                                     <a class="me-3" href="{{ route('roles.edit', $role->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Roles Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $role->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -79,8 +84,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

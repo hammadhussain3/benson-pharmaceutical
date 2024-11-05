@@ -6,11 +6,13 @@
             <h4>Branches List</h4>
             <h6>Manage your branches</h6>
         </div>
+        @if(auth()->user()->hasPermission('Branches Create'))
         <div class="page-btn">
             <a href="{{ route('branches.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Branch
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -38,7 +40,9 @@
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Status</th>
+                            @if(auth()->user()->hasPermission('Branches View') || auth()->user()->hasPermission('Branches Update') || auth()->user()->hasPermission('Branches Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -58,14 +62,19 @@
                                         {{ $branch->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-
+                                @if(auth()->user()->hasPermission('Branches View') || auth()->user()->hasPermission('Branches Update') || auth()->user()->hasPermission('Branches Delete'))
                                 <td>
+                                    @if(auth()->user()->hasPermission('Branches View'))
                                     <a class="me-3" href="{{ route('branches.view', $branch->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Branches Update'))
                                     <a class="me-3" href="{{ route('branches.edit', $branch->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Branches Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $branch->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -76,8 +85,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

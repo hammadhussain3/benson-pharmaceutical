@@ -29,9 +29,12 @@
                     </div>
                     <div class="row justify-content-between align-items-center">
                         <div class="col-auto">
+                            @if(auth()->user()->hasPermission('Leave Type Update'))
                             <a class="btn btn-primary" href="{{ route('leaves.edit', $leave_type->id) }}">Update</a>
+                            @endif
                             <a class="btn btn-secondary" href="{{ route('leaves.index') }}">Cancel</a>
                         </div>
+                        @if(auth()->user()->hasPermission('Leave Type Delete'))
                         <div class="col-auto">
                             <a class="btn btn-danger" href="javascript:void(0);"
                                 onclick="confirmDelete('{{ $leave_type->id }}')">
@@ -44,6 +47,7 @@
                                 @method('DELETE')
                             </form>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

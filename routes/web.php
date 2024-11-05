@@ -21,6 +21,8 @@ use App\Http\Controllers\{
     PermissionController,
     SalarySlipController,
     SalaryTaxSlabController,
+    SupplierController,
+    FranchiseController,
 };
 use App\Http\Controllers\SalarySheetController;
 
@@ -70,6 +72,8 @@ Route::middleware('auth')->group(function () {
     Route::get('parties/view/{id}', [PartyController::class, 'view'])->name('parties.view');
     Route::resource('roles', RoleController::class);
     Route::get('roles/view/{id}', [RoleController::class, 'view'])->name('roles.view');
+    Route::resource('suppliers', SupplierController::class);
+    Route::resource('franchises', FranchiseController::class);
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);

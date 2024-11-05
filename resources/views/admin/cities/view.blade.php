@@ -32,9 +32,12 @@
                     </div>
                     <div class="row justify-content-between align-items-center">
                         <div class="col-auto">
+                            @if(auth()->user()->hasPermission('Cities Update'))
                             <a class="btn btn-primary" href="{{ route('cities.edit', $city->id) }}">Update</a>
+                            @endif
                             <a class="btn btn-secondary" href="{{ route('cities.index') }}">Cancel</a>
                         </div>
+                        @if(auth()->user()->hasPermission('Cities Delete'))
                         <div class="col-auto">
                             <a class="btn btn-danger" href="javascript:void(0);"
                                 onclick="confirmDelete('{{ $city->id }}')">
@@ -47,6 +50,7 @@
                                 @method('DELETE')
                             </form>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

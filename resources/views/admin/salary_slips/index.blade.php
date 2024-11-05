@@ -6,11 +6,13 @@
             <h4>Salary List</h4>
             <h6>Manage your salaries</h6>
         </div>
+        @if(auth()->user()->hasPermission('Salaries Create'))
         <div class="page-btn">
             <a href="{{ route('salary_slips.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Salary
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -44,7 +46,9 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            @if(auth()->user()->hasPermission('Salaries View') || auth()->user()->hasPermission('Salaries Update') || auth()->user()->hasPermission('Salaries Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -66,14 +70,19 @@
                                 @role('Superadmin')
                                 <td>{{ $salarySlip->company->name }}</td>
                                 @endrole
+                                @if(auth()->user()->hasPermission('Salaries View') || auth()->user()->hasPermission('Salaries Update') || auth()->user()->hasPermission('Salaries Delete'))
                                 <td>
-                                    <a class="me-3"
-                                        href="{{ route('salary.sheet.show', ['employee_id' => $salarySlip->employee_id, 'month' => $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT)]) }}">
+                                    @if(auth()->user()->hasPermission('Salaries View'))
+                                    <a class="me-3" href="{{ route('salary.sheet.show', ['employee_id' => $salarySlip->employee_id, 'month' => $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT)]) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Salaries Update'))
                                     <a class="me-3" href="{{ route('salary_slips.edit', $salarySlip->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Salaries Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $salarySlip->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -84,8 +93,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

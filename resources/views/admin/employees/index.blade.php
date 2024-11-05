@@ -6,11 +6,13 @@
             <h4>Employees List</h4>
             <h6>Manage your employees</h6>
         </div>
+        @if(auth()->user()->hasPermission('Employee Create'))
         <div class="page-btn">
             <a href="{{ route('employees.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1"> Add Employee
             </a>
         </div>
+        @endif
     </div>
 
     <div class="card">
@@ -42,7 +44,9 @@
                             <th>Bank</th>
                             <th>Net Salary</th>
                             <th>Status</th>
+                            @if(auth()->user()->hasPermission('Employee Create') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -65,13 +69,19 @@
                                         {{ $employee->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
+                                @if(auth()->user()->hasPermission('Employee Create') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
                                 <td>
+                                    @if(auth()->user()->hasPermission('Employee View'))
                                     <a class="me-3" href="{{ route('employees.view', $employee->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Employee Update'))
                                     <a class="me-3" href="{{ route('employees.edit', $employee->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Employee Delete'))
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $employee->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
@@ -82,8 +92,9 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-
+                                    @endif
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>
