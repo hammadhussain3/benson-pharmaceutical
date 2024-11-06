@@ -4,19 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\FranchiseRequest;
 use Illuminate\Http\Request;
-use App\Models\Franchise;
+use App\Models\Party;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\Company;
 use App\Models\PaymentType;
 use App\Services\FranchiseService;
+use App\Services\PaymentTypeService;
 
 class FranchiseController extends Controller
 {
     protected $franchiseService;
+    protected $paymentTypeService;
 
-    public function __construct(FranchiseService $franchiseService)
+    public function __construct(FranchiseService $franchiseService, PaymentTypeService $paymentTypeService)
     {
         $this->franchiseService = $franchiseService;
+        $this->paymentTypeService = $paymentTypeService;
     }
     /**
      * Display a listing of the resource.
@@ -38,10 +42,16 @@ class FranchiseController extends Controller
         if (!auth()->user()->hasPermission('Franchise Create')) {
             abort(403, 'Unauthorized action.');
         }
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newFranchiseCode = "FRA";
+        } else {
+            $newFranchiseCode = $this->franchiseService->createFranchiseCode(auth()->user()->employee->company_id);
+        }
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
-        $paymentTypes = PaymentType::orderBy('name', 'asc')->get();
-        return view('admin.franchises.create', compact('countries', 'cities', 'paymentTypes'));
+        $companies = Company::orderBy('name', 'asc')->get();
+        $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
+        return view('admin.franchises.create', compact('countries', 'cities', 'companies', 'paymentTypes', 'newFranchiseCode'));
     }
 
     /**
@@ -59,7 +69,7 @@ class FranchiseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Franchise $franchise)
+    public function show(Party $franchise)
     {
         if (!auth()->user()->hasPermission('Franchise View')) {
             abort(403, 'Unauthorized action.');
@@ -70,21 +80,22 @@ class FranchiseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Franchise $franchise)
+    public function edit(Party $franchise)
     {
         if (!auth()->user()->hasPermission('Franchise Update')) {
             abort(403, 'Unauthorized action.');
         }
         $countries = Country::orderBy('name', 'asc')->get();
-        $cities = City::where('country_id', $franchise->country_id)->orderBy('name', 'asc')->get();
-        $paymentTypes = PaymentType::orderBy('name', 'asc')->get();
-        return view('admin.franchises.edit', compact('franchise', 'countries', 'cities', 'paymentTypes'));
+        $cities = City::orderBy('name', 'asc')->get();
+        $companies = Company::orderBy('name', 'asc')->get();
+        $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
+        return view('admin.franchises.edit', compact('franchise', 'countries', 'cities', 'companies', 'paymentTypes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(FranchiseRequest $request, Franchise $franchise)
+    public function update(FranchiseRequest $request, Party $franchise)
     {
         if (!auth()->user()->hasPermission('Franchise Update')) {
             abort(403, 'Unauthorized action.');
@@ -96,12 +107,18 @@ class FranchiseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Franchise $franchise)
+    public function destroy(Party $franchise)
     {
         if (!auth()->user()->hasPermission('Franchise Delete')) {
             abort(403, 'Unauthorized action.');
         }
         $this->franchiseService->deleteFranchise($franchise);
         return redirect()->route('franchises.index')->with('success', 'Franchise deleted successfully.');
+    }
+
+    public function createCodeByCompany($companyId)
+    {
+        $franchise_code = $this->franchiseService->createFranchiseCode($companyId);
+        return response()->json(['franchise_code' => $franchise_code]);
     }
 }

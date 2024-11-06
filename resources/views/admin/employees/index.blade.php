@@ -44,7 +44,7 @@
                             <th>Bank</th>
                             <th>Net Salary</th>
                             <th>Status</th>
-                            @if(auth()->user()->hasPermission('Employee Create') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
+                            @if(auth()->user()->hasPermission('Employee View') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
                             <th>Action</th>
                             @endif
                         </tr>
@@ -69,7 +69,7 @@
                                         {{ $employee->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-                                @if(auth()->user()->hasPermission('Employee Create') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
+                                @if(auth()->user()->hasPermission('Employee View') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Employee View'))
                                     <a class="me-3" href="{{ route('employees.view', $employee->id) }}">

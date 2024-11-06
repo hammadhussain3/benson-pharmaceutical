@@ -32,12 +32,19 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Company Name</th>
-                            <th>Email</th>
+                            <th>Code</th>
+                            <th>Contact Person Name</th>
+                            <th>Contact Person Phone</th>
+                            <th>Contact Person Email</th>
                             <th>Phone</th>
+                            <th>Email</th>
+                            <th>Country</th>
                             <th>City</th>
                             <th>Address</th>
                             <th>Payment Type</th>
+                            @role('Superadmin')
+                            <th>Company</th>
+                            @endrole
                             @if(auth()->user()->hasPermission('Franchise View') || auth()->user()->hasPermission('Franchise Update') || auth()->user()->hasPermission('Franchise Delete'))
                             <th>Action</th>
                             @endif
@@ -47,18 +54,25 @@
                         @foreach ($franchises as $franchise)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $franchise->name }}</td>
-                                <td>{{ $franchise->company_name }}</td>
-                                <td>{{ $franchise->email }}</td>
+                                <td><a class="link-primary" href="{{ route('franchises.show', $franchise->id) }}">{{ $franchise->name }}</a></td>
+                                <td>{{ $franchise->code }}</td>
+                                <td>{{ $franchise->contact_person_name }}</td>
+                                <td>{{ $franchise->contact_person_phone }}</td>
+                                <td>{{ $franchise->contact_person_email }}</td>
                                 <td>{{ $franchise->phone }}</td>
-                                <td>{{ $franchise->city->name }}</td>
+                                <td>{{ $franchise->email }}</td>
+                                <td>{{ $franchise->country->name ?? 'N/A' }}</td> <!-- Assuming relationship exists -->
+                                <td>{{ $franchise->city->name ?? 'N/A' }}</td> <!-- Assuming relationship exists -->
                                 <td>{{ $franchise->address }}</td>
-                                <td>{{ $franchise->paymentType->name }}</td>
+                                <td>{{ $franchise->paymentType->name ?? 'N/A' }}</td> <!-- Assuming relationship exists -->
+                                @role('Superadmin')
+                                <td>{{ $franchise->company->name ?? 'N/A' }}</td>
+                                @endrole
                                 @if(auth()->user()->hasPermission('Franchise View') || auth()->user()->hasPermission('Franchise Update') || auth()->user()->hasPermission('Franchise Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Franchise View'))
                                     <a class="me-3" href="{{ route('franchises.show', $franchise->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
                                     @endif
                                     @if(auth()->user()->hasPermission('Franchise Update'))

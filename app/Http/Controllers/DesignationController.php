@@ -82,9 +82,6 @@ class DesignationController extends Controller
 
     public function getDesignationsByCompany($companyId)
     {
-        if (!auth()->user()->hasPermission('Designation List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $designations = Designation::where('company_id', $companyId)->get();
         return response()->json(['designations' => $designations]);
     }

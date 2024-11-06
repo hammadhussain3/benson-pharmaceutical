@@ -124,6 +124,7 @@
                         <!-- Submit Button -->
                         <div class="form-login">
                             <button type="submit" class="btn btn-primary">Update User</button>
+                            <a class="btn btn-secondary" href="{{ route('users.index') }}">Cancel</a>
                         </div>
                     </form>
                 </div>

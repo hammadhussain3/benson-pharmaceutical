@@ -31,13 +31,14 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>Employee Code</th>
                             <th>Employee</th>
                             <th>Leave Type</th>
                             <th>Days</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            <th>Month</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -52,6 +53,7 @@
                                 @role('Superadmin')
                                 <td>{{ $leave->company->name }}</td>
                                 @endrole
+                                <td>{{ $leave->created_at->format('F, Y') }}</td>
                                 @if(auth()->user()->hasPermission('Leave View') || auth()->user()->hasPermission('Leave Update') || auth()->user()->hasPermission('Leave Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Leave View'))

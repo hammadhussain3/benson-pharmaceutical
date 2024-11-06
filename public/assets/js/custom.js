@@ -113,60 +113,102 @@ function SelectLoanDate(month)
 }
 
 
-function SelecLeaves(employeeId)
-{
-    var auth_leave = document.getElementById('auth_leave');
-    var unauth_leave = document.getElementById('unauth_leave');
-    var approved_with_pay = document.getElementById('approved_with_pay');
-    
+function SelectLeaves(employeeId) {
     if (employeeId) {
-        fetch(`/getapprovedleaves/${employeeId}`)
+        fetch(`/getleaves/${employeeId}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching leaves');
                 }
                 return response.json();
             })
             .then(data => {
-                if (data.leaves !== null) {
-                    auth_leave.value = data.leaves['days'];
-                }
-                else
-                {
-                    auth_leave.value = 0;
-                }
-             
-            })
-            .catch(error => console.error('Error fetching cities:', error));
+                const container = document.getElementById('formContainer');
+                const existingLeaves = container.querySelectorAll('.leaves');
+                existingLeaves.forEach(leaveDiv => leaveDiv.remove());
 
-            fetch(`/getunauthleaves/${employeeId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.leaves !== null) {
-                    unauth_leave.value = data.leaves['days'];
-                }
-                else
-                {
-                    unauth_leave.value = 0;
-                }
-             
-            })
-            .catch(error => console.error('Error fetching cities:', error));
+                data.leaves.forEach(leave => {
+                    // Create a wrapper div
+                    const div = document.createElement('div');
+                    div.classList.add('mb-3', 'col-md-6', 'leaves');
 
-            fetch(`/getapprovedpayleaves/${employeeId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.leaves !== null) {
-                    approved_with_pay.value = data.leaves['days'];
-                }
-                else
-                {
-                    approved_with_pay.value = 0;
-                }
-             
+                    // Create a label for the leave type
+                    const label = document.createElement('label');
+                    label.setAttribute('for', `leaves_${leave.leave_type_id}`);
+                    label.textContent = `${leave.leave_type_name}`;
+
+                    // Create the input field
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.classList.add('form-control');
+                    input.name = `leaves[]`;
+                    input.id = `leaves_${leave.leave_type_id}`;
+                    input.required = true;
+                    input.readOnly = true;
+                    input.value = leave.total_days; // Set the total days as the value
+
+                    // Append elements to the wrapper div
+                    div.appendChild(label);
+                    div.appendChild(input);
+
+                    // Append the wrapper div to the container
+                    container.appendChild(div);
+                });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching leaves:', error));
     }
+    // var auth_leave = document.getElementById('auth_leave');
+    // var unauth_leave = document.getElementById('unauth_leave');
+    // var approved_with_pay = document.getElementById('approved_with_pay');
+    
+    // if (employeeId) {
+    //     fetch(`/getapprovedleaves/${employeeId}`)
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Unauthorized or error fetching branches');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             if (data.leaves !== null) {
+    //                 auth_leave.value = data.leaves['days'];
+    //             }
+    //             else
+    //             {
+    //                 auth_leave.value = 0;
+    //             }
+             
+    //         })
+    //         .catch(error => console.error('Error fetching cities:', error));
+
+    //         fetch(`/getunauthleaves/${employeeId}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.leaves !== null) {
+    //                 unauth_leave.value = data.leaves['days'];
+    //             }
+    //             else
+    //             {
+    //                 unauth_leave.value = 0;
+    //             }
+             
+    //         })
+    //         .catch(error => console.error('Error fetching cities:', error));
+
+    //         fetch(`/getapprovedpayleaves/${employeeId}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.leaves !== null) {
+    //                 approved_with_pay.value = data.leaves['days'];
+    //             }
+    //             else
+    //             {
+    //                 approved_with_pay.value = 0;
+    //             }
+             
+    //         })
+    //         .catch(error => console.error('Error fetching cities:', error));
+    // }
 }
 
 function SelectIncomeTax(employeeId)
@@ -391,7 +433,7 @@ function createEmployeeCode(companyId)
     var code = document.getElementById('code');
     
     if (companyId && code) {
-        fetch(`/companies/${companyId}/code`)
+        fetch(`/companies/${companyId}/employee-code`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unauthorized or error fetching branches');
@@ -400,6 +442,44 @@ function createEmployeeCode(companyId)
             })
             .then(data => {
                 code.value = data.employee_code;
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function createSupplierCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/supplier-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.supplier_code;
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function createFranchiseCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/franchise-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.franchise_code;
             })
             .catch(error => console.error('Error fetching cities:', error));
     }

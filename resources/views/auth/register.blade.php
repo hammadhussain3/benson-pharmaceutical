@@ -33,13 +33,18 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @else
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="col-md-6 mb-3">
                                 <label>Select Employee </label>
                                 <select name="user" id="employee_id" class="js-example-basic-single select2" required onchange="SelectEmployeeDetails(this.value)">
                                     <option value="">--Select Employee--</option>
-                                    @if(old('user'))
-                                        @foreach ($employees->where('company_id', old('company')) as $employee)
+                                    @if(old('user') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($employees->where('company_id', $seletedCompanyId) as $employee)
                                             <option value="{{ $employee->id }}"
                                                 {{ old('user') == $employee->id ? 'selected' : '' }}>
                                                 {{ $employee->code }} - {{ $employee->first_name }} {{ $employee->last_name }}
@@ -108,6 +113,7 @@
                         <!-- Submit Button -->
                         <div class="form-login">
                             <button type="submit" class="btn btn-primary">Register</button>
+                            <a class="btn btn-secondary" href="{{ route('users.index') }}">Cancel</a>
                         </div>
                     </form>
                 </div>

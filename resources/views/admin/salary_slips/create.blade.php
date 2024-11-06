@@ -19,11 +19,11 @@
                 <div class="card-body">
                     <form action="{{ route('salary_slips.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
-                        <div class="form-row row">
+                        <div class="form-row row" id="formContainer">
 
                             <div class="col-md-6">
                                 <label>Select Employee </label>
-                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelecLeaves(this.value); SelectIncomeTax(this.value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
+                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelectLeaves(this.value); SelectIncomeTax(this.value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
                                     <option value="">--Select Employee--</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
@@ -105,24 +105,6 @@
                                 <label for="loan_advance">Loan/Advance</label>
                                 <input type="number" class="form-control" name="loan_advance" id="loan_advance" required readonly value="{{ old('loan_advance') }}">
                                 <div class="invalid-feedback">Please provide the loan/advance amount.</div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="auth_leave">Approved Leave</label>
-                                <input type="number" class="form-control" name="auth_leave" id="auth_leave" required readonly value="{{ old('auth_leave') }}">
-                                <div class="invalid-feedback">Please provide the number of approved leaves.</div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="unauth_leave">Unauthorized Leave</label>
-                                <input type="number" class="form-control" name="unauth_leave" id="unauth_leave" required readonly value="{{ old('unauth_leave') }}">
-                                <div class="invalid-feedback">Please provide the number of unauthorized leaves.</div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="approved_with_pay">Approved with Pay</label>
-                                <input type="number" class="form-control" name="approved_with_pay" id="approved_with_pay" required readonly value="{{ old('approved_with_pay') }}">
-                                <div class="invalid-feedback">Please provide the approved amount with pay.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">

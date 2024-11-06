@@ -21,28 +21,16 @@
                         @csrf
                         <div class="form-row row">
                             <div class="mb-3 col-md-6">
-                                <label for="name">Name</label>
+                                <label for="name">Franchise Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Franchiser Name" required value="{{ old('name') }}">
-                                <div class="invalid-feedback">Please provide a valid franchiser name.</div>
+                                    placeholder="Franchise Name" required value="{{ old('name') }}">
+                                <div class="invalid-feedback">Please provide a valid franchise name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="code">Company</label>
-                                <input type="text" class="form-control" name="company_name" id="company_name"
-                                    placeholder="Franchise Company Name" required value="{{ old('company_name') }}">
-                                <div class="invalid-feedback">Please provide a valid franchiser company name.</div>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="phone">Phone</label>
-                                <input type="tel" class="form-control" name="phone" id="phone"
-                                    placeholder="Contact Phone Number" required value="{{ old('phone') }}">
-                                <div class="invalid-feedback">Please provide a valid franchiser contact phone number.</div>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" id="email"
-                                    placeholder="Franchiser Contact Email" required value="{{ old('email') }}">
-                                <div class="invalid-feedback">Please provide a valid franchiser contact email.</div>
+                                <label for="code">Franchise Code</label>
+                                <input type="text" class="form-control" name="code" id="code"
+                                    placeholder="Franchise Code" required value="{{ old('code', $newFranchiseCode) }}" readonly>
+                                <div class="invalid-feedback">Please provide a valid franchise code.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
@@ -61,16 +49,68 @@
                                 <label for="city_id">City</label>
                                 <select name="city" id="city_id" class="js-example-basic-single select2" required>
                                     <option value="">Select City</option>
+                                    @if(old('city') || old('country'))
+                                        @foreach ($cities->where('country_id', old('country')) as $city)
+                                            <option value="{{ $city->id }}"
+                                                {{ old('city') == $city->id ? 'selected' : '' }}>
+                                                {{ $city->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <div class="invalid-feedback">Please select a city.</div>
+                            </div>
+                            @role('Superadmin')
+                            <div class="mb-3 col-md-12">
+                                <label for="company">Company</label>
+                                <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="createFranchiseCode(this.value);" @endrole>
+                                    <option value="">Select Company</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Please select a company.</div>
+                            </div>
+                            @else
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
+                            <div class="mb-3 col-md-6">
+                                <label for="contact_person_name">Contact Person Name</label>
+                                <input type="text" class="form-control" name="contact_person_name"
+                                    id="contact_person_name" placeholder="Contact Person Name" value="{{ old('contact_person_name') }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="contact_person_phone">Contact Person Phone</label>
+                                <input type="text" class="form-control" name="contact_person_phone"
+                                    id="contact_person_phone" placeholder="+123 1234567890" value="{{ old('contact_person_phone') }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="contact_person_email">Contact Person Email</label>
+                                <input type="email" class="form-control" name="contact_person_email"
+                                    id="contact_person_email" placeholder="Contact Person Email" value="{{ old('contact_person_email') }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="phone">Phone</label>
+                                <input type="tel" class="form-control" name="phone" id="phone" placeholder="+123 1234567890"
+                                    required value="{{ old('phone') }}">
+                                <div class="invalid-feedback">Please provide a valid phone number.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Email"
+                                    required value="{{ old('email') }}">
+                                <div class="invalid-feedback">Please provide a valid email address.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address">Address</label>
                                 <textarea class="form-control" name="address" id="address" placeholder="Address">{{ old('address') }}</textarea>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="payment_type">Payment Type</label>
-                                <select name="payment_type" id="payment_type" class="form-control" required>
+                                <label for="payment_type_id">Payment Type</label>
+                                <select name="payment_type" id="payment_type_id" class="form-control" required>
                                     <option value="">Select Payment Type</option>
                                     @foreach ($paymentTypes as $paymentType)
                                         <option value="{{ $paymentType->id }}"

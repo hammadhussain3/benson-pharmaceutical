@@ -187,15 +187,6 @@
                     <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Procurement</span></li>
                 @endif
 
-                @if(auth()->user()->hasPermission('Supplier List'))
-                <li>
-                    <a class="{{ request()->is('suppliers*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
-                        <i class="fa fa-users"></i>
-                        <span>Suppliers</span>
-                    </a>
-                </li>
-                @endif
-
                 @if(auth()->user()->hasPermission('Franchise List'))
                 <li>
                     <a class="{{ request()->is('franchises*') ? 'active' : '' }}" href="{{ route('franchises.index') }}">
@@ -205,7 +196,25 @@
                 </li>
                 @endif
 
-                @if(auth()->user()->hasPermission('Chart Of Accounts List'))
+                @if(auth()->user()->hasPermission('Payment Types List'))
+                <li>
+                    <a class="{{ request()->is('payment_types*') ? 'active' : '' }}" href="{{ route('payment_types.index') }}">
+                        <i class="fa fa-credit-card"></i>
+                        <span>Payment Types</span>
+                    </a>
+                </li>
+                @endif
+
+                @if(auth()->user()->hasPermission('Supplier List'))
+                <li>
+                    <a class="{{ request()->is('suppliers*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
+                        <i class="fa fa-users"></i>
+                        <span>Suppliers</span>
+                    </a>
+                </li>
+                @endif
+
+                {{-- @if(auth()->user()->hasPermission('Chart Of Accounts List'))
                 <li>
                     <a class="{{ request()->is('chart_of_accounts*') ? 'active' : '' }}" href="{{ route('chart_of_accounts.index') }}">
                         <i class="fa fa-list-alt"></i>
@@ -221,16 +230,8 @@
                         <span>Parties</span>
                     </a>
                 </li>
-                @endif
+                @endif --}}
 
-                @if(auth()->user()->hasPermission('Payment Types List'))
-                <li>
-                    <a class="{{ request()->is('payment_types*') ? 'active' : '' }}" href="{{ route('payment_types.index') }}">
-                        <i class="fa fa-credit-card"></i>
-                        <span>Payment Types</span>
-                    </a>
-                </li>
-                @endif
             </ul>
         </div>
     </div>

@@ -84,9 +84,6 @@ class CityController extends Controller
     }
     public function getCitiesByCountry($countryId)
     {
-        if (!auth()->user()->hasPermission('Cities List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $cities = City::where('country_id', $countryId)->orderBy('name', 'asc')->get();
         return response()->json(['cities' => $cities]);
     }

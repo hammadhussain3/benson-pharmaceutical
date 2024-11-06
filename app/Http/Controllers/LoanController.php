@@ -110,9 +110,6 @@ class LoanController extends Controller
     }
     public function getLoansByEmployee($employeeId, Request $request)
     {
-        if (!auth()->user()->hasPermission('Loan List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $totalMonthlyPayment = 0;
         $currentMonth = $request->has('month') ? Carbon::createFromFormat('Y-m', $request->input('month')) : Carbon::now();
 

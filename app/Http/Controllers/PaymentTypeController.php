@@ -22,7 +22,7 @@ class PaymentTypeController extends Controller
         if (!auth()->user()->hasPermission('Payment Types List')) {
             abort(403, 'Unauthorized action.');
         }
-        $paymentTypes = $this->paymentTypeService->getAllPaymentTypes(); // Fetch all payment types
+        $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
         return view('admin.payment_types.index', compact('paymentTypes')); // Return the index view
     }
 

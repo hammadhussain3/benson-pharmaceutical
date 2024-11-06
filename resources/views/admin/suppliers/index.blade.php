@@ -32,12 +32,19 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Company Name</th>
-                            <th>Email</th>
+                            <th>Code</th>
+                            <th>Contact Person Name</th>
+                            <th>Contact Person Phone</th>
+                            <th>Contact Person Email</th>
                             <th>Phone</th>
+                            <th>Email</th>
+                            <th>Country</th>
                             <th>City</th>
                             <th>Address</th>
                             <th>Payment Type</th>
+                            @role('Superadmin')
+                            <th>Company</th>
+                            @endrole
                             @if(auth()->user()->hasPermission('Supplier View') || auth()->user()->hasPermission('Supplier Update') || auth()->user()->hasPermission('Supplier Delete'))
                             <th>Action</th>
                             @endif
@@ -47,18 +54,25 @@
                         @foreach ($suppliers as $supplier)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $supplier->name }}</td>
-                                <td>{{ $supplier->company_name }}</td>
-                                <td>{{ $supplier->email }}</td>
+                                <td><a class="link-primary" href="{{ route('suppliers.show', $supplier->id) }}">{{ $supplier->name }}</a></td>
+                                <td>{{ $supplier->code }}</td>
+                                <td>{{ $supplier->contact_person_name }}</td>
+                                <td>{{ $supplier->contact_person_phone }}</td>
+                                <td>{{ $supplier->contact_person_email }}</td>
                                 <td>{{ $supplier->phone }}</td>
-                                <td>{{ $supplier->city->name }}</td>
+                                <td>{{ $supplier->email }}</td>
+                                <td>{{ $supplier->country->name ?? 'N/A' }}</td> <!-- Assuming relationship exists -->
+                                <td>{{ $supplier->city->name ?? 'N/A' }}</td> <!-- Assuming relationship exists -->
                                 <td>{{ $supplier->address }}</td>
-                                <td>{{ $supplier->paymentType->name }}</td>
+                                <td>{{ $supplier->paymentType->name ?? 'N/A' }}</td> <!-- Assuming relationship exists -->
+                                @role('Superadmin')
+                                <td>{{ $supplier->company->name ?? 'N/A' }}</td>
+                                @endrole
                                 @if(auth()->user()->hasPermission('Supplier View') || auth()->user()->hasPermission('Supplier Update') || auth()->user()->hasPermission('Supplier Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Supplier View'))
                                     <a class="me-3" href="{{ route('suppliers.show', $supplier->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
+                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
                                     @endif
                                     @if(auth()->user()->hasPermission('Supplier Update'))

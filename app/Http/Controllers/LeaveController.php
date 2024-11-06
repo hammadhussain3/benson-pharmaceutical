@@ -116,26 +116,42 @@ class LeaveController extends Controller
 
     public function getApprovedLeavesByEmployee($employeeId)
     {
-        if (!auth()->user()->hasPermission('Leave List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',1)->first();
         return response()->json(['leaves' => $leaves]);
     }
     public function getUnauthorizedLeavesByEmployee($employeeId)
     {
-        if (!auth()->user()->hasPermission('Leave List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',2)->first();
         return response()->json(['leaves' => $leaves]);
     }
     public function getApprovedWithPayLeavesByEmployee($employeeId)
     {
-        if (!auth()->user()->hasPermission('Leave List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $leaves = Leave::where('employee_id',$employeeId)->where('leave_type_id',3)->first();
         return response()->json(['leaves' => $leaves]);
+    }
+
+    public function getLeavesByEmployee($employeeId)
+    {
+        $employee = Employee::findOrFail($employeeId);
+
+        // Get all leave types for the employee's company
+        $leaveTypes = LeaveType::where('company_id', $employee->company_id)->get();
+    
+        // Get total days for each leave_type_id from the leaves table
+        $leaveTotals = Leave::where('employee_id', $employeeId)
+            ->select('leave_type_id', DB::raw('SUM(days) as total_days'))
+            ->groupBy('leave_type_id')
+            ->pluck('total_days', 'leave_type_id'); // returns an associative array [leave_type_id => total_days]
+    
+        // Map leave types with their total days, defaulting to 0 if not present in leaveTotals
+        $leaveSummary = $leaveTypes->map(function ($leaveType) use ($leaveTotals) {
+            return [
+                'leave_type_id' => $leaveType->id,
+                'leave_type_name' => $leaveType->name,
+                'total_days' => $leaveTotals[$leaveType->id] ?? 0,
+            ];
+        });
+    
+        return response()->json(['leaves' => $leaveSummary]);
     }
 }

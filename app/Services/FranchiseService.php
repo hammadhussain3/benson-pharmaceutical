@@ -2,39 +2,64 @@
 
 namespace App\Services;
 
-use App\Models\Franchise;
+use App\Models\Party;
 
 class FranchiseService
 {
     public function getAllFranchises()
     {
-        return Franchise::with(['city', 'paymentType', 'country'])->orderBy('name', 'asc')->get();
+        $franchisesQuery = Party::with(['city', 'paymentType', 'country'])->where('is_distributor', '1')->orderBy('name', 'asc');
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $franchisesQuery->where('company_id', auth()->user()->employee->company_id);
+        }
+
+        $franchises = $franchisesQuery->get();
+
+        return $franchises;
     }
 
     public function createFranchise(array $data)
     {
         $data['country_id'] = $data['country'];
         $data['city_id'] = $data['city'];
+        $data['company_id'] = $data['company'];
         $data['payment_type_id'] = $data['payment_type'];
-        return Franchise::create($data);
+        $data['is_supplier'] = '0';
+        $data['is_distributor'] = '1';
+        return Party::create($data);
     }
 
-    public function updateFranchise(Franchise $franchise, array $data)
+    public function updateFranchise(Party $franchise, array $data)
     {
         $data['country_id'] = $data['country'];
         $data['city_id'] = $data['city'];
+        $data['company_id'] = $data['company'];
         $data['payment_type_id'] = $data['payment_type'];
         $franchise->update($data);
         return $franchise;
     }
 
-    public function deleteFranchise(Franchise $franchise)
+    public function deleteFranchise(Party $franchise)
     {
         return $franchise->delete();
     }
 
     public function getFranchiseById($id)
     {
-        return Franchise::findOrFail($id);
+        return Party::findOrFail($id);
+    }
+
+    public function createFranchiseCode($company_id)
+    {
+        $lastFranchiseCode = Party::latest('id')->where('company_id', $company_id)->where('is_supplier', '1')->value('code');
+        if ($lastFranchiseCode) {
+            $numberPart = (int) substr($lastFranchiseCode, 3);
+            $newNumberPart = $numberPart + 1;
+            $newFranchiseCode = 'FRA' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+        } else {
+            $newFranchiseCode = 'FRA00001';
+        }
+        return $newFranchiseCode;
     }
 }

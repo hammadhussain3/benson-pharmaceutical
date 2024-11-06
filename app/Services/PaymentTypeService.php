@@ -8,8 +8,17 @@ class PaymentTypeService
 {
     public function getAllPaymentTypes()
     {
-        return PaymentType::orderBy('name', 'asc')->get();
+        $paymentTypesQuery = PaymentType::orderBy('name', 'asc');
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $paymentTypesQuery->where('company_id', auth()->user()->employee->company_id);
+        }
+
+        $paymentTypes = $paymentTypesQuery->get();
+
+        return $paymentTypes;
     }
+    
     public function createPaymentType($data)
     {
         $data['company_id'] = $data['company'];

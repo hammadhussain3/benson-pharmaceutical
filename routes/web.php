@@ -79,7 +79,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
     Route::get('/companies/{companyId}/designations', [DesignationController::class, 'getDesignationsByCompany']);
     Route::get('/companies/{companyId}/employees', [EmployeeController::class, 'getEmployeesByCompany']);
-    Route::get('/companies/{companyId}/code', [EmployeeController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/employee-code', [EmployeeController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/supplier-code', [SupplierController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/franchise-code', [FranchiseController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
     Route::get('/getemployee/{employeeId}', [EmployeeController::class, 'getEmployeeDetails']);
@@ -88,6 +90,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/getapprovedleaves/{employeeId}', [LeaveController::class, 'getApprovedLeavesByEmployee']);
     Route::get('/getunauthleaves/{employeeId}', [LeaveController::class, 'getUnauthorizedLeavesByEmployee']);
     Route::get('/getapprovedpayleaves/{employeeId}', [LeaveController::class, 'getApprovedWithPayLeavesByEmployee']);
+    Route::get('/getleaves/{employeeId}', [LeaveController::class, 'getLeavesByEmployee']);
     Route::get('/branches/{branchId}/departments', [DepartmentController::class, 'getDepartmentsByBranch']);
 
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');

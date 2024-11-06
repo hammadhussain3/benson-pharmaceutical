@@ -84,18 +84,12 @@ class DepartmentController extends Controller
 
     public function getDepartmentsByCompany($companyId)
     {
-        if (!auth()->user()->hasPermission('Departments List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $departments = Department::where('company_id', $companyId)->get();
         return response()->json(['departments' => $departments]);
     }
 
     public function getDepartmentsByBranch($branchId)
     {
-        if (!auth()->user()->hasPermission('Departments List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $departments = Department::where('branch_id', $branchId)->get();
         return response()->json(['departments' => $departments]);
     }

@@ -90,9 +90,6 @@ class BranchController extends Controller
 
     public function getBranchesByCompany($companyId)
     {
-        if (!auth()->user()->hasPermission('Branches List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $branches = Branch::where('company_id', $companyId)->get();
         return response()->json(['branches' => $branches]);
     }

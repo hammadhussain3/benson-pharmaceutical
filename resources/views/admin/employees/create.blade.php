@@ -22,7 +22,7 @@
                         <div class="form-row row">
                             <div class="mb-3 col-md-6">
                                 <label for="code">Employee Code</label>
-                                <input type="text" class="form-control" name="code" id="code" value="{{ $newEmployeeCode }}"
+                                <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $newEmployeeCode) }}"
                                     placeholder="Employee Code" readonly required>
                                 <div class="invalid-feedback">Please provide a valid employee code.</div>
                             </div>
@@ -89,8 +89,11 @@
                                 <label for="branch_id">Branch</label>
                                 <select name="branch" id="branch_id" class="form-control" required value="{{ old('branch') }}" onchange="selectDepartmentsByBranch(this.value);">
                                     <option value="">Select Branch</option>
-                                    @if(old('branch') || old('company'))
-                                        @foreach ($branches->where('company_id', old('company')) as $branch)
+                                    @if(old('branch') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($branches->where('company_id', $seletedCompanyId) as $branch)
                                             <option value="{{ $branch->id }}"
                                                 {{ old('branch') == $branch->id ? 'selected' : '' }}>
                                                 {{ $branch->name }}
@@ -119,8 +122,11 @@
                                 <label for="designation_id">Designation</label>
                                 <select name="designation" id="designation_id" class="form-control" required value="{{ old('designation') }}">
                                     <option value="">Select Designation</option>
-                                    @if(old('designation') || old('company'))
-                                        @foreach ($designations->where('company_id', old('company')) as $designation)
+                                    @if(old('designation') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($designations->where('company_id', $seletedCompanyId) as $designation)
                                             <option value="{{ $designation->id }}"
                                                 {{ old('designation') == $designation->id ? 'selected' : '' }}>
                                                 {{ $designation->name }}

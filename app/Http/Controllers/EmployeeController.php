@@ -107,9 +107,6 @@ class EmployeeController extends Controller
 
     public function getCompanyByEmployee($employeeId)
     {
-        if (!auth()->user()->hasPermission('Employee List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         // Fetch the loan record for the given employee ID
         $company_id = Employee::where('id', $employeeId)->value('company_id');
         $company = Company::findOrFail($company_id);
@@ -119,9 +116,6 @@ class EmployeeController extends Controller
 
     public function getEmployeeDetails($employeeId)
     {
-        if (!auth()->user()->hasPermission('Employee List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         // Fetch the loan record for the given employee ID
         $employee = Employee::findOrFail($employeeId);
         $branch = Branch::findOrFail($employee->branch_id);
@@ -147,18 +141,12 @@ class EmployeeController extends Controller
 
     public function getEmployeesByCompany($companyId)
     {
-        if (!auth()->user()->hasPermission('Employee List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $employees = Employee::where('company_id', $companyId)->get();
         return response()->json(['employees' => $employees]);
     }
 
     public function createCodeByCompany($companyId)
     {
-        if (!auth()->user()->hasPermission('Employee List')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
         $employee_code = $this->employeeService->createEmployeeCode($companyId);
         return response()->json(['employee_code' => $employee_code]);
     }
