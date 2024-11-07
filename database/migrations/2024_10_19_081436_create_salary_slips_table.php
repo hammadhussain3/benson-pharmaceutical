@@ -11,9 +11,7 @@ class CreateSalarySlipsTable extends Migration
         Schema::create('salary_slips', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained()->onDelete('cascade'); // Assuming you have an employees table
-            $table->integer('auth_leave')->default(0);
-            $table->integer('unauth_leave')->default(0);
-            $table->decimal('approved_with_pay', 10, 2)->default(0);
+            $table->json('leaves')->nullable();
             $table->decimal('late_in_early_out_deduction', 10, 2)->default(0);
             $table->decimal('overtime', 10, 2)->default(0);
             $table->decimal('arrears', 10, 2)->default(0);

@@ -11,9 +11,7 @@ class SalarySlip extends Model
 
     protected $fillable = [
         'employee_id',
-        'auth_leave',
-        'unauth_leave',
-        'approved_with_pay',
+        'leaves',
         'late_in_early_out_deduction',
         'overtime',
         'arrears',
@@ -23,6 +21,10 @@ class SalarySlip extends Model
         'month',
         'year',
         'company_id',
+    ];
+
+    protected $casts = [
+        'leaves' => 'array',
     ];
 
     public function employee()

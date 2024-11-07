@@ -147,6 +147,21 @@
                                 <input type="hidden" name="designation_id" id="designation_id" required>
                             </div>
 
+                            @if (old('employee') || old('leaves'))
+                                @php
+                                    $leaveTypes = App\Models\LeaveType::where('company_id', old('company'))->get();
+                                    $oldLeaves = old('leaves', []);
+                                    $oldLeavesId = old('leave_id', []);
+                                @endphp
+
+                                @foreach ($leaveTypes as $index => $leave)
+                                    <div class="mb-3 col-md-6 leaves">
+                                        <label for="leaves_{{ $leave->id }}">{{ $leave->name }}</label>
+                                        <input type="number" class="form-control" name="leaves[]" id="leaves_{{ $leave->id }}" value="{{ $oldLeaves[$index] ?? 0 }}" required readonly>
+                                        <input type="hidden" name="leave_id[]" id="leave_id_{{ $leave->id }}" value="{{ $oldLeavesId[$index] ?? 0 }}">
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('salary_slips.index') }}">Cancel</a>

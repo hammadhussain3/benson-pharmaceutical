@@ -9,6 +9,7 @@ use App\Models\Salary;
 use App\Models\SalarySlip;
 use App\Models\Company;
 use App\Models\SalaryTaxSlab;
+use App\Models\LeaveType;
 use Carbon\Carbon;
 use NumberFormatter;
 
@@ -55,8 +56,22 @@ class SalarySheetController extends Controller
 
         $salaryPerDay = $employee->net_salary / $daysInMonth;
         $salaryPerHour = $salaryPerDay / 8;
-        $authorizedAbsenceDeduction = $salaryPerDay * $salarySlip->auth_leave;
-        $unauthorizedAbsenceDeduction = $salarySlip->unauth_leave * (1.25 * $salaryPerDay);
+        $leaveIds = collect($salarySlip->leaves)->pluck('id');
+        $leaveTypes = LeaveType::whereIn('id', $leaveIds)->get()->keyBy('id');
+        $leaves = [];
+        $leavesTotalAmount = 0;
+        foreach ($salarySlip->leaves as $leave) {
+            if ($leaveType = $leaveTypes->get($leave['id'])) {
+                $leavePerDayDeduction = ($leaveType->deduction / 100) * $salaryPerDay;
+                $leaves[] = [
+                    'name' => $leaveType->name,
+                    'days' => $leave['days'],
+                    'per_day_deduction' => $leavePerDayDeduction,
+                    'total_deduction' => $leavePerDayDeduction * $leave['days'],
+                ];
+                $leavesTotalAmount += $leavePerDayDeduction * $leave['days'];
+            }
+        }
         $lateDeduction = $salaryPerHour * $salarySlip->late_in_early_out_deduction;
         $overtimePay = ($salaryPerHour * $salarySlip->overtime + (0.25 * $salaryPerHour));
         $loan = Loan::where('employee_id', $employee->id)
@@ -68,9 +83,9 @@ class SalarySheetController extends Controller
             ->where('slab_end', '>=', $employee->net_salary)
             ->first();
         $incomeTax = $taxSlab ? $salarySlip->income_tax : 0;
-        $totalDeductions = $authorizedAbsenceDeduction + $unauthorizedAbsenceDeduction + $lateDeduction + $loanDeduction + $incomeTax;
+        $totalDeductions = $leavesTotalAmount + $lateDeduction + $loanDeduction + $incomeTax;
         $netSalary = $employee->net_salary;
-        $totalDebit = $authorizedAbsenceDeduction + $unauthorizedAbsenceDeduction + $lateDeduction + $salarySlip->loan_advance + $incomeTax;
+        $totalDebit = $leavesTotalAmount + $lateDeduction + $salarySlip->loan_advance + $incomeTax;
         $totalCredit = $netSalary + $overtimePay + $salarySlip->arrears;
         $totalSalary = $totalCredit - $totalDebit;
         $totalSalaryRounded = round($totalSalary, 2);
@@ -89,8 +104,7 @@ class SalarySheetController extends Controller
             'totalSalary',
             'salaryPerDay',
             'netSalary',
-            'authorizedAbsenceDeduction',
-            'unauthorizedAbsenceDeduction',
+            'leaves',
             'lateDeduction',
             'overtimePay',
             'loanDeduction',

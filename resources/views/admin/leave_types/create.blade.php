@@ -20,11 +20,17 @@
                     <form action="{{ route('leave_types.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-row row">
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label for="name">Leave Type Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Leave Type Name" required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a valid leave type name.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="deduction">Deduction (%)</label>
+                                <input type="number" class="form-control" name="deduction" id="deduction"
+                                    placeholder="Deduction Amount Per Day" min="0" max="200" step="0.01" required value="{{ old('deduction') }}">
+                                <div class="invalid-feedback">Please provide a valid deduction amount.</div>
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">

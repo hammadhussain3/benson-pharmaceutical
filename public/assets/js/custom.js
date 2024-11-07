@@ -145,11 +145,18 @@ function SelectLeaves(employeeId) {
                     input.id = `leaves_${leave.leave_type_id}`;
                     input.required = true;
                     input.readOnly = true;
-                    input.value = leave.total_days; // Set the total days as the value
+                    input.value = leave.total_days;
+
+                    const nameInput = document.createElement('input');
+                    nameInput.type = 'hidden';
+                    nameInput.name = `leave_id[]`;
+                    nameInput.id = `leave_id_${leave.leave_type_id}`;
+                    nameInput.value = leave.leave_type_id;
 
                     // Append elements to the wrapper div
                     div.appendChild(label);
                     div.appendChild(input);
+                    div.appendChild(nameInput);
 
                     // Append the wrapper div to the container
                     container.appendChild(div);

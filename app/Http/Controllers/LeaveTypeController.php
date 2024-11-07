@@ -41,10 +41,13 @@ class LeaveTypeController extends Controller
         if (!auth()->user()->hasPermission('Leave Type Create')) {
             abort(403, 'Unauthorized action.');
         }
+        
         $data = [
             'name' => $request->name,
+            'deduction' => $request->deduction,
             'company_id' => $request->company
         ];
+
         LeaveType::create($data);
         return redirect()->route('leave_types.index')->with('success', 'Leave Type created successfully.');
     }
@@ -65,6 +68,7 @@ class LeaveTypeController extends Controller
         }
         $data = [
             'name' => $request->name,
+            'deduction' => $request->deduction,
             'company_id' => $request->company
         ];
         $leaveType->update($data);

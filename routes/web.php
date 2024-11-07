@@ -18,11 +18,13 @@ use App\Http\Controllers\{
     PartyController,
     PaymentTypeController,
     RoleController,
-    PermissionController,
     SalarySlipController,
     SalaryTaxSlabController,
     SupplierController,
     FranchiseController,
+    CategoryController,
+    PackingTypesController,
+    PackSizeController,
 };
 use App\Http\Controllers\SalarySheetController;
 
@@ -74,6 +76,13 @@ Route::middleware('auth')->group(function () {
     Route::get('roles/view/{id}', [RoleController::class, 'view'])->name('roles.view');
     Route::resource('suppliers', SupplierController::class);
     Route::resource('franchises', FranchiseController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::get('categories/view/{id}', [CategoryController::class, 'view'])->name('categories.view');
+    Route::resource('packingtypes', PackingTypesController::class);
+    Route::get('packingtypes/view/{id}', [PackingTypesController::class, 'view'])->name('packingtypes.view');
+
+    Route::resource('pack_size', PackSizeController::class);
+    Route::get('pack_size/view/{id}', [PackSizeController::class, 'view'])->name('pack_size.view');
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);

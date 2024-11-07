@@ -141,7 +141,7 @@ class LeaveController extends Controller
         $leaveTotals = Leave::where('employee_id', $employeeId)
             ->select('leave_type_id', DB::raw('SUM(days) as total_days'))
             ->groupBy('leave_type_id')
-            ->pluck('total_days', 'leave_type_id'); // returns an associative array [leave_type_id => total_days]
+            ->pluck('total_days', 'leave_type_id');
     
         // Map leave types with their total days, defaulting to 0 if not present in leaveTotals
         $leaveSummary = $leaveTypes->map(function ($leaveType) use ($leaveTotals) {

@@ -88,22 +88,16 @@
                         <td>-</td>
                         <td>{{ number_format($netSalary, 2) }}</td>
                     </tr>
-                    <tr>
-                        <td>Authorized Absence</td>
-                        <td>{{ $salarySlip->auth_leave }}</td>
-                        <td>-</td>
-                        <td>{{ number_format($salaryPerDay, 2) }}</td>
-                        <td>{{ number_format($authorizedAbsenceDeduction, 2) }}</td>
-                        <td>-</td>
-                    </tr>
-                    <tr>
-                        <td>Unauth. Absence</td>
-                        <td>{{ $salarySlip->unauth_leave }}</td>
-                        <td>-</td>
-                        <td>{{ number_format($salaryPerDay * 1.25, 2) }}</td>
-                        <td>{{ number_format($unauthorizedAbsenceDeduction, 2) }}</td>
-                        <td>-</td>
-                    </tr>
+                    @foreach ($leaves as $leave)
+                        <tr>
+                            <td>{{ $leave['name'] }}</td>
+                            <td>{{ $leave['days'] }}</td>
+                            <td>-</td>
+                            <td>{{ number_format($leave['per_day_deduction'], 2) }}</td>
+                            <td>{{ number_format($leave['total_deduction'], 2) }}</td>
+                            <td>-</td>
+                        </tr>
+                    @endforeach
                     <tr>
                         <td>Late In / Early Out</td>
                         <td></td>
@@ -162,7 +156,7 @@
             </div>
             <br>
             <br>
-            <div style="display: flex; justify-content: space-around; margin-top: 50px;">
+            <div style="display: flex; justify-content: space-around; margin-top: 45px;">
                 <div style="width: 200px; text-align: center;">
                     <hr style="width: 100%;">
                     <span style="font-size: 14px; margin-top: 10px;">Prepared by</span>
@@ -181,7 +175,7 @@
                 </div>
             </div>
 
-            <div style="margin-top: 30px; font-size: 14px;">
+            <div style="margin-top: 15px; font-size: 14px;">
                 <strong>Note:</strong> Claims (if any) must be lodged with the departmental head within seven (7) days
                 from the receipt of the above amount.
             </div>

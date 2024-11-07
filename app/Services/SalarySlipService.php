@@ -29,6 +29,13 @@ class SalarySlipService
             $loan->update(['remaining' => $loanAmount]);
         }
 
+        $data['leaves'] = array_map(function ($id, $days) {
+            return [
+                'id' => $id,
+                'days' => $days,
+            ];
+        }, $data['leave_id'], $data['leaves']);
+
         return SalarySlip::create($data);
     }
 
@@ -40,6 +47,13 @@ class SalarySlipService
         $data['year'] = $date->format('Y');
         $data['employee_id'] = $data['employee'];
         $data['company_id'] = $data['company'];
+
+        $data['leaves'] = array_map(function ($id, $days) {
+            return [
+                'id' => $id,
+                'days' => $days,
+            ];
+        }, $data['leave_id'], $data['leaves']);
 
         $salarySlip->update($data);
     }

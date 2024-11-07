@@ -15,9 +15,11 @@ class SalarySlipRequest extends FormRequest
     {
         return [
             'employee' => 'required|exists:employees,id',
-            'auth_leave' => 'required|integer|min:0',
-            'unauth_leave' => 'required|integer|min:0',
-            'approved_with_pay' => 'required|numeric|min:0',
+            // 'auth_leave' => 'required|integer|min:0',
+            // 'unauth_leave' => 'required|integer|min:0',
+            // 'approved_with_pay' => 'required|numeric|min:0',
+            'leaves' => 'required',
+            'leave_id' => 'required',
             'late_in_early_out_deduction' => 'required|numeric|min:0',
             'overtime' => 'required|numeric|min:0',
             'arrears' => 'required|numeric|min:0',

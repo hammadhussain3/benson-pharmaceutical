@@ -10,6 +10,7 @@ class StoreLeaveTypeRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'deduction' => 'required|numeric|min:0|max:200',
             'company' => 'required|exists:companies,id',
         ];
     }

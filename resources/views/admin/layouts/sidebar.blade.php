@@ -20,78 +20,84 @@
                     auth()->user()->hasPermission('Roles List') ||
                     auth()->user()->hasPermission('Users List')
                 )
-                    <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Admin</span></li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Bank List'))
-                    <li>
-                        <a class="{{ request()->is('banks*') ? 'active' : '' }}" href="{{ route('banks.index') }}">
-                            <i class="fa fa-building"></i>
-                            <span>Banks</span>
+                    <li class="submenu">
+                        <a class="{{ request()->is('banks*') ||
+                        request()->is('branches*') ||
+                        request()->is('cities*') ||
+                        request()->is('companies*') ||
+                        request()->is('countries*') ||
+                        request()->is('departments*') ||
+                        request()->is('roles*') ||
+                        request()->is('users*') ? 'active' : '' }}" href="javascript:void(0);">
+                            <span>Admin</span>
+                            <span class="menu-arrow"></span>
                         </a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Branches List'))
-                    <li>
-                        <a class="{{ request()->is('branches*') ? 'active' : '' }}" href="{{ route('branches.index') }}">
-                            <i class="fa fa-code-branch"></i>
-                            <span>Branches</span>
-                        </a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Cities List'))
-                    <li>
-                        <a class="{{ request()->is('cities*') ? 'active' : '' }}" href="{{ route('cities.index') }}">
-                            <i class="fa fa-city"></i>
-                            <span>Cities</span>
-                        </a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Companies List'))
-                    <li>
-                        <a class="{{ request()->is('companies*') ? 'active' : '' }}" href="{{ route('companies.index') }}">
-                            <i class="fa fa-building"></i>
-                            <span>Companies</span>
-                        </a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Countries List'))
-                    <li>
-                        <a class="{{ request()->is('countries*') ? 'active' : '' }}" href="{{ route('countries.index') }}">
-                            <i class="fa fa-globe"></i>
-                            <span>Countries</span>
-                        </a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Departments List'))
-                    <li>
-                        <a class="{{ request()->is('departments*') ? 'active' : '' }}" href="{{ route('departments.index') }}">
-                            <i class="fa fa-sitemap"></i>
-                            <span>Departments</span>
-                        </a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Roles List'))
-                    <li>
-                        <a class="{{ request()->is('roles*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
-                            <i class="fa fa-lock"></i>
-                            <span>Roles</span>
-                        </a>
-                    </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Users List'))
-                    <li>
-                        <a class="{{ request()->is('users*') ? 'active' : '' }}" href="{{ route('users.index') }}">
-                            <i class="fa fa-user"></i>
-                            <span>Users</span>
-                        </a>
+                        <ul>
+                            @if(auth()->user()->hasPermission('Bank List'))
+                                <li>
+                                    <a class="{{ request()->is('banks*') ? 'active' : '' }}" href="{{ route('banks.index') }}">
+                                        <i class="fa fa-building me-1"></i>
+                                        Banks
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Branches List'))
+                                <li>
+                                    <a class="{{ request()->is('branches*') ? 'active' : '' }}" href="{{ route('branches.index') }}">
+                                        <i class="fa fa-code-branch me-1"></i>
+                                        Branches
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Cities List'))
+                                <li>
+                                    <a class="{{ request()->is('cities*') ? 'active' : '' }}" href="{{ route('cities.index') }}">
+                                        <i class="fa fa-city me-1"></i>
+                                        Cities
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Companies List'))
+                                <li>
+                                    <a class="{{ request()->is('companies*') ? 'active' : '' }}" href="{{ route('companies.index') }}">
+                                        <i class="fa fa-building me-1"></i>
+                                        Companies
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Countries List'))
+                                <li>
+                                    <a class="{{ request()->is('countries*') ? 'active' : '' }}" href="{{ route('countries.index') }}">
+                                        <i class="fa fa-globe me-1"></i>
+                                        Countries
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Departments List'))
+                                <li>
+                                    <a class="{{ request()->is('departments*') ? 'active' : '' }}" href="{{ route('departments.index') }}">
+                                        <i class="fa fa-sitemap me-1"></i>
+                                        Departments
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Roles List'))
+                                <li>
+                                    <a class="{{ request()->is('roles*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
+                                        <i class="fa fa-lock me-1"></i>
+                                        Roles
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Users List'))
+                                <li>
+                                    <a class="{{ request()->is('users*') ? 'active' : '' }}" href="{{ route('users.index') }}">
+                                        <i class="fa fa-user me-1"></i>
+                                        Users
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
                     </li>
                 @endif
 
@@ -104,113 +110,148 @@
                     auth()->user()->hasPermission('Salaries List') ||
                     auth()->user()->hasPermission('Salary Tax Slabs List')
                 )
-                    <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Human Resource</span></li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Designation List'))
-                <li>
-                    <a class="{{ request()->is('designations*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
-                        <i class="fa fa-briefcase"></i>
-                        <span>Designations</span>
-                    </a>
-                </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Employee List'))
-                <li>
-                    <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
-                        <i class="fa fa-users"></i>
-                        <span>Employees</span>
-                    </a>
-                </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Leave List'))
-                <li>
-                    <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
-                        <i class="fa fa-calendar"></i>
-                        <span>Leave</span>
-                    </a>
-                </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Leave Type List'))
-                <li>
-                    <a class="{{ request()->is('leave_types*') ? 'active' : '' }}"
-                        href="{{ route('leave_types.index') }}">
-                        <i class="fa fa-tags"></i>
-                        <span>Leave Type</span>
-                    </a>
-                </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Loan List'))
-                <li>
-                    <a class="{{ request()->is('loans*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
-                        <i class="fa fa-handshake"></i>
-                        <span>Loan</span>
-                    </a>
-                </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Salaries List'))
-                <li>
-                    <a class="{{ request()->is('salary_slips*') ? 'active' : '' }}"
-                        href="{{ route('salary_slips.index') }}">
-                        <i class="fa fa-calculator"></i>
-                        <span>Salaries</span>
-                    </a>
-                </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Salary Tax Slabs List'))
-                <li>
-                    <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
-                        <i class="fa fa-handshake"></i>
-                        <span>Salary Tax Slabs</span>
-                    </a>
-                </li>
-                @endif
-
-                {{-- <li>
-                    <a class="{{ request()->is('salary-sheet*') ? 'active' : '' }}"
-                        href="{{ route('salary.sheet.index') }}">
-                        <i class="fa fa-book"></i>
-                        <span>Salary Sheet</span>
-                    </a>
-                </li> --}}
+                    <li class="submenu">
+                        <a class="{{ request()->is('designations*') ||
+                        request()->is('employees*') ||
+                        request()->is('leaves*') ||
+                        request()->is('leave_types*') ||
+                        request()->is('loans*') ||
+                        request()->is('salary_slips*') ||
+                        request()->is('tax-slabs*') ? 'active' : '' }}" href="javascript:void(0);">
+                            <span>Human Resource</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul>
+                            @if(auth()->user()->hasPermission('Designation List'))
+                                <li>
+                                    <a class="{{ request()->is('designations*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
+                                        <i class="fa fa-briefcase me-1"></i>
+                                        Designations
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Employee List'))
+                                <li>
+                                    <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
+                                        <i class="fa fa-users me-1"></i>
+                                        Employees
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Leave List'))
+                                <li>
+                                    <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
+                                        <i class="fa fa-calendar me-1"></i>
+                                        Leave
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Leave Type List'))
+                                <li>
+                                    <a class="{{ request()->is('leave_types*') ? 'active' : '' }}" href="{{ route('leave_types.index') }}">
+                                        <i class="fa fa-tags me-1"></i>
+                                        Leave Type
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Loan List'))
+                                <li>
+                                    <a class="{{ request()->is('loans*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
+                                        <i class="fa fa-handshake me-1"></i>
+                                        Loan
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Salaries List'))
+                                <li>
+                                    <a class="{{ request()->is('salary_slips*') ? 'active' : '' }}" href="{{ route('salary_slips.index') }}">
+                                        <i class="fa fa-calculator me-1"></i>
+                                        Salaries
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Salary Tax Slabs List'))
+                                <li>
+                                    <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
+                                        <i class="fa fa-percent me-1"></i>
+                                        Salary Tax Slabs
+                                    </a>
+                                </li>
+                            @endif
+                            {{-- <li>
+                                <a class="{{ request()->is('salary-sheet*') ? 'active' : '' }}" href="{{ route('salary.sheet.index') }}">Salary Sheet</a>
+                            </li> --}}
+                        </ul>
+                    </li>
+                @endif                
 
                 @if(
+                    auth()->user()->hasPermission('Category List') ||
                     auth()->user()->hasPermission('Supplier List') ||
+                    auth()->user()->hasPermission('PackSize List') ||
+                    auth()->user()->hasPermission('PackingType List') ||
+                    auth()->user()->hasPermission('Payment Types List') ||
                     auth()->user()->hasPermission('Franchise List')
                 )
-                    <li><span class="fst-italic fw-bold" style="color: #ff9f43;">Procurement</span></li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Franchise List'))
-                <li>
-                    <a class="{{ request()->is('franchises*') ? 'active' : '' }}" href="{{ route('franchises.index') }}">
-                        <i class="fa fa-users"></i>
-                        <span>Franchises</span>
+                <li class="submenu">
+                    <a class="{{ request()->is('categories*') ||
+                    request()->is('franchises*') ||
+                    request()->is('pack_size*') ||
+                    request()->is('packingtypes*') ||
+                    request()->is('payment_types*') ||
+                    request()->is('suppliers*') ? 'active' : '' }}" href="javascript:void(0);">
+                        <span>Procurement</span>
+                        <span class="menu-arrow"></span>
                     </a>
-                </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Payment Types List'))
-                <li>
-                    <a class="{{ request()->is('payment_types*') ? 'active' : '' }}" href="{{ route('payment_types.index') }}">
-                        <i class="fa fa-credit-card"></i>
-                        <span>Payment Types</span>
-                    </a>
-                </li>
-                @endif
-
-                @if(auth()->user()->hasPermission('Supplier List'))
-                <li>
-                    <a class="{{ request()->is('suppliers*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
-                        <i class="fa fa-users"></i>
-                        <span>Suppliers</span>
-                    </a>
+                    <ul>
+                        @if(auth()->user()->hasPermission('Category List'))
+                            <li>
+                                <a class="{{ request()->is('categories*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
+                                    <i class="fa fa-layer-group me-1"></i>
+                                    Categories
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Franchise List'))
+                            <li>
+                                <a class="{{ request()->is('franchises*') ? 'active' : '' }}" href="{{ route('franchises.index') }}">
+                                    <i class="fa fa-truck me-1"></i>Franchises
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('PackSize List'))
+                            <li>
+                                <a class="{{ request()->is('pack_size*') ? 'active' : '' }}" href="{{ route('pack_size.index') }}">
+                                    <i class="fa fa-boxes me-1"></i>
+                                    Pack Size
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('PackingType List'))
+                            <li>
+                                <a class="{{ request()->is('packingtypes*') ? 'active' : '' }}" href="{{ route('packingtypes.index') }}">
+                                    <i class="fa fa-box me-1"></i>
+                                    Packing Types
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Payment Types List'))
+                            <li>
+                                <a class="{{ request()->is('payment_types*') ? 'active' : '' }}" href="{{ route('payment_types.index') }}">
+                                    <i class="fa fa-credit-card me-1"></i>
+                                    Payment Types
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Supplier List'))
+                            <li>
+                                <a class="{{ request()->is('suppliers*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Supplier
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
                 </li>
                 @endif
 

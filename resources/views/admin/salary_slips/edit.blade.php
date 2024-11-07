@@ -21,11 +21,10 @@
                         class="needs-validation" novalidate>
                         @csrf
                         @method('PUT')
-                        <div class="form-row row">
-
+                        <div class="form-row row" id="formContainer">
                             <div class="mb-3 col-md-6">
                                 <label for="employee">Employee</label>
-                                <select name="employee" id="employee" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelecLeaves(this.value); SelectIncomeTax(this.value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
+                                <select name="employee" id="employee" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelectLeaves(this.value); SelectIncomeTax(this.value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
                                     <option value="">Select Employee</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
@@ -112,27 +111,6 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="auth_leave">Approved Leave</label>
-                                <input type="number" class="form-control" name="auth_leave" id="auth_leave"
-                                    value="{{ old('auth_leave', $salarySlip->auth_leave) }}" required readonly>
-                                <div class="invalid-feedback">Please provide the number of approved leaves.</div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="unauth_leave">Unauthorized Leave</label>
-                                <input type="number" class="form-control" name="unauth_leave" id="unauth_leave"
-                                    value="{{ old('unauth_leave', $salarySlip->unauth_leave) }}" required readonly>
-                                <div class="invalid-feedback">Please provide the number of unauthorized leaves.</div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="approved_with_pay">Approved with Pay</label>
-                                <input type="number" class="form-control" name="approved_with_pay" id="approved_with_pay"
-                                    value="{{ old('approved_with_pay', $salarySlip->approved_with_pay) }}" required readonly>
-                                <div class="invalid-feedback">Please provide the approved amount with pay.</div>
-                            </div> 
-
-                            <div class="mb-3 col-md-6">
                                 <label for="basic_pay">Basic Pay</label>
                                 <input type="number" class="form-control" name="basic_pay" id="basic_pay"
                                     value="{{ old('basic_pay', $currentEmployee->basic_pay) }}" required readonly>
@@ -175,8 +153,21 @@
                                 <label for="designation">Designation</label>
                                 <input type="text" class="form-control" name="designation" id="designation" required readonly value="{{ old('designation', $singleDesignation->name) }}">
                                 <input type="hidden" name="designation_id" id="designation_id" required value="{{ old('designation_id', $singleDesignation->id) }}">
-                            </div>                                               
+                            </div>    
 
+                            @php
+                                $leaveTypes = App\Models\LeaveType::where('company_id', old('company', $salarySlip->company_id))->get();
+                                $savedLeaves = old('leaves', $salarySlip->leaves) ?? [];
+                                $savedLeavesId = old('leave_id', $salarySlip->leaves) ?? [];
+                            @endphp
+
+                            @foreach ($leaveTypes as $index => $leave)
+                                <div class="mb-3 col-md-6 leaves">
+                                    <label for="leaves_{{ $leave->id }}">{{ $leave->name }}</label>
+                                    <input type="number" class="form-control" name="leaves[]" id="leaves_{{ $leave->id }}" value="{{ old('leaves')[$index] ?? ($savedLeaves[$index]['days'] ?? 0) }}" required readonly>
+                                    <input type="hidden" name="leave_id[]" id="leave_id_{{ $leave->id }}" value="{{ old('leave_id')[$index] ?? $savedLeavesId[$index]['id'] ?? 0 }}">
+                                </div>
+                            @endforeach
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>
                         <a class="btn btn-secondary" href="{{ route('salary_slips.index') }}">Cancel</a>

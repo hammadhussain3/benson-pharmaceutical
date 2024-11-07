@@ -34,9 +34,6 @@
                             <th>Code</th>
                             <th>Name</th>
                             <th>Month</th>
-                            <th>Approved Leave</th>
-                            <th>Unauthorized Leave</th>
-                            <th>Approved with Pay</th>
                             <th>Late/Early Out Deduction</th>
                             <th>Overtime</th>
                             <th>Arrears</th>
@@ -58,9 +55,6 @@
                                 <td><a class="me-3" href="{{ route('salary.sheet.show', ['employee_id' => $salarySlip->employee_id, 'month' => $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT)]) }}">{{ $salarySlip->employee->code }}</a></td>
                                 <td>{{ $salarySlip->employee->first_name }} {{ $salarySlip->employee->last_name }}</td>
                                 <td>{{ DateTime::createFromFormat('!m', $salarySlip->month)->format('F') }} {{ $salarySlip->year }}</td>
-                                <td>{{ $salarySlip->auth_leave }}</td>
-                                <td>{{ $salarySlip->unauth_leave }}</td>
-                                <td>{{ $salarySlip->approved_with_pay }}</td>
                                 <td>{{ $salarySlip->late_in_early_out_deduction }}</td>
                                 <td>{{ $salarySlip->overtime }}</td>
                                 <td>{{ $salarySlip->arrears }}</td>

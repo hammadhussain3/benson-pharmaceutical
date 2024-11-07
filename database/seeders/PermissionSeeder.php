@@ -115,6 +115,21 @@ class PermissionSeeder extends Seeder
             ['id' => 98, 'name' => 'Franchise Update', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 99, 'name' => 'Franchise Delete', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 100, 'name' => 'Franchise View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 101, 'name' => 'Category List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 102, 'name' => 'Category Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 103, 'name' => 'Category Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 104, 'name' => 'Category Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 105, 'name' => 'Category View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 106, 'name' => 'PackingType List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 107, 'name' => 'PackingType Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 108, 'name' => 'PackingType Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 109, 'name' => 'PackingType Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 110, 'name' => 'PackingType View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 111, 'name' => 'PackSize List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 112, 'name' => 'PackSize Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 113, 'name' => 'PackSize Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 114, 'name' => 'PackSize Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 115, 'name' => 'PackSize View', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }
 }
