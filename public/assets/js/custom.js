@@ -435,6 +435,31 @@ function selectEmployee(companyId)
     }
 }
 
+function selectProductGroups(companyId)
+{
+    var productGroupSelect = document.getElementById('product_group_id');
+    
+    if (companyId && productGroupSelect) {
+        productGroupSelect.innerHTML = '<option value="">Select Product Group</option>';
+        fetch(`/companies/${companyId}/product-groups`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.productGroups.forEach(function (productGroup) {
+                    var option = document.createElement('option');
+                    option.value = productGroup.id;
+                    option.textContent = productGroup.name;
+                    productGroupSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
 function createEmployeeCode(companyId)
 {
     var code = document.getElementById('code');

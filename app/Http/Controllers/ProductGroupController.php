@@ -6,6 +6,7 @@ use App\Models\ProductGroup;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductGroupRequest;
+use App\Models\Company;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -18,7 +19,7 @@ class ProductGroupController extends Controller
     {
         $productGroups = ProductGroup::paginate();
 
-        return view('product-group.index', compact('productGroups'))
+        return view('admin.product-group.index', compact('productGroups'))
             ->with('i', ($request->input('page', 1) - 1) * $productGroups->perPage());
     }
 
@@ -28,8 +29,8 @@ class ProductGroupController extends Controller
     public function create(): View
     {
         $productGroup = new ProductGroup();
-
-        return view('product-group.create', compact('productGroup'));
+        $companies = Company::orderBy('name', 'asc')->get();
+        return view('admin.product-group.create', compact('productGroup','companies'));
     }
 
     /**
@@ -50,7 +51,7 @@ class ProductGroupController extends Controller
     {
         $productGroup = ProductGroup::find($id);
 
-        return view('product-group.show', compact('productGroup'));
+        return view('admin.product-group.show', compact('productGroup'));
     }
 
     /**
@@ -59,8 +60,8 @@ class ProductGroupController extends Controller
     public function edit($id): View
     {
         $productGroup = ProductGroup::find($id);
-
-        return view('product-group.edit', compact('productGroup'));
+        $companies = Company::orderBy('name', 'asc')->get();
+        return view('admin.product-group.edit', compact('productGroup','companies'));
     }
 
     /**
@@ -80,5 +81,11 @@ class ProductGroupController extends Controller
 
         return Redirect::route('product-groups.index')
             ->with('success', 'ProductGroup deleted successfully');
+    }
+
+    public function getProductGroupsByCompany($companyId)
+    {
+        $productGroups = ProductGroup::where('company_id', $companyId)->get();
+        return response()->json(['productGroups' => $productGroups]);
     }
 }

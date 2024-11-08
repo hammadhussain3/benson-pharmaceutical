@@ -212,6 +212,14 @@
                                 </a>
                             </li>
                         @endif
+                        @if(auth()->user()->hasPermission('Dosage Form List'))
+                        <li>
+                            <a class="{{ request()->is('dosage-forms*') ? 'active' : '' }}" href="{{ route('dosage-forms.index') }}">
+                                <i class="fa fa-store me-1"></i>
+                                Dosage Form
+                            </a>
+                        </li>
+                        @endif
                         @if(auth()->user()->hasPermission('Franchise List'))
                             <li>
                                 <a class="{{ request()->is('franchises*') ? 'active' : '' }}" href="{{ route('franchises.index') }}">
@@ -219,11 +227,11 @@
                                 </a>
                             </li>
                         @endif
-                        @if(auth()->user()->hasPermission('PackSize List'))
+                        @if(auth()->user()->hasPermission('PackForm List'))
                             <li>
-                                <a class="{{ request()->is('pack_size*') ? 'active' : '' }}" href="{{ route('pack_size.index') }}">
-                                    <i class="fa fa-boxes me-1"></i>
-                                    Pack Size
+                                <a class="{{ request()->is('pack-forms*') ? 'active' : '' }}" href="{{ route('pack-forms.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Pack Forms
                                 </a>
                             </li>
                         @endif
@@ -235,6 +243,14 @@
                                 </a>
                             </li>
                         @endif
+                        @if(auth()->user()->hasPermission('PackSize List'))
+                            <li>
+                                <a class="{{ request()->is('pack_size*') ? 'active' : '' }}" href="{{ route('pack_size.index') }}">
+                                    <i class="fa fa-boxes me-1"></i>
+                                    Pack Size
+                                </a>
+                            </li>
+                        @endif
                         @if(auth()->user()->hasPermission('Payment Types List'))
                             <li>
                                 <a class="{{ request()->is('payment_types*') ? 'active' : '' }}" href="{{ route('payment_types.index') }}">
@@ -243,11 +259,35 @@
                                 </a>
                             </li>
                         @endif
+                        @if(auth()->user()->hasPermission('Product List'))
+                            <li>
+                                <a class="{{ request()->is('products*') ? 'active' : '' }}" href="{{ route('products.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Products
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('ProductGroup List'))
+                            <li>
+                                <a class="{{ request()->is('product-groups*') ? 'active' : '' }}" href="{{ route('product-groups.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Product Groups
+                                </a>
+                            </li>
+                        @endif
                         @if(auth()->user()->hasPermission('Supplier List'))
                             <li>
                                 <a class="{{ request()->is('suppliers*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
                                     <i class="fa fa-store me-1"></i>
                                     Supplier
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Tax List'))
+                            <li>
+                                <a class="{{ request()->is('taxes*') ? 'active' : '' }}" href="{{ route('taxes.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Taxes
                                 </a>
                             </li>
                         @endif

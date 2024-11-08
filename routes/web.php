@@ -25,6 +25,11 @@ use App\Http\Controllers\{
     CategoryController,
     PackingTypesController,
     PackSizeController,
+    TaxController,
+    DosageFormController,
+    ProductGroupController,
+    PackFormController,
+    ProductController,
 };
 use App\Http\Controllers\SalarySheetController;
 
@@ -80,14 +85,19 @@ Route::middleware('auth')->group(function () {
     Route::get('categories/view/{id}', [CategoryController::class, 'view'])->name('categories.view');
     Route::resource('packingtypes', PackingTypesController::class);
     Route::get('packingtypes/view/{id}', [PackingTypesController::class, 'view'])->name('packingtypes.view');
-
     Route::resource('pack_size', PackSizeController::class);
     Route::get('pack_size/view/{id}', [PackSizeController::class, 'view'])->name('pack_size.view');
+    Route::resource('taxes', TaxController::class);
+    Route::resource('dosage-forms', DosageFormController::class);
+    Route::resource('product-groups', ProductGroupController::class);
+    Route::resource('pack-forms', PackFormController::class);
+    Route::resource('products', ProductController::class);
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
     Route::get('/companies/{companyId}/designations', [DesignationController::class, 'getDesignationsByCompany']);
     Route::get('/companies/{companyId}/employees', [EmployeeController::class, 'getEmployeesByCompany']);
+    Route::get('/companies/{companyId}/product-groups', [ProductGroupController::class, 'getProductGroupsByCompany']);
     Route::get('/companies/{companyId}/employee-code', [EmployeeController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/supplier-code', [SupplierController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/franchise-code', [FranchiseController::class, 'createCodeByCompany']);
@@ -107,3 +117,7 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
