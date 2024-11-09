@@ -8,7 +8,12 @@ class DosageFormService
 {
     public function getAllDosageForms()
     {
-        return DosageForm::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $dosageForm = DosageForm::orderBy('name', 'asc')->get();
+        } else {
+            $dosageForm = DosageForm::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $dosageForm;
     }
 
     public function createDosageForm(array $data)

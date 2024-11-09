@@ -30,6 +30,7 @@ use App\Http\Controllers\{
     ProductGroupController,
     PackFormController,
     ProductController,
+    ProductVariationController,
 };
 use App\Http\Controllers\SalarySheetController;
 
@@ -92,12 +93,18 @@ Route::middleware('auth')->group(function () {
     Route::resource('product-groups', ProductGroupController::class);
     Route::resource('pack-forms', PackFormController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('product-variations', ProductVariationController::class);
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
     Route::get('/companies/{companyId}/designations', [DesignationController::class, 'getDesignationsByCompany']);
     Route::get('/companies/{companyId}/employees', [EmployeeController::class, 'getEmployeesByCompany']);
     Route::get('/companies/{companyId}/product-groups', [ProductGroupController::class, 'getProductGroupsByCompany']);
+    Route::get('/companies/{companyId}/products', [ProductController::class, 'getProductsByCompany']);
+    Route::get('/companies/{companyId}/dosage-forms', [DosageFormController::class, 'getDosageFormsByCompany']);
+    Route::get('/companies/{companyId}/pack-forms', [PackFormController::class, 'getPackFormsByCompany']);
+    Route::get('/companies/{companyId}/pack-sizes', [PackSizeController::class, 'getPackSizesByCompany']);
+    Route::get('/companies/{companyId}/packing-types', [PackingTypesController::class, 'getPackingTypesByCompany']);
     Route::get('/companies/{companyId}/employee-code', [EmployeeController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/supplier-code', [SupplierController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/franchise-code', [FranchiseController::class, 'createCodeByCompany']);

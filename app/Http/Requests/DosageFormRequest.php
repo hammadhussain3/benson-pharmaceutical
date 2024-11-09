@@ -23,7 +23,7 @@ class DosageFormRequest extends FormRequest
     {
         return [
 			'name' => 'required|string|max:255',
-			'description' => 'string',
+			'description' => 'nullable|string',
 			'company' => 'required|exists:companies,id',
         ];
     }

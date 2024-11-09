@@ -42,19 +42,15 @@
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Name" value="{{ old('name', $category->name) }}" required>
-                                <div class="invalid-feedback">Please provide a name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="address">Prefix</label>
                                 <input type="text" class="form-control" name="prefix" placeholder="Prefix"
                                     value="{{ old('prefix', $category->prefix) }}" required>
-                                <div class="invalid-feedback">Please provide an prefix.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="phone">Description</label>
-                                <input type="text" class="form-control" name="description" placeholder="Description"
-                                    value="{{ old('description', $category->description) }}" required>
-                                <div class="invalid-feedback">Please provide a Description.</div>
+                                <textarea name="description" id="description" class="form-control" placeholder="Description...">{{ old('description', $category->description) }}</textarea>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

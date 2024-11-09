@@ -9,7 +9,12 @@ class DepartmentService
 {
     public function getAllDepartments()
     {
-        return Department::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $department = Department::orderBy('name', 'asc')->get();
+        } else {
+            $department = Department::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $department;
     }
 
     public function createDepartment(array $data)

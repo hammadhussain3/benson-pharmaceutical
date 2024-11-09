@@ -28,7 +28,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company">Company</label>
-                                <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="createFranchiseCode(this.value);" @endrole>
+                                <select name="company" id="company" class="js-example-basic-single select2" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"

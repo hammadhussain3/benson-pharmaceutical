@@ -8,7 +8,12 @@ class TaxService
 {
     public function getAllTaxes()
     {
-        return Tax::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $tax = Tax::orderBy('name', 'asc')->get();
+        } else {
+            $tax = Tax::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $tax;
     }
 
     public function createTax(array $data)

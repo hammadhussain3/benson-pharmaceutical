@@ -8,22 +8,23 @@ class PackSizeService
 {
     public function getAllPackSize()
     {
-        return PackSize::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $packSize = PackSize::orderBy('name', 'asc')->get();
+        } else {
+            $packSize = PackSize::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $packSize;
     }
 
     public function createPackSize(array $data)
     {
-        $data['name'] = $data['name'];
         $data['company_id'] = $data['company'];
-        $data['description'] = $data['description'];
         return PackSize::create($data);
     }
 
     public function updatePackSize(PackSize $packsize, array $data)
     {
-        $data['name'] = $data['name'];
         $data['company_id'] = $data['company'];
-        $data['description'] = $data['description'];
         $packsize->update($data);
         return $packsize;
     }

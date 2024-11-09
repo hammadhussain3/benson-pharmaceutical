@@ -6,7 +6,7 @@
             <div class="col-sm-12">
                 <h3 class="page-title">Product Group Details</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('product-groups.index') }}">Product Group</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Product Groups</a></li>
                     <li class="breadcrumb-item active">Product Group Details</li>
                 </ul>
             </div>
@@ -29,8 +29,6 @@
                             <label>Name</label>
                             <input type="text" class="form-control" value="{{ $productGroup->name ?? 'N/A' }}" readonly>
                         </div>
-
-                        
                     </div>
                     <div class="row justify-content-between align-items-center">
                         <div class="col-auto">

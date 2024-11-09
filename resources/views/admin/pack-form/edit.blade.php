@@ -25,7 +25,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select class="js-example-basic-single select2" name="company_id" required>
+                                <select class="js-example-basic-single select2" name="company" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -44,11 +44,9 @@
                                     placeholder="Name" value="{{ old('name', $packForm->name) }}" required>
                                 <div class="invalid-feedback">Please provide a name.</div>
                             </div>
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-12">
                                 <label for="phone">Description</label>
-                                <input type="text" class="form-control" name="description" placeholder="Description"
-                                    value="{{ old('description', $packForm->description) }}" required>
-                                <div class="invalid-feedback">Please provide a Description.</div>
+                                <textarea class="form-control" name="description" id="description" placeholder="Description...">{{ old('description', $packForm->description) }}</textarea>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

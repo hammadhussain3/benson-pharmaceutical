@@ -3,84 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductGroup;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Http\Requests\ProductGroupRequest;
-use App\Models\Company;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Services\ProductGroupService;
+use App\Services\CompanyService;
 
 class ProductGroupController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request): View
-    {
-        $productGroups = ProductGroup::paginate();
+    protected $companyService;
+    protected $productGroupService;
 
-        return view('admin.product-group.index', compact('productGroups'))
-            ->with('i', ($request->input('page', 1) - 1) * $productGroups->perPage());
+    public function __construct(ProductGroupService $productGroupService, CompanyService $companyService)
+    {
+        $this->companyService = $companyService;
+        $this->productGroupService = $productGroupService;
+    }
+
+    public function index()
+    {
+        $productGroups = $this->productGroupService->getAllProductGroups();
+        return view('admin.product-group.index', compact('productGroups'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
-        $productGroup = new ProductGroup();
-        $companies = Company::orderBy('name', 'asc')->get();
-        return view('admin.product-group.create', compact('productGroup','companies'));
+        $companies = $this->companyService->getAllCompanies();
+        return view('admin.product-group.create', compact('companies'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductGroupRequest $request): RedirectResponse
+    public function store(ProductGroupRequest $request)
     {
-        ProductGroup::create($request->validated());
-
-        return Redirect::route('product-groups.index')
-            ->with('success', 'ProductGroup created successfully.');
+        $this->productGroupService->createProductGroup($request->validated());
+        return redirect()->route('product-groups.index')->with('success', 'Product Group created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id): View
+    public function show($id)
     {
-        $productGroup = ProductGroup::find($id);
-
+        $productGroup = $this->productGroupService->getProductGroupById($id);
         return view('admin.product-group.show', compact('productGroup'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): View
+    public function edit($id)
     {
-        $productGroup = ProductGroup::find($id);
-        $companies = Company::orderBy('name', 'asc')->get();
+        $productGroup = $this->productGroupService->getProductGroupById($id);
+        $companies = $this->companyService->getAllCompanies();
         return view('admin.product-group.edit', compact('productGroup','companies'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductGroupRequest $request, ProductGroup $productGroup): RedirectResponse
+    public function update(ProductGroupRequest $request, ProductGroup $productGroup)
     {
-        $productGroup->update($request->validated());
-
-        return Redirect::route('product-groups.index')
-            ->with('success', 'ProductGroup updated successfully');
+        $this->productGroupService->updateProductGroup($productGroup, $request->validated());
+        return redirect()->route('product-groups.index')->with('success', 'Product Group updated successfully');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(ProductGroup $productGroup)
     {
-        ProductGroup::find($id)->delete();
-
-        return Redirect::route('product-groups.index')
-            ->with('success', 'ProductGroup deleted successfully');
+        $this->productGroupService->deleteProductGroup($productGroup);
+        return redirect()->route('product-groups.index')->with('success', 'Product Group deleted successfully');
     }
 
     public function getProductGroupsByCompany($companyId)

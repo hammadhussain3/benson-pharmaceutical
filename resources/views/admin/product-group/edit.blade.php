@@ -6,7 +6,7 @@
             <div class="col-sm-12">
                 <h3 class="page-title">Edit Product Group</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('product-groups.index') }}">Product Group</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}">Product Groups</a></li>
                     <li class="breadcrumb-item active">Edit Product Group</li>
                 </ul>
             </div>
@@ -25,7 +25,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select class="js-example-basic-single select2" name="company_id" required>
+                                <select class="js-example-basic-single select2" name="company" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -33,16 +33,14 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ $productGroup->company_id }}">
+                                <input type="hidden" name="company" value="{{ $productGroup->company_id }}">
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Name" value="{{ old('name', $productGroup->name) }}" required>
-                                <div class="invalid-feedback">Please provide a name.</div>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

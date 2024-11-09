@@ -78,4 +78,10 @@ class ProductController extends Controller
         $this->productService->deleteProduct($id);
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
+
+    public function getProductsByCompany($companyId)
+    {
+        $products = Product::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        return response()->json(['products' => $products]);
+    }
 }

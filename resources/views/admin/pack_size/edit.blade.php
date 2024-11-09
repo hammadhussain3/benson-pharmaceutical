@@ -33,7 +33,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
                                 <input type="hidden" name="company" value="{{ $pack_size->company_id }}">
@@ -42,13 +41,10 @@
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Name" value="{{ old('name', $pack_size->name) }}" required>
-                                <div class="invalid-feedback">Please provide a name.</div>
                             </div>
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-12">
                                 <label for="phone">Description</label>
-                                <input type="text" class="form-control" name="description" placeholder="Description"
-                                    value="{{ old('description', $pack_size->description) }}" required>
-                                <div class="invalid-feedback">Please provide a Description.</div>
+                                <textarea class="form-control" name="description" id="description" placeholder="Description">{{ old('description', $pack_size->description) }}</textarea>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

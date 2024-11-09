@@ -155,6 +155,11 @@ class PermissionSeeder extends Seeder
             ['id' => 138, 'name' => 'PackForm Update', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 139, 'name' => 'PackForm Delete', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 140, 'name' => 'PackForm View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 141, 'name' => 'Product Variation List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 142, 'name' => 'Product Variation Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 143, 'name' => 'Product Variation Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 144, 'name' => 'Product Variation Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 145, 'name' => 'Product Variation View', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }
 }

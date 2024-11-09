@@ -6,16 +6,19 @@ use App\Http\Requests\PackSizeRequest;
 use App\Models\Company;
 use App\Models\PackSize;
 use App\Services\PackSizeService;
-use Illuminate\Http\Request;
+use App\Services\CompanyService;
 
 class PackSizeController extends Controller
 {
+    protected $companyService;
     protected $packsizeService;
 
-    public function __construct(PackSizeService $packsizeservice)
+    public function __construct(PackSizeService $packsizeservice, CompanyService $companyService)
     {
+        $this->companyService = $companyService;
         $this->packsizeService = $packsizeservice;
     }
+    
     public function index()
     {
         if (!auth()->user()->hasPermission('PackSize List')) {
@@ -31,7 +34,7 @@ class PackSizeController extends Controller
         if (!auth()->user()->hasPermission('PackSize Create')) {
             abort(403, 'Unauthorized action.');
         }
-        $companies = Company::orderBy('name', 'asc')->get();
+        $companies = $this->companyService->getAllCompanies();
         return view('admin.pack_size.create', compact('companies'));
     }
 
@@ -58,7 +61,7 @@ class PackSizeController extends Controller
         if (!auth()->user()->hasPermission('PackSize Update')) {
             abort(403, 'Unauthorized action.');
         }
-        $companies = Company::orderBy('name', 'asc')->get();
+        $companies = $this->companyService->getAllCompanies();
         return view('admin.pack_size.edit', compact('pack_size','companies'));
     }
 
@@ -84,5 +87,11 @@ class PackSizeController extends Controller
     {
         $pack_size = PackSize::where('company_id', $companyId)->get();
         return response()->json(['categories' => $pack_size]);
+    }
+
+    public function getPackSizesByCompany($companyId)
+    {
+        $packSizes = PackSize::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        return response()->json(['packSizes' => $packSizes]);
     }
 }

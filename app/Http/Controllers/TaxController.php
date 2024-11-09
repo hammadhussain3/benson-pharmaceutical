@@ -70,9 +70,9 @@ class TaxController extends Controller
         return redirect()->route('taxes.index')->with('success', 'Tax updated successfully');
     }
 
-    public function destroy($id)
+    public function destroy(Tax $tax)
     {
-        $this->taxService->deleteTax($id);
+        $this->taxService->deleteTax($tax);
         return redirect()->route('taxes.index')->with('success', 'Tax deleted successfully');
     }
 }

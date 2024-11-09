@@ -37,10 +37,8 @@
 
                         <div class="mb-3 col-md-6">
                             <label>Description</label>
-                            <input type="text" class="form-control" value="{{ $category->description ?? 'N/A' }}" readonly>
+                            <textarea class="form-control" readonly>{{ $category->description ?? 'N/A' }}</textarea>
                         </div>
-
-                        
                     </div>
                     <div class="row justify-content-between align-items-center">
                         <div class="col-auto">

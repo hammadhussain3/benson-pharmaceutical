@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Services\CategoryService;
+use App\Services\CompanyService;
 use App\Models\Category;
 use App\Models\Company;
 use Illuminate\Http\Request;
@@ -11,10 +12,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
+    protected $companyService;
     protected $categoryService;
 
-    public function __construct(CategoryService $categoryService)
+    public function __construct(CategoryService $categoryService, CompanyService $companyService)
     {
+        $this->companyService = $companyService;
         $this->categoryService = $categoryService;
     }
     public function index()
@@ -32,7 +35,7 @@ class CategoryController extends Controller
         if (!auth()->user()->hasPermission('Category Create')) {
             abort(403, 'Unauthorized action.');
         }
-        $companies = Company::orderBy('name', 'asc')->get();
+        $companies = $this->companyService->getAllCompanies();
         return view('admin.categories.create', compact('companies'));
     }
 
@@ -59,7 +62,7 @@ class CategoryController extends Controller
         if (!auth()->user()->hasPermission('Category Update')) {
             abort(403, 'Unauthorized action.');
         }
-        $companies = Company::orderBy('name', 'asc')->get();
+        $companies = $this->companyService->getAllCompanies();
         return view('admin.categories.edit', compact('category','companies'));
     }
 
@@ -83,7 +86,7 @@ class CategoryController extends Controller
 
     public function getCategoriesByCompany($companyId)
     {
-        $categories = Category::where('company_id', $companyId)->get();
+        $categories = Category::where('company_id', $companyId)->orderBy('name', 'asc')->get();
         return response()->json(['categories' => $categories]);
     }
 }

@@ -32,7 +32,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
@@ -42,14 +41,11 @@
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Name" required value="{{ old('name') }}">
-                                <div class="invalid-feedback">Please provide a name.</div>
-                            </div>
+\                            </div>
                             
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-12">
                                 <label for="description">Description</label>
-                                <input type="text" class="form-control" name="description" placeholder="Description"
-                                    required value="{{ old('description') }}">
-                                <div class="invalid-feedback">Please provide a Description.</div>
+                                <textarea class="form-control" name="description" id="description" placeholder="Description...">{{ old('description') }}</textarea>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

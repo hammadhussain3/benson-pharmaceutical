@@ -8,7 +8,12 @@ class PartyService
 {
     public function getAllParties()
     {
-        return Party::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $party = Party::orderBy('name', 'asc')->get();
+        } else {
+            $party = Party::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $party;
     }
 
     public function createParty(array $data)

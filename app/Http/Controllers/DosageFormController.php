@@ -70,9 +70,15 @@ class DosageFormController extends Controller
         return redirect()->route('dosage-forms.index')->with('success', 'DosageForm updated successfully');
     }
 
-    public function destroy($id)
+    public function destroy(DosageForm $dosageForm)
     {
-        $this->dosageFormService->deleteDosageForm($id);
+        $this->dosageFormService->deleteDosageForm($dosageForm);
         return redirect()->route('dosage-forms.index')->with('success', 'DosageForm deleted successfully');
+    }
+
+    public function getDosageFormsByCompany($companyId)
+    {
+        $dosageForms = DosageForm::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        return response()->json(['dosageForms' => $dosageForms]);
     }
 }

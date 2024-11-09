@@ -460,6 +460,131 @@ function selectProductGroups(companyId)
     }
 }
 
+function selectProducts(companyId)
+{
+    var productSelect = document.getElementById('product_id');
+    
+    if (companyId && productSelect) {
+        productSelect.innerHTML = '<option value="">Select Product</option>';
+        fetch(`/companies/${companyId}/products`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.products.forEach(function (product) {
+                    var option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = product.name;
+                    productSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function selectDosageForms(companyId)
+{
+    var dosageFormSelect = document.getElementById('dosage_form_id');
+    
+    if (companyId && dosageFormSelect) {
+        dosageFormSelect.innerHTML = '<option value="">Select Dosage Form</option>';
+        fetch(`/companies/${companyId}/dosage-forms`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.dosageForms.forEach(function (dosageForm) {
+                    var option = document.createElement('option');
+                    option.value = dosageForm.id;
+                    option.textContent = dosageForm.name;
+                    dosageFormSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function selectPackForms(companyId)
+{
+    var packFormSelect = document.getElementById('pack_form_id');
+    
+    if (companyId && packFormSelect) {
+        packFormSelect.innerHTML = '<option value="">Select Pack Form</option>';
+        fetch(`/companies/${companyId}/pack-forms`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.packForms.forEach(function (packForm) {
+                    var option = document.createElement('option');
+                    option.value = packForm.id;
+                    option.textContent = packForm.name;
+                    packFormSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function selectPackSizes(companyId)
+{
+    var packSizeSelect = document.getElementById('pack_size_id');
+    
+    if (companyId && packSizeSelect) {
+        packSizeSelect.innerHTML = '<option value="">Select Pack Size</option>';
+        fetch(`/companies/${companyId}/pack-sizes`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.packSizes.forEach(function (packSize) {
+                    var option = document.createElement('option');
+                    option.value = packSize.id;
+                    option.textContent = packSize.name;
+                    packSizeSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
+function selectPackingTypes(companyId)
+{
+    var packingTypeSelect = document.getElementById('packing_type_id');
+    
+    if (companyId && packingTypeSelect) {
+        packingTypeSelect.innerHTML = '<option value="">Select Packing Type</option>';
+        fetch(`/companies/${companyId}/packing-types`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching branches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.packingTypes.forEach(function (packingType) {
+                    var option = document.createElement('option');
+                    option.value = packingType.id;
+                    option.textContent = packingType.name;
+                    packingTypeSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching cities:', error));
+    }
+}
+
 function createEmployeeCode(companyId)
 {
     var code = document.getElementById('code');

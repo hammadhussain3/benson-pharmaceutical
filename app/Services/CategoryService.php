@@ -8,24 +8,23 @@ class CategoryService
 {
     public function getAllCategories()
     {
-        return Category::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $category = Category::orderBy('name', 'asc')->get();
+        } else {
+            $category = Category::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $category;
     }
 
     public function createCategory(array $data)
     {
-        $data['name'] = $data['name'];
-        $data['prefix'] = $data['prefix'];
         $data['company_id'] = $data['company'];
-        $data['description'] = $data['description'];
         return Category::create($data);
     }
 
     public function updateCategory(Category $category, array $data)
     {
-        $data['name'] = $data['name'];
-        $data['prefix'] = $data['prefix'];
         $data['company_id'] = $data['company'];
-        $data['description'] = $data['description'];
         $category->update($data);
         return $category;
     }

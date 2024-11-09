@@ -8,7 +8,12 @@ class ProductService
 {
     public function getAllProducts()
     {
-        return Product::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $product = Product::orderBy('name', 'asc')->get();
+        } else {
+            $product = Product::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $product;
     }
 
     public function createProduct(array $data)

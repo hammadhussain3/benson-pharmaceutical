@@ -25,7 +25,12 @@ class ChartOfAccountService
 
     public function getAllChartOfAccounts()
     {
-        return ChartOfAccount::orderBy('name', 'asc')->get(); // Or implement pagination as needed
+        if (auth()->user()->hasRole('Superadmin')) {
+            $chartOfAccount = ChartOfAccount::orderBy('name', 'asc')->get();
+        } else {
+            $chartOfAccount = ChartOfAccount::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $chartOfAccount;
     }
 
     public function getChartOfAccountById($id)

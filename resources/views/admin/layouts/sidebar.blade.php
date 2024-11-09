@@ -275,6 +275,14 @@
                                 </a>
                             </li>
                         @endif
+                        @if(auth()->user()->hasPermission('Product Variation List'))
+                            <li>
+                                <a class="{{ request()->is('product-variations*') ? 'active' : '' }}" href="{{ route('product-variations.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Product Variations
+                                </a>
+                            </li>
+                        @endif
                         @if(auth()->user()->hasPermission('Supplier List'))
                             <li>
                                 <a class="{{ request()->is('suppliers*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">

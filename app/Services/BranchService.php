@@ -9,7 +9,12 @@ class BranchService
 {
     public function getAllBranches()
     {
-        return Branch::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $branch = Branch::orderBy('name', 'asc')->get();
+        } else {
+            $branch = Branch::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $branch;
     }
 
     public function createBranch(array $data)

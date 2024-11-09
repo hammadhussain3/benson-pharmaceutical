@@ -1,28 +1,53 @@
 @extends('admin.layouts.app')
 
-@section('template_title')
-    {{ __('Create') }} Product Group
-@endsection
-
 @section('content')
-    <section class="content container-fluid">
+    <div class="page-header">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-sm-12">
+                <h3 class="page-title">Add New Product Group</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('categories.index') }}"> Product Groups</a></li>
+                    <li class="breadcrumb-item active">Add Product Group</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-                <div class="card card-default">
-                    <div class="card-header">
-                        <span class="card-title">{{ __('Create') }} Product Group</span>
-                    </div>
-                    <div class="card-body bg-white">
-                        <form method="POST" action="{{ route('product-groups.store') }}"  role="form" enctype="multipart/form-data">
-                            @csrf
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('product-groups.store') }}" method="POST" class="needs-validation" novalidate>
+                        @csrf
+                        <div class="form-row row">
+                            @role('Superadmin')
+                            <div class="mb-3 col-md-6">
+                                <label for="company_id">Company</label>
+                                <select class="js-example-basic-single select2" name="company" required>
+                                    <option value="">Select Company</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @else
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
 
-                            @include('admin.product-group.form')
-
-                        </form>
-                    </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" name="name" id="name"
+                                    placeholder="Name" required value="{{ old('name') }}">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Submit</button>
+                        <a class="btn btn-secondary" href="{{ route('product-groups.index') }}">Cancel</a>
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 @endsection

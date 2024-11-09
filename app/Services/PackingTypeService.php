@@ -2,33 +2,34 @@
 
 namespace App\Services;
 
-use App\Models\PackingTypes;
+use App\Models\PackingType;
 
 class PackingTypeService
 {
     public function getAllPackingTypes()
     {
-        return PackingTypes::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $packingType = PackingType::orderBy('name', 'asc')->get();
+        } else {
+            $packingType = PackingType::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $packingType;
     }
 
     public function createPackingType(array $data)
     {
-        $data['name'] = $data['name'];
         $data['company_id'] = $data['company'];
-        $data['description'] = $data['description'];
-        return PackingTypes::create($data);
+        return PackingType::create($data);
     }
 
-    public function updatePackingType(PackingTypes $packing_types, array $data)
+    public function updatePackingType(PackingType $packing_types, array $data)
     {
-        $data['name'] = $data['name'];
         $data['company_id'] = $data['company'];
-        $data['description'] = $data['description'];
         $packing_types->update($data);
         return $packing_types;
     }
 
-    public function deletePackingType(PackingTypes $packing_types)
+    public function deletePackingType(PackingType $packing_types)
     {
         $packing_types->delete();
         return true;
@@ -36,6 +37,6 @@ class PackingTypeService
 
     public function getPackingTypeById($id)
     {
-        return PackingTypes::findOrFail($id);
+        return PackingType::findOrFail($id);
     }
 }

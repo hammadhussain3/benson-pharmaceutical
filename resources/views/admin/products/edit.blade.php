@@ -70,7 +70,7 @@
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="product_group">Product Group</label>
-                                <select name="product_group" id="product_group_id" class="js-example-basic-single select2" required @role('Superadmin') onchange="createFranchiseCode(this.value);" @endrole>
+                                <select name="product_group" id="product_group_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Product Group</option>
                                     @php
                                         $selectedCompanyId = old('company', $product->company_id);

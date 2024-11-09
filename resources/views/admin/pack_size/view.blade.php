@@ -30,12 +30,10 @@
                             <input type="text" class="form-control" value="{{ $pack_size->name ?? 'N/A' }}" readonly>
                         </div>
 
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-12">
                             <label>Description</label>
-                            <input type="text" class="form-control" value="{{ $pack_size->description ?? 'N/A' }}" readonly>
+                            <textarea class="form-control" readonly>{{ $pack_size->description ?? 'N/A' }}</textarea>
                         </div>
-
-                        
                     </div>
                     <div class="row justify-content-between align-items-center">
                         <div class="col-auto">

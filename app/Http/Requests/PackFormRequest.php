@@ -22,9 +22,9 @@ class PackFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'name' => 'required|string',
-			'description' => 'required|string',
-			'company_id' => 'required',
+			'name' => 'required|string|max:255',
+			'description' => 'nullable|string',
+			'company' => 'required|exists:companies,id',
         ];
     }
 }
