@@ -160,6 +160,21 @@ class PermissionSeeder extends Seeder
             ['id' => 143, 'name' => 'Product Variation Update', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 144, 'name' => 'Product Variation Delete', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 145, 'name' => 'Product Variation View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 146, 'name' => 'Batch List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 147, 'name' => 'Batch Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 148, 'name' => 'Batch Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 149, 'name' => 'Batch Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 150, 'name' => 'Batch View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 151, 'name' => 'Raw Material Item List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 152, 'name' => 'Raw Material Item Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 153, 'name' => 'Raw Material Item Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 154, 'name' => 'Raw Material Item Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 155, 'name' => 'Raw Material Item View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 156, 'name' => 'Stock List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 157, 'name' => 'Stock Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 158, 'name' => 'Stock Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 159, 'name' => 'Stock Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 160, 'name' => 'Stock View', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }
 }

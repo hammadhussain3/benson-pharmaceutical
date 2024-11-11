@@ -49,7 +49,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code"
-                                    placeholder="Code" required value="{{ old('code', $product->code) }}">
+                                    placeholder="Code" required value="{{ old('code', $product->code) }}" readonly>
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">

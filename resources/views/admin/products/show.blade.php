@@ -61,18 +61,18 @@
                             <a class="btn btn-secondary" href="{{ route('products.index') }}">Cancel</a>
                         </div>
                         @if(auth()->user()->hasPermission('Product Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $product->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $product->id }}"
-                                action="{{ route('products.destroy', $product->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
+                            <div class="col-auto">
+                                <a class="btn btn-danger" href="javascript:void(0);"
+                                    onclick="confirmDelete('{{ $product->id }}')">
+                                    Delete
+                                </a>
+                                <form id="delete-form-{{ $product->id }}"
+                                    action="{{ route('products.destroy', $product->id) }}" method="POST"
+                                    style="display:none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </div>
                         @endif
                     </div>
                 </div>

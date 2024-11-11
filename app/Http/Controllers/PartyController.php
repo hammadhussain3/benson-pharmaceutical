@@ -21,6 +21,12 @@ class PartyController extends Controller
         $this->partyService = $partyService;
     }
 
+    public function getPartiesByCompany($companyId)
+    {
+        $parties = Party::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        return response()->json(['parties' => $parties]);
+    }
+
     public function index()
     {
         if (!auth()->user()->hasPermission('Parties List')) {

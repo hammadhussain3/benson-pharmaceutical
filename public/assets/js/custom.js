@@ -226,14 +226,14 @@ function SelectIncomeTax(employeeId)
         fetch(`/getincometax/${employeeId}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching income tax');
                 }
                 return response.json();
             })
             .then(data => {
                 incomeTax.value = data.incomeTax;
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching income tax:', error));
     }
 }
 
@@ -246,7 +246,7 @@ function SelectCompany(employeeId)
         fetch(`/getcompany/${employeeId}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching company');
                 }
                 return response.json();
             })
@@ -258,7 +258,7 @@ function SelectCompany(employeeId)
                     company.value = data.company;
                 }
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching company:', error));
     }
 }
 
@@ -279,7 +279,7 @@ function SelectEmployeeDetails(employeeId) {
         fetch(`/getemployee/${employeeId}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching employee details');
                 }
                 return response.json();
             })
@@ -356,7 +356,7 @@ function selectBranches(companyId)
                     branchSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching branches:', error));
     }
 }
 
@@ -369,7 +369,7 @@ function selectDepartments(companyId)
         fetch(`/companies/${companyId}/departments`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching departments');
                 }
                 return response.json();
             })
@@ -381,7 +381,7 @@ function selectDepartments(companyId)
                     departmentSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching departments:', error));
     }
 }
 
@@ -394,7 +394,7 @@ function selectDesignations(companyId)
         fetch(`/companies/${companyId}/designations`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching designations');
                 }
                 return response.json();
             })
@@ -406,7 +406,7 @@ function selectDesignations(companyId)
                     designationSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching designations:', error));
     }
 }
 
@@ -419,7 +419,7 @@ function selectEmployee(companyId)
         fetch(`/companies/${companyId}/employees`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching employees');
                 }
                 return response.json();
             })
@@ -431,7 +431,7 @@ function selectEmployee(companyId)
                     employeeSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching employees:', error));
     }
 }
 
@@ -444,7 +444,7 @@ function selectProductGroups(companyId)
         fetch(`/companies/${companyId}/product-groups`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching product groups');
                 }
                 return response.json();
             })
@@ -456,7 +456,7 @@ function selectProductGroups(companyId)
                     productGroupSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching product groups:', error));
     }
 }
 
@@ -469,7 +469,7 @@ function selectProducts(companyId)
         fetch(`/companies/${companyId}/products`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching products');
                 }
                 return response.json();
             })
@@ -481,7 +481,7 @@ function selectProducts(companyId)
                     productSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching products:', error));
     }
 }
 
@@ -494,7 +494,7 @@ function selectDosageForms(companyId)
         fetch(`/companies/${companyId}/dosage-forms`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching dosage forms');
                 }
                 return response.json();
             })
@@ -506,7 +506,7 @@ function selectDosageForms(companyId)
                     dosageFormSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching dosage forms:', error));
     }
 }
 
@@ -519,7 +519,7 @@ function selectPackForms(companyId)
         fetch(`/companies/${companyId}/pack-forms`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching pack forms');
                 }
                 return response.json();
             })
@@ -531,7 +531,7 @@ function selectPackForms(companyId)
                     packFormSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching pack forms:', error));
     }
 }
 
@@ -544,7 +544,7 @@ function selectPackSizes(companyId)
         fetch(`/companies/${companyId}/pack-sizes`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching pack sizes');
                 }
                 return response.json();
             })
@@ -556,7 +556,7 @@ function selectPackSizes(companyId)
                     packSizeSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching pack sizes:', error));
     }
 }
 
@@ -569,7 +569,7 @@ function selectPackingTypes(companyId)
         fetch(`/companies/${companyId}/packing-types`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching packing types');
                 }
                 return response.json();
             })
@@ -581,7 +581,63 @@ function selectPackingTypes(companyId)
                     packingTypeSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching packing types:', error));
+    }
+}
+
+function selectParties(companyId)
+{
+    var partySelect = document.getElementById('party_id');
+    
+    if (companyId && partySelect) {
+        partySelect.innerHTML = '<option value="">Select Party</option>';
+        fetch(`/companies/${companyId}/parties`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching parties');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.parties.forEach(function (party) {
+                    var option = document.createElement('option');
+                    option.value = party.id;
+                    let nameSuffix = '';
+                    if (party.is_supplier === 1) {
+                        nameSuffix = ' (Supplier)';
+                    } else if (party.is_distributor === 1) {
+                        nameSuffix = ' (Franchiser)';
+                    }
+                    option.textContent = party.name + nameSuffix;
+                    partySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching parties:', error));
+    }
+}
+
+function selectRawMaterialItems(companyId)
+{
+    var RawMaterialItemSelect = document.getElementById('raw_material_item_id');
+    
+    if (companyId && RawMaterialItemSelect) {
+        RawMaterialItemSelect.innerHTML = '<option value="">Select Raw Material</option>';
+        fetch(`/companies/${companyId}/raw-material-items`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching raw material items');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.rawMaterialItems.forEach(function (rawMaterialItem) {
+                    var option = document.createElement('option');
+                    option.value = rawMaterialItem.id;
+                    option.textContent = rawMaterialItem.name;
+                    RawMaterialItemSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching raw material items:', error));
     }
 }
 
@@ -593,14 +649,14 @@ function createEmployeeCode(companyId)
         fetch(`/companies/${companyId}/employee-code`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error creating employee code');
                 }
                 return response.json();
             })
             .then(data => {
                 code.value = data.employee_code;
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error creating employee code:', error));
     }
 }
 
@@ -612,14 +668,14 @@ function createSupplierCode(companyId)
         fetch(`/companies/${companyId}/supplier-code`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error creating suppliers code');
                 }
                 return response.json();
             })
             .then(data => {
                 code.value = data.supplier_code;
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error creating suppliers code:', error));
     }
 }
 
@@ -631,14 +687,52 @@ function createFranchiseCode(companyId)
         fetch(`/companies/${companyId}/franchise-code`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error creating franchises code');
                 }
                 return response.json();
             })
             .then(data => {
                 code.value = data.franchise_code;
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error creating franchises code:', error));
+    }
+}
+
+function createProductCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/product-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating products code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.product_code;
+            })
+            .catch(error => console.error('Error creating products code:', error));
+    }
+}
+
+function createRawMaterialItemCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/raw-material-item-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating raw material items code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.raw_material_item_code;
+            })
+            .catch(error => console.error('Error creating raw material items code:', error));
     }
 }
 
@@ -651,7 +745,7 @@ function selectDepartmentsByBranch(branchId)
         fetch(`/branches/${branchId}/departments`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching branches');
+                    throw new Error('Unauthorized or error fetching departments');
                 }
                 return response.json();
             })
@@ -663,10 +757,18 @@ function selectDepartmentsByBranch(branchId)
                     departmentSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching cities:', error));
+            .catch(error => console.error('Error fetching departments:', error));
     }
 }
 
 function updateLoanRemaining(loanAmount) {
     document.getElementById('loan_remaining').value = loanAmount;
+}
+
+function calculateValue() {
+    const quantity = parseFloat(document.getElementById('available_quantity').value) || 0;
+    const rate = parseFloat(document.getElementById('rate').value) || 0;
+    const value = quantity * rate;
+    
+    document.getElementById('value').value = value.toFixed(2); // Format to 2 decimal places if needed
 }

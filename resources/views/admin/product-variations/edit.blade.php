@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
-                        <a class="btn btn-secondary" href="{{ route('suppliers.index') }}">Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('product-variations.index') }}">Cancel</a>
                     </form>
                 </div>
             </div>

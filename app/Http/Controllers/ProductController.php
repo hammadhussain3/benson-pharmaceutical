@@ -30,9 +30,14 @@ class ProductController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newProductCode = "PRD";
+        } else {
+            $newProductCode = $this->productService->createProductCode(auth()->user()->employee->company_id);
+        }
         $companies = $this->companyService->getAllCompanies();
         $productGroups = ProductGroup::orderBy('name', 'asc')->get();
-        return view('admin.products.create', compact('companies', 'productGroups'));
+        return view('admin.products.create', compact('companies', 'productGroups', 'newProductCode'));
     }
 
     /**
@@ -73,9 +78,9 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        $this->productService->deleteProduct($id);
+        $this->productService->deleteProduct($product);
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
 
@@ -83,5 +88,11 @@ class ProductController extends Controller
     {
         $products = Product::where('company_id', $companyId)->orderBy('name', 'asc')->get();
         return response()->json(['products' => $products]);
+    }
+
+    public function createCodeByCompany($companyId)
+    {
+        $product_code = $this->productService->createProductCode($companyId);
+        return response()->json(['product_code' => $product_code]);
     }
 }

@@ -48,7 +48,7 @@
                             @endrole
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
-                        <a class="btn btn-secondary" href="{{ route('suppliers.index') }}">Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('taxes.index') }}">Cancel</a>
                     </form>
                 </div>
             </div>

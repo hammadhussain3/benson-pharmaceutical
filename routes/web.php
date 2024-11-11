@@ -31,6 +31,9 @@ use App\Http\Controllers\{
     PackFormController,
     ProductController,
     ProductVariationController,
+    BatchController,
+    RawMaterialItemController,
+    StockController,
 };
 use App\Http\Controllers\SalarySheetController;
 
@@ -94,6 +97,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('pack-forms', PackFormController::class);
     Route::resource('products', ProductController::class);
     Route::resource('product-variations', ProductVariationController::class);
+    Route::resource('batches', BatchController::class);
+    Route::resource('raw-material-items', RawMaterialItemController::class);
+    Route::resource('stocks', StockController::class);
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
@@ -105,9 +111,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/pack-forms', [PackFormController::class, 'getPackFormsByCompany']);
     Route::get('/companies/{companyId}/pack-sizes', [PackSizeController::class, 'getPackSizesByCompany']);
     Route::get('/companies/{companyId}/packing-types', [PackingTypesController::class, 'getPackingTypesByCompany']);
+    Route::get('/companies/{companyId}/parties', [PartyController::class, 'getPartiesByCompany']);
+    Route::get('/companies/{companyId}/raw-material-items', [RawMaterialItemController::class, 'getRawMaterialItemsByCompany']);
     Route::get('/companies/{companyId}/employee-code', [EmployeeController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/supplier-code', [SupplierController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/franchise-code', [FranchiseController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/product-code', [ProductController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/raw-material-item-code', [RawMaterialItemController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
     Route::get('/getemployee/{employeeId}', [EmployeeController::class, 'getEmployeeDetails']);

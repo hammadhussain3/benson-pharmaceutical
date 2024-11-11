@@ -204,6 +204,14 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
+                        @if(auth()->user()->hasPermission('Batch List'))
+                            <li>
+                                <a class="{{ request()->is('batches*') ? 'active' : '' }}" href="{{ route('batches.index') }}">
+                                    <i class="fa fa-layer-group me-1"></i>
+                                    Batches
+                                </a>
+                            </li>
+                        @endif
                         @if(auth()->user()->hasPermission('Category List'))
                             <li>
                                 <a class="{{ request()->is('categories*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
@@ -213,12 +221,12 @@
                             </li>
                         @endif
                         @if(auth()->user()->hasPermission('Dosage Form List'))
-                        <li>
-                            <a class="{{ request()->is('dosage-forms*') ? 'active' : '' }}" href="{{ route('dosage-forms.index') }}">
-                                <i class="fa fa-store me-1"></i>
-                                Dosage Form
-                            </a>
-                        </li>
+                            <li>
+                                <a class="{{ request()->is('dosage-forms*') ? 'active' : '' }}" href="{{ route('dosage-forms.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Dosage Form
+                                </a>
+                            </li>
                         @endif
                         @if(auth()->user()->hasPermission('Franchise List'))
                             <li>
@@ -280,6 +288,22 @@
                                 <a class="{{ request()->is('product-variations*') ? 'active' : '' }}" href="{{ route('product-variations.index') }}">
                                     <i class="fa fa-store me-1"></i>
                                     Product Variations
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Raw Material Item List'))
+                            <li>
+                                <a class="{{ request()->is('raw-material-items*') ? 'active' : '' }}" href="{{ route('raw-material-items.index') }}">
+                                    <i class="fa fa-layer-group me-1"></i>
+                                    Raw Material Items
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Stock List'))
+                            <li>
+                                <a class="{{ request()->is('stocks*') ? 'active' : '' }}" href="{{ route('stocks.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Stocks
                                 </a>
                             </li>
                         @endif

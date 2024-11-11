@@ -48,12 +48,12 @@
                             <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code"
-                                    placeholder="Code" required value="{{ old('code') }}">
+                                    placeholder="Code" required value="{{ old('code', $newProductCode) }}" readonly>
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company">Company</label>
-                                <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="selectProductGroups(this.value);" @endrole>
+                                <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="selectProductGroups(this.value); createProductCode(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -85,7 +85,7 @@
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
-                        <a class="btn btn-secondary" href="{{ route('suppliers.index') }}">Cancel</a>
+                        <a class="btn btn-secondary" href="{{ route('products.index') }}">Cancel</a>
                     </form>
                 </div>
             </div>

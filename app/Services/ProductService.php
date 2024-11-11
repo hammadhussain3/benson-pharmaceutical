@@ -40,4 +40,17 @@ class ProductService
     {
         return Product::findOrFail($id);
     }
+
+    public function createProductCode($company_id)
+    {
+        $lastProductCode = Product::latest('id')->where('company_id', $company_id)->value('code');
+        if ($lastProductCode) {
+            $numberPart = (int) substr($lastProductCode, 3);
+            $newNumberPart = $numberPart + 1;
+            $newProductCode = 'PRD' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+        } else {
+            $newProductCode = 'PRD00001';
+        }
+        return $newProductCode;
+    }
 }
