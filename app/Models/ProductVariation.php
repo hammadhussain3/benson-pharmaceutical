@@ -26,7 +26,7 @@ class ProductVariation extends Model
 
     public function company()
     {
-        return $this->belongsTo(\App\Models\Company::class, 'company_id', 'id');
+        return $this->belongsTo(Company::class);
     }
     
     /**
@@ -34,7 +34,7 @@ class ProductVariation extends Model
      */
     public function dosageForm()
     {
-        return $this->belongsTo(\App\Models\DosageForm::class, 'dosage_form_id', 'id');
+        return $this->belongsTo(DosageForm::class);
     }
     
     /**
@@ -42,7 +42,7 @@ class ProductVariation extends Model
      */
     public function packForm()
     {
-        return $this->belongsTo(\App\Models\PackForm::class, 'pack_form_id', 'id');
+        return $this->belongsTo(PackForm::class);
     }
     
     /**
@@ -50,7 +50,7 @@ class ProductVariation extends Model
      */
     public function packSize()
     {
-        return $this->belongsTo(\App\Models\PackSize::class, 'pack_size_id', 'id');
+        return $this->belongsTo(PackSize::class);
     }
     
     /**
@@ -58,7 +58,7 @@ class ProductVariation extends Model
      */
     public function packingType()
     {
-        return $this->belongsTo(\App\Models\PackingType::class, 'packing_type_id', 'id');
+        return $this->belongsTo(PackingType::class);
     }
     
     /**
@@ -66,7 +66,7 @@ class ProductVariation extends Model
      */
     public function product()
     {
-        return $this->belongsTo(\App\Models\Product::class, 'product_id', 'id');
+        return $this->belongsTo(Product::class);
     }
     
 }

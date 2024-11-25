@@ -21,10 +21,24 @@ class PartyController extends Controller
         $this->partyService = $partyService;
     }
 
-    public function getPartiesByCompany($companyId)
+    public function getPartiesByCompany(Request $request, $companyId)
     {
-        $parties = Party::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        $partiesQuery = Party::where('company_id', $companyId)->orderBy('name', 'asc');
+        if ($request->input('document_type') == 'purchase') {
+            $parties = $partiesQuery->where('is_supplier', '1')->get();
+        } elseif ($request->input('document_type') == 'sale' || $request->input('document_type') == 'quotation') {
+            $parties = $partiesQuery->where('is_distributor', '1')->get();
+        } else {
+            $parties = $partiesQuery->get();
+        }
+        
         return response()->json(['parties' => $parties]);
+    }
+
+    public function getSupplierCodeByPartyId($partyId)
+    {
+        $party = Party::where('id', $partyId)->first();
+        return response()->json(['supplier_code' => $party->code]);
     }
 
     public function index()

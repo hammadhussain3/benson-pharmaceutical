@@ -62,7 +62,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company">Company</label>
-                                <select name="company" id="company" class="js-example-basic-single select2" required>
+                                <select name="company" id="company_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -74,7 +74,7 @@
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_name">Contact Person Name</label>

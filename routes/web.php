@@ -32,8 +32,16 @@ use App\Http\Controllers\{
     ProductController,
     ProductVariationController,
     BatchController,
+    InvoiceController,
     RawMaterialItemController,
     StockController,
+    PurchaseRequisitionController,
+    GoodsReceivingController,
+    FinishedGoodsReceivingController,
+    StoreIssueRequisitionController,
+    RejectionReturnNoteController,
+    LeftOverNoteController,
+    ReportController,
 };
 use App\Http\Controllers\SalarySheetController;
 
@@ -100,6 +108,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('batches', BatchController::class);
     Route::resource('raw-material-items', RawMaterialItemController::class);
     Route::resource('stocks', StockController::class);
+    Route::resource('purchase-requisitions', PurchaseRequisitionController::class);
+    Route::resource('invoices', InvoiceController::class);
+    Route::resource('goods-receivings', GoodsReceivingController::class);
+    Route::resource('finished-goods-receivings', FinishedGoodsReceivingController::class);
+    Route::resource('store-issue-requisitions', StoreIssueRequisitionController::class);
+    Route::get('store-issue-requisitions/production/create', [StoreIssueRequisitionController::class, 'productionCreate'])->name('store-issue-requisitions.production.create');
+    Route::resource('rejection-return-notes', RejectionReturnNoteController::class);
+    Route::resource('left-over-notes', LeftOverNoteController::class);
+    Route::get('report/current-balance-report', [ReportController::class, 'currentBalanceReport'])->name('current_balance_report');
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
@@ -107,18 +124,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/employees', [EmployeeController::class, 'getEmployeesByCompany']);
     Route::get('/companies/{companyId}/product-groups', [ProductGroupController::class, 'getProductGroupsByCompany']);
     Route::get('/companies/{companyId}/products', [ProductController::class, 'getProductsByCompany']);
+    Route::get('/companies/{companyId}/products-and-raw-materials', [ProductController::class, 'getProdAndRMByCompany']);
     Route::get('/companies/{companyId}/dosage-forms', [DosageFormController::class, 'getDosageFormsByCompany']);
     Route::get('/companies/{companyId}/pack-forms', [PackFormController::class, 'getPackFormsByCompany']);
     Route::get('/companies/{companyId}/pack-sizes', [PackSizeController::class, 'getPackSizesByCompany']);
     Route::get('/companies/{companyId}/packing-types', [PackingTypesController::class, 'getPackingTypesByCompany']);
     Route::get('/companies/{companyId}/parties', [PartyController::class, 'getPartiesByCompany']);
     Route::get('/companies/{companyId}/raw-material-items', [RawMaterialItemController::class, 'getRawMaterialItemsByCompany']);
+    Route::get('/companies/{companyId}/suppliers', [SupplierController::class, 'getSuppliersByCompany']);
+    Route::get('/companies/{companyId}/chart-of-accounts', [ChartOfAccountController::class, 'getChartOfAccountsByCompany']);
+    Route::get('/companies/{companyId}/general-store-requisitions', [StoreIssueRequisitionController::class, 'getGeneralStoreRequisitionsByCompany']);
+    Route::get('/companies/{companyId}/production-store-requisitions', [StoreIssueRequisitionController::class, 'getProductionStoreRequisitionsByCompany']);
     Route::get('/companies/{companyId}/employee-code', [EmployeeController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/supplier-code', [SupplierController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/franchise-code', [FranchiseController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/product-code', [ProductController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/raw-material-item-code', [RawMaterialItemController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/purchase-requisition-code', [PurchaseRequisitionController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/store-requisition-code', [StoreIssueRequisitionController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/invoice-code', [InvoiceController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
+    Route::get('/companies/{companyId}/invoices', [InvoiceController::class, 'getInvoicesByCompany']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
     Route::get('/getemployee/{employeeId}', [EmployeeController::class, 'getEmployeeDetails']);
     Route::get('/getloan/{employeeId}', [LoanController::class, 'getLoansByEmployee']);
@@ -127,7 +153,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/getunauthleaves/{employeeId}', [LeaveController::class, 'getUnauthorizedLeavesByEmployee']);
     Route::get('/getapprovedpayleaves/{employeeId}', [LeaveController::class, 'getApprovedWithPayLeavesByEmployee']);
     Route::get('/getleaves/{employeeId}', [LeaveController::class, 'getLeavesByEmployee']);
+    Route::get('/invoices/{invoiceId}/details', [InvoiceController::class, 'getInvoiceDetailsById']);
+    Route::get('/invoices/{invoiceId}/supplier', [SupplierController::class, 'getSupplierByInvoice']);
+    Route::get('/invoices/{invoiceId}/goods-receivings', [GoodsReceivingController::class, 'getGoodReceivingsByInvoice']);
+    Route::get('/products/{productId}/product-variations', [ProductVariationController::class, 'getProductVariationsByCompany']);
+    Route::get('/products/{productId}/batches', [BatchController::class, 'getBatchesByProductId']);
+    Route::get('/store-requisitions/{requisitionId}/general-details', [StoreIssueRequisitionController::class, 'getGeneralStoreRequisitionDetailsById']);
+    Route::get('/store-requisitions/{requisitionId}/production-details', [StoreIssueRequisitionController::class, 'getProductionStoreRequisitionDetailsById']);
     Route::get('/branches/{branchId}/departments', [DepartmentController::class, 'getDepartmentsByBranch']);
+    Route::get('/parties/{partyId}/supplier_code', [PartyController::class, 'getSupplierCodeByPartyId']);
 
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');
     Route::get('salary-sheet/generate', [SalarySheetController::class, 'showSalarySheet'])->name('salary.sheet.show');

@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('stocks', function (Blueprint $table) {
+        Schema::create('finished_goods_receivings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('batch_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('raw_material_item_id');
-            $table->integer('available_quantity');
-            $table->string('unit');
-            $table->decimal('rate', 8, 2);
-            $table->decimal('value', 10, 2);
-            $table->integer('min_level');
-            $table->integer('max_level');
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -28,8 +22,8 @@ return new class extends Migration
 
             // Foreign key
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('batch_id')->references('id')->on('batches')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('raw_material_item_id')->references('id')->on('raw_material_items')->onDelete('cascade');
         });
     }
 
@@ -38,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('stocks');
+        Schema::dropIfExists('finished_goods_receiving_notes');
     }
 };

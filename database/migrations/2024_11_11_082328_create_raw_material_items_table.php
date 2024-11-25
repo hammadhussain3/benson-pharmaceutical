@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('code');
             $table->string('unit');
+            $table->string('min_level');
+            $table->string('max_level');
             $table->unsignedBigInteger('party_id')->nullable();
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();

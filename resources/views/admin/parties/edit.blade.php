@@ -76,7 +76,7 @@
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ $party->company_id }}">
+                                <input type="hidden" name="company" value="{{ $party->company_id }}">
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_name">Contact Person Name</label>

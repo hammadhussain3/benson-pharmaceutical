@@ -460,28 +460,126 @@ function selectProductGroups(companyId)
     }
 }
 
-function selectProducts(companyId)
-{
-    var productSelect = document.getElementById('product_id');
-    
-    if (companyId && productSelect) {
-        productSelect.innerHTML = '<option value="">Select Product</option>';
-        fetch(`/companies/${companyId}/products`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching products');
-                }
-                return response.json();
-            })
-            .then(data => {
-                data.products.forEach(function (product) {
-                    var option = document.createElement('option');
-                    option.value = product.id;
-                    option.textContent = product.name;
-                    productSelect.appendChild(option);
+function selectProducts(companyId) {
+    if (!companyId) return; // Exit if no company ID is provided
+
+    const productSelect = document.getElementById('product_id');
+    const productSelectList = Array.from(document.getElementsByClassName('products_dropdown'));
+
+    const allSelects = [];
+    if (productSelect) allSelects.push(productSelect);
+    allSelects.push(...productSelectList);
+
+    if (allSelects.length === 0) return;
+
+    allSelects.forEach(select => {
+        select.innerHTML = '<option value="">Select Product</option>';
+    });
+
+    fetch(`/companies/${companyId}/products`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching products');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.products && data.products.length > 0) {
+                allSelects.forEach(select => {
+                    data.products.forEach(product => {
+                        const option = document.createElement('option');
+                        option.value = product.id;
+                        option.textContent = product.name;
+                        select.appendChild(option);
+                    });
                 });
-            })
-            .catch(error => console.error('Error fetching products:', error));
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching products:', error);
+        });
+}
+
+function selectProductsAndRawMaterials(companyId) {
+    // Get all dropdowns with the class 'products_dropdown'
+    var productSelectList = document.getElementsByClassName('products_dropdown');
+    
+    if (companyId && productSelectList.length > 0) {
+        // Loop through all dropdowns
+        Array.from(productSelectList).forEach(function(productSelect) {
+            // Clear the existing options in each dropdown
+            productSelect.innerHTML = '<option value="">Select Product or Raw Material</option>';
+            
+            // Fetch the products and raw materials for the selected company
+            fetch(`/companies/${companyId}/products-and-raw-materials`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error fetching data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Add product options
+                    if (data.products && data.products.length > 0) {
+                        var productGroup = document.createElement('optgroup');
+                        productGroup.label = "Products";
+                        data.products.forEach(function(product) {
+                            var option = document.createElement('option');
+                            option.value = `product_${product.id}`; // Use prefix to differentiate
+                            option.textContent = product.name;
+                            productGroup.appendChild(option);
+                        });
+                        productSelect.appendChild(productGroup);
+                    }
+
+                    // Add raw material options
+                    if (data.rawMaterialItems && data.rawMaterialItems.length > 0) {
+                        var rawMaterialGroup = document.createElement('optgroup');
+                        rawMaterialGroup.label = "Raw Materials";
+                        data.rawMaterialItems.forEach(function(rawMaterialItem) {
+                            var option = document.createElement('option');
+                            option.value = `raw_${rawMaterialItem.id}`; // Use prefix to differentiate
+                            option.textContent = rawMaterialItem.name;
+                            rawMaterialGroup.appendChild(option);
+                        });
+                        productSelect.appendChild(rawMaterialGroup);
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+    }
+}
+
+function selectProductVariations(productId) {
+    // Get all dropdowns with the class 'product_variations_dropdown'
+    var selectProductVariations = document.getElementsByClassName('product_variations_dropdown');
+    
+    if (productId && selectProductVariations.length > 0) {
+        // Loop through all dropdowns
+        Array.from(selectProductVariations).forEach(function(selectProductVariation) {
+            // Clear the existing options in each dropdown
+            selectProductVariation.innerHTML = '<option value="">Select Product Variation</option>';
+            
+            // Fetch the products and raw materials for the selected company
+            fetch(`/products/${productId}/product-variations`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error fetching data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.productVariations && data.productVariations.length > 0) {
+                        data.productVariations.forEach(function(productVariation) {
+                            var option = document.createElement('option');
+                            option.value = productVariation.id; // Use prefix to differentiate
+                            option.textContent = `${productVariation.product.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
+                            selectProductVariation.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
     }
 }
 
@@ -588,10 +686,12 @@ function selectPackingTypes(companyId)
 function selectParties(companyId)
 {
     var partySelect = document.getElementById('party_id');
+    var documentTypeSelect = document.getElementById('document_type');
     
     if (companyId && partySelect) {
+        let documentType = documentTypeSelect ? documentTypeSelect.value : null;
         partySelect.innerHTML = '<option value="">Select Party</option>';
-        fetch(`/companies/${companyId}/parties`)
+        fetch(`/companies/${companyId}/parties?document_type=${documentType || ''}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unauthorized or error fetching parties');
@@ -618,26 +718,192 @@ function selectParties(companyId)
 
 function selectRawMaterialItems(companyId)
 {
-    var RawMaterialItemSelect = document.getElementById('raw_material_item_id');
+    if (!companyId) return; // Exit if no company ID is provided
+
+    const rawMaterialItemSelect = document.getElementById('raw_material_item_id');
+    const rawMaterialItemSelectList = Array.from(document.getElementsByClassName('raw_material_items_dropdown'));
+
+    const allSelects = [];
+    if (rawMaterialItemSelect) allSelects.push(rawMaterialItemSelect);
+    allSelects.push(...rawMaterialItemSelectList);
+
+    if (allSelects.length === 0) return;
+
+    allSelects.forEach(select => {
+        select.innerHTML = '<option value="">Select Raw Material</option>';
+    });
+
+    fetch(`/companies/${companyId}/raw-material-items`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching raw materials');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.rawMaterialItems && data.rawMaterialItems.length > 0) {
+                allSelects.forEach(select => {
+                    data.rawMaterialItems.forEach(rawMaterialItem => {
+                        const option = document.createElement('option');
+                        option.value = rawMaterialItem.id;
+                        option.textContent = rawMaterialItem.name;
+                        select.appendChild(option);
+                    });
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching raw materials:', error);
+        });
+}
+
+function selectSuppliers(companyId)
+{
+    var supplierSelect = document.getElementById('supplier_id');
     
-    if (companyId && RawMaterialItemSelect) {
-        RawMaterialItemSelect.innerHTML = '<option value="">Select Raw Material</option>';
-        fetch(`/companies/${companyId}/raw-material-items`)
+    if (companyId && supplierSelect) {
+        supplierSelect.innerHTML = '<option value="">Select Supplier</option>';
+        fetch(`/companies/${companyId}/suppliers`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching raw material items');
+                    throw new Error('Unauthorized or error fetching suppliers');
                 }
                 return response.json();
             })
             .then(data => {
-                data.rawMaterialItems.forEach(function (rawMaterialItem) {
+                data.suppliers.forEach(function (supplier) {
                     var option = document.createElement('option');
-                    option.value = rawMaterialItem.id;
-                    option.textContent = rawMaterialItem.name;
-                    RawMaterialItemSelect.appendChild(option);
+                    option.value = supplier.id;
+                    option.textContent = supplier.name;
+                    supplierSelect.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching raw material items:', error));
+            .catch(error => console.error('Error fetching suppliers:', error));
+    }
+}
+
+function selectBatches(productId)
+{
+    var BatchSelect = document.getElementById('batch_id');
+    
+    if (productId && BatchSelect) {
+        BatchSelect.innerHTML = '<option value="">Select Batch</option>';
+        fetch(`/products/${productId}/batches`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching Batches');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.batches.forEach(function (batch) {
+                    var option = document.createElement('option');
+                    option.value = batch.id;
+                    option.textContent = batch.batch_no;
+                    BatchSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching Batches:', error));
+    }
+}
+
+function selectChartOfAccounts(companyId)
+{
+    var chartOfAccountSelect = document.getElementById('chart_of_account_id');
+    
+    if (companyId && chartOfAccountSelect) {
+        chartOfAccountSelect.innerHTML = '<option value="">Select Chart Of Account</option>';
+        fetch(`/companies/${companyId}/chart-of-accounts`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching chart of accounts');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.chartOfAccounts.forEach(function (chartOfAccount) {
+                    var option = document.createElement('option');
+                    option.value = chartOfAccount.id;
+                    option.textContent = chartOfAccount.name;
+                    chartOfAccountSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching  chart of accounts:', error));
+    }
+}
+
+function selectGeneralStoreRequisitions(companyId)
+{
+    var storeIssueRequisitionSelect = document.getElementById('store_issue_requisition_id');
+    
+    if (companyId && storeIssueRequisitionSelect) {
+        storeIssueRequisitionSelect.innerHTML = '<option value="">Select DN/GP</option>';
+        fetch(`/companies/${companyId}/general-store-requisitions`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching store issue requisitions');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.storeIssueRequisitions.forEach(function (storeIssueRequisition) {
+                    var option = document.createElement('option');
+                    option.value = storeIssueRequisition.id;
+                    option.textContent = storeIssueRequisition.dn_gp;
+                    storeIssueRequisitionSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching store issue requisitions:', error));
+    }
+}
+
+function selectProductionStoreRequisitions(companyId, productId)
+{
+    var storeIssueRequisitionSelect = document.getElementById('store_issue_requisition_id');
+    
+    if (companyId && storeIssueRequisitionSelect && productId) {
+        storeIssueRequisitionSelect.innerHTML = '<option value="">Select DN/GP</option>';
+        fetch(`/companies/${companyId}/production-store-requisitions?productId=${productId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching store issue requisitions');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.storeIssueRequisitions.forEach(function (storeIssueRequisition) {
+                    var option = document.createElement('option');
+                    option.value = storeIssueRequisition.id;
+                    option.textContent = storeIssueRequisition.dn_gp;
+                    storeIssueRequisitionSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching store issue requisitions:', error));
+    }
+}
+
+function selectInvoices(companyId)
+{
+    var InvoiceSelect = document.getElementById('invoice_id');
+    
+    if (companyId && InvoiceSelect) {
+        InvoiceSelect.innerHTML = '<option value="">Select Invoice</option>';
+        fetch(`/companies/${companyId}/invoices`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching parties');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.invoices.forEach(function (invoice) {
+                    var option = document.createElement('option');
+                    option.value = invoice.id;
+                    option.textContent = invoice.code;
+                    InvoiceSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching parties:', error));
     }
 }
 
@@ -717,6 +983,25 @@ function createProductCode(companyId)
     }
 }
 
+function createPurchaseRequisitionCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/purchase-requisition-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating purchse requisition code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.purchase_requisition_code;
+            })
+            .catch(error => console.error('Error creating purchse requisition code:', error));
+    }
+}
+
 function createRawMaterialItemCode(companyId)
 {
     var code = document.getElementById('code');
@@ -733,6 +1018,46 @@ function createRawMaterialItemCode(companyId)
                 code.value = data.raw_material_item_code;
             })
             .catch(error => console.error('Error creating raw material items code:', error));
+    }
+}
+
+function createInvoiceCode(companyId)
+{
+    var code = document.getElementById('code');
+    var documentTypeSelect = document.getElementById('document_type');
+    
+    if (companyId && code && documentTypeSelect) {
+        let documentType = documentTypeSelect ? documentTypeSelect.value : null;        
+        fetch(`/companies/${companyId}/invoice-code?document_type=${documentType || ''}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating invoice code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.invoice_code;
+            })
+            .catch(error => console.error('Error creating invoice code:', error));
+    }
+}
+
+function createStoreRequisitionCode(companyId)
+{
+    var code = document.getElementById('dn_gp');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/store-requisition-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating store requisition code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.store_requisition_code;
+            })
+            .catch(error => console.error('Error creating store requisition code:', error));
     }
 }
 
@@ -761,14 +1086,542 @@ function selectDepartmentsByBranch(branchId)
     }
 }
 
+function getInvoiceDetails(invoiceId) {
+    const itemSets = document.querySelectorAll('#item-group .item-set');
+    var supplierId = document.getElementById('supplier_id');
+    var supplierName = document.getElementById('supplier_name');
+    var supplierCode = document.getElementById('supplier_code');
+    
+    if (invoiceId && (supplierId || supplierName || supplierCode)) {
+        fetch(`/invoices/${invoiceId}/details`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching invoice details');
+                }
+                return response.json();
+            })
+            .then(data => {
+                let itemIndex = 0;
+                supplierId.value = data.invoice.party_id;
+                supplierName.value = data.invoice.party.name;
+                supplierCode.value = data.invoice.code;
+                itemSets.forEach(itemSet => itemSet.remove());
+                data.invoice.items.forEach(function (item) {
+                    var html = `
+                        <div class="item-set">
+                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                <h4 class="card-title mb-0">Item ${itemIndex + 1}</h4>
+                                <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                            </div>
+                            <div class="card-body px-0 pb-0">
+                                <input type="hidden" name="items[${itemIndex}][types]" value="${item.product_id ? 'product' : 'raw_material_item'}">
+                                <div class="row">
+                                    <div class="mb-3 col-md-4">
+                                        <label for="product_code">Code</label>
+                                        <input type="text" class="form-control" name="items[${itemIndex}][code]"
+                                            placeholder="Product Code" required value="${item.product ? item.product.code : item.raw_material_item.code}" readonly>
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label for="product_name">Description</label>
+                                        <input type="text" class="form-control" name="items[${itemIndex}][name]"
+                                            placeholder="Product Names" required value="${item.product ? item.product.name : item.raw_material_item.name}" readonly>
+                                        <input type="hidden" name="items[${itemIndex}][${item.product_id ? 'product' : 'raw_material_item'}]" value="${item.product_id ? item.product_id : item.raw_material_item_id}">
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label for="batch_id">Batch</label>
+                                        <select name="items[${itemIndex}][batch]" id="batch_id_${itemIndex}" class="js-example-basic-single select2" required>
+                                            <option value="">Select Batch</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label>Quantity Ordered</label>
+                                        <input type="number" class="form-control" name="items[${itemIndex}][quantity_ordered]"
+                                            placeholder="Quantity Ordered" required value="${item.product_quantity}" readonly>
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label>Quantity Recieved</label>
+                                        <input type="number" class="form-control" name="items[${itemIndex}][quantity_received]"
+                                            placeholder="Quantity Recieved" required value="${item.received_quantity}" readonly>
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label>Balance Recievable</label>
+                                        <input type="number" class="form-control balance_receivable" name="items[${itemIndex}][balance_receivable]"
+                                            placeholder="Balance Recievable" required value="" max="${item.product_quantity - item.received_quantity}" oninput="calculateGoodsRecievingAmount()">
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label>Unit</label>
+                                        <input type="text" class="form-control" name="items[${itemIndex}][unit]"
+                                            placeholder="Unit" required value="${item.unit}" readonly>
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label>Unit Price</label>
+                                        <input type="text" class="form-control unit_price" name="items[${itemIndex}][unit_price]"
+                                            placeholder="Unit Price" required value="${item.unit_price}" readonly>
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label>Total</label>
+                                        <input type="number" class="form-control product_total" name="items[${itemIndex}][total_amount]"
+                                            placeholder="Total" required value="" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    $("#item-group").append(html);
+
+                    // Populate the batch options dynamically based on the type (product or raw material)
+                    var batchSelect = $(`#batch_id_${itemIndex}`);
+                    if (item.product_id) {
+                        // For product, populate batches related to the product
+                        item.batches.forEach(function(batch) {
+                            var batchOption = `<option value="${batch.id}">${batch.batch_no}</option>`;
+                            batchSelect.append(batchOption);
+                        });
+                    }
+
+                    // Reinitialize select2 for the new batch dropdown
+                    batchSelect.select2();
+                    itemIndex++;
+                });
+            })
+            .catch(error => console.error('Error fetching invoice details:', error));
+    }
+}
+
+function getGeneralStoreRequisitionDetails(requisitionId) {
+    const itemSets = document.querySelectorAll('#item-group .item-set');
+    var invoiceId = document.getElementById('invoice_id').value;
+    var supplierBillNo = document.getElementById('supplier_bill_no').value;
+    
+    if (requisitionId && invoiceId && supplierBillNo) {
+        fetch(`/store-requisitions/${requisitionId}/general-details?invoiceId=${invoiceId}&supplierBillNo=${supplierBillNo}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching store requisition details');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Clear existing item sets
+                itemSets.forEach(itemSet => itemSet.remove());
+
+                if (data.items && data.items.length > 0) {
+                    let index = 0;
+                
+                    // Iterate over the common items (data.requisition)
+                    data.items.forEach(function (item, index) {
+                        // Generate HTML for each item
+                        var html = `
+                            <div class="item-set">
+                                <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title mb-0">Item ${index + 1}</h4>
+                                    <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                </div>
+                                <div class="card-body px-0 pb-0">
+                                    <input type="hidden" name="items[${index}][types]" value="${item.product_id ? 'product' : 'raw_material_item'}">
+                                    <div class="row">
+                                        <div class="mb-3 col-md">
+                                            <label for="product_name">Description</label>
+                                            <input type="text" class="form-control" name="items[${index}][name]"
+                                                placeholder="Description" required 
+                                                value="${item.product ? item.product.name : item.raw_material_item.name}" readonly>
+                                            <input type="hidden" name="items[${index}][${item.product_id ? 'product' : 'raw_material_item'}]" 
+                                                value="${item.product_id ? item.product_id : item.raw_material_item_id}">
+                                        </div>
+                                        <div class="mb-3 col-md">
+                                            <label>Unit Price</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control w-25 unit_price" name="items[${index}][unit_price]"
+                                                    placeholder="Unit Price" required value="${item.unit_price}" readonly oninput="calculateSingleProductAmount()">
+                                                <input type="text" class="form-control" name="items[${index}][unit]"
+                                                    placeholder="Unit" required value="${item.unit}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 col-md">
+                                            <label>Quantity</label>
+                                            <input type="number" class="form-control quantity" name="items[${index}][quantity]"
+                                                placeholder="Quantity" required value="${item.quantity}" oninput="calculateSingleProductAmount()" max="${item.quantity}" min="1">
+                                            <input type="hidden" name="items[${index}][max_quantity]" value="${item.quantity}">
+                                        </div>
+                                        <div class="mb-3 col-md">
+                                            <label>Total</label>
+                                            <input type="number" class="form-control product_total" name="items[${index}][total]"
+                                                placeholder="Total" required value="${item.total}" readonly>
+                                        </div>
+                                        <div class="mb-3 col-12">
+                                            <label>Remarks</label>
+                                            <textarea class="form-control" name="items[${index}][remarks]" placeholder="Write your remarks..." required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    
+                        // Append the generated HTML to the #item-group container
+                        $("#item-group").append(html);
+                    
+                        // Ensure amounts are calculated
+                        calculateSingleProductAmount();
+                    });                    
+                } else {
+                    var html = `
+                        <div class="item-set">
+                            <div class="alert alert-danger text-center">No Items Found According your provided supplier bill no. and DN/GP.</p>
+                        </div>
+                    `;
+                    $("#item-group").append(html);
+                }
+            })
+            
+            .catch(error => console.error('Error fetching store requisition details:', error));
+    }
+}
+
+function getProductionStoreRequisitionDetails(requisitionId) {
+    const itemSets = document.querySelectorAll('#item-group .item-set');
+    var batchId = document.getElementById('batch_id').value;
+    
+    if (requisitionId && batchId) {
+        fetch(`/store-requisitions/${requisitionId}/production-details?batchId=${batchId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching store requisition details');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                // Clear existing item sets
+                itemSets.forEach(itemSet => itemSet.remove());
+
+                if (data.items && data.items.length > 0) {
+                
+                    // Iterate over the common items (data.requisition)
+                    data.items.forEach(function (item, index) {
+                        // Generate HTML for each item
+                        var html = `
+                            <div class="item-set">
+                                <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title mb-0">Item ${index + 1}</h4>
+                                    <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                </div>
+                                <div class="card-body px-0 pb-0">
+                                    <div class="row">
+                                        <div class="mb-3 col-md">
+                                            <label for="raw_material_item_name">Description</label>
+                                            <input type="text" class="form-control" name="items[${index}][name]"
+                                                placeholder="Description" required 
+                                                value="${item.raw_material_item.name}" readonly>
+                                            <input type="hidden" name="items[${index}][raw_material_item]" 
+                                                value="${item.raw_material_item_id}">
+                                        </div>
+                                        <div class="mb-3 col-md">
+                                            <label>Unit Price</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control w-25 unit_price" name="items[${index}][unit_price]"
+                                                    placeholder="Unit Price" required value="${item.unit_price}" readonly oninput="calculateSingleProductAmount()">
+                                                <input type="text" class="form-control" name="items[${index}][unit]"
+                                                    placeholder="Unit" required value="${item.unit}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 col-md">
+                                            <label>Quantity</label>
+                                            <input type="number" class="form-control quantity" name="items[${index}][quantity]"
+                                                placeholder="Quantity" required value="${item.quantity}" oninput="calculateSingleProductAmount()" max="${item.quantity}" min="1">
+                                            <input type="hidden" name="items[${index}][max_quantity]" value="${item.quantity}">
+                                        </div>
+                                        <div class="mb-3 col-md">
+                                            <label>Total</label>
+                                            <input type="number" class="form-control product_total" name="items[${index}][total]"
+                                                placeholder="Total" required value="${item.total}" readonly>
+                                        </div>
+                                        <div class="mb-3 col-12">
+                                            <label>Remarks</label>
+                                            <textarea class="form-control" name="items[${index}][remarks]" placeholder="Write your remarks..." required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    
+                        // Append the generated HTML to the #item-group container
+                        $("#item-group").append(html);
+                    
+                        // Ensure amounts are calculated
+                        calculateSingleProductAmount();
+                    });                    
+                } else {
+                    var html = `
+                        <div class="item-set">
+                            <div class="alert alert-danger text-center">No Items Found According your provided product and batch No.</p>
+                        </div>
+                    `;
+                    $("#item-group").append(html);
+                }
+            })
+            
+            .catch(error => console.error('Error fetching store requisition details:', error));
+    }
+}
+
+function selectSupplierByInvoice(invoiceId)
+{
+    var supplierIdSelect = document.getElementById('supplier_id');
+    var supplierNameSelect = document.getElementById('supplier_name');
+    
+    if (invoiceId && (supplierIdSelect || supplierNameSelect)) {
+        fetch(`/invoices/${invoiceId}/supplier`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching supplier');
+                }
+                return response.json();
+            })
+            .then(data => {
+                supplierNameSelect.value = data.supplier.name;
+                supplierIdSelect.value = data.supplier.id;
+            })
+            .catch(error => console.error('Error fetching supplier:', error));
+    }
+}
+
+function selectSupplierBillNoByInvoice(invoiceId)
+{
+    var supplierBillNoSelect = document.getElementById('supplier_bill_no');
+    
+    if (invoiceId && supplierBillNoSelect) {
+        supplierBillNoSelect.innerHTML = '<option value="">Select Bill No.</option>';
+        fetch(`/invoices/${invoiceId}/goods-receivings`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching goods receivings');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.goodsReceivings.forEach(function (goodsReceiving) {
+                    var option = document.createElement('option');
+                    option.value = goodsReceiving.supplier_bill_no;
+                    option.textContent = goodsReceiving.supplier_bill_no;
+                    supplierBillNoSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching goods receivings:', error));
+    }
+}
+
+function getSupplierCodeByPartyId(partyId)
+{
+    var SupplierCodeSelect = document.getElementById('supplier_code');
+    
+    if (partyId && SupplierCodeSelect) {
+        fetch(`/parties/${partyId}/supplier_code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching parties');
+                }
+                return response.json();
+            })
+            .then(data => {
+                SupplierCodeSelect.value = data.supplier_code;
+            })
+            .catch(error => console.error('Error fetching parties:', error));
+    }
+}
+
 function updateLoanRemaining(loanAmount) {
     document.getElementById('loan_remaining').value = loanAmount;
 }
 
 function calculateValue() {
-    const quantity = parseFloat(document.getElementById('available_quantity').value) || 0;
-    const rate = parseFloat(document.getElementById('rate').value) || 0;
+    const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+    const rate = parseFloat(document.getElementById('unit_price').value) || 0;
     const value = quantity * rate;
     
-    document.getElementById('value').value = value.toFixed(2); // Format to 2 decimal places if needed
+    document.getElementById('total').value = value.toFixed(2); // Format to 2 decimal places if needed
+}
+
+function calculateRowAmount(element) {
+    // Find the closest row and the inputs within it
+    const row = element.closest('.product-row');
+    const quantity = row.querySelector('input[name="quantity[]"]').value || 0;
+    const price = row.querySelector('input[name="price[]"]').value || 0;
+
+    // Calculate the amount
+    const amount = parseFloat(quantity) * parseFloat(price);
+
+    // Set the amount value in the corresponding input
+    row.querySelector('input[name="amount[]"]').value = amount.toFixed(2);
+
+    // Optionally, update the total amount for all rows
+    calculateTotalAmount();
+}
+
+function calculateTotalAmount() {
+    let totalAmount = 0;
+    const amountInputs = document.querySelectorAll('input[name="amount[]"]');
+    amountInputs.forEach(input => {
+        const amount = parseFloat(input.value) || 0;
+        totalAmount += amount;
+    });
+    document.getElementById('total_amount').value = totalAmount.toFixed(2);
+}
+
+document.getElementById('addProductButton').addEventListener('click', function() {
+    // Get the table body and clone the row
+    const table = document.getElementById('productList').getElementsByTagName('tbody')[0];
+    const newRow = document.querySelector('.product-row').cloneNode(true);
+
+    // Update row index in the first cell
+    const rowCount = table.querySelectorAll('.product-row').length + 1;
+    newRow.cells[0].textContent = rowCount;
+
+    // Clear input values in the cloned row
+    newRow.querySelectorAll('input').forEach(input => input.value = '');
+
+    // Add "Remove" button only to new rows
+    newRow.cells[6].innerHTML = '<button type="button" class="btn btn-danger btn-sm removeProductButton" onclick="removeProductRow(this)"><i class="fa fa-trash"></i></button>';
+
+    // Insert the new row before the "Total" row
+    const totalRow = table.lastElementChild;
+    table.insertBefore(newRow, totalRow);
+});
+
+function removeProductRow(button) {
+    const row = button.closest('tr');
+    row.remove();
+    calculateTotalAmount();
+    updateRowNumbers();
+}
+
+function updateProductRowNumbers() {
+    // Update row numbers after a row is removed
+    document.querySelectorAll('.product-row').forEach((row, index) => {
+        row.cells[0].textContent = index + 1;
+    });
+}
+
+function selectInvoiceprefix(value) {
+    let prefix = '';
+    switch(value) {
+        case 'sale':
+            prefix = 'SI';
+            break;
+        case 'purchase':
+            prefix = 'PR';
+            break;
+        case 'quotation':
+            prefix = 'QT';
+            break;
+        default:
+            prefix = '';
+    }
+    document.getElementById('prefix').value = prefix;
+}
+
+function calculateInvoiceAmount() {
+    let totalInvoiceTax = 0;
+    let itemsCostWithoutTax = 0;
+    let itemsCostWithTax = 0;
+    let invdiscounttype = document.getElementById('discount_type').value;
+    let invdiscount = document.getElementById('discount').value;
+    let totaldiscount = 0;
+    let totalAmount = 0;
+
+    // Get shipping cost and invoice tax rate
+    var shippingCost = parseFloat(document.getElementById('shipping_cost').value) || 0;
+    var invoiceTaxRate = parseFloat(document.getElementById('invoice_tax_rate').value) || 0;
+
+    // Loop through each item set
+    document.querySelectorAll('.item-set').forEach((itemSet, index) => {
+        const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
+        const quantity = parseFloat(itemSet.querySelector('.product_quantity').value) || 0;
+        const taxRate = parseFloat(itemSet.querySelector('.tax_rate').value) || 0;
+        const discountType = itemSet.querySelector('select[name="invoice_items[' + index + '][discount_type]"]').value;
+        const discount = parseFloat(itemSet.querySelector('.discount').value) || 0;
+
+        // Calculate item total without discount and tax
+        let itemTotal = unitPrice * quantity;
+
+        // Apply discount
+        if (discountType === 'percent') {
+            itemTotal -= (itemTotal * discount) / 100;
+        } else {
+            itemTotal -= discount;
+        }
+
+        // Accumulate items cost without tax
+        itemsCostWithoutTax += itemTotal;
+
+        // Calculate tax for the item
+        const taxAmount = (itemTotal * taxRate) / 100;
+        itemTotal += taxAmount;
+
+        itemSet.querySelector('.total_item_amount').value = itemTotal.toFixed(2);
+    });
+
+    // Add shipping cost to items without tax total
+    itemsCostWithoutTax += shippingCost;
+
+    // Apply invoice tax rate to the total cost without tax
+    totalInvoiceTax += itemsCostWithoutTax * (invoiceTaxRate / 100);
+
+    
+
+    // Calculate the total amount (items with tax + shipping cost)
+    totalAmount = itemsCostWithoutTax + totalInvoiceTax;
+
+    if (invdiscounttype === 'percent') {
+        totaldiscount = (totalAmount * invdiscount) / 100;
+    } else {
+        totaldiscount = invdiscount;
+    }
+
+    totalAmount -= totaldiscount;
+
+    // Update the fields with the calculated values
+    document.getElementById('total_invoice_tax').value = totalInvoiceTax.toFixed(2);
+    document.getElementById('items_cost_without_tax').value = itemsCostWithoutTax.toFixed(2);
+    document.getElementById('items_cost_with_tax').value = totalAmount.toFixed(2);
+    document.getElementById('total_amount').value = totalAmount.toFixed(2);
+}
+
+function calculateGoodsRecievingAmount() {
+    let totalAmount = 0;
+
+    var salesTax = parseFloat(document.getElementById('sales_tax').value) || 0;
+    var advanceTax = parseFloat(document.getElementById('adv_tax').value) || 0;
+
+    // Loop through each item set
+    document.querySelectorAll('.item-set').forEach((itemSet, index) => {
+        const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
+        const quantity = parseFloat(itemSet.querySelector('.balance_receivable').value) || 0;
+
+        // Calculate item total without discount and tax
+        let itemTotal = unitPrice * quantity;
+
+        // Accumulate total invoice tax
+        totalAmount += itemTotal;
+
+        // Update the total amount field
+        itemSet.querySelector('.product_total').value = itemTotal.toFixed(2);
+    });
+
+    totalAmount += salesTax + advanceTax;
+    document.getElementById('total_amount').value = totalAmount.toFixed(2);
+}
+
+function calculateSingleProductAmount() {
+    // Loop through each item set
+    document.querySelectorAll('.item-set').forEach((itemSet, index) => {
+        const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
+        const quantity = parseFloat(itemSet.querySelector('.quantity').value) || 0;
+
+        // Calculate item total without discount and tax
+        let itemTotal = unitPrice * quantity;
+
+        // Update the total amount field
+        itemSet.querySelector('.product_total').value = itemTotal.toFixed(2);
+    });
 }

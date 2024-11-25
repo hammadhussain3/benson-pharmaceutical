@@ -5,35 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class Batch
- *
- * @property $id
- * @property $batchno
- * @property $batch_size
- * @property $product_id
- * @property $mfg_date
- * @property $exp_date
- * @property $status
- * @property $created_by
- * @property $updated_by
- * @property $created_at
- * @property $updated_at
- *
- * @package App
- * @mixin \Illuminate\Database\Eloquent\Builder
- */
 class Batch extends Model
 {
     use HasFactory;
-    protected $perPage = 20;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = ['batchno', 'batch_size', 'product_id', 'mfg_date', 'exp_date', 'status', 'created_by', 'updated_by'];
+    protected $fillable = ['batch_no', 'batch_size', 'product_id', 'mfg_date', 'exp_date', 'status', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -52,6 +28,11 @@ class Batch extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
     // Define the relationship to User (Created By)

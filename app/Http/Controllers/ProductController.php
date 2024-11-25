@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductGroup;
 use App\Models\Product;
+use App\Models\RawMaterialItem;
 use App\Http\Requests\ProductRequest;
 use App\Services\ProductService;
 use App\Services\CompanyService;
@@ -88,6 +89,13 @@ class ProductController extends Controller
     {
         $products = Product::where('company_id', $companyId)->orderBy('name', 'asc')->get();
         return response()->json(['products' => $products]);
+    }
+
+    public function getProdAndRMByCompany($companyId)
+    {
+        $products = Product::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        $rawMaterialItems = RawMaterialItem::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        return response()->json(['products' => $products, 'rawMaterialItems' => $rawMaterialItems]);
     }
 
     public function createCodeByCompany($companyId)

@@ -37,6 +37,9 @@
                             <th>MFG date</th>
                             <th>EXP date</th>
                             <th>Status</th>
+                            @role('Superadmin')
+                            <th>Company</th>
+                            @endrole
                             @if(auth()->user()->hasPermission('Batch View') || auth()->user()->hasPermission('Batch Update') || auth()->user()->hasPermission('Batch Delete'))
                             <th>Action</th>
                             @endif
@@ -46,7 +49,7 @@
                         @foreach ($batches as $batch)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> <a class="link-primary" href="{{ route('batches.show', $batch->id) }}">{{ $batch->batchno }}</a></td>
+                                <td> <a class="link-primary" href="{{ route('batches.show', $batch->id) }}">{{ $batch->batch_no }}</a></td>
                                 <td>{{ $batch->batch_size }}</td>
                                 <td>{{ $batch->product->name }}</td>
                                 <td>{{ $batch->mfg_date }}</td>
@@ -56,6 +59,9 @@
                                         {{ $batch->status == 'completed' ? 'Completed' : 'In-Process' }}
                                     </span>
                                 </td>
+                                @role('Superadmin')
+                                <td>{{ $batch->company->name }}</td>
+                                @endrole
                                 @if(auth()->user()->hasPermission('Batch View') || auth()->user()->hasPermission('Batch Update') || auth()->user()->hasPermission('Batch Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Batch View'))

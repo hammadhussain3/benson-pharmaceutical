@@ -24,7 +24,7 @@
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Company</label>
-                            <input type="text" class="form-control" value="{{ $franchise->company_name }}" readonly>
+                            <input type="text" class="form-control" value="{{ $franchise->company->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Phone</label>

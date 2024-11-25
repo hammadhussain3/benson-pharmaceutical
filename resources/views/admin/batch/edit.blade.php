@@ -22,22 +22,43 @@
                         @csrf
                         @method('PUT')
                         <div class="form-row row">
-                            <div class="mb-3 col-md-6">
-                                <label for="product_id">Product</label>
-                                <select class="js-example-basic-single select2" name="product_id" required>
+                            @role('Superadmin')
+                            <div class="mb-3 col-md-12">
+                                <label for="company_id">Company</label>
+                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectProducts(this.value);" @endrole>
                                     <option value="">Select Company</option>
-                                    @foreach ($products as $product)
-                                        <option value="{{ $product->id }}"
-                                            {{ old('product_id', $batch->product_id) == $product->id ? 'selected' : '' }}>{{ $product->name }}
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company', $batch->company_id) == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                <div class="invalid-feedback">Please select a Product.</div>
+                                <div class="invalid-feedback">Please select a company.</div>
+                            </div>
+                            @else
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
+                            <div class="mb-3 col-md-6">
+                                <label for="product_id">Product</label>
+                                <select class="js-example-basic-single select2" name="product" id="product_id" required>
+                                    <option value="">Select Product</option>
+                                    @php
+                                        $seletedCompanyId = old('company', $batch->company_id) ?? auth()->user()->employee->company_id;
+                                    @endphp
+                                    @foreach ($products->where('company_id', $seletedCompanyId) as $product)
+                                        <option value="{{ $product->id }}"
+                                            {{ old('product', $batch->product_id) == $product->id ? 'selected' : '' }}>
+                                            {{ $product->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="batchno">Batch No</label>
-                                <input type="text" class="form-control" name="batchno" id="batchno"
-                                    placeholder="Batch No" value="{{ old('batchno', $batch->batchno) }}" required>
+                                <label for="batch_no">Batch No</label>
+                                <input type="text" class="form-control" name="batch_no" id="batch_no"
+                                    placeholder="Batch No" value="{{ old('batch_no', $batch->batch_no) }}" required>
                                 <div class="invalid-feedback">Please provide a Batch No.</div>
                             </div>
                             <div class="mb-3 col-md-6">

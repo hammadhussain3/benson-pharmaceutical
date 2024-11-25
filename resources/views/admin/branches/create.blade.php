@@ -35,7 +35,7 @@
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
 
                             <div class="mb-3 col-md-6">

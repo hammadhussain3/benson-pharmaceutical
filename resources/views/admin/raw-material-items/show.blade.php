@@ -30,6 +30,14 @@
                             <label>Unit</label>
                             <input type="text" class="form-control" value="{{ $rawMaterialItem->unit }}" readonly>
                         </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Min Level</label>
+                            <input type="text" class="form-control" value="{{ $rawMaterialItem->min_level }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Max Level</label>
+                            <input type="text" class="form-control" value="{{ $rawMaterialItem->max_level }}" readonly>
+                        </div>
                         @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label>Company</label>

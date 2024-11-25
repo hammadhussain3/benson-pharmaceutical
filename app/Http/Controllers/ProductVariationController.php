@@ -49,7 +49,7 @@ class ProductVariationController extends Controller
     public function store(ProductVariationRequest $request)
     {
         $this->productVariationService->createProductVariation($request->validated());
-        return redirect()->route('product-variations.index')->with('success', 'ProductVariation created successfully.');
+        return redirect()->route('product-variations.index')->with('success', 'Product Variation created successfully.');
     }
 
     /**
@@ -82,12 +82,18 @@ class ProductVariationController extends Controller
     public function update(ProductVariationRequest $request, ProductVariation $productVariation)
     {
         $this->productVariationService->updateProductVariation($productVariation, $request->validated());
-        return redirect()->route('product-variations.index')->with('success', 'ProductVariation updated successfully');
+        return redirect()->route('product-variations.index')->with('success', 'Product Variation updated successfully');
     }
 
     public function destroy(ProductVariation $productVariation)
     {
         $this->productVariationService->deleteProductVariation($productVariation);
-        return redirect()->route('product-variations.index')->with('success', 'ProductVariation deleted successfully');
+        return redirect()->route('product-variations.index')->with('success', 'Product Variation deleted successfully');
+    }
+
+    public function getProductVariationsByCompany($productId)
+    {
+        $productVariations = ProductVariation::with(['product', 'packingType', 'packSize'])->where('product_id', $productId)->get();
+        return response()->json(['productVariations' => $productVariations]);
     }
 }

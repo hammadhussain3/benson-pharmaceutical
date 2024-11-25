@@ -22,7 +22,7 @@ class ProductVariationRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'product' => 'required|exists:companies,id',
+			'product' => 'required|exists:products,id',
 			'dosage_form' => 'required|exists:dosage_forms,id',
 			'pack_form' => 'required|exists:pack_forms,id',
 			'packing_type' => 'required|exists:packing_types,id',

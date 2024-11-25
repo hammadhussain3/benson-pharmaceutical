@@ -8,19 +8,21 @@ use App\Models\Party;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\Company;
-use App\Models\PaymentType;
 use App\Services\SupplierService;
 use App\Services\PaymentTypeService;
+use App\Services\InvoiceService;
 
 class SupplierController extends Controller
 {
     protected $supplierService;
     protected $paymentTypeService;
+    protected $invoiceService;
 
-    public function __construct(SupplierService $supplierService, PaymentTypeService $paymentTypeService)
+    public function __construct(SupplierService $supplierService, PaymentTypeService $paymentTypeService, InvoiceService $invoiceService)
     {
         $this->supplierService = $supplierService;
         $this->paymentTypeService = $paymentTypeService;
+        $this->invoiceService = $invoiceService;
     }
 
     /**
@@ -122,5 +124,18 @@ class SupplierController extends Controller
     {
         $supplier_code = $this->supplierService->createSupplierCode($companyId);
         return response()->json(['supplier_code' => $supplier_code]);
+    }
+
+    public function getSuppliersByCompany($companyId)
+    {
+        $suppliers = Party::where('company_id', $companyId)->where('is_supplier', '1')->orderBy('name', 'asc')->get();
+        return response()->json(['suppliers' => $suppliers]);
+    }
+
+    public function getSupplierByInvoice($invoiceId)
+    {
+        $invoice = $this->invoiceService->getInvoiceById($invoiceId);
+        $supplier = $this->supplierService->getSupplierById($invoice->party_id);
+        return response()->json(['supplier' => $supplier]);
     }
 }

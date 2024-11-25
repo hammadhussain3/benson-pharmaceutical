@@ -22,12 +22,13 @@ class BatchRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'batchno' => 'required|string',
+			'batch_no' => 'required|string',
 			'batch_size' => 'required|string',
-			'product_id' => 'required',
+			'product' => 'required|exists:products,id',
 			'mfg_date' => 'required|string',
 			'exp_date' => 'required|string',
 			'status' => 'required|string',
+            'company' => 'required|exists:companies,id',
         ];
     }
 }

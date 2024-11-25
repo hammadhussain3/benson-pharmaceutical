@@ -33,7 +33,7 @@
                                 <input type="hidden" name="company" id="company_id" value="{{ $selectedCompanyId }}" required>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ $leave->company_id }}">
+                                <input type="hidden" name="company" value="{{ $leave->company_id }}">
                             @endrole
 
                             <div class="mb-3 col-md-12">

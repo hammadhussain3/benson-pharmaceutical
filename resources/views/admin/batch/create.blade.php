@@ -20,24 +20,45 @@
                     <form action="{{ route('batches.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-row row">
-                            <div class="mb-3 col-md-6">
-                                <label for="company_id">Product</label>
-                                <select class="js-example-basic-single select2" name="product_id" required>
-                                    <option value="">Select Product</option>
-                                    @foreach ($products as $product)
-                                        <option value="{{ $product->id }}"
-                                            {{ old('company') == $product->id ? 'selected' : '' }}>
-                                            {{ $product->name }}
+                            @role('Superadmin')
+                            <div class="mb-3 col-md-12">
+                                <label for="company_id">Company</label>
+                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectProducts(this.value);" @endrole>
+                                    <option value="">Select Company</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}"
+                                            {{ old('company') == $company->id ? 'selected' : '' }}>
+                                            {{ $company->name }}
                                         </option>
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
-
+                            @else
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="batchno">Batch No</label>
-                                <input type="text" class="form-control" name="batchno" id="batchno"
-                                    placeholder="Batch No" required value="{{ old('batchno') }}">
+                                <label for="product_id">Product</label>
+                                <select class="js-example-basic-single select2" name="product" id="product_id" required>
+                                    <option value="">Select Product</option>
+                                    @if(old('product') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($products->where('company_id', $seletedCompanyId) as $product)
+                                            <option value="{{ $product->id }}"
+                                                {{ old('product') == $product->id ? 'selected' : '' }}>
+                                                {{ $product->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                <div class="invalid-feedback">Please select a company.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="batch_no">Batch No</label>
+                                <input type="text" class="form-control" name="batch_no" id="batch_no"
+                                    placeholder="Batch No" required value="{{ old('batch_no') }}">
                                 <div class="invalid-feedback">Please provide a Batch No.</div>
                             </div>
                             <div class="mb-3 col-md-6">

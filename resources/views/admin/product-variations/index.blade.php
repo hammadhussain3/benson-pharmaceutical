@@ -31,14 +31,14 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>REG. No.</th>
-                            <th>Brand Name</th>
-                            <th>Generic Name</th>
-                            <th>Therapeutic Class</th>
+                            <th>Product</th>
                             <th>Dosage Forms</th>
                             <th>Pack Forms</th>
                             <th>Packing Types</th>
                             <th>Pack Sizes</th>
+                            <th>Trade Price</th>
+                            <th>Our MRP</th>
+                            <th>Drap MRP</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
@@ -51,14 +51,14 @@
                         @foreach ($productVariations as $productVariation)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><a class="link-primary" href="{{ route('product-variations.show', $productVariation->id) }}">{{ $productVariation->product->reg_no }}</a></td>
-                                <td>{{ $productVariation->product->brand_name ?? 'N/A' }}</td>
-                                <td>{{ $productVariation->product->generic_name ?? 'N/A' }}</td>
-                                <td>{{ $productVariation->product->therapeutic_class ?? 'N/A' }}</td>
+                                <td><a class="link-primary" href="{{ route('product-variations.show', $productVariation->id) }}">{{ $productVariation->product->brand_name ?? 'N/A' }}</a></td>
                                 <td>{{ $productVariation->dosageForm->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packForm->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packSize->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packingType->name ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->trade_price ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->our_mrp ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->drap_mrp ?? 'N/A' }}</td>
                                 @role('Superadmin')
                                 <td>{{ $productVariation->company->name ?? 'N/A' }}</td>
                                 @endrole

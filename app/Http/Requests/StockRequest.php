@@ -22,14 +22,24 @@ class StockRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'product' => 'required|exists:products,id',
-			'raw_material_item' => 'required|exists:raw_material_items,id',
-			'available_quantity' => 'required|integer|min:0',
+            'product' => [
+                'required',
+                'string', // Ensure the product field contains the prefix to differentiate
+                function ($attribute, $value, $fail) {
+                    // Extract prefix and ID from the value (e.g., 'product_5' or 'raw_3')
+                    [$type, $id] = explode('_', $value, 2);
+
+                    if ($type === 'product' && !\App\Models\Product::where('id', $id)->exists()) {
+                        $fail("The selected product ($value) does not exist.");
+                    } elseif ($type === 'raw' && !\App\Models\RawMaterialItem::where('id', $id)->exists()) {
+                        $fail("The selected raw material ($value) does not exist.");
+                    }
+                }
+            ],
+			'quantity' => 'required|integer|min:0',
 			'unit' => 'required|string',
-			'rate' => 'required|numeric|min:0',
-			'value' => 'required|numeric|min:0',
-			'min_level' => 'required|integer|min:0',
-			'max_level' => 'required|integer|min:0',
+			'unit_price' => 'required|numeric|min:0',
+			'total' => 'required|numeric|min:0',
 			'company' => 'required|exists:companies,id',
         ];
     }

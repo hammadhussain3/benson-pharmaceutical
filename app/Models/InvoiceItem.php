@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class InvoiceItem extends Model
+{
+    use HasFactory;
+
+    protected $fillable = ['invoice_id', 'product_id', 'raw_material_item_id', 'unit', 'unit_price', 'product_quantity', 'tax_rate', 'discount_type', 'discount','total_amount'];
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+    
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function rawMaterialItem()
+    {
+        return $this->belongsTo(RawMaterialItem::class);
+    }
+
+    public function getItemAttribute()
+    {
+        return $this->product_id
+            ? $this->product
+            : $this->rawMaterialItem;
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+}

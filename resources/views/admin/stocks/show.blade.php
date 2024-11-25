@@ -25,36 +25,24 @@
                         </div>
                         @endrole
                         <div class="mb-3 col-md-6">
-                            <label>Product</label>
-                            <input type="text" class="form-control" value="{{ $stock->product->name }}" readonly>
+                            <label>Name</label>
+                            <input type="text" class="form-control" value="{{ $stock->product->name ?? $stock->rawMaterialItem->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Raw Material</label>
-                            <input type="text" class="form-control" value="{{ $stock->rawMaterialItem->name }}" readonly>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label>Available Quantity</label>
-                            <input type="text" class="form-control" value="{{ $stock->available_quantity }}" readonly>
+                            <label>Quantity</label>
+                            <input type="text" class="form-control" value="{{ $stock->quantity }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Unit</label>
                             <input type="text" class="form-control" value="{{ $stock->unit }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Rate</label>
-                            <input type="text" class="form-control" value="{{ $stock->rate }}" readonly>
+                            <label>Unit Price</label>
+                            <input type="text" class="form-control" value="{{ $stock->unit_price }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Value</label>
-                            <input type="text" class="form-control" value="{{ $stock->value }}" readonly>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label>Min. Level</label>
-                            <input type="text" class="form-control" value="{{ $stock->min_level }}" readonly>
-                        </div>
-                        <div class="mb-3 col-md-6">
-                            <label>Max. Level</label>
-                            <input type="text" class="form-control" value="{{ $stock->max_level }}" readonly>
+                            <label>Total</label>
+                            <input type="text" class="form-control" value="{{ $stock->total }}" readonly>
                         </div>
                     </div>
                     <div class="row justify-content-between align-items-center">

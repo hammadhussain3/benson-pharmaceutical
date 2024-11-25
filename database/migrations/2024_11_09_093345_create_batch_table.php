@@ -19,11 +19,13 @@ return new class extends Migration
             $table->string('mfg_date');
             $table->string('exp_date');
             $table->string('status');
+            $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
 
             // Foreign key constraints (if needed)
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }

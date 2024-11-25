@@ -36,7 +36,7 @@
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             @else
-                                <input type="hidden" name="company_id" value="{{ $packForm->company_id }}">
+                                <input type="hidden" name="company" value="{{ $packForm->company_id }}">
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="name">Name</label>

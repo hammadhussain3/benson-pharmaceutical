@@ -4,82 +4,87 @@ namespace App\Http\Controllers;
 
 use App\Models\Batch;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Http\Requests\BatchRequest;
-use App\Models\Product;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Services\CompanyService;
+use App\Services\BatchService;
+use App\Services\ProductService;
 
 class BatchController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request): View
-    {
-        $batches = Batch::paginate();
+    protected $batchService;
+    protected $companyService;
+    protected $productService;
 
-        return view('admin.batch.index', compact('batches'))
-            ->with('i', ($request->input('page', 1) - 1) * $batches->perPage());
+    public function __construct(BatchService $batchService, CompanyService $companyService, ProductService $productService)
+    {
+        $this->batchService = $batchService;
+        $this->companyService = $companyService;
+        $this->productService = $productService;
+    }
+
+    public function index()
+    {
+        $batches = $this->batchService->getAllBatches();
+        return view('admin.batch.index', compact('batches'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
-        $batch = new Batch();
-        $products = Product::orderBy('name', 'asc')->get();
-        return view('admin.batch.create', compact('batch','products'));
+        $companies = $this->companyService->getAllCompanies();
+        $products = $this->productService->getAllProducts();
+        return view('admin.batch.create', compact('companies','products'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(BatchRequest $request): RedirectResponse
+    public function store(BatchRequest $request)
     {
-        Batch::create($request->validated());
-
-        return Redirect::route('batches.index')
-            ->with('success', 'Batch created successfully.');
+        $this->batchService->createBatch($request->validated());
+        return redirect()->route('batches.index')->with('success', 'Batch created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id): View
+    public function show($id)
     {
-        $batch = Batch::find($id);
-
+        $batch = $this->batchService->getBatchById($id);
         return view('admin.batch.show', compact('batch'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id): View
+    public function edit($id)
     {
-        $batch = Batch::find($id);
-        $products = Product::orderBy('name', 'asc')->get();
-        return view('admin.batch.edit', compact('batch','products'));
+        $batch = $this->batchService->getBatchById($id);
+        $companies = $this->companyService->getAllCompanies();
+        $products = $this->productService->getAllProducts();
+        return view('admin.batch.edit', compact('batch', 'companies', 'products'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(BatchRequest $request, Batch $batch): RedirectResponse
+    public function update(BatchRequest $request, Batch $batch)
     {
-        $batch->update($request->validated());
-
-        return Redirect::route('batches.index')
-            ->with('success', 'Batch updated successfully');
+        $this->batchService->updateBatch($batch, $request->validated());
+        return redirect()->route('batches.index')->with('success', 'Batch updated successfully');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(Batch $batch)
     {
-        Batch::find($id)->delete();
+        $this->batchService->deleteBatch($batch);
+        return redirect()->route('batches.index')->with('success', 'Batch deleted successfully');
+    }
 
-        return Redirect::route('batches.index')
-            ->with('success', 'Batch deleted successfully');
+    public function getBatchesByProductId($productId)
+    {
+        $batches = Batch::where('product_id', $productId)->get();
+        return response()->json(['batches' => $batches]);
     }
 }

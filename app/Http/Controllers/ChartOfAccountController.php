@@ -82,4 +82,10 @@ class ChartOfAccountController extends Controller
         $this->chartOfAccountService->deleteChartOfAccount($chartOfAccount);
         return redirect()->route('chart_of_accounts.index')->with('success', 'Chart of Account deleted successfully!');
     }
+
+    public function getChartOfAccountsByCompany($companyId)
+    {
+        $chartOfAccounts = ChartOfAccount::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        return response()->json(['chartOfAccounts' => $chartOfAccounts]);
+    }
 }

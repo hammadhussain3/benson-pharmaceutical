@@ -35,10 +35,20 @@
                                 <input type="text" class="form-control" name="unit" id="unit"
                                     placeholder="Unit" required value="{{ old('unit') }}">
                             </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="min_level">Min Level</label>
+                                <input type="text" class="form-control" name="min_level" id="min_level"
+                                    placeholder="Min Level" required value="{{ old('min_level') }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="max_level">Max Level</label>
+                                <input type="text" class="form-control" name="max_level" id="max_level"
+                                    placeholder="Max Level" required value="{{ old('max_level') }}">
+                            </div>
                             @role('Superadmin')
                                 <div class="mb-3 col-md-6">
                                     <label for="company">Company</label>
-                                    <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="selectParties(this.value); createRawMaterialItemCode(this.value);" @endrole>
+                                    <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="selectSuppliers(this.value); createRawMaterialItemCode(this.value);" @endrole>
                                         <option value="">Select Company</option>
                                         @foreach ($companies as $company)
                                             <option value="{{ $company->id }}"
@@ -52,9 +62,9 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="party_id">Party</label>
-                                <select name="party" id="party_id" class="form-control" required>
-                                    <option value="">Select Party</option>
+                                <label for="supplier_id">Supplier</label>
+                                <select name="party" id="supplier_id" class="form-control" required>
+                                    <option value="">Select Supplier</option>
                                     @if(old('party') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
                                             $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
