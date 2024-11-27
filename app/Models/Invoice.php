@@ -25,4 +25,8 @@ class Invoice extends Model
         return $this->belongsTo(Party::class);
     }
     
+    public function goodsReceivings()
+    {
+        return $this->hasMany(GoodsReceiving::class);
+    }
 }

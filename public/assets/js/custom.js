@@ -550,6 +550,69 @@ function selectProductsAndRawMaterials(companyId) {
     }
 }
 
+function selectAllTypeOfProducts(companyId) {
+    // Get all dropdowns with the class 'products_dropdown'
+    var productSelectList = document.getElementsByClassName('products_dropdown');
+    
+    if (companyId && productSelectList.length > 0) {
+        // Loop through all dropdowns
+        Array.from(productSelectList).forEach(function(productSelect) {
+            // Clear the existing options in each dropdown
+            productSelect.innerHTML = '<option value="">Select Products</option>';
+            
+            // Fetch the products and raw materials for the selected company
+            fetch(`/companies/${companyId}/all-products`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error fetching data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Add product options
+                    if (data.products && data.products.length > 0) {
+                        var productGroup = document.createElement('optgroup');
+                        productGroup.label = "Products";
+                        data.products.forEach(function(product) {
+                            var option = document.createElement('option');
+                            option.value = `product_${product.id}`; // Use prefix to differentiate
+                            option.textContent = product.name;
+                            productGroup.appendChild(option);
+                        });
+                        productSelect.appendChild(productGroup);
+                    }
+
+                    // Add raw material options
+                    if (data.rawMaterialItems && data.rawMaterialItems.length > 0) {
+                        var rawMaterialGroup = document.createElement('optgroup');
+                        rawMaterialGroup.label = "Raw Materials";
+                        data.rawMaterialItems.forEach(function(rawMaterialItem) {
+                            var option = document.createElement('option');
+                            option.value = `raw_${rawMaterialItem.id}`; // Use prefix to differentiate
+                            option.textContent = rawMaterialItem.name;
+                            rawMaterialGroup.appendChild(option);
+                        });
+                        productSelect.appendChild(rawMaterialGroup);
+                    }
+
+                    // Add product variation
+                    if (data.productVariations && data.productVariations.length > 0) {
+                        var productVariationGroup = document.createElement('optgroup');
+                        productVariationGroup.label = "Finished Products";
+                        data.productVariations.forEach(function(productVariation) {
+                            var option = document.createElement('option');
+                            option.value = `var_${productVariation.id}`; // Use prefix to differentiate
+                            option.textContent = `${productVariation.product.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
+                            productVariationGroup.appendChild(option);
+                        });
+                        productSelect.appendChild(productVariationGroup);
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+    }
+}
+
 function selectProductVariations(productId) {
     // Get all dropdowns with the class 'product_variations_dropdown'
     var selectProductVariations = document.getElementsByClassName('product_variations_dropdown');
@@ -837,7 +900,7 @@ function selectGeneralStoreRequisitions(companyId)
     var storeIssueRequisitionSelect = document.getElementById('store_issue_requisition_id');
     
     if (companyId && storeIssueRequisitionSelect) {
-        storeIssueRequisitionSelect.innerHTML = '<option value="">Select DN/GP</option>';
+        storeIssueRequisitionSelect.innerHTML = '<option value="">Select Store Issue Requisition</option>';
         fetch(`/companies/${companyId}/general-store-requisitions`)
             .then(response => {
                 if (!response.ok) {
@@ -849,7 +912,7 @@ function selectGeneralStoreRequisitions(companyId)
                 data.storeIssueRequisitions.forEach(function (storeIssueRequisition) {
                     var option = document.createElement('option');
                     option.value = storeIssueRequisition.id;
-                    option.textContent = storeIssueRequisition.dn_gp;
+                    option.textContent = storeIssueRequisition.code;
                     storeIssueRequisitionSelect.appendChild(option);
                 });
             })
@@ -862,7 +925,7 @@ function selectProductionStoreRequisitions(companyId, productId)
     var storeIssueRequisitionSelect = document.getElementById('store_issue_requisition_id');
     
     if (companyId && storeIssueRequisitionSelect && productId) {
-        storeIssueRequisitionSelect.innerHTML = '<option value="">Select DN/GP</option>';
+        storeIssueRequisitionSelect.innerHTML = '<option value="">Select Store Issue Requisition</option>';
         fetch(`/companies/${companyId}/production-store-requisitions?productId=${productId}`)
             .then(response => {
                 if (!response.ok) {
@@ -874,7 +937,7 @@ function selectProductionStoreRequisitions(companyId, productId)
                 data.storeIssueRequisitions.forEach(function (storeIssueRequisition) {
                     var option = document.createElement('option');
                     option.value = storeIssueRequisition.id;
-                    option.textContent = storeIssueRequisition.dn_gp;
+                    option.textContent = storeIssueRequisition.code;
                     storeIssueRequisitionSelect.appendChild(option);
                 });
             })
@@ -1042,9 +1105,28 @@ function createInvoiceCode(companyId)
     }
 }
 
+function createGoodsReceivingsCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/goods-receivings-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating goods receivings code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.goods_receiving_code;
+            })
+            .catch(error => console.error('Error creating goods receivings code:', error));
+    }
+}
+
 function createStoreRequisitionCode(companyId)
 {
-    var code = document.getElementById('dn_gp');
+    var code = document.getElementById('code');
     
     if (companyId && code) {
         fetch(`/companies/${companyId}/store-requisition-code`)
@@ -1058,6 +1140,82 @@ function createStoreRequisitionCode(companyId)
                 code.value = data.store_requisition_code;
             })
             .catch(error => console.error('Error creating store requisition code:', error));
+    }
+}
+
+function createFinishedGoodsCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/finished-goods-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating finished goods code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.finished_goods_code;
+            })
+            .catch(error => console.error('Error creating finished goods code:', error));
+    }
+}
+
+function createLeftOverNoteCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/left-over-note-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating left over note code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.left_over_note_code;
+            })
+            .catch(error => console.error('Error creating left over note code:', error));
+    }
+}
+
+function createRejectionCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/rejection-return-note-code`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating rejection return note code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.rejection;
+            })
+            .catch(error => console.error('Error creating rejection return note code:', error));
+    }
+}
+
+function createChartOfAccountCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/chart-of-account`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating chart of account code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.chart_of_account_code;
+            })
+            .catch(error => console.error('Error creating chart of account code:', error));
     }
 }
 
@@ -1241,8 +1399,7 @@ function getGeneralStoreRequisitionDetails(requisitionId) {
                                         <div class="mb-3 col-md">
                                             <label>Quantity</label>
                                             <input type="number" class="form-control quantity" name="items[${index}][quantity]"
-                                                placeholder="Quantity" required value="${item.quantity}" oninput="calculateSingleProductAmount()" max="${item.quantity}" min="1">
-                                            <input type="hidden" name="items[${index}][max_quantity]" value="${item.quantity}">
+                                                placeholder="Quantity" required value="${item.quantity}" oninput="calculateSingleProductAmount()" readonly>
                                         </div>
                                         <div class="mb-3 col-md">
                                             <label>Total</label>
@@ -1267,7 +1424,7 @@ function getGeneralStoreRequisitionDetails(requisitionId) {
                 } else {
                     var html = `
                         <div class="item-set">
-                            <div class="alert alert-danger text-center">No Items Found According your provided supplier bill no. and DN/GP.</p>
+                            <div class="alert alert-danger text-center">No Items Found According your provided supplier bill no. and store issue requisition.</p>
                         </div>
                     `;
                     $("#item-group").append(html);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GoodsReceiving extends Model
 {
-    protected $fillable = ['invoice_id', 'party_id', 'supplier_bill_no', 'company_id', 'sales_tax', 'adv_tax', 'total_amount'];
+    protected $fillable = ['code', 'invoice_id', 'party_id', 'supplier_bill_no', 'company_id', 'sales_tax', 'adv_tax', 'total_amount'];
 
     public function company()
     {

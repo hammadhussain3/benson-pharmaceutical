@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('goods_receivings', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->unsignedBigInteger('invoice_id');
             $table->unsignedBigInteger('party_id');
             $table->string('supplier_bill_no');

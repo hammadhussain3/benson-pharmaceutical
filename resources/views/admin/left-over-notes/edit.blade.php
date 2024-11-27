@@ -37,7 +37,11 @@
                             @else
                                 <input type="hidden" name="company" id="company_id" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
+                                <label for="code">Code</label>
+                                <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $leftOverNote->code) }}">
+                            </div>
+                            <div class="mb-3 col-md-4">
                                 <label for="product_id">Product</label>
                                 <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectBatches(this.value); selectProductionStoreRequisitions(document.getElementById('company_id').value, this.value);">
                                     <option value="">Select Product</option>
@@ -53,7 +57,7 @@
                                 </select>
                             </div>
 
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
                                 <label for="batch_id">Batch</label>
                                 <select class="js-example-basic-single select2" name="batch" id="batch_id" required>
                                     <option value="">Select Batch</option>
@@ -86,16 +90,16 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="store_issue_requisition_id">DN/GP</label>
+                                <label for="store_issue_requisition_id">Store Issue Requisition</label>
                                 <select name="store_issue_requisition" id="store_issue_requisition_id" class="js-example-basic-single select2" required onchange="getProductionStoreRequisitionDetails(this.value)">
-                                    <option value="">Select DN/GP</option>
+                                    <option value="">Select Store Issue Requisition</option>
                                     @php
                                         $seletedCompanyId = old('company', $leftOverNote->company_id) ?? auth()->user()->employee->company_id;
                                     @endphp
-                                    @foreach ($requisitions->where('company_id', $seletedCompanyId) as $requisition)
+                                    @foreach ($requisitions->where('company_id', $seletedCompanyId)->where('is_production', '1') as $requisition)
                                         <option value="{{ $requisition->id }}"
                                             {{ old('store_issue_requisition', $leftOverNote->store_issue_requisition_id) == $requisition->id ? 'selected' : '' }}>
-                                            {{ $requisition->dn_gp }}
+                                            {{ $requisition->code }}
                                         </option>
                                     @endforeach
                                 </select>

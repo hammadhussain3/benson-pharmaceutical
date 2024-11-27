@@ -33,8 +33,9 @@
                     </div>
                 </div>
                 <div class="col-auto text-end">
-                    <h2>Store Issue Requisition</h2>
-                    <h5>Month: {{ $requisition->created_at->format('d M, Y') }}</h5>
+                    <h2 class="fs-5 fw-bold">Store Issue Requisition</h2>
+                    <p class="fs-6 mb-0">{{ $requisition->code }}</p>
+                    <p class="fs-6 mb-0">Month: {{ $requisition->created_at->format('d M, Y') }}</p>
                 </div>
             </div>
 
@@ -68,8 +69,8 @@
                     @foreach ($requisition->items as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->product->code ?? $item->raw_material_item->code }}</td>
-                            <td>{{ $item->product->name ?? $item->raw_material_item->name }}</td>
+                            <td>{{ $item->product->code ?? $item->raw_material_item->code ?? $item->product_variation->product->name. ' | ' .$item->product_variation->packingType->name. ' | ' .$item->product_variation->packSize->name }}</td>
+                            <td>{{ $item->product->name ?? $item->raw_material_item->name ?? $item->product_variation->product->code }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ $item->unit }}</td>
                             <td>{{ number_format($item->unit_price) }}</td>

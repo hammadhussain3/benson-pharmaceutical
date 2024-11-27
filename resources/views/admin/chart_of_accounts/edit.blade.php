@@ -31,7 +31,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code"
-                                    value="{{ old('code', $chartOfAccount->code) }}" required>
+                                    value="{{ old('code', $chartOfAccount->code) }}" required readonly>
                                 <div class="invalid-feedback">Please provide a valid code.</div>
                             </div>
                             @role('Superadmin')

@@ -34,7 +34,7 @@
                             @role('Superadmin')
                                 <div class="mb-3 col-md-12">
                                     <label for="company">Company</label>
-                                    <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectProductsAndRawMaterials(this.value); selectChartOfAccounts(this.value); createStoreRequisitionCode(this.value);">
+                                    <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectAllTypeOfProducts(this.value); selectChartOfAccounts(this.value); createStoreRequisitionCode(this.value);">
                                         <option value="">Select Company</option>
                                         @foreach ($companies as $company)
                                             <option value="{{ $company->id }}"
@@ -47,7 +47,11 @@
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
+                                <label for="code">Code</label>
+                                <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $newRequisitionCode) }}">
+                            </div>
+                            <div class="mb-3 col-md-4">
                                 <label for="type">Chart of Accounts</label>
                                 <select class="js-example-basic-single select2" name="chart_of_account" id="chart_of_account_id" required>
                                     <option value="">Select Chart Of Account</option>
@@ -64,9 +68,9 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="dn_gp">DN GP</label>
-                                <input type="text" class="form-control" name="dn_gp" id="dn_gp" value="{{ old('dn_gp') }}" readonly>
+                            <div class="mb-3 col-md-4">
+                                <label for="dn_gp">DN/GP</label>
+                                <input type="text" class="form-control" name="dn_gp" id="dn_gp" value="{{ old('dn_gp') }}" placeholder="Enter DN/GP">
                             </div>
                             <div class="col-md-12">
                                 <div class="card border-0 mb-0" id="item-group">
@@ -89,7 +93,7 @@
                                                     <div class="mb-3 col-md-4">
                                                         <label for="">Product</label>
                                                         <select name="items[{{ $i }}][product]" class="js-example-basic-single select2 products_dropdown" required>
-                                                            <option value="">Select Product or Raw Material</option>
+                                                            <option value="">Select Products</option>
                                                             @if(old('items[{{ $i }}][product]') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                                                 @php
                                                                     $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
@@ -107,6 +111,14 @@
                                                                         <option value="{{ 'raw_' .$rawMaterialItem->id }}"
                                                                             {{ old("items.$i.product") == 'raw_' .$rawMaterialItem->id ? 'selected' : '' }}>
                                                                             {{ $rawMaterialItem->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </optgroup>
+                                                                <optgroup label="Finished Products">
+                                                                    @foreach ($productVariations->where('company_id', $seletedCompanyId) as $productVariation)
+                                                                        <option value="{{ 'var_' .$productVariation->id }}"
+                                                                            {{ old("items.$i.product") == 'var_' .$productVariation->id ? 'selected' : '' }}>
+                                                                            {{ $productVariation->product->name. ' | ' .$productVariation->packingType->name. ' | ' .$productVariation->packSize->name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </optgroup>

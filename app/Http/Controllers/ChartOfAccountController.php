@@ -40,8 +40,13 @@ class ChartOfAccountController extends Controller
         if (!auth()->user()->hasPermission('Chart Of Accounts Create')) {
             abort(403, 'Unauthorized action.');
         }
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newChartOfAccountCode = "COA";
+        } else {
+            $newChartOfAccountCode = $this->chartOfAccountService->createChartOfAccountCode(auth()->user()->employee->company_id);
+        }
         $companies = Company::orderBy('name', 'asc')->get();
-        return view('admin.chart_of_accounts.create', compact('companies'));
+        return view('admin.chart_of_accounts.create', compact('companies', 'newChartOfAccountCode'));
     }
 
     public function store(StoreChartOfAccountRequest $request)
@@ -87,5 +92,11 @@ class ChartOfAccountController extends Controller
     {
         $chartOfAccounts = ChartOfAccount::where('company_id', $companyId)->orderBy('name', 'asc')->get();
         return response()->json(['chartOfAccounts' => $chartOfAccounts]);
+    }
+
+    public function createCodeByCompany($companyId)
+    {
+        $chart_of_account_code = $this->chartOfAccountService->createChartOfAccountCode($companyId);
+        return response()->json(['chart_of_account_code' => $chart_of_account_code]);
     }
 }

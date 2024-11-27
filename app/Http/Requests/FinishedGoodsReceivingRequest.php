@@ -21,7 +21,10 @@ class FinishedGoodsReceivingRequest extends FormRequest
      */
     public function rules(): array
     {
+        $finishedgoodsReceivingId = $this->finishedgoodsReceiving ? $this->finishedgoodsReceiving->id : null;
+
         return [
+            'code' => 'required|string|max:255|unique:goods_receivings,code,' . $finishedgoodsReceivingId . ',id,company_id,' . $this->company_id,
             'batch' => 'required|integer|exists:batches,id',
             'product' => 'required|integer|exists:products,id',
             'company' => 'required|integer|exists:companies,id',

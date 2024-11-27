@@ -3,13 +3,13 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Return Rejection Note List</h4>
-            <h6>Manage your Return Rejection Notes</h6>
+            <h4>Rejection Return Note List</h4>
+            <h6>Manage your Rejection Return Notes</h6>
         </div>
         @if(auth()->user()->hasPermission('Rejection Return Note Create'))
         <div class="page-btn">
             <a href="{{ route('rejection-return-notes.create') }}" class="btn btn-added">
-                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Return Rejection Note
+                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Rejection Return Note
             </a>
         </div>
         @endif
@@ -31,6 +31,7 @@
                     <thead class="thead">
                         <tr>
                             <th>#</th>
+                            <th>Code</th>
                             <th>Supplier</th>
                             <th>Invoice</th>
                             <th>Supplier Bill No.</th>
@@ -48,6 +49,7 @@
                         @foreach ($rejectionReturnNotes as $rejectionReturnNote)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $rejectionReturnNote->code ?? 'N/A' }}</td>
                                 <td>{{ $rejectionReturnNote->party->name ?? 'N/A' }}</td>
                                 <td>{{ $rejectionReturnNote->invoice->code ?? 'N/A' }}</td>
                                 <td>{{ $rejectionReturnNote->supplier_bill_no ?? 'N/A' }}</td>

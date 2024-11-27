@@ -47,7 +47,11 @@
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
+                                <label for="code">Code</label>
+                                <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $newRequisitionCode) }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="product_id">Product</label>
                                 <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectBatches(this.value)">
                                     <option value="">Select Product</option>
@@ -64,7 +68,7 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="batch_id">Batch</label>
                                 <select class="js-example-basic-single select2" name="batch" id="batch_id" required>
                                     <option value="">Select Batch</option>
@@ -81,9 +85,9 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="dn_gp">DN GP</label>
-                                <input type="text" class="form-control" name="dn_gp" id="dn_gp" value="{{ old('dn_gp') }}" readonly>
+                            <div class="mb-3 col-md-6">
+                                <label for="dn_gp">DN/GP</label>
+                                <input type="text" class="form-control" name="dn_gp" id="dn_gp" value="{{ old('dn_gp') }}" placeholder="Enter DN/GP">
                             </div>
                             <div class="col-md-12">
                                 <div class="card border-0 mb-0" id="item-group">

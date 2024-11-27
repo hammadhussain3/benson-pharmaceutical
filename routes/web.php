@@ -116,7 +116,11 @@ Route::middleware('auth')->group(function () {
     Route::get('store-issue-requisitions/production/create', [StoreIssueRequisitionController::class, 'productionCreate'])->name('store-issue-requisitions.production.create');
     Route::resource('rejection-return-notes', RejectionReturnNoteController::class);
     Route::resource('left-over-notes', LeftOverNoteController::class);
-    Route::get('report/current-balance-report', [ReportController::class, 'currentBalanceReport'])->name('current_balance_report');
+    Route::get('report/balance-report', [ReportController::class, 'balanceReport'])->name('reports.balance-report');
+    Route::get('report/purchase-items', [ReportController::class, 'purchaseItems'])->name('reports.purchase-items');
+    Route::get('report/purchase-requisition', [ReportController::class, 'purchaseRequisitions'])->name('reports.purchase-requisitions');
+    Route::get('report/requirement-report', [ReportController::class, 'requirementReport'])->name('reports.requirement-report');
+    Route::get('report/production-report', [ReportController::class, 'productionReport'])->name('reports.production-report');
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
@@ -125,6 +129,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/product-groups', [ProductGroupController::class, 'getProductGroupsByCompany']);
     Route::get('/companies/{companyId}/products', [ProductController::class, 'getProductsByCompany']);
     Route::get('/companies/{companyId}/products-and-raw-materials', [ProductController::class, 'getProdAndRMByCompany']);
+    Route::get('/companies/{companyId}/all-products', [ProductController::class, 'getAllTypeProductByCompany']);
     Route::get('/companies/{companyId}/dosage-forms', [DosageFormController::class, 'getDosageFormsByCompany']);
     Route::get('/companies/{companyId}/pack-forms', [PackFormController::class, 'getPackFormsByCompany']);
     Route::get('/companies/{companyId}/pack-sizes', [PackSizeController::class, 'getPackSizesByCompany']);
@@ -141,8 +146,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/product-code', [ProductController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/raw-material-item-code', [RawMaterialItemController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/purchase-requisition-code', [PurchaseRequisitionController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/goods-receivings-code', [GoodsReceivingController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/store-requisition-code', [StoreIssueRequisitionController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/finished-goods-code', [FinishedGoodsReceivingController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/left-over-note-code', [LeftOverNoteController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/rejection-return-note-code', [RejectionReturnNoteController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/invoice-code', [InvoiceController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/chart-of-account', [ChartOfAccountController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/companies/{companyId}/invoices', [InvoiceController::class, 'getInvoicesByCompany']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);

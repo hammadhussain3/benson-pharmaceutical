@@ -39,11 +39,16 @@ class RejectionReturnNoteController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newRejectionCode = "RRN";
+        } else {
+            $newRejectionCode = $this->rejectionReturnNoteService->createCode(auth()->user()->employee->company_id);
+        }
         $companies = $this->companyService->getAllCompanies();
         $invoices = $this->invoiceService->getAllInvoices();
         $goodsReceivings = $this->goodsReceivingService->getAllGoodsReceivings();
         $requisitions = $this->storeIssueRequisitionService->getAll();
-        return view('admin.rejection-return-notes.create', compact('companies', 'invoices', 'goodsReceivings', 'requisitions'));
+        return view('admin.rejection-return-notes.create', compact('companies', 'invoices', 'goodsReceivings', 'requisitions', 'newRejectionCode'));
     }
 
     /**
@@ -90,5 +95,11 @@ class RejectionReturnNoteController extends Controller
     {
         $this->rejectionReturnNoteService->delete($rejectionReturnNote);
         return redirect()->route('rejection-return-notes.index')->with('success', 'Rejection Return Note deleted successfully');
+    }
+
+    public function createCodeByCompany($companyId)
+    {
+        $rejection = $this->rejectionReturnNoteService->createCode($companyId);
+        return response()->json(['rejection' => $rejection]);
     }
 }

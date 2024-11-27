@@ -37,7 +37,11 @@
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
+                                <label for="code">Code</label>
+                                <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $finishedGoodsReceiving->code) }}">
+                            </div>
+                            <div class="mb-3 col-md-4">
                                 <label for="product_id">Product</label>
                                 <select name="product" id="product_id" class="js-example-basic-single select2" required onchange="selectBatches(this.value); selectProductVariations(this.value);">
                                     <option value="">Select Product</option>
@@ -52,7 +56,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
                                 <label for="batch_id">Batch</label>
                                 <select name="batch" id="batch_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Batch</option>

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Collection;
 use App\Models\GoodsReceiving;
 use App\Models\StoreIssueRequisition;
 use App\Http\Requests\StoreIssueRequisitionRequest;
+use App\Services\ProductVariationService;
 use App\Services\StoreIssueRequisitionService;
 use App\Services\ChartOfAccountService;
 use App\Services\RawMaterialItemService;
@@ -17,15 +17,17 @@ use Illuminate\Http\Request;
 class StoreIssueRequisitionController extends Controller
 {
     protected $storeIssueRequisitionService;
+    protected $productVariationService;
     protected $chartOfAccountService;
     protected $rawMaterialItemService;
     protected $batchService;
     protected $companyService;
     protected $productService;
 
-    public function __construct(BatchService $batchService, StoreIssueRequisitionService $storeIssueRequisitionService, RawMaterialItemService $rawMaterialItemService, ChartOfAccountService $chartOfAccountService, CompanyService $companyService, ProductService $productService)
+    public function __construct(BatchService $batchService, StoreIssueRequisitionService $storeIssueRequisitionService, RawMaterialItemService $rawMaterialItemService, ChartOfAccountService $chartOfAccountService, CompanyService $companyService, ProductService $productService, ProductVariationService $productVariationService)
     {
         $this->storeIssueRequisitionService = $storeIssueRequisitionService;
+        $this->productVariationService = $productVariationService;
         $this->chartOfAccountService = $chartOfAccountService;
         $this->rawMaterialItemService = $rawMaterialItemService;
         $this->companyService = $companyService;
@@ -44,20 +46,31 @@ class StoreIssueRequisitionController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newRequisitionCode = "SIR";
+        } else {
+            $newRequisitionCode = $this->storeIssueRequisitionService->createCode(auth()->user()->employee->company_id);
+        }
         $companies = $this->companyService->getAllCompanies();
         $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
         $products = $this->productService->getAllProducts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
-        return view('admin.store-issue-requisition.create', compact('companies', 'products', 'rawMaterialItems', 'chartOfAccounts'));
+        $productVariations = $this->productVariationService->getAllProductVariations();
+        return view('admin.store-issue-requisition.create', compact('companies', 'products', 'rawMaterialItems', 'chartOfAccounts', 'productVariations', 'newRequisitionCode'));
     }
 
     public function productionCreate()
     {
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newRequisitionCode = "SIR";
+        } else {
+            $newRequisitionCode = $this->storeIssueRequisitionService->createCode(auth()->user()->employee->company_id);
+        }
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
         $batches = $this->batchService->getAllBatches();
-        return view('admin.store-issue-requisition.production-create', compact('companies','products','rawMaterialItems', 'batches'));
+        return view('admin.store-issue-requisition.production-create', compact('companies','products','rawMaterialItems', 'batches', 'newRequisitionCode'));
     }
 
     /**
@@ -89,7 +102,8 @@ class StoreIssueRequisitionController extends Controller
         $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
         $batches = $this->batchService->getAllBatches();
-        return view('admin.store-issue-requisition.edit', compact('requisition', 'companies', 'products', 'chartOfAccounts', 'rawMaterialItems', 'batches'));
+        $productVariations = $this->productVariationService->getAllProductVariations();
+        return view('admin.store-issue-requisition.edit', compact('requisition', 'companies', 'products', 'chartOfAccounts', 'rawMaterialItems', 'productVariations', 'batches'));
     }
 
     /**
@@ -115,13 +129,13 @@ class StoreIssueRequisitionController extends Controller
 
     public function getGeneralStoreRequisitionsByCompany($companyId)
     {
-        $storeIssueRequisitions = StoreIssueRequisition::where('company_id', $companyId)->where('is_general', '1')->orderBy('dn_gp', 'asc')->get();
+        $storeIssueRequisitions = StoreIssueRequisition::where('company_id', $companyId)->where('is_general', '1')->orderBy('code', 'asc')->get();
         return response()->json(['storeIssueRequisitions' => $storeIssueRequisitions]);
     }
 
     public function getProductionStoreRequisitionsByCompany($companyId, Request $request)
     {
-        $storeIssueRequisitions = StoreIssueRequisition::where('company_id', $companyId)->where('product_id', $request->productId)->where('is_production', '1')->orderBy('dn_gp', 'asc')->get();
+        $storeIssueRequisitions = StoreIssueRequisition::where('company_id', $companyId)->where('product_id', $request->productId)->where('is_production', '1')->orderBy('code', 'asc')->get();
         return response()->json(['storeIssueRequisitions' => $storeIssueRequisitions]);
     }
 

@@ -31,6 +31,7 @@
                     <thead class="thead">
                         <tr>
                             <th>#</th>
+                            <th>Code</th>
                             <th>Product</th>
                             <th>Batch #</th>
                             <th>Department</th>
@@ -47,6 +48,7 @@
                         @foreach ($leftOverNotes as $leftOverNote)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $leftOverNote->code ?? 'N/A' }}</td>
                                 <td>{{ $leftOverNote->product->name ?? 'N/A' }}</td>
                                 <td>{{ $leftOverNote->batch->batch_no ?? 'N/A' }}</td>
                                 <td>{{ $leftOverNote->department->name ?? 'N/A' }}</td>                                

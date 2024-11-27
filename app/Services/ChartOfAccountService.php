@@ -37,4 +37,17 @@ class ChartOfAccountService
     {
         return ChartOfAccount::findOrFail($id);
     }
+
+    public function createChartOfAccountCode($company_id)
+    {
+        $lastChartOfAccountCode = ChartOfAccount::latest('id')->where('company_id', $company_id)->value('code');
+        if ($lastChartOfAccountCode) {
+            $numberPart = (int) substr($lastChartOfAccountCode, 3);
+            $newNumberPart = $numberPart + 1;
+            $newChartOfAccountCode = 'COA' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+        } else {
+            $newChartOfAccountCode = 'COA00001';
+        }
+        return $newChartOfAccountCode;
+    }
 }

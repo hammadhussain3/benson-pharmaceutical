@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\GoodsReceiving;
-use Illuminate\Http\Request;
 use App\Http\Requests\GoodsReceivingRequest;
 use App\Services\GoodsReceivingService;
 use App\Services\CompanyService;
@@ -36,10 +35,15 @@ class GoodsReceivingController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newGoodsReceivingCode = "GRN";
+        } else {
+            $newGoodsReceivingCode = $this->goodsReceivingService->createGoodsReceivingCode(auth()->user()->employee->company_id);
+        }
         $invoices = $this->invoiceService->getAllInvoices();
         $companies = $this->companyService->getAllCompanies();
         $batches = $this->batchService->getAllBatches();
-        return view('admin.goods-receivings.create', compact('invoices','batches','companies'));
+        return view('admin.goods-receivings.create', compact('invoices', 'batches', 'companies', 'newGoodsReceivingCode'));
     }
 
     /**
@@ -91,5 +95,11 @@ class GoodsReceivingController extends Controller
     {
         $goodsReceivings = GoodsReceiving::where('invoice_id', $invoiceId)->orderBy('supplier_bill_no', 'asc')->get();
         return response()->json(['goodsReceivings' => $goodsReceivings]);
+    }
+
+    public function createCodeByCompany($companyId)
+    {
+        $goods_receiving_code = $this->goodsReceivingService->createGoodsReceivingCode($companyId);
+        return response()->json(['goods_receiving_code' => $goods_receiving_code]);
     }
 }

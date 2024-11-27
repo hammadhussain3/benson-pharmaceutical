@@ -75,4 +75,17 @@ class LeftOverNoteService
     {
         return LeftOverNote::findOrFail($id);
     }
+
+    public function createCode($company_id)
+    {
+        $lastLeftOverNoteCode = LeftOverNote::latest('id')->where('company_id', $company_id)->value('code');
+        if ($lastLeftOverNoteCode) {
+            $numberPart = (int) substr($lastLeftOverNoteCode, 3);
+            $newNumberPart = $numberPart + 1;
+            $newLeftOverNoteCode = 'LON' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+        } else {
+            $newLeftOverNoteCode = 'LON00001';
+        }
+        return $newLeftOverNoteCode;
+    }
 }

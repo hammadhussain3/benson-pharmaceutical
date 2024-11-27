@@ -8,16 +8,19 @@ use App\Models\RawMaterialItem;
 use App\Http\Requests\ProductRequest;
 use App\Services\ProductService;
 use App\Services\CompanyService;
+use App\Services\ProductVariationService;
 
 class ProductController extends Controller
 {
     protected $companyService;
     protected $productService;
+    protected $productVariationService;
 
-    public function __construct(ProductService $productService, CompanyService $companyService)
+    public function __construct(ProductService $productService, CompanyService $companyService, ProductVariationService $productVariationService)
     {
         $this->companyService = $companyService;
         $this->productService = $productService;
+        $this->productVariationService = $productVariationService;
     }
 
     public function index()
@@ -96,6 +99,15 @@ class ProductController extends Controller
         $products = Product::where('company_id', $companyId)->orderBy('name', 'asc')->get();
         $rawMaterialItems = RawMaterialItem::where('company_id', $companyId)->orderBy('name', 'asc')->get();
         return response()->json(['products' => $products, 'rawMaterialItems' => $rawMaterialItems]);
+    }
+
+    public function getAllTypeProductByCompany($companyId)
+    {
+        $products = Product::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        $rawMaterialItems = RawMaterialItem::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        $variationQuery = $this->productVariationService->getAllProductVariations();
+        $productVariations = $variationQuery->where('company_id', $companyId);
+        return response()->json(['products' => $products, 'rawMaterialItems' => $rawMaterialItems, 'productVariations' => $productVariations]);
     }
 
     public function createCodeByCompany($companyId)

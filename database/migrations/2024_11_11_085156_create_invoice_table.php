@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('required_date');
             $table->integer('is_urgent');
             $table->unsignedBigInteger('company_id');
-            $table->enum('status', ['pending', 'paid', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->decimal('invoice_tax_rate', 5, 2);
             $table->decimal('total_invoice_tax', 15, 2); 
             $table->decimal('items_cost_with_tax', 15, 2);

@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\FinishedGoodsReceiving;
+use App\Models\FinishedGoodsReceivingItem;
+use App\Models\ProductVariation;
 
 class FinishedGoodsReceivingService
 {
@@ -31,7 +33,6 @@ class FinishedGoodsReceivingService
 
             $finishedGoodsReceiving->items()->create($item);
             $item['quantity'] = $item['quantity_received'];
-            $item['product_id'] = $data['product_id'];
             $item['company_id'] = $data['company_id'];
             $finishedGoodsReceiving->stocks()->create($item);
         }
@@ -74,5 +75,47 @@ class FinishedGoodsReceivingService
     public function getFinishedGoodsReceivingById($id)
     {
         return FinishedGoodsReceiving::findOrFail($id);
+    }
+
+    public function createFinishedGoodsReceivingCode($company_id)
+    {
+        $lastFinishedGoodsReceivingCode = FinishedGoodsReceiving::latest('id')->where('company_id', $company_id)->value('code');
+        if ($lastFinishedGoodsReceivingCode) {
+            $numberPart = (int) substr($lastFinishedGoodsReceivingCode, 3);
+            $newNumberPart = $numberPart + 1;
+            $newFinishedGoodsReceivingCode = 'FGR' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+        } else {
+            $newFinishedGoodsReceivingCode = 'FGR00001';
+        }
+        return $newFinishedGoodsReceivingCode;
+    }
+
+    public function getMonthlyFinishedProductReport()
+    {
+        $finalProducts = ProductVariation::all();
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $finalProducts = $finalProducts->where('company_id', auth()->user()->employee->company_id);
+        }
+
+        $finalProducts->each(function ($product) {
+            $monthlyTotals = array_fill(1, 12, 0);
+
+            $currentYear = now()->year;
+
+            $finishedProducts = $product->finishedProducts()
+                ->whereYear('created_at', $currentYear)
+                ->select('created_at', 'quantity_received')
+                ->get();
+
+            $finishedProducts->each(function ($finishedProduct) use (&$monthlyTotals) {
+                $month = $finishedProduct->created_at->month;
+                $monthlyTotals[$month] += $finishedProduct->quantity_received;
+            });
+
+            $product->monthly_totals = $monthlyTotals;
+        });
+
+        return $finalProducts;
     }
 }

@@ -33,4 +33,19 @@ class RawMaterialItem extends Model
         return $this->belongsTo(Party::class);
     }
     
+    public function orders()
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
+
+    public function recievers()
+    {
+        return $this->hasMany(GoodsReceivingItem::class);
+    }
+
+    public function balance()
+    {
+        $balanceData = Stock::currentBalanceForItem(null, $this->id);
+        return $balanceData['balance'];
+    }
 }

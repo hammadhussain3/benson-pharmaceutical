@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Edit Return Rejection Note</h3>
+                <h3 class="page-title">Edit Rejection Return Note</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('rejection-return-notes.index') }}">Return Rejection Notes</a></li>
-                    <li class="breadcrumb-item active">Edit Return Rejection Note</li>
+                    <li class="breadcrumb-item"><a href="{{ route('rejection-return-notes.index') }}">Rejection Return Notes</a></li>
+                    <li class="breadcrumb-item active">Edit Rejection Return Note</li>
                 </ul>
             </div>
         </div>
@@ -37,7 +37,11 @@
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
+                                <label for="code">Code</label>
+                                <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $rejectionReturnNote->code) }}">
+                            </div>
+                            <div class="mb-3 col-md-4">
                                 <label for="invoice_id">Invoice</label>
                                 <select name="invoice" id="invoice_id" class="js-example-basic-single select2" required onchange="selectSupplierByInvoice(this.value); selectSupplierBillNoByInvoice(this.value);">
                                     <option value="">Select Invoice</option>
@@ -53,7 +57,7 @@
                                 </select>
                             </div>
                             
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
                                 <label for="supplier">Supplier</label>
                                 <input type="text" class="form-control" name="supplier_name" id="supplier_name" placeholder="Supplier Name" value="{{ old('supplier_name', $rejectionReturnNote->party->name) }}" readonly>
                                 <input type="hidden" name="supplier" id="supplier_id" value="{{ old('supplier', $rejectionReturnNote->party_id) }}">
@@ -76,16 +80,16 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="store_issue_requisition_id">DN/GP</label>
+                                <label for="store_issue_requisition_id">Store Issue Requisition</label>
                                 <select name="store_issue_requisition" id="store_issue_requisition_id" class="js-example-basic-single select2" required onchange="getGeneralStoreRequisitionDetails(this.value)">
-                                    <option value="">Select DN/GP</option>
+                                    <option value="">Select Store Issue Requisition</option>
                                     @php
                                         $seletedCompanyId = old('company', $rejectionReturnNote->company_id) ?? auth()->user()->employee->company_id;
                                     @endphp
-                                    @foreach ($requisitions->where('company_id', $seletedCompanyId) as $requisition)
+                                    @foreach ($requisitions->where('company_id', $seletedCompanyId)->where('is_general', '1') as $requisition)
                                         <option value="{{ $requisition->id }}"
                                             {{ old('store_issue_requisition', $rejectionReturnNote->store_issue_requisition_id) == $requisition->id ? 'selected' : '' }}>
-                                            {{ $requisition->dn_gp }}
+                                            {{ $requisition->code }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -126,10 +130,7 @@
                                                             <label>Quantity</label>
                                                             <input type="number" class="form-control quantity" name="items[{{ $i }}][quantity]"
                                                                    placeholder="Quantity" required 
-                                                                   value="{{ old("items.$i.quantity", $rejectionReturnNote->items[$i]->quantity) }}" 
-                                                                   max="{{ old("items.$i.max_quantity") }}"
-                                                                   min="1" oninput="calculateSingleProductAmount()">
-                                                            <input type="hidden" name="items[{{ $i }}][max_quantity]" value="{{ old("items.$i.max_quantity", $rejectionReturnNote->items[$i]->quantity) }}">
+                                                                   value="{{ old("items.$i.quantity", $rejectionReturnNote->items[$i]->quantity) }}" readonly>
                                                         </div>
                                                         <div class="mb-3 col-md">
                                                             <label>Total</label>

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\GoodsReceiving;
 use App\Models\GoodsReceivingItem;
+use App\Models\Invoice;
 
 class GoodsReceivingService
 {
@@ -31,6 +32,7 @@ class GoodsReceivingService
             $item['product_id'] = $item['product'] ?? null;
             $item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
             $item['batch_id'] = $item['batch'];
+            
             if ($item['product_id']) {
                 $item['last_goods_receiving_id'] = GoodsReceivingItem::where('product_id', $item['product_id'])
                     ->latest('id')
@@ -42,10 +44,22 @@ class GoodsReceivingService
             }
 
             $goodsReceiving->items()->create($item);
+
             $item['quantity'] = $item['balance_receivable'];
             $item['total'] = $item['total_amount'];
             $item['company_id'] = $data['company_id'];
+
             $goodsReceiving->stocks()->create($item);
+        }
+
+        $allItemsMatch = $goodsReceiving->items->every(function ($item) {
+            return $item->quantity_ordered == ($item->quantity_received + $item->balance_receivable);
+        });
+
+        if ($allItemsMatch) {
+            $goodsReceiving->invoice->update(['status' => 'completed']);
+        } else {
+            $goodsReceiving->invoice->update(['status' => 'pending']);
         }
 
         return $goodsReceiving;
@@ -88,17 +102,41 @@ class GoodsReceivingService
             $goodsReceiving->stocks()->create($item);
         }
 
+        $allItemsMatch = $goodsReceiving->items->every(function ($item) {
+            return $item->quantity_ordered == ($item->quantity_received + $item->balance_receivable);
+        });
+
+        if ($allItemsMatch) {
+            $goodsReceiving->invoice->update(['status' => 'completed']);
+        } else {
+            $goodsReceiving->invoice->update(['status' => 'pending']);
+        }
+
         return $goodsReceiving;
     }
 
     public function deleteGoodsReceiving(GoodsReceiving $goodsReceiving)
     {
         $goodsReceiving->stocks()->delete();
+        $goodsReceiving->invoice->update(['status' => 'pending']);
         return $goodsReceiving->delete();
     }
 
     public function getGoodsReceivingById($id)
     {
         return GoodsReceiving::findOrFail($id);
+    }
+
+    public function createGoodsReceivingCode($company_id)
+    {
+        $lastGoodsReceivingCode = GoodsReceiving::latest('id')->where('company_id', $company_id)->value('code');
+        if ($lastGoodsReceivingCode) {
+            $numberPart = (int) substr($lastGoodsReceivingCode, 3);
+            $newNumberPart = $numberPart + 1;
+            $newGoodsReceivingCode = 'GRN' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+        } else {
+            $newGoodsReceivingCode = 'GRN00001';
+        }
+        return $newGoodsReceivingCode;
     }
 }

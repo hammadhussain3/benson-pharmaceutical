@@ -33,8 +33,9 @@
                     </div>
                 </div>
                 <div class="col-auto text-end">
-                    <h2>Finished Goods Receiving Note</h2>
-                    <h5>Month: {{ $finishedGoodsReceiving->created_at->format('d M, Y') }}</h5>
+                    <h2 class="fs-5 fw-bold">Finished Goods Receiving Note</h2>
+                    <p class="fs-6 mb-0">{{ $finishedGoodsReceiving->code }}</p>
+                    <p class="fs-6 mb-0">Month: {{ $finishedGoodsReceiving->created_at->format('d M, Y') }}</p>
                 </div>
             </div>
 

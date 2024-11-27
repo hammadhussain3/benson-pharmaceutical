@@ -31,6 +31,7 @@
                     <thead class="thead">
                         <tr>
                             <th>#</th> 
+                            <th>Code</th>
                             <th >Batch No</th>
                             <th >Product</th>
                             @role('Superadmin')
@@ -45,10 +46,11 @@
                         @foreach ($finishedGoodsReceivings as $finishedGoodsReceiving)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td >{{ $finishedGoodsReceiving->batch->batch_no }}</td>
-                                <td >{{ $finishedGoodsReceiving->product->name }}</td>
+                                <td>{{ $finishedGoodsReceiving->code }}</td>
+                                <td>{{ $finishedGoodsReceiving->batch->batch_no }}</td>
+                                <td>{{ $finishedGoodsReceiving->product->name }}</td>
                                 @role('Superadmin')
-                                <td >{{ $finishedGoodsReceiving->company->name }}</td>
+                                <td>{{ $finishedGoodsReceiving->company->name }}</td>
                                 @endrole
                                 @if(auth()->user()->hasPermission('Finished Goods Receiving View') || auth()->user()->hasPermission('Finished Goods Receiving Update') || auth()->user()->hasPermission(' FinishedGoods Receiving Delete'))
                                     <td>

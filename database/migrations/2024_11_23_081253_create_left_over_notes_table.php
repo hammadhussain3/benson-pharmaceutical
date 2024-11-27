@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('left_over_notes', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('batch_id')->nullable();
             $table->unsignedBigInteger('department_id')->nullable();

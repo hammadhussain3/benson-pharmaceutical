@@ -33,21 +33,24 @@
                     </div>
                 </div>
                 <div class="col-auto text-end">
-                    <h2>Left Over Note</h2>
-                    <h5>Month: {{ $leftOverNote->created_at->format('d M, Y') }}</h5>
+                    <h2 class="fs-5 fw-bold">Left Over Note</h2>
+                    <p class="fs-6 mb-0">{{ $leftOverNote->code }}</p>
+                    <p class="fs-6 mb-0">Date: {{ $leftOverNote->created_at->format('d M, Y') }}</p>
                 </div>
             </div>
 
             <table class="table mt-3">
                 <tr>
                     <th>Name</th>
-                    <td>{{ $leftOverNote->product->name ?? 'N/A' }}</td>
-                    <th>Batch #</th>
-                    <td>{{ $leftOverNote->batch->batch_no ?? 'N/A' }}</td>
+                    <td colspan="3">{{ $leftOverNote->product->name ?? 'N/A' }}</td>
+                    <th>SIR</th>
+                    <td>{{ $leftOverNote->storeIssueRequisition->code ?? 'N/A' }}</td>
                 </tr>
                 <tr>
                     <th>Department</th>
                     <td>{{ $leftOverNote->department->name ?? 'N/A' }}</td>
+                    <th>Batch #</th>
+                    <td>{{ $leftOverNote->batch->batch_no ?? 'N/A' }}</td>
                     <th>DN/GP #</th>
                     <td>{{ $leftOverNote->storeIssueRequisition->dn_gp ?? 'N/A' }}</td>
                 </tr>

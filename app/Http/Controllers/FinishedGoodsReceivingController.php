@@ -38,11 +38,16 @@ class FinishedGoodsReceivingController extends Controller
      */
     public function create()
     {
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newFinishedGoodsCode = "FGR";
+        } else {
+            $newFinishedGoodsCode = $this->finishedGoodsReceivingService->createFinishedGoodsReceivingCode(auth()->user()->employee->company_id);
+        }
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
         $batches = $this->batchService->getAllBatches();
         $productVariations = $this->productVariationService->getAllProductVariations();
-        return view('admin.finished-goods-receivings.create', compact('companies', 'products', 'batches', 'productVariations'));
+        return view('admin.finished-goods-receivings.create', compact('companies', 'products', 'batches', 'productVariations', 'newFinishedGoodsCode'));
     }
 
     /**
@@ -89,5 +94,11 @@ class FinishedGoodsReceivingController extends Controller
     {
         $this->finishedGoodsReceivingService->deleteFinishedGoodsReceiving($finishedGoodsReceiving);
         return redirect()->route('finished-goods-receivings.index')->with('success', 'Finished Goods Receiving Note deleted successfully');
+    }
+
+    public function createCodeByCompany($companyId)
+    {
+        $finished_goods_code = $this->finishedGoodsReceivingService->createFinishedGoodsReceivingCode($companyId);
+        return response()->json(['finished_goods_code' => $finished_goods_code]);
     }
 }

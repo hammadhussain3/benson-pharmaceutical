@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('total', 10, 2);
             $table->timestamps();
 
-            $table->foreign('finished_goods_receiving_id')->references('id')->on('finished_goods_receivings')->onDelete('cascade');
+            $table->foreign('finished_goods_receiving_id', 'fgr_items_fgr_id_foreign')->references('id')->on('finished_goods_receivings')->onDelete('cascade');
             $table->foreign('product_variation_id')->references('id')->on('product_variations')->onDelete('cascade');
         });
     }

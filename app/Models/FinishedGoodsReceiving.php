@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FinishedGoodsReceiving extends Model
 {
-    protected $fillable = ['batch_id', 'product_id', 'company_id'];
+    protected $fillable = ['code', 'batch_id', 'product_id', 'company_id'];
 
     public function batch()
     {
@@ -31,5 +31,10 @@ class FinishedGoodsReceiving extends Model
     public function stocks()
     {
         return $this->hasMany(Stock::class);
+    }
+
+    public static function monthlyProduction($id = null)
+    {
+        $quantity = FinishedGoodsReceivingItem::where('product_variation_id', $id)->sum('quantity_received');
     }
 }

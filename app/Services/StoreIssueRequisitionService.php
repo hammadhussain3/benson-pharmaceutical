@@ -33,8 +33,14 @@ class StoreIssueRequisitionService
                 if (str_starts_with($item['product'], 'product_')) {
                     $item['product_id'] = str_replace('product_', '', $item['product']);
                     $item['raw_material_item_id'] = null;
+                    $item['product_variation_id'] = null;
                 } elseif (str_starts_with($item['product'], 'raw_')) {
                     $item['raw_material_item_id'] = str_replace('raw_', '', $item['product']);
+                    $item['product_id'] = null;
+                    $item['product_variation_id'] = null;
+                } elseif (str_starts_with($item['product'], 'var_')) {
+                    $item['product_variation_id'] = str_replace('var_', '', $item['product']);
+                    $item['raw_material_item_id'] = null;
                     $item['product_id'] = null;
                 }
             } elseif(isset($item['raw_material_item'])){
@@ -65,19 +71,26 @@ class StoreIssueRequisitionService
         $storeIssueRequisition->stocks()->delete();
 
         foreach ($items as $item) {
-            if($item['product']){
+            if(isset($item['product'])){
                 if (str_starts_with($item['product'], 'product_')) {
                     $item['product_id'] = str_replace('product_', '', $item['product']);
                     $item['raw_material_item_id'] = null;
+                    $item['product_variation_id'] = null;
                 } elseif (str_starts_with($item['product'], 'raw_')) {
                     $item['raw_material_item_id'] = str_replace('raw_', '', $item['product']);
                     $item['product_id'] = null;
+                    $item['product_variation_id'] = null;
+                } elseif (str_starts_with($item['product'], 'var_')) {
+                    $item['product_variation_id'] = str_replace('var_', '', $item['product']);
+                    $item['raw_material_item_id'] = null;
+                    $item['product_id'] = null;
                 }
-            } elseif($item['raw_material_item']){
+            } elseif(isset($item['raw_material_item'])){
                 $item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
             }
 
             $storeIssueRequisition->items()->create($item);
+            $item['company_id'] = $data['company_id'];
             $storeIssueRequisition->stocks()->create($item);
         }
 
@@ -97,7 +110,7 @@ class StoreIssueRequisitionService
 
     public function createCode($company_id)
     {
-        $lastRequisitionCode = StoreIssueRequisition::latest('id')->where('company_id', $company_id)->value('dn_gp');
+        $lastRequisitionCode = StoreIssueRequisition::latest('id')->where('company_id', $company_id)->value('code');
         if ($lastRequisitionCode) {
             $numberPart = (int) substr($lastRequisitionCode, 3);
             $newNumberPart = $numberPart + 1;

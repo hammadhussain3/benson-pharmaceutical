@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('raw_material_item_id')->nullable();
+            $table->unsignedBigInteger('product_variation_id')->nullable();
             $table->unsignedBigInteger('batch_id')->nullable();
             $table->unsignedBigInteger('goods_receiving_id')->nullable();
             $table->unsignedBigInteger('finished_goods_receiving_id')->nullable();
             $table->unsignedBigInteger('store_issue_requisition_id')->nullable();
-            $table->unsignedBigInteger('rejection_return_note_id')->nullable();
             $table->unsignedBigInteger('left_over_note_id')->nullable();
             $table->integer('quantity');
             $table->string('unit');

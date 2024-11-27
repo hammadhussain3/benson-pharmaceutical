@@ -30,7 +30,7 @@
                                 <div class="mb-3 col-md-12">
                                     <label for="company">Company</label>
                                     <select name="company" id="company_id" class="js-example-basic-single select2" required 
-                                        onchange="selectProducts(this.value);
+                                        onchange="selectAllTypeOfProducts(this.value);
                                         @if ($requisition->is_general == '1') selectChartOfAccounts(this.value);
                                         @elseif ($requisition->is_production == '1') selectRawMaterialItems(this.value);
                                         @endif">
@@ -46,8 +46,12 @@
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
+                            <div class="mb-3 col-md-4">
+                                <label for="code">Code</label>
+                                <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $requisition->code) }}">
+                            </div>
                             @if ($requisition->is_general == '1')
-                                <div class="mb-3 col-md-6">
+                                <div class="mb-3 col-md-4">
                                     <label for="type">Chart of Accounts</label>
                                     <select class="js-example-basic-single select2" name="chart_of_account" id="chart_of_account_id" required>
                                         <option value="">Select Chart Of Account</option>
@@ -63,7 +67,7 @@
                                     </select>
                                 </div>
                             @elseif ($requisition->is_production == '1')
-                                <div class="mb-3 col-md-4">
+                                <div class="mb-3 col-md-6">
                                     <label for="product_id">Product</label>
                                     <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectBatches(this.value)">
                                         <option value="">Select Product</option>
@@ -80,7 +84,7 @@
                                 </div>
                             @endif
                             @if ($requisition->is_production == '1')
-                                <div class="mb-3 col-md-4">
+                                <div class="mb-3 col-md-6">
                                     <label for="batch_id">Batch</label>
                                     <select class="js-example-basic-single select2" name="batch" id="batch_id" required>
                                         <option value="">Select Batch</option>
@@ -96,7 +100,7 @@
                                     </select>
                                 </div>
                             @endif
-                            <div class="mb-3 {{ $requisition->is_general == '1' ? 'col-md-6' : 'col-md-4'; }}">
+                            <div class="mb-3 {{ $requisition->is_general == '1' ? 'col-md-4' : 'col-md-6'; }}">
                                 <label for="dn_gp">DN GP</label>
                                 <input type="text" class="form-control" name="dn_gp" id="dn_gp" value="{{ old('dn_gp', $requisition->dn_gp) }}">
                             </div>
@@ -118,12 +122,12 @@
                                                             <select name="items[{{ $i }}][product]" class="js-example-basic-single select2 products_dropdown" required>
                                                                 <option value="">Select Product</option>
                                                                 @php
-                                                                    $seletedCompanyId = old('company', $invoice->company_id) ?? auth()->user()->employee->company_id;
+                                                                    $seletedCompanyId = old('company', $requisition->company_id) ?? auth()->user()->employee->company_id;
                                                                 @endphp
                                                                 <optgroup label="Products">
                                                                     @foreach ($products->where('company_id', $seletedCompanyId) as $product)
                                                                         <option value="{{ 'product_' .$product->id }}"
-                                                                            {{ old("items.$i.product", 'product_' .$invoice->items[$i]->product_id ?? '') == 'product_' .$product->id ? 'selected' : '' }}>
+                                                                            {{ old("items.$i.product", 'product_' .$requisition->items[$i]->product_id ?? '') == 'product_' .$product->id ? 'selected' : '' }}>
                                                                             {{ $product->name }}
                                                                         </option>
                                                                     @endforeach
@@ -131,8 +135,16 @@
                                                                 <optgroup label="Raw Materials">
                                                                     @foreach ($rawMaterialItems->where('company_id', $seletedCompanyId) as $rawMaterialItem)
                                                                         <option value="{{ 'raw_' .$rawMaterialItem->id }}"
-                                                                            {{ old("items.$i.product", 'raw_' .$invoice->items[$i]->raw_material_item_id ?? '') == 'raw_' .$rawMaterialItem->id ? 'selected' : '' }}>
+                                                                            {{ old("items.$i.product", 'raw_' .$requisition->items[$i]->raw_material_item_id ?? '') == 'raw_' .$rawMaterialItem->id ? 'selected' : '' }}>
                                                                             {{ $rawMaterialItem->name }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </optgroup>
+                                                                <optgroup label="Finished Product">
+                                                                    @foreach ($productVariations->where('company_id', $seletedCompanyId) as $productVariation)
+                                                                        <option value="{{ 'var_' .$productVariation->id }}"
+                                                                            {{ old("items.$i.product", 'var_' .$requisition->items[$i]->product_variation_id ?? '') == 'var_' .$productVariation->id ? 'selected' : '' }}>
+                                                                            {{ $productVariation->product->name. ' | ' .$productVariation->packingType->name. ' | ' .$productVariation->packSize->name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </optgroup>

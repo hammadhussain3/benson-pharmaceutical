@@ -31,6 +31,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Code</th>
                             <th>Invocie No.</th>
                             <th>Supplier</th>
                             <th>Supplier Bill No.</th>
@@ -51,6 +52,7 @@
                             <tr>
                                 
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $goodsReceiving->code }}</td>
                                 <td>{{ $goodsReceiving->invoice->code }}</td>
                                 <td>{{ $goodsReceiving->party->name }}</td>
                                 <td>{{ $goodsReceiving->supplier_bill_no }}</td>

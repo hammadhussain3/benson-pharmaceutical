@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('store_issue_requisitions', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->integer('chart_of_account_id')->nullable();
             $table->integer('product_id')->nullable();
             $table->unsignedBigInteger('batch_id')->nullable();

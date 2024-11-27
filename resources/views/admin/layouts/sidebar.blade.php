@@ -433,16 +433,48 @@
                     auth()->user()->hasPermission('Stock List')
                 )
                 <li class="submenu">
-                    <a class="{{ request()->is('current_balance_report*') ? 'active' : ''}}" href="javascript:void(0);">
+                    <a class="{{ request()->is('reports.balance-report*') ? 'active' : ''}}" href="javascript:void(0);">
                         <span>Reports</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         @if(auth()->user()->hasPermission('Stock List'))
                             <li>
-                                <a class="{{ request()->is('current_balance_report*') ? 'active' : '' }}" href="{{ route('current_balance_report') }}">
+                                <a class="{{ request()->is('reports.balance-report*') ? 'active' : '' }}" href="{{ route('reports.balance-report') }}">
                                     <i class="fa fa-store me-1"></i>
-                                    Current Balance Report
+                                    Balance Report
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Finished Goods Receiving List'))
+                            <li>
+                                <a class="{{ request()->is('reports.production-report*') ? 'active' : '' }}" href="{{ route('reports.production-report') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Production Report
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Invoice List'))
+                            <li>
+                                <a class="{{ request()->is('reports.purchase-items*') ? 'active' : '' }}" href="{{ route('reports.purchase-items') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Purchase Items
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Invoice List'))
+                            <li>
+                                <a class="{{ request()->is('reports.purchase-requisitions*') ? 'active' : '' }}" href="{{ route('reports.purchase-requisitions') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Purchase Requisition
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Invoice List'))
+                            <li>
+                                <a class="{{ request()->is('reports.requirement-report*') ? 'active' : '' }}" href="{{ route('reports.requirement-report') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Requirement Report
                                 </a>
                             </li>
                         @endif

@@ -21,7 +21,10 @@ class RejectionReturnNoteRequest extends FormRequest
      */
     public function rules(): array
     {
+        $rejectionReturnNoteId = $this->rejectionReturnNote ? $this->rejectionReturnNote->id : null;
+
         return [
+            'code' => 'required|string|max:255|unique:goods_receivings,code,' . $rejectionReturnNoteId . ',id,company_id,' . $this->company_id,
             'supplier' => 'required|exists:parties,id',
             'invoice' => 'required|exists:invoices,id',
             'supplier_bill_no' => 'required|string|max:255',
@@ -30,7 +33,7 @@ class RejectionReturnNoteRequest extends FormRequest
             'items' => 'required|array|min:1',
             'items.*.product' => 'nullable|required_if:items.*.types,product|exists:products,id',
             'items.*.raw_material_item' => 'nullable|required_if:items.*.types,raw_material_item|exists:raw_material_items,id',
-            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.quantity' => 'required|numeric|min:1',
             'items.*.unit_price' => 'required|numeric|min:0',
             'items.*.unit' => 'required|string|max:50',
             'items.*.total' => 'required|numeric|min:0',

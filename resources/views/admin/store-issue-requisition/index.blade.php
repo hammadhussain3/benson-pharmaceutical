@@ -31,6 +31,7 @@
                     <thead class="thead">
                         <tr>
                             <th>#</th>
+                            <th>Code</th>
                             <th>Chart Of Account</th>
                             <th>Product</th>
                             <th>Batch No</th>
@@ -48,6 +49,7 @@
                         @foreach ($requisitions as $requisition)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $requisition->code ?? 'N/A' }}</td>
                                 <td>{{ $requisition->chart_of_account->name ?? 'N/A' }}</td>
                                 <td>{{ $requisition->product->name ?? 'N/A' }}</td>
                                 <td>{{ $requisition->batch->batch_no ?? 'N/A' }}</td>

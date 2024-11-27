@@ -2,14 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stock;
-use Illuminate\Http\Request;
+use App\Services\FinishedGoodsReceivingService;
+use App\Services\InvoiceService;
+use App\Services\StockService;
 
 class ReportController extends Controller
 {
-    public function currentBalanceReport()
+    protected $finishedGoodsReceivingService;
+    protected $invoiceService;
+    protected $stockService;
+
+    public function __construct(StockService $stockService, InvoiceService $invoiceService, FinishedGoodsReceivingService $finishedGoodsReceivingService)
     {
-       $stocks = Stock::with('product')->get();
-       return view('admin.reports.current_balance_report',compact('stocks'));
+        $this->finishedGoodsReceivingService = $finishedGoodsReceivingService;
+        $this->invoiceService = $invoiceService;
+        $this->stockService = $stockService;
+    }
+
+    public function balanceReport()
+    {
+        $stocks = $this->stockService->currentBalanceReport();
+        return view('admin.reports.balance-report',compact('stocks'));
+    }
+
+    public function purchaseItems()
+    {
+        $purchaseItems = $this->invoiceService->getOnlyPurchaseItems()->sortBy('item_code');
+        return view('admin.reports.purchase-items',compact('purchaseItems'));
+    }
+
+    public function purchaseRequisitions()
+    {
+        $purchaseRequisitions = $this->invoiceService->getOnlyPurchaseRequisitions();
+        return view('admin.reports.purchase-requisitions',compact('purchaseRequisitions'));
+    }
+
+    public function requirementReport()
+    {
+        $requirementReport = $this->invoiceService->getRequirementForInvoice();
+        return view('admin.reports.requirement-report',compact('requirementReport'));
+    }
+
+    public function productionReport()
+    {
+        $productionReport = $this->finishedGoodsReceivingService->getMonthlyFinishedProductReport();
+        return view('admin.reports.production-report',compact('productionReport'));
     }
 }

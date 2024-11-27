@@ -30,13 +30,13 @@
                             <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code" placeholder="Code"
-                                    required value="{{ old('code') }}">
+                                    required value="{{ old('code', $newChartOfAccountCode) }}" readonly>
                                 <div class="invalid-feedback">Please provide a valid code.</div>
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company">Company</label>
-                                <select name="company" id="company_id" class="js-example-basic-single select2" required>
+                                <select name="company" id="company_id" class="js-example-basic-single select2" required @role('Superadmin') onchange="createChartOfAccountCode(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"

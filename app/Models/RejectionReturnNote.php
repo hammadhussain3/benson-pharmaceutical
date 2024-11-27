@@ -9,7 +9,7 @@ class RejectionReturnNote extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['party_id', 'invoice_id', 'supplier_bill_no', 'batch_id', 'store_issue_requisition_id', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'party_id', 'invoice_id', 'supplier_bill_no', 'batch_id', 'store_issue_requisition_id', 'company_id', 'created_by', 'updated_by'];
 
     public function company()
     {
@@ -34,11 +34,5 @@ class RejectionReturnNote extends Model
     public function items()
     {
         return $this->hasMany(RejectionReturnNoteItem::class);
-    }
-
-    public function stocks()
-    {
-        return $this->hasMany(Stock::class);
-    }
-    
+    }    
 }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('rejection_return_notes', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->unsignedBigInteger('party_id');
             $table->unsignedBigInteger('invoice_id');
             $table->string('supplier_bill_no');
