@@ -446,6 +446,22 @@
                                 </a>
                             </li>
                         @endif
+                        @if(auth()->user()->hasPermission('Batch List'))
+                            <li>
+                                <a class="{{ request()->is('reports.batch-balance-report*') ? 'active' : '' }}" href="{{ route('reports.batch-balance-report') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Batch Balance Report
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Store Issue Rquisition List'))
+                            <li>
+                                <a class="{{ request()->is('reports.consumption-report*') ? 'active' : '' }}" href="{{ route('reports.consumption-report') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Consumption Report
+                                </a>
+                            </li>
+                        @endif
                         @if(auth()->user()->hasPermission('Finished Goods Receiving List'))
                             <li>
                                 <a class="{{ request()->is('reports.production-report*') ? 'active' : '' }}" href="{{ route('reports.production-report') }}">

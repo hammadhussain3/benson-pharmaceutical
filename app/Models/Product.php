@@ -34,4 +34,19 @@ class Product extends Model
         return $this->belongsTo(ProductGroup::class, 'product_group_id', 'id');
     }
     
+    public function balance()
+    {
+        $balanceData = Stock::currentBalanceForItem($this->id);
+        return $balanceData['balance'];
+    }
+
+    public function productVariations()
+    {
+        return $this->hasMany(ProductVariation::class);
+    }
+
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
 }

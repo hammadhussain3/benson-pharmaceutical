@@ -32,6 +32,7 @@ class LeftOverNoteService
             $item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
 
             $leftOverNote->items()->create($item);
+            $item['batch_id'] = $data['batch_id'];
             $item['company_id'] = $data['company_id'];
             $leftOverNote->stocks()->create($item);
         }
@@ -58,6 +59,7 @@ class LeftOverNoteService
             $item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
 
             $leftOverNote->items()->create($item);
+            $item['batch_id'] = $data['batch_id'];
             $item['company_id'] = $data['company_id'];
             $leftOverNote->stocks()->create($item);
         }

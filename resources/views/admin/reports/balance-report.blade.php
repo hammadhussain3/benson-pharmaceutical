@@ -9,7 +9,7 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Current Balance Report</button>
+            <button class="btn btn-primary" onclick="window.print()">Print Report</button>
         </div>
     </div>
 

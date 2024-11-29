@@ -121,6 +121,10 @@ Route::middleware('auth')->group(function () {
     Route::get('report/purchase-requisition', [ReportController::class, 'purchaseRequisitions'])->name('reports.purchase-requisitions');
     Route::get('report/requirement-report', [ReportController::class, 'requirementReport'])->name('reports.requirement-report');
     Route::get('report/production-report', [ReportController::class, 'productionReport'])->name('reports.production-report');
+    Route::get('report/consumption-report', [ReportController::class, 'consumptionReport'])->name('reports.consumption-report');
+    Route::get('report/batch-balance-report', [ReportController::class, 'batchBalanceReport'])->name('reports.batch-balance-report');
+    Route::get('report/batch-track-report/{id}', [ReportController::class, 'batchTrackReport'])->name('reports.batch-track-report');
+    Route::get('report/costing-voucher/{id}', [ReportController::class, 'costingVoucher'])->name('reports.costing-voucher');
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);

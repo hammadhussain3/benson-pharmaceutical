@@ -19,12 +19,15 @@
                 <table class="table table-striped">
                     <thead class="table-primary">
                         <tr>
-                            <th>Code</th>
-                            <th>Item</th>
-                            <th>Max.<br>Level</th>
-                            <th>Min.<br>Level</th>
-                            <th>Current<br>Level</th>
-                            <th>Reorder<br>Qty</th>
+                            <th rowspan="2">Code</th>
+                            <th rowspan="2">Item</th>
+                            <th rowspan="2">Max.<br>Level</th>
+                            <th rowspan="2">Min.<br>Level</th>
+                            <th rowspan="2">Current<br>Level</th>
+                            <th rowspan="2">Reorder<br>Qty</th>
+                            <th colspan="4" class="text-center">In Process</th>
+                        </tr>
+                        <tr>
                             <th>PO#</th>
                             <th>PO Qty</th>
                             <th>Qty Recv</th>

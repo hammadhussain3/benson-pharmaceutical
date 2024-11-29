@@ -73,4 +73,10 @@ class ProductVariation extends Model
     {
         return $this->hasMany(FinishedGoodsReceivingItem::class);
     }
+
+    public function balance()
+    {
+        $balanceData = Stock::currentBalanceForItem(null, null, $this->id);
+        return $balanceData['balance'];
+    }
 }

@@ -32,6 +32,7 @@ class FinishedGoodsReceivingService
             $item['product_variation_id'] = $item['product_variation'];
 
             $finishedGoodsReceiving->items()->create($item);
+            $item['batch_id'] = $data['batch_id'];
             $item['quantity'] = $item['quantity_received'];
             $item['company_id'] = $data['company_id'];
             $finishedGoodsReceiving->stocks()->create($item);
@@ -57,8 +58,8 @@ class FinishedGoodsReceivingService
             $item['product_variation_id'] = $item['product_variation'];
 
             $finishedGoodsReceiving->items()->create($item);
+            $item['batch_id'] = $data['batch_id'];
             $item['quantity'] = $item['quantity_received'];
-            $item['product_id'] = $data['product_id'];
             $item['company_id'] = $data['company_id'];
             $finishedGoodsReceiving->stocks()->create($item);
         }

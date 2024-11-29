@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\StoreIssueRequisition;
 use App\Models\StoreIssueRequisitionItem;
+use Illuminate\Support\Facades\DB;
 
 class StoreIssueRequisitionService
 {
@@ -119,5 +120,26 @@ class StoreIssueRequisitionService
             $newRequisitionCode = 'SIR00001';
         }
         return $newRequisitionCode;
+    }
+
+    public function getConsumptionReport()
+    {
+        $storeIssueRequisition = StoreIssueRequisitionItem::select(
+                'raw_material_item_id',
+                'raw_material_items.name',
+                'raw_material_items.code',
+                'raw_material_items.unit',
+                DB::raw('SUM(quantity) as total_quantity'),
+                DB::raw('AVG(unit_price) as average_unit_price')
+            )
+            ->whereNotNull('raw_material_item_id')
+            ->whereHas('store_issue_requisition', function ($query) {
+                $query->where('is_production', 1);
+            })
+            ->join('raw_material_items', 'store_issue_requisition_items.raw_material_item_id', '=', 'raw_material_items.id')
+            ->groupBy('raw_material_item_id', 'raw_material_items.name', 'raw_material_items.code', 'raw_material_items.unit')
+            ->get();
+
+        return $storeIssueRequisition;
     }
 }
