@@ -65,6 +65,16 @@
                                 @if(auth()->user()->hasPermission('Product Variation View') || auth()->user()->hasPermission('Product Variation Update') || auth()->user()->hasPermission('Product Variation Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Product Variation View'))
+                                    <a class="me-3" href="{{ route('product-variations.reports.product-variant-batch-report', $productVariation->id) }}">
+                                        <img src="{{ asset('assets/img/icons/time.svg') }}" alt="Single product Batch Report" height="20" width="24">
+                                    </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Product Variation View'))
+                                    <a class="me-3" href="{{ route('product-variations.reports.bin-card', $productVariation->id) }}">
+                                        <img src="{{ asset('assets/img/icons/time.svg') }}" alt="Stock Bin Card" height="20" width="24">
+                                    </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Product Variation View'))
                                     <a class="me-3" href="{{ route('product-variations.show', $productVariation->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>

@@ -60,6 +60,11 @@
                                 @if(auth()->user()->hasPermission('Raw Material Item View') || auth()->user()->hasPermission('Raw Material Item Update') || auth()->user()->hasPermission('Raw Material Item Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Raw Material Item View'))
+                                    <a class="me-3" href="{{ route('raw-material-items.reports.bin-card', $rawMaterialItem->id) }}">
+                                        <img src="{{ asset('assets/img/icons/time.svg') }}" alt="Stock Bin Card" height="20" width="20">
+                                    </a>
+                                    @endif
+                                    @if(auth()->user()->hasPermission('Raw Material Item View'))
                                     <a class="me-3" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>

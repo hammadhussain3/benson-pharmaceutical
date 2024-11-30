@@ -12,6 +12,7 @@ use App\Services\PartyService;
 use App\Services\ProductService;
 use App\Services\RawMaterialItemService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class InvoiceController extends Controller
 {
@@ -32,8 +33,26 @@ class InvoiceController extends Controller
 
     public function index()
     {
-        $invoices = $this->invoiceService->getAllInvoices();
-        return view('admin.invoice.index', compact('invoices'));
+        $routeConfig = [
+            'sale-invoices.index' => [
+                'view' => 'admin.sale-invoice.index',
+                'type' => 'sale',
+            ],
+            'purchase-invoices.index' => [
+                'view' => 'admin.purchase-invoice.index',
+                'type' => 'purchase',
+            ],
+            'quotations.index' => [
+                'view' => 'admin.quotations.index',
+                'type' => 'quotation',
+            ],
+        ];
+
+        $routeName = Route::currentRouteName();
+
+        $invoices = $this->invoiceService->getAllInvoices($routeConfig[$routeName]['type']);
+
+        return view($routeConfig[$routeName]['view'], compact('invoices'));
     }
 
     /**
@@ -41,12 +60,30 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        $newInvoiceCode = null;
+        $routeConfig = [
+            'sale-invoices.create' => [
+                'view' => 'admin.sale-invoice.create',
+                'products' => $this->productService->getAllProducts(),
+                'newInvoiceCode' => 'SI',
+            ],
+            'purchase-invoices.create' => [
+                'view' => 'admin.purchase-invoice.create',
+                'products' => $this->rawMaterialItemService->getAllRawMaterialItems(),
+                'newInvoiceCode' => 'PR',
+            ],
+            'quotations.create' => [
+                'view' => 'admin.quotations.create',
+                'products' => $this->productService->getAllProducts(),
+                'newInvoiceCode' => 'QT',
+            ],
+        ];
+
+        $routeName = Route::currentRouteName();
+        $newInvoiceCode = $routeConfig[$routeName]['newInvoiceCode'];
         $parties = $this->partyService->getAllParties();
         $companies = $this->companyService->getAllCompanies();
-        $products = $this->productService->getAllProducts();
-        $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
-        return view('admin.invoice.create', compact('parties','companies','products', 'rawMaterialItems', 'newInvoiceCode'));
+        $products = $routeConfig[$routeName]['products'];
+        return view($routeConfig[$routeName]['view'], compact('parties','companies','products', 'newInvoiceCode'));
     }
 
     /**
@@ -55,7 +92,7 @@ class InvoiceController extends Controller
     public function store(InvoiceRequest $request)
     {
         $this->invoiceService->createInvoice($request->validated());
-        return redirect()->route('invoices.index')->with('success', 'Invoice created successfully.');
+        return redirect()->route('purchase-invoices.index')->with('success', 'Invoice created successfully.');
     }
 
     /**
@@ -64,7 +101,7 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $invoice = $this->invoiceService->getInvoiceById($id);
-        return view('admin.invoice.show', compact('invoice'));
+        return view('admin.purchase-invoice.show', compact('invoice'));
     }
 
     /**
@@ -77,7 +114,7 @@ class InvoiceController extends Controller
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
-        return view('admin.invoice.edit', compact('invoice','parties','companies','products', 'rawMaterialItems'));
+        return view('admin.purchase-invoice.edit', compact('invoice','parties','companies','products', 'rawMaterialItems'));
     }
 
     /**
@@ -86,13 +123,13 @@ class InvoiceController extends Controller
     public function update(InvoiceRequest $request, Invoice $invoice)
     {
         $this->invoiceService->updateInvoice($invoice, $request->validated());
-        return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully');
+        return redirect()->route('purchase-invoices.index')->with('success', 'Invoice updated successfully');
     }
 
     public function destroy(Invoice $invoice)
     {
         $this->invoiceService->deleteInvoice($invoice);
-        return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully');
+        return redirect()->route('purchase-invoices.index')->with('success', 'Invoice deleted successfully');
     }
 
     public function createCodeByCompany(Request $request, $companyId)

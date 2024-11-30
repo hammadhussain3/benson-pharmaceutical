@@ -45,10 +45,10 @@
                                     @foreach ($balanceReport['batches'] as $batch)
                                         <div class="d-flex mb-2">
                                             <div class="col">
-                                                <a href="{{ route('reports.batch-track-report', $batch['batch_id']) }}">Batch # {{ $batch['batch_code'] }}</a>
+                                                <a href="{{ route('reports.costing-voucher', $batch['batch_id']) }}">Batch # {{ $batch['batch_code'] }}</a>
                                             </div>
                                             <div class="col">
-                                                <a href="{{ route('reports.costing-voucher', $batch['batch_id']) }}">Bal QTY # {{ $batch['batch_balance'] }}</a>
+                                                Bal QTY # {{ $batch['batch_balance'] }}
                                             </div>
                                             <div class="col">
                                                 Mfg {{ $batch['mfg'] }}

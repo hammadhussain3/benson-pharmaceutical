@@ -267,7 +267,7 @@
                         @endif
                         @if(auth()->user()->hasPermission('Invoice List'))
                             <li>
-                                <a class="{{ request()->is('invoices*') ? 'active' : '' }}" href="{{ route('invoices.index') }}">
+                                <a class="{{ request()->is('purchase-invoices*') ? 'active' : '' }}" href="{{ route('purchase-invoices.index') }}">
                                     <i class="fa fa-store me-1"></i>
                                     Invoices
                                 </a>
@@ -496,6 +496,23 @@
                         @endif
                     </ul>
                 </li>
+                @endif
+
+                @if(auth()->user()->hasPermission('Invoice List'))
+                    <li class="submenu">
+                        <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="javascript:void(0);">
+                            <span>Accounts</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Sale Invoice
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
 
                 {{-- @if(auth()->user()->hasPermission('Parties List'))

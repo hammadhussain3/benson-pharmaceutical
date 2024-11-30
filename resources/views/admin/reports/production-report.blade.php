@@ -13,8 +13,31 @@
         </div>
     </div>
 
+    <div class="mb-3">
+        <form action="{{ route('reports.production-report') }}" class="row gy-2 gx-3 align-items-end" method="get">
+            <div class="col-sm-4 col-md-3">
+                <label class="form-label" for="year">Select Year</label>
+                <select class="form-select" id="year" name="year">
+                    @php 
+                        $currentYear = date('Y');
+                        $startYear = $currentYear - 25;
+                        for ($yearOption = $currentYear; $yearOption >= $startYear; $yearOption--) {
+                            $selected = (isset($year) && $year == $yearOption) ? 'selected' : '';
+                            echo "<option value=\"$yearOption\" $selected>$yearOption</option>";
+                        }
+                    @endphp
+                </select>
+            </div> 
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>            
+        </form>
+    </div>
+
     <div class="card">
-        <div class="card-body p-0">
+        <div class="card-body px-0 pb-0">
+            <h5 class="text-center card-title mb-0">Production Report</h5>
+            <p class="text-center text-muted">From {{ \Carbon\Carbon::create($year)->startOfYear()->format('d M, Y') }} to {{ \Carbon\Carbon::create($year)->endOfYear()->format('d M, Y') }}</p>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead class="table-primary">
@@ -67,12 +90,12 @@
            visibility: hidden;
        }
    
-       table,
-       table * {
+       .card-body,
+       .card-body * {
            visibility: visible;
        }
    
-       table {
+       .card-body {
            position: fixed;
            left: 0;
            top: 0;

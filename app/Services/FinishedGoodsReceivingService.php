@@ -91,21 +91,19 @@ class FinishedGoodsReceivingService
         return $newFinishedGoodsReceivingCode;
     }
 
-    public function getMonthlyFinishedProductReport()
-    {
+    public function getMonthlyFinishedProductReport($year)
+    {        
         $finalProducts = ProductVariation::all();
 
         if (!auth()->user()->hasRole('Superadmin')) {
-            $finalProducts = $finalProducts->where('company_id', auth()->user()->employee->company_id);
+            $finalProducts->where('company_id', auth()->user()->employee->company_id);
         }
 
-        $finalProducts->each(function ($product) {
+        $finalProducts = $finalProducts->filter(function ($product) use ($year) {
             $monthlyTotals = array_fill(1, 12, 0);
 
-            $currentYear = now()->year;
-
             $finishedProducts = $product->finishedProducts()
-                ->whereYear('created_at', $currentYear)
+                ->whereYear('created_at', $year)
                 ->select('created_at', 'quantity_received')
                 ->get();
 
@@ -115,6 +113,8 @@ class FinishedGoodsReceivingService
             });
 
             $product->monthly_totals = $monthlyTotals;
+
+            return array_sum($monthlyTotals) > 0;
         });
 
         return $finalProducts;

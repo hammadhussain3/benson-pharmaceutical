@@ -109,7 +109,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('raw-material-items', RawMaterialItemController::class);
     Route::resource('stocks', StockController::class);
     Route::resource('purchase-requisitions', PurchaseRequisitionController::class);
-    Route::resource('invoices', InvoiceController::class);
+    Route::resource('purchase-invoices', InvoiceController::class);
+    Route::resource('sale-invoices', InvoiceController::class);
     Route::resource('goods-receivings', GoodsReceivingController::class);
     Route::resource('finished-goods-receivings', FinishedGoodsReceivingController::class);
     Route::resource('store-issue-requisitions', StoreIssueRequisitionController::class);
@@ -125,6 +126,10 @@ Route::middleware('auth')->group(function () {
     Route::get('report/batch-balance-report', [ReportController::class, 'batchBalanceReport'])->name('reports.batch-balance-report');
     Route::get('report/batch-track-report/{id}', [ReportController::class, 'batchTrackReport'])->name('reports.batch-track-report');
     Route::get('report/costing-voucher/{id}', [ReportController::class, 'costingVoucher'])->name('reports.costing-voucher');
+    Route::get('product-variations/bin-card/{id}', [ReportController::class, 'stockBinCardForFinalProduct'])->name('product-variations.reports.bin-card');
+    Route::get('raw-material-items/bin-card/{id}', [ReportController::class, 'stockBinCardForRawMaterial'])->name('raw-material-items.reports.bin-card');
+    Route::get('products/bin-card/{id}', [ReportController::class, 'stockBinCardForProducts'])->name('products.reports.bin-card');
+    Route::get('product-variations/batch-report/{id}', [ReportController::class, 'batchReport'])->name('product-variations.reports.product-variant-batch-report');
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);

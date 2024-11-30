@@ -40,7 +40,7 @@ class GoodsReceivingController extends Controller
         } else {
             $newGoodsReceivingCode = $this->goodsReceivingService->createGoodsReceivingCode(auth()->user()->employee->company_id);
         }
-        $invoices = $this->invoiceService->getAllInvoices();
+        $invoices = $this->invoiceService->getAllInvoices('purchase');
         $companies = $this->companyService->getAllCompanies();
         $batches = $this->batchService->getAllBatches();
         return view('admin.goods-receivings.create', compact('invoices', 'batches', 'companies', 'newGoodsReceivingCode'));
@@ -70,7 +70,7 @@ class GoodsReceivingController extends Controller
     public function edit($id)
     {
         $goodsReceiving = $this->goodsReceivingService->getGoodsReceivingById($id);
-        $invoices = $this->invoiceService->getAllInvoices();
+        $invoices = $this->invoiceService->getAllInvoices('purchase');
         $companies = $this->companyService->getAllCompanies();
         $batches = $this->batchService->getAllBatches();
         return view('admin.goods-receivings.edit', compact('goodsReceiving','invoices','companies','batches'));

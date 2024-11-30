@@ -9,12 +9,12 @@ use App\Models\Stock;
 
 class InvoiceService
 {
-    public function getAllInvoices()
+    public function getAllInvoices($type)
     {
         if (auth()->user()->hasRole('Superadmin')) {
-            $invoices = Invoice::orderBy('required_date', 'asc')->get();
+            $invoices = Invoice::where('type', $type)->orderBy('required_date', 'asc')->get();
         } else {
-            $invoices = Invoice::where('company_id', auth()->user()->employee->company_id)->orderBy('required_date', 'asc')->get();
+            $invoices = Invoice::where('type', $type)->where('company_id', auth()->user()->employee->company_id)->orderBy('required_date', 'asc')->get();
         }
         return $invoices;
     }
@@ -28,13 +28,8 @@ class InvoiceService
         if ($data['invoice_items']) {
             foreach ($data['invoice_items'] as $key => $value) {
                 $value['invoice_id'] = $invoice->id;
-                if (str_starts_with($value['product'], 'product_')) {
-                    $value['product_id'] = str_replace('product_', '', $value['product']);
-                    $value['raw_material_item_id'] = null;
-                } elseif (str_starts_with($value['product'], 'raw_')) {
-                    $value['raw_material_item_id'] = str_replace('raw_', '', $value['product']);
-                    $value['product_id'] = null;
-                }
+                $value['product_id'] = isset($value['product']) ? $value['product'] : null;
+                $value['raw_material_item_id'] = isset($value['raw_material_item']) ? $value['raw_material_item'] : null;
                 InvoiceItem::create($value);
             }
         }
@@ -50,13 +45,8 @@ class InvoiceService
         if ($data['invoice_items']) {
             foreach ($data['invoice_items'] as $value) {
                 $value['invoice_id'] = $invoice->id;
-                if (str_starts_with($value['product'], 'product_')) {
-                    $value['product_id'] = str_replace('product_', '', $value['product']);
-                    $value['raw_material_item_id'] = null;
-                } elseif (str_starts_with($value['product'], 'raw_')) {
-                    $value['raw_material_item_id'] = str_replace('raw_', '', $value['product']);
-                    $value['product_id'] = null;
-                }
+                $value['product_id'] = isset($value['product']) ? $value['product'] : null;
+                $value['raw_material_item_id'] = isset($value['raw_material_item']) ? $value['raw_material_item'] : null;
                 InvoiceItem::create($value);
             }
         }
@@ -87,10 +77,11 @@ class InvoiceService
         return $newInvoiceCode;
     }
 
-    public function getOnlyPurchaseItems()
+    public function getOnlyPurchaseItems($from_date, $to_date, $status)
     {
-        $invoiceItemQuery = InvoiceItem::whereHas('invoice', function ($query) {
-            $query->where('type', 'purchase');
+        $invoiceItemQuery = InvoiceItem::whereHas('invoice', function ($query) use ($from_date, $to_date) {
+            $query->where('type', 'purchase')
+                ->whereBetween('invoice_date', [$from_date, $to_date]);
         });
 
         if (!auth()->user()->hasRole('Superadmin')) {
@@ -114,8 +105,9 @@ class InvoiceService
             ->select('id', 'invoice_id', 'product_id', 'raw_material_item_id', 'product_quantity')
             ->get();
 
-        $invoiceItems->each(function ($invoiceItem) {
+        $filteredItems = $invoiceItems->filter(function ($invoiceItem) use ($status) {
             $receivedQuantity = 0;
+
             if ($invoiceItem->invoice->goodsReceivings) {
                 $receivedQuantity = $invoiceItem->invoice->goodsReceivings->flatMap(function ($goodsReceiving) {
                     return $goodsReceiving->items;
@@ -130,35 +122,40 @@ class InvoiceService
             $invoiceItem->received_quantity = $receivedQuantity;
             $invoiceItem->status = $invoiceItem->product_quantity != $receivedQuantity ? 'Pending' : 'Completed';
             $invoiceItem->item_code = $invoiceItem->product->code ?? $invoiceItem->rawMaterialItem->code;
+
+            return $status === null || $invoiceItem->status === $status;
         });
 
-        return $invoiceItems;
+        return $filteredItems->values();
     }
 
-    public function getOnlyPurchaseRequisitions()
+    public function getOnlyPurchaseRequisitions($from_date, $to_date, $status)
     {
-        // Query for purchase invoices, where type is 'purchase'
-        $invoiceQuery = Invoice::where('type', 'purchase')->orderBy('required_date', 'asc');
+        $invoiceQuery = Invoice::where('type', 'purchase')
+            ->whereBetween('invoice_date', [$from_date, $to_date])
+            ->orderBy('required_date', 'asc');
 
-        // Restrict access based on user role and company if not Superadmin
         if (!auth()->user()->hasRole('Superadmin')) {
             $invoiceQuery->where('company_id', auth()->user()->employee->company_id);
         }
 
-        // Get the invoices data with related product and raw material item details
+        if ($status != null) {
+            $invoiceQuery->where('status', $status);
+        }
+
         $invoices = $invoiceQuery
             ->with([
                 'items' => function ($query) {
                     $query->select('id', 'invoice_id', 'product_id', 'raw_material_item_id', 'product_quantity');  // Select only necessary invoice item columns
                 },
                 'items.product' => function ($query) {
-                    $query->select('id', 'code', 'name');  // Select only necessary product columns
+                    $query->select('id', 'code', 'name');
                 },
                 'items.rawMaterialItem' => function ($query) {
-                    $query->select('id', 'code', 'name');  // Select only necessary raw material columns
+                    $query->select('id', 'code', 'name');
                 },
                 'goodsReceivings' => function ($query) {
-                    $query->select('invoice_id');  // Select only necessary goods receiving columns
+                    $query->select('invoice_id');
                 }
             ])
             ->select('id', 'code', 'invoice_date', 'required_date', 'status', 'company_id')  // Select only necessary invoice columns

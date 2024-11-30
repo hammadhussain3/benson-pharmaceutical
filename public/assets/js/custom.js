@@ -845,6 +845,31 @@ function selectSuppliers(companyId)
     }
 }
 
+function selectFranchisers(companyId)
+{
+    var franchiserSelect = document.getElementById('franchiser_id');
+    
+    if (companyId && franchiserSelect) {
+        franchiserSelect.innerHTML = '<option value="">Select Franchiser</option>';
+        fetch(`/companies/${companyId}/franchisers`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching suppliers');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.suppliers.forEach(function (supplier) {
+                    var option = document.createElement('option');
+                    option.value = supplier.id;
+                    option.textContent = supplier.name;
+                    supplierSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching suppliers:', error));
+    }
+}
+
 function selectBatches(productId)
 {
     var BatchSelect = document.getElementById('batch_id');

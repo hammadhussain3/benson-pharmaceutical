@@ -51,8 +51,8 @@
                                 <td>{{ $costing['unit'] }}</td>
                                 <td>{{ number_format($costing['quantity'], 2) }}</td>
                                 <td>{{ number_format($costing['unit_price'], 2) }}</td>
-                                <td>{{ $costing['type'] == 'debit' ? number_format($costing['total'], 2) : '' }}</td>
-                                <td>{{ $costing['type'] == 'credit' ? number_format($costing['total'], 2) : '' }}</td>
+                                <td>{{ $costing['type'] == 'debit' ? number_format($costing['total'], 2) : number_format(0, 2) }}</td>
+                                <td>{{ $costing['type'] == 'credit' ? number_format($costing['total'], 2) : number_format(0, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>

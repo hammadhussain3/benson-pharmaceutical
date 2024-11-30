@@ -72,7 +72,7 @@ class Stock extends Model
 
     public function scopeOnlyManualStock($query)
     {
-        return $query->leftJoin('products', 'stocks.product_id', '=', 'products.id')
+        $query->leftJoin('products', 'stocks.product_id', '=', 'products.id')
             ->leftJoin('raw_material_items', 'stocks.raw_material_item_id', '=', 'raw_material_items.id')
             ->join('companies', 'stocks.company_id', '=', 'companies.id')
             ->select(
@@ -88,6 +88,12 @@ class Stock extends Model
             ->whereNull('stocks.finished_goods_receiving_id')
             ->whereNull('stocks.store_issue_requisition_id')
             ->whereNull('stocks.left_over_note_id');
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $query->where('company_id', auth()->user()->employee->company_id);
+        }
+
+        return $query;
     }
 
     public static function currentBalance()
@@ -100,6 +106,10 @@ class Stock extends Model
             ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
             ->get();
 
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $addQuantityWhenAllNull->where('company_id', auth()->user()->employee->company_id);
+        }
+
         $addQuantityWhenNotNull = self::where(function ($query) {
                 $query->whereNotNull('goods_receiving_id')
                     ->orWhereNotNull('finished_goods_receiving_id')
@@ -109,12 +119,20 @@ class Stock extends Model
             ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
             ->get();
 
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $addQuantityWhenNotNull->where('company_id', auth()->user()->employee->company_id);
+        }
+
         $subtractQuantityWhenNotNull = self::where(function ($query) {
                 $query->whereNotNull('store_issue_requisition_id');
             })
             ->groupBy('product_id', 'raw_material_item_id', 'product_variation_id')
             ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
             ->get();
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $subtractQuantityWhenNotNull->where('company_id', auth()->user()->employee->company_id);
+        }
 
         $balances = [];
 

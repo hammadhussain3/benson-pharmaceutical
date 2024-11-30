@@ -45,7 +45,7 @@ class RejectionReturnNoteController extends Controller
             $newRejectionCode = $this->rejectionReturnNoteService->createCode(auth()->user()->employee->company_id);
         }
         $companies = $this->companyService->getAllCompanies();
-        $invoices = $this->invoiceService->getAllInvoices();
+        $invoices = $this->invoiceService->getAllInvoices('purchase');
         $goodsReceivings = $this->goodsReceivingService->getAllGoodsReceivings();
         $requisitions = $this->storeIssueRequisitionService->getAll();
         return view('admin.rejection-return-notes.create', compact('companies', 'invoices', 'goodsReceivings', 'requisitions', 'newRejectionCode'));
@@ -76,7 +76,7 @@ class RejectionReturnNoteController extends Controller
     {
         $rejectionReturnNote = $this->rejectionReturnNoteService->getById($id);
         $companies = $this->companyService->getAllCompanies();
-        $invoices = $this->invoiceService->getAllInvoices();
+        $invoices = $this->invoiceService->getAllInvoices('purchase');
         $goodsReceivings = $this->goodsReceivingService->getAllGoodsReceivings();
         $requisitions = $this->storeIssueRequisitionService->getAll();
         return view('admin.rejection-return-notes.edit', compact('rejectionReturnNote', 'companies', 'invoices', 'goodsReceivings', 'requisitions'));

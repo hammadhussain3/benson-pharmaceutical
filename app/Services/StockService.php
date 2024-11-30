@@ -54,12 +54,67 @@ class StockService
         return Stock::findOrFail($id);
     }
 
+    public function stockBinCard($productId = null, $rawMaterialItemId = null, $productVariationId = null, $from_date, $to_date)
+    {
+        $query = Stock::query();
+
+        if ($productId !== null) {
+            $query->where('product_id', $productId);
+        }
+        if ($rawMaterialItemId !== null) {
+            $query->where('raw_material_item_id', $rawMaterialItemId);
+        }
+        if ($productVariationId !== null) {
+            $query->where('product_variation_id', $productVariationId);
+        }
+
+        $stockEntries = $query->whereBetween('created_at', [$from_date, $to_date])->orderBy('created_at', 'asc')->get();
+
+        $balance = 0;
+        $stockReport = [];
+
+        foreach ($stockEntries as $entry) {
+            $type = null;
+            if ($entry->goods_receiving_id || $entry->finished_goods_receiving_id || $entry->left_over_note_id) {
+                $type = 'received';
+                $doc = $entry->goodsReceiving->code ?? $entry->finishedGoodsReceiving->code ?? $entry->leftOverNote->code;
+                $balance += $entry->quantity;
+            } elseif ($entry->store_issue_requisition_id) {
+                $type = 'issued';
+                $doc = $entry->storeIssueRequisition->code;
+                $balance -= $entry->quantity;
+            } elseif (
+                is_null($entry->goods_receiving_id) &&
+                is_null($entry->finished_goods_receiving_id) &&
+                is_null($entry->store_issue_requisition_id) &&
+                is_null($entry->left_over_note_id)
+            ) {
+                $type = 'received';
+                $doc = 'OPN-BAL';
+                $balance += $entry->quantity;
+            }
+
+            $stockReport[] = [
+                'date' => $entry->created_at->format('d M, Y'),
+                'type' => $type,
+                'doc' => $doc,
+                'quantity' => $entry->quantity,
+                'unit_price' => $entry->unit_price,
+                'total' => $entry->total,
+                'balance_quantity' => $balance,
+                'balance_unit_price' => $entry->unit_price,
+                'balance_total' => $balance * $entry->unit_price,
+            ];
+        }
+
+        return $stockReport;
+    }
+
+
     public function currentBalanceReport()
     {
-        // Step 1: Get the current balance data
         $balances = Stock::currentBalance();
 
-        // Step 2: Get the product details (most recent row for each product_id, raw_material_item_id, and product_variation_id)
         $productDetails = Stock::leftJoin('products', 'stocks.product_id', '=', 'products.id')
             ->leftJoin('raw_material_items', 'stocks.raw_material_item_id', '=', 'raw_material_items.id')
             ->leftJoin('product_variations', 'stocks.product_variation_id', '=', 'product_variations.id')
@@ -96,6 +151,10 @@ class StockService
             ->keyBy(function ($item) {
                 return ($item->product_id ?? 'null') . '_' . ($item->raw_material_item_id ?? 'null') . '_' . ($item->product_variation_id ?? 'null');
             });
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $productDetails->where('company_id', auth()->user()->employee->company_id);
+        }
 
         // Step 3: Merge balances with product details
         foreach ($balances as &$balance) {

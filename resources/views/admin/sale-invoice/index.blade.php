@@ -3,13 +3,13 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Invoice List</h4>
-            <h6>Manage your Invoices</h6>
+            <h4>Sale Invoice List</h4>
+            <h6>Manage your sale invoices</h6>
         </div>
         @if(auth()->user()->hasPermission('Invoice Create'))
         <div class="page-btn">
-            <a href="{{ route('invoices.create') }}" class="btn btn-added">
-                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Invoice
+            <a href="{{ route('sale-invoices.create') }}" class="btn btn-added">
+                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Sale Invoice
             </a>
         </div>
         @endif
@@ -57,7 +57,7 @@
                         @foreach ($invoices as $invoice)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><a class="link-primary" href="{{ route('invoices.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
+                                <td><a class="link-primary" href="{{ route('sale-invoices.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
                                 <td>{{ ucfirst(strtolower($invoice->type)) }} ({{ $invoice->prefix }})</td>
                                 <td>{{ $invoice->party->name }} ({{ $invoice->party->is_supplier == '1' ? 'Supplier' : ($invoice->party->is_supplier == '1' ? 'Franchiser' : '') }})</td>
                                 <td>{{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}</td>
@@ -75,12 +75,12 @@
                                 @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
                                     <td>
                                         @if(auth()->user()->hasPermission('Invoice View'))
-                                            <a class="me-3" href="{{ route('invoices.show', $invoice->id) }}">
+                                            <a class="me-3" href="{{ route('sale-invoices.show', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                             </a>
                                         @endif
                                         @if(auth()->user()->hasPermission('Invoice Update'))
-                                            <a class="me-3" href="{{ route('invoices.edit', $invoice->id) }}">
+                                            <a class="me-3" href="{{ route('sale-invoices.edit', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                             </a>
                                         @endif
@@ -90,7 +90,7 @@
                                                 <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                             </a>
                                             <form id="delete-form-{{ $invoice->id }}"
-                                                action="{{ route('invoices.destroy', $invoice->id) }}" method="POST"
+                                                action="{{ route('sale-invoices.destroy', $invoice->id) }}" method="POST"
                                                 style="display:none;">
                                                 @csrf
                                                 @method('DELETE')

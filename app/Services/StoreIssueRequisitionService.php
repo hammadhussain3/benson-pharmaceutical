@@ -122,7 +122,7 @@ class StoreIssueRequisitionService
         return $newRequisitionCode;
     }
 
-    public function getConsumptionReport()
+    public function getConsumptionReport($from_date, $to_date)
     {
         $storeIssueRequisition = StoreIssueRequisitionItem::select(
                 'raw_material_item_id',
@@ -133,12 +133,16 @@ class StoreIssueRequisitionService
                 DB::raw('AVG(unit_price) as average_unit_price')
             )
             ->whereNotNull('raw_material_item_id')
-            ->whereHas('store_issue_requisition', function ($query) {
-                $query->where('is_production', 1);
+            ->whereHas('store_issue_requisition', function ($query) use ($from_date, $to_date) {
+                $query->where('is_production', 1)->whereBetween('created_at', [$from_date, $to_date]);
             })
             ->join('raw_material_items', 'store_issue_requisition_items.raw_material_item_id', '=', 'raw_material_items.id')
             ->groupBy('raw_material_item_id', 'raw_material_items.name', 'raw_material_items.code', 'raw_material_items.unit')
             ->get();
+
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $storeIssueRequisition->where('company_id', auth()->user()->employee->company_id);
+        }
 
         return $storeIssueRequisition;
     }
