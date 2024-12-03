@@ -968,27 +968,45 @@ function selectBatchesByProductVariation(productVariationId, triggerElement) {
 
 function selectChartOfAccounts(companyId)
 {
-    var chartOfAccountSelect = document.getElementById('chart_of_account_id');
-    
-    if (companyId && chartOfAccountSelect) {
-        chartOfAccountSelect.innerHTML = '<option value="">Select Chart Of Account</option>';
-        fetch(`/companies/${companyId}/chart-of-accounts`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Unauthorized or error fetching chart of accounts');
-                }
-                return response.json();
-            })
-            .then(data => {
-                data.chartOfAccounts.forEach(function (chartOfAccount) {
-                    var option = document.createElement('option');
-                    option.value = chartOfAccount.id;
-                    option.textContent = chartOfAccount.name;
-                    chartOfAccountSelect.appendChild(option);
+    if (!companyId) return; // Exit if no company ID is provided
+
+    const chartOfAccountSelect = document.getElementById('chart_of_account_id');
+    const chartOfAccountSelectList = Array.from(document.getElementsByClassName('chart_of_accounts_dropdown'));
+
+    const allSelects = [];
+    if (chartOfAccountSelect) allSelects.push(chartOfAccountSelect);
+    allSelects.push(...chartOfAccountSelectList);
+
+    if (allSelects.length === 0) return;
+
+    allSelects.forEach(select => {
+        select.innerHTML = '<option value="">Select Chart Of Account</option>';
+    });
+
+    console.log(companyId);
+    fetch(`/companies/${companyId}/chart-of-accounts`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching chart of accounts');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            if (data.chartOfAccounts && data.chartOfAccounts.length > 0) {
+                allSelects.forEach(select => {
+                    data.chartOfAccounts.forEach(chartOfAccount => {
+                        const option = document.createElement('option');
+                        option.value = chartOfAccount.id;
+                        option.textContent = chartOfAccount.particular;
+                        select.appendChild(option);
+                    });
                 });
-            })
-            .catch(error => console.error('Error fetching  chart of accounts:', error));
-    }
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching chart of accounts:', error);
+        });
 }
 
 function selectGeneralStoreRequisitions(companyId)
@@ -1329,6 +1347,25 @@ function createChartOfAccountCode(companyId)
                 code.value = data.chart_of_account_code;
             })
             .catch(error => console.error('Error creating chart of account code:', error));
+    }
+}
+
+function createPaymentVoucherCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/payment-voucher`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating payment voucher code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.payment_voucher_code;
+            })
+            .catch(error => console.error('Error creating payment voucher code:', error));
     }
 }
 
@@ -1927,4 +1964,23 @@ function calculateSingleProductAmount() {
         // Update the total amount field
         itemSet.querySelector('.product_total').value = itemTotal.toFixed(2);
     });
+}
+
+function calculatePaymentVoucherAmount() {
+    let totalDebit = 0;
+    let totalCredit = 0;
+    let total = 0;
+    document.querySelectorAll('.item-set').forEach((itemSet, index) => {
+        const debit = parseFloat(itemSet.querySelector('.debit').value) || 0;
+        const credit = parseFloat(itemSet.querySelector('.credit').value) || 0;
+
+        totalDebit += debit;
+        totalCredit += credit;
+    });
+
+    total += totalCredit - totalDebit;
+
+    document.getElementById('total_debit').value = totalDebit.toFixed(2);
+    document.getElementById('total_credit').value = totalCredit.toFixed(2);
+    document.getElementById('total').value = total.toFixed(2);
 }

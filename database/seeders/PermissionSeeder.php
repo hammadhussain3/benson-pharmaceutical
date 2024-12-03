@@ -210,6 +210,11 @@ class PermissionSeeder extends Seeder
             ['id' => 193, 'name' => 'Left Over Note Update', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 194, 'name' => 'Left Over Note Delete', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 195, 'name' => 'Left Over Note View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 196, 'name' => 'Payment Voucher List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 197, 'name' => 'Payment Voucher Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 198, 'name' => 'Payment Voucher Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 199, 'name' => 'Payment Voucher Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 200, 'name' => 'Payment Voucher View', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }
 }

@@ -68,15 +68,23 @@ class SaleInvoiceController extends Controller
         return view('admin.sale-invoice.show', compact('invoice'));
     }
 
+    public function warranty($id)
+    {
+        $invoice = $this->invoiceService->getInvoiceById($id);
+        return view('admin.sale-invoice.warranty', compact('invoice'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
         $invoice = $this->invoiceService->getInvoiceById($id);
+        $companies = $this->companyService->getAllCompanies();
         $parties = $this->partyService->getAllParties();
-        $products = $this->productVariationService->getAllProductVariations();
-        return view('admin.sale-invoice.edit', compact('invoice', 'parties', 'products'));
+        $batches = $this->batchService->getAllBatches();
+        $productVariations = $this->productVariationService->getAllProductVariations();
+        return view('admin.sale-invoice.edit', compact('invoice', 'parties', 'companies', 'productVariations', 'batches'));
     }
 
     /**

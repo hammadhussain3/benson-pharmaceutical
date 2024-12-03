@@ -90,7 +90,7 @@ class ChartOfAccountController extends Controller
 
     public function getChartOfAccountsByCompany($companyId)
     {
-        $chartOfAccounts = ChartOfAccount::where('company_id', $companyId)->orderBy('name', 'asc')->get();
+        $chartOfAccounts = ChartOfAccount::where('company_id', $companyId)->orderBy('particular', 'asc')->get();
         return response()->json(['chartOfAccounts' => $chartOfAccounts]);
     }
 

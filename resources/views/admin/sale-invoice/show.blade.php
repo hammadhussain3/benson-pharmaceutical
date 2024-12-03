@@ -5,7 +5,7 @@
         <div class="page-title">
             <h4>{{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</h4>
             <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('invoices.index') }}">Invoices</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('sale-invoices.index') }}">Invoices</a></li>
                 <li class="breadcrumb-item active">View {{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</li>
             </ul>
         </div>
@@ -33,108 +33,144 @@
                     </div>
                 </div>
                 <div class="col-auto text-end">
-                    <h2>{{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</h2>
+                    <h2 class="mb-0">{{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</h2>
+                    <p class="mb-0"><strong>Ref No:</strong> {{ $invoice->code }}</p>
+                    <p class="mb-0"><strong>Date:</strong> {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</p>
                 </div>
             </div>
 
-            <div style="display: flex; justify-content: space-between;">
-                <div style="width: 233px;">
-                    <div class="card">
+            <div class="flex-container" style="display: flex; justify-content: space-between;">
+                <div style="width: 500px;">
+                    <div class="card mb-0">
+                        <div class="p-3">
+                            <p class="mb-0"><strong>Ship To:</strong> {{ $invoice->party->name }}</p>
+                            <p class="mb-0"><strong>Address:</strong> {{ $invoice->party->address }}</p>
+                            <p class="mb-0"><strong>Phone:</strong> {{ $invoice->party->contact_person_phone ?? $invoice->party->phone }}
+                                <span class="float-end">
+                                    <strong>Email:</strong> {{ $invoice->party->contact_person_email ?? $invoice->party->email }}
+                                </span>
+                            </p>
+                            <p class="mb-0"><strong>Contact Person:</strong> {{ $invoice->party->contact_person_name }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 333px;">
+                    <div class="card mb-0">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Ref No:</strong> {{ $invoice->code }}</li>
-                            <li class="list-group-item"><strong>Date:</strong> {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</li>
+                            <li class="list-group-item"><strong>Order Number:</strong> {{ $invoice->order_number }}</li>
+                            <li class="list-group-item"><strong>Order Date:</strong> {{ \Carbon\Carbon::parse($invoice->order_date)->format('d M, Y') }}</li>
+                            <li class="list-group-item"><strong>Shipped Via:</strong> {{ $invoice->shipped_via }}</li>
                         </ul>
                     </div>
                 </div>
-                <div style="width: 766px;">
-                    <div class="card">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <div class="d-flex">
-                                    <div style="width: 333px;">
-                                        <strong>Required Date:</strong> {{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}
-                                    </div>
-                                    <div class="col border-start border-end"><strong>Urgent</strong></div>
-                                    <div class="col">{{ $invoice->is_urgent == '1' ? '*' : '' }}</div>
-                                    <div class="col border-start border-end"><strong>Ordinary</strong></div>
-                                    <div class="col">{{ $invoice->is_urgent == '0' ? '*' : '' }}</div>
-                                </div>
-                            </li>
-                            <li class="list-group-item"><strong>{{ $invoice->type == 'purchase' ? 'Supplier' : ($invoice->type == 'sale' || $invoice->type == 'quotation' ? 'Franchise' : '') }}:</strong> {{ $invoice->party->name }}</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            </div>            
 
-            <table class="table table-striped mt-3">
-                <thead class="table-primary">
-                    <tr>
-                        <th>#</th>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        {{-- <th>Unit</th> --}}
-                        <th>Price</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($invoice->items as $item)
+            <div class="table-responsive">
+                <table class="table table-striped mt-3">
+                    <thead class="table-primary">
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->item->name }}</td>
-                            <td>{{ $item->product_quantity }}</td>
-                            {{-- <td>{{ $item->unit }}</td> --}}
-                            <td>{{ number_format($item->unit_price) }}</td>
-                            <td>{{ number_format($item->product_quantity * $item->unit_price, 2) }}</td>
+                            <th>#</th>
+                            <th>Batch #</th>
+                            <th>Product <br> Code</th>
+                            <th>Products</th>
+                            <th>Pack <br> Size</th>
+                            <th>MFG. <br> Date</th>
+                            <th>Exp. <br> Date</th>
+                            <th>Qty. <br> Pack</th>
+                            <th>Rate</th>
+                            <th>Value</th>
+                            <th>Discount</th>
+                            <th>Discount <br> Value</th>
+                            <th>Sales Tax</th>
+                            <th>Inclusive <br> Sales Tax</th>
                         </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="4" class="text-right"> <strong>Sub Total</strong></th>
-                        <th>{{ number_format($invoice->items_cost_without_tax - $invoice->shipping_cost, 2) }}</th>
-                    </tr>
-                    <tr>
-                        <th colspan="4" class="text-right"> <strong>Shipping Cost:</strong></th>
-                        <th>{{ number_format($invoice->shipping_cost, 2) }}</th>
-                    </tr>
-                    <tr>
-                        <th colspan="4" class="text-right"> <strong>Tax Rate ({{ $invoice->invoice_tax_rate }}%):</strong></th>
-                        <th>{{ number_format($invoice->total_invoice_tax, 2) }}</th>
-                    </tr>
-                    @if($invoice->discount_type == "flat")
-                    <tr>
-                        <th colspan="4" class="text-right"> <strong>Discount (Flat):</strong></th>
-                        <th>{{ number_format($invoice->discount, 2) }}</th>
-                    </tr>
-                    @else
-                    <tr>
-                        <th colspan="4" class="text-right"> <strong>Discount (%):</strong></th>
-                        <th>{{ number_format($invoice->discount, 2) }}</th>
-                    </tr>
-                    @endif
-                    <tr>
-                        <th colspan="4" class="text-right"> <strong>Total Amount:</strong></th>
-                        <td>{{ number_format($invoice->total_amount, 2) }}</td>
-                    </tr>
-                </tfoot>
-            </table>
-            <div style="display: flex; justify-content: space-around; margin-top: 45px;">
-                <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Raised by</span>
-                </div>
-                <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Checked by Dept. Head</span>
-                </div>
-                <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Approved by: Cheif Executive</span>
-                </div>
+                    </thead>
+                    <tbody>
+                        @foreach ($invoice->items as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->batch?->batch_no }}</td>
+                                <td>{{ $item->productVariation?->product?->code }}</td>
+                                <td>{{ $item->productVariation?->product?->name }}</td>
+                                <td>{{ $item->productVariation?->packSize?->name }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->batch?->mfg_date)->format('d M, Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->batch?->exp_date)->format('d M, Y') }}</td>
+                                <td>{{ number_format($item->quantity) }}</td>
+                                <td>{{ number_format($item->unit_price, 2) }}</td>
+                                <td>{{ number_format($item->quantity * $item->unit_price, 2) }}</td>
+                                <td>{{ $item->discount }}{{ $item->discount_type == 'percent' ? '%' : '' }}</td>
+                                <td>
+                                    {{ number_format(
+                                        $item->discount_type == 'percent' 
+                                            ? ($item->quantity * $item->unit_price * $item->discount) / 100 
+                                            : $item->discount, 
+                                        2
+                                    ) }}
+                                </td>
+                                <td>{{ number_format((($item->quantity * $item->unit_price * $item->tax_rate) / 100), 2) }}</td>
+                                <td>{{ number_format($item->total_amount, 2) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <td colspan="6">
+                                <x-amount-in-words :amount="$invoice->total_amount" />
+                            </td>
+                            <td>{{ number_format($invoice->items->sum('quantity')) }}</td>
+                            <td>{{ number_format($invoice->items->sum('unit_price'), 2) }}</td>
+                            <td>{{ number_format($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price), 2) }}</td>
+                            <td></td>
+                            <td>
+                                {{ number_format(
+                                    $invoice->items->sum(fn($item) => 
+                                        $item->discount_type == 'percent' 
+                                            ? ($item->quantity * $item->unit_price * $item->discount) / 100 
+                                            : $item->discount
+                                    ), 2
+                                ) }}
+                            </td>
+                            <td>{{ number_format($invoice->items->sum(fn($item) => ($item->quantity * $item->unit_price * $item->tax_rate) / 100), 2) }}</td>
+                            <td>{{ number_format($invoice->items->sum('total_amount'), 2) }}</td>
+                        </tr>
+                    </tfoot>
+                </table>                
             </div>
             <div style="margin-top: 15px; font-size: 14px;">
-                <strong>Note:</strong> {{ $invoice->note }}
+                <strong>Damage Clause:</strong> Claims and replacement of the damage goods shall only be entertained if lodged with undersigned within 2 days of receipt of goods from transporter/carrier
+            </div>
+            <div style="display: flex; justify-content: space-around; align-items: end; margin-top: 45px;">
+                <div style="width: 200px; text-align: center;">
+                    <hr style="width: 100%;">
+                    <span style="font-size: 14px; margin-top: 10px;">Account Officer</span>
+                </div>
+                <div style="width: 500px; text-align: center;">
+                    <p class="mb-1 fw-bold fs-6">Packing Details</p>
+                    <table class="table table-border">
+                        <thead>
+                            <th>Type of Carton</th>
+                            <th>No. of Carton</th>
+                            <th>Weight (KG)</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SC-02 <br> SC-90 <br> SC-60</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="width: 200px; text-align: center;">
+                    <hr style="width: 100%;">
+                    <span style="font-size: 14px; margin-top: 10px;">Authorised Signature <br> Warranter</span>
+                </div>
             </div>
         </div>
     </div>
@@ -142,18 +178,31 @@
 
 <style>
     @media print {
-       @page {
-           margin: 0;
-       }
-   
-       html, body {
-           height: 100%;
-           margin: 0;
-           padding: 0;
-           overflow: hidden;
-       }
-   
-       body * {
+        @page {
+            margin: 0;
+            size: landscape;
+        }
+
+        body {
+            font-size: 12px;
+            line-height: 1.2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card {
+            border: none;
+            margin: 0;
+        }
+
+        .table-primary th {
+            background-color: #e3f2fd !important;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            
+        }
+
+        body * {
            visibility: hidden;
        }
    
@@ -173,7 +222,19 @@
            background-color: #e3f2fd !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
+           font-size: 11px;
        }
-   }
-   
-   </style>
+
+       .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            padding: 4px 8px;
+            font-size: 10px;
+        }
+    }
+</style>

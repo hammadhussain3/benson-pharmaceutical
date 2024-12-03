@@ -9,21 +9,26 @@ class InvoiceItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['invoice_id', 'product_id', 'raw_material_item_id', 'unit', 'unit_price', 'quantity', 'tax_rate', 'discount_type', 'discount','total_amount'];
+    protected $fillable = ['invoice_id', 'product_variation_id', 'raw_material_item_id', 'batch_id', 'unit', 'unit_price', 'quantity', 'tax_rate', 'discount_type', 'discount','total_amount'];
 
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);
     }
     
-    public function product()
+    public function productVariation()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(ProductVariation::class);
     }
 
     public function rawMaterialItem()
     {
         return $this->belongsTo(RawMaterialItem::class);
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
     }
 
     public function getItemAttribute()

@@ -75,6 +75,11 @@
                                 @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
                                     <td>
                                         @if(auth()->user()->hasPermission('Invoice View'))
+                                            <a class="me-3" href="{{ route('sale-invoices.warranty', $invoice->id) }}">
+                                                <img src="{{ asset('assets/img/icons/time.svg') }}" alt="View">
+                                            </a>
+                                        @endif
+                                        @if(auth()->user()->hasPermission('Invoice View'))
                                             <a class="me-3" href="{{ route('sale-invoices.show', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                             </a>

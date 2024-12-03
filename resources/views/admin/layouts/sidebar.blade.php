@@ -505,12 +505,22 @@
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
-                            <li>
-                                <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Sale Invoice
-                                </a>
-                            </li>
+                            @if(auth()->user()->hasPermission('Invoice List'))
+                                <li>
+                                    <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Sale Invoice
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Payment Voucher List'))
+                                <li>
+                                    <a class="{{ request()->is('payment-vouchers*') ? 'active' : '' }}" href="{{ route('payment-vouchers.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Payment Voucher
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                 @endif

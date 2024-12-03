@@ -42,6 +42,7 @@ use App\Http\Controllers\{
     StoreIssueRequisitionController,
     RejectionReturnNoteController,
     LeftOverNoteController,
+    PaymentVoucherController,
     ReportController,
 };
 use App\Http\Controllers\SalarySheetController;
@@ -118,6 +119,8 @@ Route::middleware('auth')->group(function () {
     Route::get('store-issue-requisitions/production/create', [StoreIssueRequisitionController::class, 'productionCreate'])->name('store-issue-requisitions.production.create');
     Route::resource('rejection-return-notes', RejectionReturnNoteController::class);
     Route::resource('left-over-notes', LeftOverNoteController::class);
+    Route::get('sale-invoices/warranty/{id}', [SaleInvoiceController::class, 'warranty'])->name('sale-invoices.warranty');
+    Route::resource('payment-vouchers', PaymentVoucherController::class);
     Route::get('report/balance-report', [ReportController::class, 'balanceReport'])->name('reports.balance-report');
     Route::get('report/purchase-items', [ReportController::class, 'purchaseItems'])->name('reports.purchase-items');
     Route::get('report/purchase-requisition', [ReportController::class, 'purchaseRequisitions'])->name('reports.purchase-requisitions');
@@ -166,6 +169,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/purchase-invoice-code', [PurchaseInvoiceController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/sale-invoice-code', [SaleInvoiceController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/chart-of-account', [ChartOfAccountController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/payment-voucher', [PaymentVoucherController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/companies/{companyId}/invoices', [PurchaseInvoiceController::class, 'getInvoicesByCompany']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
