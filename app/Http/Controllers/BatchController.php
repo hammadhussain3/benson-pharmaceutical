@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Batch;
+use App\Models\ProductVariation;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\BatchRequest;
 use App\Services\CompanyService;
@@ -85,6 +86,13 @@ class BatchController extends Controller
     public function getBatchesByProductId($productId)
     {
         $batches = Batch::where('product_id', $productId)->get();
+        return response()->json(['batches' => $batches]);
+    }
+
+    public function getBatchesByProductVariationId($productVariationId)
+    {
+        $productVariation = ProductVariation::findOrFail($productVariationId);
+        $batches = Batch::where('product_id', $productVariation->product_id)->get();
         return response()->json(['batches' => $batches]);
     }
 }

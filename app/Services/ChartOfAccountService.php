@@ -26,9 +26,9 @@ class ChartOfAccountService
     public function getAllChartOfAccounts()
     {
         if (auth()->user()->hasRole('Superadmin')) {
-            $chartOfAccount = ChartOfAccount::orderBy('name', 'asc')->get();
+            $chartOfAccount = ChartOfAccount::orderBy('particular', 'asc')->get();
         } else {
-            $chartOfAccount = ChartOfAccount::where('company_id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+            $chartOfAccount = ChartOfAccount::where('company_id', auth()->user()->employee->company_id)->orderBy('particular', 'asc')->get();
         }
         return $chartOfAccount;
     }

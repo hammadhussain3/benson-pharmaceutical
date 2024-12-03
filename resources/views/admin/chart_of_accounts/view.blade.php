@@ -19,12 +19,44 @@
                 <div class="card-body">
                     <div class="form-row row">
                         <div class="mb-3 col-md-6">
-                            <label>Name</label>
-                            <input type="text" class="form-control" value="{{ $chartOfAccount->name }}" readonly>
+                            <label>Particular</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->particular }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Code</label>
                             <input type="text" class="form-control" value="{{ $chartOfAccount->code }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Abbreviation</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->abbreviation }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Budget</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->budget }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Open Debit</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->open_debit }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Open Credit</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->open_credit }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Act Debit</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->act_debit }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Act Credit</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->act_credit }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>CL Debit</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->cl_debit }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>CL Credit</label>
+                            <input type="text" class="form-control" value="{{ $chartOfAccount->cl_credit }}" readonly>
                         </div>
                         @role('Superadmin')
                         <div class="mb-3 col-md-6">

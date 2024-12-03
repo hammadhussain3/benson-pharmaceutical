@@ -31,8 +31,9 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
                             <th>Code</th>
+                            <th>Particular</th>
+                            <th>Abbreviation</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
@@ -45,8 +46,9 @@
                         @foreach ($chartOfAccounts as $chartOfAccount)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><a class="link-primary" href="{{ route('chart_of_accounts.view', $chartOfAccount->id) }}">{{ $chartOfAccount->name }}</a></td>
+                                <td><a class="link-primary" href="{{ route('chart_of_accounts.view', $chartOfAccount->id) }}">{{ $chartOfAccount->particular }}</a></td>
                                 <td>{{ $chartOfAccount->code }}</td>
+                                <td>{{ $chartOfAccount->abbreviation }}</td>
                                 @role('Superadmin')
                                 <td>{{ $chartOfAccount->company->name }}</td>
                                 @endrole

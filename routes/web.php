@@ -32,7 +32,8 @@ use App\Http\Controllers\{
     ProductController,
     ProductVariationController,
     BatchController,
-    InvoiceController,
+    PurchaseInvoiceController,
+    SaleInvoiceController,
     RawMaterialItemController,
     StockController,
     PurchaseRequisitionController,
@@ -109,8 +110,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('raw-material-items', RawMaterialItemController::class);
     Route::resource('stocks', StockController::class);
     Route::resource('purchase-requisitions', PurchaseRequisitionController::class);
-    Route::resource('purchase-invoices', InvoiceController::class);
-    Route::resource('sale-invoices', InvoiceController::class);
+    Route::resource('purchase-invoices', PurchaseInvoiceController::class);
+    Route::resource('sale-invoices', SaleInvoiceController::class);
     Route::resource('goods-receivings', GoodsReceivingController::class);
     Route::resource('finished-goods-receivings', FinishedGoodsReceivingController::class);
     Route::resource('store-issue-requisitions', StoreIssueRequisitionController::class);
@@ -136,6 +137,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/designations', [DesignationController::class, 'getDesignationsByCompany']);
     Route::get('/companies/{companyId}/employees', [EmployeeController::class, 'getEmployeesByCompany']);
     Route::get('/companies/{companyId}/product-groups', [ProductGroupController::class, 'getProductGroupsByCompany']);
+    Route::get('/companies/{companyId}/product-variations', [ProductVariationController::class, 'getProductVariationsByComapny']);
     Route::get('/companies/{companyId}/products', [ProductController::class, 'getProductsByCompany']);
     Route::get('/companies/{companyId}/products-and-raw-materials', [ProductController::class, 'getProdAndRMByCompany']);
     Route::get('/companies/{companyId}/all-products', [ProductController::class, 'getAllTypeProductByCompany']);
@@ -146,6 +148,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/parties', [PartyController::class, 'getPartiesByCompany']);
     Route::get('/companies/{companyId}/raw-material-items', [RawMaterialItemController::class, 'getRawMaterialItemsByCompany']);
     Route::get('/companies/{companyId}/suppliers', [SupplierController::class, 'getSuppliersByCompany']);
+    Route::get('/companies/{companyId}/franchisers', [FranchiseController::class, 'getFranchisersByCompany']);
     Route::get('/companies/{companyId}/chart-of-accounts', [ChartOfAccountController::class, 'getChartOfAccountsByCompany']);
     Route::get('/companies/{companyId}/general-store-requisitions', [StoreIssueRequisitionController::class, 'getGeneralStoreRequisitionsByCompany']);
     Route::get('/companies/{companyId}/production-store-requisitions', [StoreIssueRequisitionController::class, 'getProductionStoreRequisitionsByCompany']);
@@ -160,10 +163,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/finished-goods-code', [FinishedGoodsReceivingController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/left-over-note-code', [LeftOverNoteController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/rejection-return-note-code', [RejectionReturnNoteController::class, 'createCodeByCompany']);
-    Route::get('/companies/{companyId}/invoice-code', [InvoiceController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/purchase-invoice-code', [PurchaseInvoiceController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/sale-invoice-code', [SaleInvoiceController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/chart-of-account', [ChartOfAccountController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
-    Route::get('/companies/{companyId}/invoices', [InvoiceController::class, 'getInvoicesByCompany']);
+    Route::get('/companies/{companyId}/invoices', [PurchaseInvoiceController::class, 'getInvoicesByCompany']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
     Route::get('/getemployee/{employeeId}', [EmployeeController::class, 'getEmployeeDetails']);
     Route::get('/getloan/{employeeId}', [LoanController::class, 'getLoansByEmployee']);
@@ -172,11 +176,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/getunauthleaves/{employeeId}', [LeaveController::class, 'getUnauthorizedLeavesByEmployee']);
     Route::get('/getapprovedpayleaves/{employeeId}', [LeaveController::class, 'getApprovedWithPayLeavesByEmployee']);
     Route::get('/getleaves/{employeeId}', [LeaveController::class, 'getLeavesByEmployee']);
-    Route::get('/invoices/{invoiceId}/details', [InvoiceController::class, 'getInvoiceDetailsById']);
+    Route::get('/invoices/{invoiceId}/details', [PurchaseInvoiceController::class, 'getInvoiceDetailsById']);
     Route::get('/invoices/{invoiceId}/supplier', [SupplierController::class, 'getSupplierByInvoice']);
     Route::get('/invoices/{invoiceId}/goods-receivings', [GoodsReceivingController::class, 'getGoodReceivingsByInvoice']);
-    Route::get('/products/{productId}/product-variations', [ProductVariationController::class, 'getProductVariationsByCompany']);
+    Route::get('/products/{productId}/product-variations', [ProductVariationController::class, 'getProductVariationsByProduct']);
     Route::get('/products/{productId}/batches', [BatchController::class, 'getBatchesByProductId']);
+    Route::get('/product-variations/{productVariationId}/batches', [BatchController::class, 'getBatchesByProductVariationId']);
     Route::get('/store-requisitions/{requisitionId}/general-details', [StoreIssueRequisitionController::class, 'getGeneralStoreRequisitionDetailsById']);
     Route::get('/store-requisitions/{requisitionId}/production-details', [StoreIssueRequisitionController::class, 'getProductionStoreRequisitionDetailsById']);
     Route::get('/branches/{branchId}/departments', [DepartmentController::class, 'getDepartmentsByBranch']);

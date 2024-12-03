@@ -91,9 +91,15 @@ class ProductVariationController extends Controller
         return redirect()->route('product-variations.index')->with('success', 'Product Variation deleted successfully');
     }
 
-    public function getProductVariationsByCompany($productId)
+    public function getProductVariationsByProduct($productId)
     {
         $productVariations = ProductVariation::with(['product', 'packingType', 'packSize'])->where('product_id', $productId)->get();
+        return response()->json(['productVariations' => $productVariations]);
+    }
+
+    public function getProductVariationsByComapny($companyId)
+    {
+        $productVariations = ProductVariation::with(['product', 'packingType', 'packSize'])->where('company_id', $companyId)->get();
         return response()->json(['productVariations' => $productVariations]);
     }
 }

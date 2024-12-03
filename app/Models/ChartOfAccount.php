@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ChartOfAccount extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'code', 'company_id'];
+    protected $fillable = ['particular', 'abbreviation', 'code', 'open_debit', 'open_credit', 'act_debit', 'act_credit', 'cl_debit', 'cl_credit', 'budget', 'company_id'];
 
     protected static function boot()
     {

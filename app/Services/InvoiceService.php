@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\RawMaterialItem;
-use App\Models\Stock;
 
 class InvoiceService
 {
@@ -27,10 +26,10 @@ class InvoiceService
 
         if ($data['invoice_items']) {
             foreach ($data['invoice_items'] as $key => $value) {
-                $value['invoice_id'] = $invoice->id;
-                $value['product_id'] = isset($value['product']) ? $value['product'] : null;
+                $value['product_variation_id'] = isset($value['product']) ? $value['product'] : null;
                 $value['raw_material_item_id'] = isset($value['raw_material_item']) ? $value['raw_material_item'] : null;
-                InvoiceItem::create($value);
+                $value['batch_id'] = isset($value['batch']) ? $value['batch'] : null;
+                $invoice->items()->create($value);
             }
         }
         return $data;
@@ -44,10 +43,10 @@ class InvoiceService
         $invoice->items()->delete();
         if ($data['invoice_items']) {
             foreach ($data['invoice_items'] as $value) {
-                $value['invoice_id'] = $invoice->id;
-                $value['product_id'] = isset($value['product']) ? $value['product'] : null;
+                $value['product_variation_id'] = isset($value['product']) ? $value['product'] : null;
                 $value['raw_material_item_id'] = isset($value['raw_material_item']) ? $value['raw_material_item'] : null;
-                InvoiceItem::create($value);
+                $value['batch_id'] = isset($value['batch']) ? $value['batch'] : null;
+                $invoice->items()->create($value);
             }
         }
         return $data;

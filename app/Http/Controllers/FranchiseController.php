@@ -121,4 +121,10 @@ class FranchiseController extends Controller
         $franchise_code = $this->franchiseService->createFranchiseCode($companyId);
         return response()->json(['franchise_code' => $franchise_code]);
     }
+
+    public function getFranchisersByCompany($companyId)
+    {
+        $franchisers = Party::where('company_id', $companyId)->where('is_distributor', '1')->orderBy('name', 'asc')->get();
+        return response()->json(['franchisers' => $franchisers]);
+    }
 }

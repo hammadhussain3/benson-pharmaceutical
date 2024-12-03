@@ -11,7 +11,8 @@ class UpdateChartOfAccountRequest extends FormRequest
         $chartOfAccountId = $this->route('chart_of_account');
 
         return [
-            'name' => 'required|string|max:255',
+            'particular' => 'required|string|max:255',
+            'abbreviation' => 'nullable|string|max:255',
             'code' => 'required|string|max:50|unique:chart_of_accounts,code,' . $chartOfAccountId,
             'company' => 'required|exists:companies,id',
         ];

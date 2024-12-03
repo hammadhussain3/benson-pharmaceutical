@@ -23,9 +23,9 @@
                         @method('PUT')
                         <div class="form-row row">
                             <div class="mb-3 col-md-6">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ old('name', $chartOfAccount->name) }}" required>
+                                <label for="particular">Particular</label>
+                                <input type="text" class="form-control" name="particular" id="particular"
+                                    value="{{ old('name', $chartOfAccount->particular) }}" required>
                                 <div class="invalid-feedback">Please provide a valid name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
@@ -33,6 +33,11 @@
                                 <input type="text" class="form-control" name="code" id="code"
                                     value="{{ old('code', $chartOfAccount->code) }}" required readonly>
                                 <div class="invalid-feedback">Please provide a valid code.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="abbreviation">Abbreviation</label>
+                                <input type="text" class="form-control" name="abbreviation" id="abbreviation" placeholder="Abbreviation"
+                                    required value="{{ old('abbreviation', $chartOfAccount->abbreviation) }}">
                             </div>
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">

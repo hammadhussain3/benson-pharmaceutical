@@ -72,7 +72,7 @@
                         <th>#</th>
                         <th>Description</th>
                         <th>Quantity</th>
-                        {{-- <th>Unit</th> --}}
+                        <th>Unit</th>
                         <th>Price</th>
                         <th>Total</th>
                     </tr>
@@ -82,39 +82,28 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->item->name }}</td>
-                            <td>{{ $item->product_quantity }}</td>
-                            {{-- <td>{{ $item->unit }}</td> --}}
+                            <td>{{ $item->quantity }}</td>
+                            <td>{{ $item->unit }}</td>
                             <td>{{ number_format($item->unit_price) }}</td>
-                            <td>{{ number_format($item->product_quantity * $item->unit_price, 2) }}</td>
+                            <td>{{ number_format($item->total_amount, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="4" class="text-right"> <strong>Sub Total</strong></th>
-                        <th>{{ number_format($invoice->items_cost_without_tax - $invoice->shipping_cost, 2) }}</th>
+                        <th colspan="5" class="text-right"> <strong>Sub Total</strong></th>
+                        <th>{{ number_format($invoice->items_cost_without_tax, 2) }}</th>
                     </tr>
                     <tr>
-                        <th colspan="4" class="text-right"> <strong>Shipping Cost:</strong></th>
-                        <th>{{ number_format($invoice->shipping_cost, 2) }}</th>
-                    </tr>
-                    <tr>
-                        <th colspan="4" class="text-right"> <strong>Tax Rate ({{ $invoice->invoice_tax_rate }}%):</strong></th>
+                        <th colspan="5" class="text-right"> <strong>Tax Rate ({{ $invoice->invoice_tax_rate }}%):</strong></th>
                         <th>{{ number_format($invoice->total_invoice_tax, 2) }}</th>
                     </tr>
-                    @if($invoice->discount_type == "flat")
                     <tr>
-                        <th colspan="4" class="text-right"> <strong>Discount (Flat):</strong></th>
+                        <th colspan="5" class="text-right"> <strong>Discount ({{ $invoice->discount_type }}):</strong></th>
                         <th>{{ number_format($invoice->discount, 2) }}</th>
                     </tr>
-                    @else
                     <tr>
-                        <th colspan="4" class="text-right"> <strong>Discount (%):</strong></th>
-                        <th>{{ number_format($invoice->discount, 2) }}</th>
-                    </tr>
-                    @endif
-                    <tr>
-                        <th colspan="4" class="text-right"> <strong>Total Amount:</strong></th>
+                        <th colspan="5" class="text-right"> <strong>Total Amount:</strong></th>
                         <td>{{ number_format($invoice->total_amount, 2) }}</td>
                     </tr>
                 </tfoot>

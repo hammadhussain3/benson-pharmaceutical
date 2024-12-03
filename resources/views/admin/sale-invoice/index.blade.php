@@ -34,8 +34,8 @@
                             <th>Code</th>   
                             <th>Type</th>
                             <th>Party</th>
-                            <th>Required Date</th>
-                            <th>Is Urgent</th>
+                            <th>Order Number</th>
+                            <th>Order Date</th>
                             <th>Status</th>
                             <th>Discount</th>
                             <th>Paid Amount</th>
@@ -43,10 +43,9 @@
                             <th>Due Amount</th>
                             <th>Total Amount</th>
                             <th>Payment Status</th>
-                            <th>Payment Deadline</th>
                             <th>Invoice Date</th>
                             @role('Superadmin')
-                            <th>Company Id</th>
+                                <th>Company Id</th>
                             @endrole
                             @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
                                 <th>Action</th>
@@ -59,9 +58,9 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('sale-invoices.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
                                 <td>{{ ucfirst(strtolower($invoice->type)) }} ({{ $invoice->prefix }})</td>
-                                <td>{{ $invoice->party->name }} ({{ $invoice->party->is_supplier == '1' ? 'Supplier' : ($invoice->party->is_supplier == '1' ? 'Franchiser' : '') }})</td>
-                                <td>{{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}</td>
-                                <td>{{ $invoice->is_urgent == '1' ? 'Yes' : 'No' }}</td>
+                                <td>{{ $invoice->party->name }}</td>
+                                <td>{{ $invoice->order_number }}</td>
+                                <td>{{ \Carbon\Carbon::parse($invoice->order_date)->format('d M, Y') }}</td>
                                 <td>{{ $invoice->status }}</td>
                                 <td>{{ $invoice->discount_type }} - {{ $invoice->discount }}</td>
                                 <td>{{ $invoice->paid_amount }}</td>
@@ -69,9 +68,10 @@
                                 <td>{{ $invoice->due_amount }}</td>
                                 <td>{{ $invoice->total_amount }}</td>
                                 <td>{{ $invoice->payment_status }}</td>
-                                <td>{{ $invoice->payment_deadline }}</td>
                                 <td>{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</td>
-                                <td>{{ $invoice->company->name }}</td>
+                                @role('Superadmin')
+                                    <td>{{ $invoice->company->name }}</td>
+                                @endrole
                                 @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
                                     <td>
                                         @if(auth()->user()->hasPermission('Invoice View'))

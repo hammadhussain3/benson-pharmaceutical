@@ -13,12 +13,22 @@ return new class extends Migration
     {
         Schema::create('chart_of_accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code')->unique();
+            $table->string('code');
+            $table->string('particular');
+            $table->string('abbreviation')->nullable();
+            $table->decimal('open_debit', 15, 2)->default(0);
+            $table->decimal('open_credit', 15, 2)->default(0);
+            $table->decimal('act_debit', 15, 2)->default(0);
+            $table->decimal('act_credit', 15, 2)->default(0);
+            $table->decimal('cl_debit', 15, 2)->default(0);
+            $table->decimal('cl_credit', 15, 2)->default(0);
+            $table->decimal('budget', 15, 2)->default(0);
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
+
+            $table->unique(['code', 'company_id']);
         });
     }
 

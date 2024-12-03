@@ -9,50 +9,28 @@ use App\Http\Requests\InvoiceRequest;
 use App\Services\CompanyService;
 use App\Services\InvoiceService;
 use App\Services\PartyService;
-use App\Services\ProductService;
 use App\Services\RawMaterialItemService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
-class InvoiceController extends Controller
+class PurchaseInvoiceController extends Controller
 {
     protected $invoiceService;
     protected $companyService;
     protected $partyService;
-    protected $productService;
     protected $rawMaterialItemService;
 
-    public function __construct(InvoiceService $invoiceService, CompanyService $companyService, PartyService $partyService, ProductService $productService, RawMaterialItemService $rawMaterialItemService)
+    public function __construct(InvoiceService $invoiceService, CompanyService $companyService, PartyService $partyService, RawMaterialItemService $rawMaterialItemService)
     {
         $this->invoiceService = $invoiceService;
         $this->companyService = $companyService;
         $this->partyService = $partyService;
-        $this->productService = $productService;
         $this->rawMaterialItemService = $rawMaterialItemService;
     }
 
     public function index()
     {
-        $routeConfig = [
-            'sale-invoices.index' => [
-                'view' => 'admin.sale-invoice.index',
-                'type' => 'sale',
-            ],
-            'purchase-invoices.index' => [
-                'view' => 'admin.purchase-invoice.index',
-                'type' => 'purchase',
-            ],
-            'quotations.index' => [
-                'view' => 'admin.quotations.index',
-                'type' => 'quotation',
-            ],
-        ];
-
-        $routeName = Route::currentRouteName();
-
-        $invoices = $this->invoiceService->getAllInvoices($routeConfig[$routeName]['type']);
-
-        return view($routeConfig[$routeName]['view'], compact('invoices'));
+        $invoices = $this->invoiceService->getAllInvoices('purchase');
+        return view('admin.purchase-invoice.index', compact('invoices'));
     }
 
     /**
@@ -60,30 +38,15 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        $routeConfig = [
-            'sale-invoices.create' => [
-                'view' => 'admin.sale-invoice.create',
-                'products' => $this->productService->getAllProducts(),
-                'newInvoiceCode' => 'SI',
-            ],
-            'purchase-invoices.create' => [
-                'view' => 'admin.purchase-invoice.create',
-                'products' => $this->rawMaterialItemService->getAllRawMaterialItems(),
-                'newInvoiceCode' => 'PR',
-            ],
-            'quotations.create' => [
-                'view' => 'admin.quotations.create',
-                'products' => $this->productService->getAllProducts(),
-                'newInvoiceCode' => 'QT',
-            ],
-        ];
-
-        $routeName = Route::currentRouteName();
-        $newInvoiceCode = $routeConfig[$routeName]['newInvoiceCode'];
+        if (auth()->user()->hasRole('Superadmin')) {
+            $newInvoiceCode = 'PR';
+        } else {
+            $newSupplierCode = $this->invoiceService->createInvoiceCode(auth()->user()->employee->company_id, 'purchase');
+        }
         $parties = $this->partyService->getAllParties();
         $companies = $this->companyService->getAllCompanies();
-        $products = $routeConfig[$routeName]['products'];
-        return view($routeConfig[$routeName]['view'], compact('parties','companies','products', 'newInvoiceCode'));
+        $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
+        return view('admin.purchase-invoice.create', compact('parties','companies','rawMaterialItems', 'newInvoiceCode'));
     }
 
     /**
@@ -111,30 +74,30 @@ class InvoiceController extends Controller
     {
         $invoice = $this->invoiceService->getInvoiceById($id);
         $parties = $this->partyService->getAllParties();
-        $companies = $this->companyService->getAllCompanies();
-        $products = $this->productService->getAllProducts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
-        return view('admin.purchase-invoice.edit', compact('invoice','parties','companies','products', 'rawMaterialItems'));
+        return view('admin.purchase-invoice.edit', compact('invoice', 'parties', 'rawMaterialItems'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(InvoiceRequest $request, Invoice $invoice)
+    public function update(InvoiceRequest $request, $id)
     {
+        $invoice = $this->invoiceService->getInvoiceById($id);
         $this->invoiceService->updateInvoice($invoice, $request->validated());
         return redirect()->route('purchase-invoices.index')->with('success', 'Invoice updated successfully');
     }
 
-    public function destroy(Invoice $invoice)
+    public function destroy($id)
     {
+        $invoice = $this->invoiceService->getInvoiceById($id);
         $this->invoiceService->deleteInvoice($invoice);
         return redirect()->route('purchase-invoices.index')->with('success', 'Invoice deleted successfully');
     }
 
-    public function createCodeByCompany(Request $request, $companyId)
+    public function createCodeByCompany($companyId)
     {
-        $invoice_code = $this->invoiceService->createInvoiceCode($companyId, $request->input('document_type'));
+        $invoice_code = $this->invoiceService->createInvoiceCode($companyId, 'purchase');
         return response()->json(['invoice_code' => $invoice_code]);
     }
 
