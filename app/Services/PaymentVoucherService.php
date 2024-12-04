@@ -68,11 +68,11 @@ class PaymentVoucherService
     {
         $lastPaymentVoucherCode = PaymentVoucher::latest('id')->where('company_id', $company_id)->value('code');
         if ($lastPaymentVoucherCode) {
-            $numberPart = (int) substr($lastPaymentVoucherCode, 3);
+            $numberPart = (int) substr($lastPaymentVoucherCode, 2);
             $newNumberPart = $numberPart + 1;
-            $newPaymentVoucherCode = 'PVR' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+            $newPaymentVoucherCode = 'PV' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
         } else {
-            $newPaymentVoucherCode = 'PVR00001';
+            $newPaymentVoucherCode = 'PV00001';
         }
         return $newPaymentVoucherCode;
     }

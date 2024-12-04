@@ -215,6 +215,21 @@ class PermissionSeeder extends Seeder
             ['id' => 198, 'name' => 'Payment Voucher Update', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 199, 'name' => 'Payment Voucher Delete', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 200, 'name' => 'Payment Voucher View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 201, 'name' => 'Receipt Voucher List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 202, 'name' => 'Receipt Voucher Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 203, 'name' => 'Receipt Voucher Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 204, 'name' => 'Receipt Voucher Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 205, 'name' => 'Receipt Voucher View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 206, 'name' => 'Credit Note List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 207, 'name' => 'Credit Note Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 208, 'name' => 'Credit Note Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 209, 'name' => 'Credit Note Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 210, 'name' => 'Credit Note View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 211, 'name' => 'Sales Return List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 212, 'name' => 'Sales Return Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 213, 'name' => 'Sales Return Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 214, 'name' => 'Sales Return Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 215, 'name' => 'Sales Return View', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }
 }

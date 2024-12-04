@@ -3,14 +3,14 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>{{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</h4>
+            <h4>Sale Warranty</h4>
             <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('sale-invoices.index') }}">Invoices</a></li>
-                <li class="breadcrumb-item active">View {{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</li>
+                <li class="breadcrumb-item"><a href="{{ route('sale-warranties.index') }}">Sale Warranties</a></li>
+                <li class="breadcrumb-item active">View Sale Warranty</li>
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print {{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</button>
+            <button class="btn btn-primary" onclick="window.print()">Print Sale Warranty</button>
         </div>
     </div>
     <!-- Print Button -->
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="col-auto text-end">
-                    <h2 class="mb-0">{{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</h2>
+                    <h2 class="mb-0">Warranty</h2>
                     <p class="mb-0"><strong>Ref No:</strong> {{ $invoice->code }}</p>
                     <p class="mb-0"><strong>Date:</strong> {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</p>
                 </div>

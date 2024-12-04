@@ -505,11 +505,11 @@
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
-                            @if(auth()->user()->hasPermission('Invoice List'))
+                            @if(auth()->user()->hasPermission('Credit Note List'))
                                 <li>
-                                    <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
+                                    <a class="{{ request()->is('credit-notes*') ? 'active' : '' }}" href="{{ route('credit-notes.index') }}">
                                         <i class="fa fa-store me-1"></i>
-                                        Sale Invoice
+                                        Credit Note
                                     </a>
                                 </li>
                             @endif
@@ -518,6 +518,38 @@
                                     <a class="{{ request()->is('payment-vouchers*') ? 'active' : '' }}" href="{{ route('payment-vouchers.index') }}">
                                         <i class="fa fa-store me-1"></i>
                                         Payment Voucher
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Receipt Voucher List'))
+                                <li>
+                                    <a class="{{ request()->is('receipt-vouchers*') ? 'active' : '' }}" href="{{ route('receipt-vouchers.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Receipt Voucher
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Invoice List'))
+                                <li>
+                                    <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Sale Invoice
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Sales Return List'))
+                                <li>
+                                    <a class="{{ request()->is('sales-returns*') ? 'active' : '' }}" href="{{ route('sales-returns.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Sales Return
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Invoice List'))
+                                <li>
+                                    <a class="{{ request()->is('sale-warranties*') ? 'active' : '' }}" href="{{ route('sale-warranties.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Sale Warranty
                                     </a>
                                 </li>
                             @endif

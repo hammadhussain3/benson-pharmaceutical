@@ -38,6 +38,10 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
+                                <label for="code">Code</label>
+                                <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $paymentVoucher->code) }}" readonly>
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="supplier_id">Supplier</label>
                                 <select name="party" id="supplier_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Supplier</option>
@@ -51,10 +55,6 @@
                                         </option>
                                     @endforeach
                                 </select>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="code">Code</label>
-                                <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $paymentVoucher->code) }}" readonly>
                             </div>
                             <div class="col-md-12">
                                 <div class="card border-0 mb-0" id="item-group">
@@ -169,8 +169,8 @@
 
             $("#item-group").append(html);
             // Clone the options from the first dropdown and append to the new dropdown
-            const firstDropdownOptions = $(".raw_material_items_dropdown:first").children().clone();
-            $(`#item-group .item-set:last .raw_material_items_dropdown`).append(firstDropdownOptions);
+            const firstDropdownOptions = $(".chart_of_accounts_dropdown:first").children().clone();
+            $(`#item-group .item-set:last .chart_of_accounts_dropdown`).append(firstDropdownOptions);
             itemIndex++;
             $('.js-example-basic-single').select2({});
         }
@@ -182,7 +182,7 @@
             // Only remove if there is more than one item set
             if (itemSets.length > 1) {
                 itemSets[itemSets.length - 1].remove(); // Remove the last added item set
-                calculatePurchaseInvoiceAmount();
+                calculatePaymentVoucherAmount();
                 itemIndex--; // Decrement the index to keep track accurately
             }
         }

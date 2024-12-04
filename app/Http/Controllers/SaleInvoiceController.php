@@ -68,6 +68,12 @@ class SaleInvoiceController extends Controller
         return view('admin.sale-invoice.show', compact('invoice'));
     }
 
+    public function saleWarranties()
+    {
+        $invoices = $this->invoiceService->getAllInvoices('sale');
+        return view('admin.sale-invoice.warranty-list', compact('invoices'));
+    }
+
     public function warranty($id)
     {
         $invoice = $this->invoiceService->getInvoiceById($id);

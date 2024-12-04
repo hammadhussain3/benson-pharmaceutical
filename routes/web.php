@@ -42,7 +42,10 @@ use App\Http\Controllers\{
     StoreIssueRequisitionController,
     RejectionReturnNoteController,
     LeftOverNoteController,
+    SalesReturnController,
     PaymentVoucherController,
+    ReceiptVoucherController,
+    CreditNoteController,
     ReportController,
 };
 use App\Http\Controllers\SalarySheetController;
@@ -119,8 +122,12 @@ Route::middleware('auth')->group(function () {
     Route::get('store-issue-requisitions/production/create', [StoreIssueRequisitionController::class, 'productionCreate'])->name('store-issue-requisitions.production.create');
     Route::resource('rejection-return-notes', RejectionReturnNoteController::class);
     Route::resource('left-over-notes', LeftOverNoteController::class);
-    Route::get('sale-invoices/warranty/{id}', [SaleInvoiceController::class, 'warranty'])->name('sale-invoices.warranty');
+    Route::get('sale-warranties', [SaleInvoiceController::class, 'saleWarranties'])->name('sale-warranties.index');
+    Route::get('sale-warranties/{id}/show', [SaleInvoiceController::class, 'warranty'])->name('sale-warranties.show');
+    Route::resource('sales-returns', SalesReturnController::class);
     Route::resource('payment-vouchers', PaymentVoucherController::class);
+    Route::resource('receipt-vouchers', ReceiptVoucherController::class);
+    Route::resource('credit-notes', CreditNoteController::class);
     Route::get('report/balance-report', [ReportController::class, 'balanceReport'])->name('reports.balance-report');
     Route::get('report/purchase-items', [ReportController::class, 'purchaseItems'])->name('reports.purchase-items');
     Route::get('report/purchase-requisition', [ReportController::class, 'purchaseRequisitions'])->name('reports.purchase-requisitions');
@@ -170,6 +177,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/sale-invoice-code', [SaleInvoiceController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/chart-of-account', [ChartOfAccountController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/payment-voucher', [PaymentVoucherController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/receipt-voucher', [ReceiptVoucherController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/credit-note', [CreditNoteController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/sales-return', [SalesReturnController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/companies/{companyId}/invoices', [PurchaseInvoiceController::class, 'getInvoicesByCompany']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);

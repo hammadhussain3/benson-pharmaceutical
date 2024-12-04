@@ -33,7 +33,7 @@ class PaymentVoucherController extends Controller
     public function create()
     {
         if (auth()->user()->hasRole('Superadmin')) {
-            $newPaymentVoucherCode = "PVR";
+            $newPaymentVoucherCode = "PV";
         } else {
             $newPaymentVoucherCode = $this->paymentVoucherService->createCode(auth()->user()->employee->company_id);
         }

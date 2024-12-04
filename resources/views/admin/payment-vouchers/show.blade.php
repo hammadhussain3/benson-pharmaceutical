@@ -3,14 +3,14 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Purchase Voucher</h4>
+            <h4>Payment Voucher</h4>
             <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('payment-vouchers.index') }}">Purchase Vouchers</a></li>
-                <li class="breadcrumb-item active">View Purchase Voucher</li>
+                <li class="breadcrumb-item"><a href="{{ route('payment-vouchers.index') }}">Payment Vouchers</a></li>
+                <li class="breadcrumb-item active">View Payment Voucher</li>
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Purchase Voucher</button>
+            <button class="btn btn-primary" onclick="window.print()">Print Payment Voucher</button>
         </div>
     </div>
     <!-- Print Button -->
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="col-auto text-end">
-                    <h2 class="fs-5 fw-bold">Purchase Voucher</h2>
+                    <h2 class="fs-5 fw-bold">Payment Voucher</h2>
                     <p class="fs-6 mb-0">{{ $paymentVoucher->code }}</p>
                     <p class="fs-6 mb-0">{{ $paymentVoucher->created_at->format('d M, Y') }}</p>
                 </div>
@@ -91,11 +91,11 @@
             <table class="table mt-3 border">
                 <tr>
                     <th>Net:</th>
-                    <td>{{ number_format($paymentVoucher->total, 2) }}</td>
+                    <td class="w-75">{{ number_format($paymentVoucher->total, 2) }}</td>
                 </tr>
                 <tr>
                     <th>Amount in words:</th>
-                    <td>
+                    <td class="w-75">
                         <x-amount-in-words :amount="$paymentVoucher->total" />
                     </td>
                 </tr>

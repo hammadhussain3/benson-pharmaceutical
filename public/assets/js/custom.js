@@ -515,7 +515,6 @@ function selectProductVariationsByCompany(companyId) {
     allSelects.forEach(select => {
         select.innerHTML = '<option value="">Select Product</option>';
     });
-    console.log(companyId);
     fetch(`/companies/${companyId}/product-variations`)
         .then(response => {
             if (!response.ok) {
@@ -524,7 +523,6 @@ function selectProductVariationsByCompany(companyId) {
             return response.json();
         })
         .then(data => {
-            console.log(data);
             if (data.productVariations && data.productVariations.length > 0) {
                 allSelects.forEach(select => {
                     data.productVariations.forEach(productVariation => {
@@ -983,7 +981,6 @@ function selectChartOfAccounts(companyId)
         select.innerHTML = '<option value="">Select Chart Of Account</option>';
     });
 
-    console.log(companyId);
     fetch(`/companies/${companyId}/chart-of-accounts`)
         .then(response => {
             if (!response.ok) {
@@ -992,7 +989,6 @@ function selectChartOfAccounts(companyId)
             return response.json();
         })
         .then(data => {
-            console.log(data);
             if (data.chartOfAccounts && data.chartOfAccounts.length > 0) {
                 allSelects.forEach(select => {
                     data.chartOfAccounts.forEach(chartOfAccount => {
@@ -1366,6 +1362,63 @@ function createPaymentVoucherCode(companyId)
                 code.value = data.payment_voucher_code;
             })
             .catch(error => console.error('Error creating payment voucher code:', error));
+    }
+}
+
+function createReceiptVoucherCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/receipt-voucher`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating receipt voucher code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.receipt_voucher_code;
+            })
+            .catch(error => console.error('Error creating receipt voucher code:', error));
+    }
+}
+
+function createCreditNoteCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/credit-note`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating credit note code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.credit_note_code;
+            })
+            .catch(error => console.error('Error creating credit note code:', error));
+    }
+}
+
+function createSalesReturnCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/sales-return`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating sales return code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.sales_return_code;
+            })
+            .catch(error => console.error('Error creating sales return code:', error));
     }
 }
 
@@ -1878,6 +1931,55 @@ function calculateSaleInvoiceAmount() {
     document.getElementById('total_amount').value = totalAmount.toFixed(2);
 }
 
+function calculateSalesReturnAmount() {
+    let totalTax = 0;
+    let itemsCostWithTax = 0;
+    let itemsCostWithoutTax = 0;
+    let totalAmount = 0;
+
+    var returnTaxRate = parseFloat(document.getElementById('tax_rate').value) || 0;
+    var invdiscount = parseFloat(document.getElementById('discount').value) || 0;
+    var invdiscounttype = document.getElementById('discount_type').value || 'flat';
+
+    document.querySelectorAll('.item-set').forEach((itemSet, index) => {
+        const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
+        const quantity = parseFloat(itemSet.querySelector('.product_quantity').value) || 0;
+        const taxRate = parseFloat(itemSet.querySelector('.tax_rate').value) || 0;
+        const discountType = itemSet.querySelector('select[name="items[' + index + '][discount_type]"]').value;
+        const discount = parseFloat(itemSet.querySelector('.discount').value) || 0;
+
+        let itemTotal = unitPrice * quantity;
+
+        itemTotal += (itemTotal * taxRate) / 100;
+
+        if (discountType === 'percent') {
+            itemTotal -= (itemTotal * discount) / 100;
+        } else {
+            itemTotal -= discount;
+        }
+
+        totalAmount += itemTotal;
+
+        itemSet.querySelector('.total_item_amount').value = itemTotal.toFixed(2);
+    });
+
+    itemsCostWithoutTax += totalAmount;
+    totalTax = (totalAmount * returnTaxRate) / 100;
+    itemsCostWithTax += itemsCostWithoutTax + totalTax;
+    totalAmount += totalTax;
+    
+    if (invdiscounttype === 'percent') {
+        totalAmount -= (totalAmount * invdiscount) / 100;
+    } else {
+        totalAmount -= invdiscount;
+    }
+
+    document.getElementById('inclusive_tax').value = itemsCostWithoutTax.toFixed(2);
+    document.getElementById('total_tax').value = totalTax.toFixed(2);
+    document.getElementById('exclusive_tax').value = itemsCostWithTax.toFixed(2);
+    document.getElementById('total_amount').value = totalAmount.toFixed(2);
+}
+
 function calculatePurchaseInvoiceAmount() {
     let totalInvoiceTax = 0;
     let itemsCostWithTax = 0;
@@ -1967,6 +2069,25 @@ function calculateSingleProductAmount() {
 }
 
 function calculatePaymentVoucherAmount() {
+    let totalDebit = 0;
+    let totalCredit = 0;
+    let total = 0;
+    document.querySelectorAll('.item-set').forEach((itemSet, index) => {
+        const debit = parseFloat(itemSet.querySelector('.debit').value) || 0;
+        const credit = parseFloat(itemSet.querySelector('.credit').value) || 0;
+
+        totalDebit += debit;
+        totalCredit += credit;
+    });
+
+    total += totalDebit - totalCredit;
+
+    document.getElementById('total_debit').value = totalDebit.toFixed(2);
+    document.getElementById('total_credit').value = totalCredit.toFixed(2);
+    document.getElementById('total').value = total.toFixed(2);
+}
+
+function calculateReceiptVoucherAmount() {
     let totalDebit = 0;
     let totalCredit = 0;
     let total = 0;

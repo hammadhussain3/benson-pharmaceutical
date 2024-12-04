@@ -252,7 +252,7 @@
                         <div class="row">
                             <div class="mb-3 col-md-6">
                                 <label for="">Products</label>
-                                <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 product_variations_dropdown" onchange="selectBatchesByProductVariation(this.value, this)" required>
+                                <select name="invoice_items[${itemIndex}][product]" class="js-example-basic-single select2 product_variations_dropdown" onchange="selectBatchesByProductVariation(this.value, this)" required>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
