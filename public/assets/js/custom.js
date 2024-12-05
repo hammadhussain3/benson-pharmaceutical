@@ -608,19 +608,6 @@ function selectAllTypeOfProducts(companyId) {
                     return response.json();
                 })
                 .then(data => {
-                    // Add product options
-                    if (data.products && data.products.length > 0) {
-                        var productGroup = document.createElement('optgroup');
-                        productGroup.label = "Products";
-                        data.products.forEach(function(product) {
-                            var option = document.createElement('option');
-                            option.value = `product_${product.id}`; // Use prefix to differentiate
-                            option.textContent = product.name;
-                            productGroup.appendChild(option);
-                        });
-                        productSelect.appendChild(productGroup);
-                    }
-
                     // Add raw material options
                     if (data.rawMaterialItems && data.rawMaterialItems.length > 0) {
                         var rawMaterialGroup = document.createElement('optgroup');
@@ -931,6 +918,27 @@ function selectBatches(productId)
                 });
             })
             .catch(error => console.error('Error fetching Batches:', error));
+    }
+}
+
+function selectBatchesForProducts(productVariation, target) {
+    // Remove all options and append one with "Select Product"
+    const itemSet = target.closest('.item-set');
+    if (!itemSet) return;
+
+    const batchDropdown = itemSet.querySelector('.batch_dropdown');
+    if (batchDropdown) {
+        if (productVariation.startsWith('var_')) {
+            const productVariationId = productVariation.split('_')[1];
+            console.log(productVariationId);
+            selectBatchesByProductVariation(productVariationId, target);
+        } else {            
+            batchDropdown.innerHTML = ''; // Clear all options
+            const defaultOption = document.createElement('option');
+            defaultOption.value = ''; // Value set to null equivalent
+            defaultOption.textContent = 'Select Batch';
+            batchDropdown.appendChild(defaultOption);
+        }
     }
 }
 
@@ -1422,6 +1430,25 @@ function createSalesReturnCode(companyId)
     }
 }
 
+function createJournalVoucherCode(companyId)
+{
+    var code = document.getElementById('code');
+    
+    if (companyId && code) {
+        fetch(`/companies/${companyId}/journal-voucher`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error creating journal voucher code');
+                }
+                return response.json();
+            })
+            .then(data => {
+                code.value = data.journal_voucher_code;
+            })
+            .catch(error => console.error('Error creating journal voucher code:', error));
+    }
+}
+
 function selectDepartmentsByBranch(branchId)
 {
     var departmentSelect = document.getElementById('department_id');
@@ -1497,7 +1524,7 @@ function getInvoiceDetails(invoiceId) {
                                     <div class="mb-3 col-md-4">
                                         <label>Quantity Ordered</label>
                                         <input type="number" class="form-control" name="items[${itemIndex}][quantity_ordered]"
-                                            placeholder="Quantity Ordered" required value="${item.product_quantity}" readonly>
+                                            placeholder="Quantity Ordered" required value="${item.quantity}" readonly>
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label>Quantity Recieved</label>
@@ -2104,4 +2131,19 @@ function calculateReceiptVoucherAmount() {
     document.getElementById('total_debit').value = totalDebit.toFixed(2);
     document.getElementById('total_credit').value = totalCredit.toFixed(2);
     document.getElementById('total').value = total.toFixed(2);
+}
+
+function calculateJournalVoucherAmount() {
+    let totalDebit = 0;
+    let totalCredit = 0;
+    document.querySelectorAll('.item-set').forEach((itemSet, index) => {
+        const debit = parseFloat(itemSet.querySelector('.debit').value) || 0;
+        const credit = parseFloat(itemSet.querySelector('.credit').value) || 0;
+
+        totalDebit += debit;
+        totalCredit += credit;
+    });
+
+    document.getElementById('total_debit').value = totalDebit.toFixed(2);
+    document.getElementById('total_credit').value = totalCredit.toFixed(2);
 }

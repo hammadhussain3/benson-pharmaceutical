@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
+                            <th>Code</th>
                             <th>Supplier</th>
                             <th>Address</th>
                             <th>Contact Person</th>
@@ -41,6 +41,7 @@
                             <th>Debit</th>
                             <th>Credit</th>
                             <th>Total</th>
+                            <th>Date</th>
                             @role('Superadmin')
                                 <th>Company</th>
                             @endrole
@@ -53,14 +54,15 @@
                         @foreach ($paymentVouchers as $paymentVoucher)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> <a class="link-primary" href="{{ route('payment-vouchers.show', $paymentVoucher->id) }}">{{ $paymentVoucher->created_at->format('d M, Y') }}</a></td>
+                                <td> <a class="link-primary" href="{{ route('payment-vouchers.show', $paymentVoucher->id) }}">{{ $paymentVoucher->code }}</a></td>
                                 <td>{{ $paymentVoucher->party->name }}</td>
                                 <td>{{ $paymentVoucher->party->address }}</td>
                                 <td>{{ $paymentVoucher->party->contact_person_name }}</td>
                                 <td>{{ $paymentVoucher->party->contact_person_phone ?? $paymentVoucher->party->phone }}</td>
-                                <td>{{ $paymentVoucher->total_debit }}</td>
-                                <td>{{ $paymentVoucher->total_credit }}</td>
-                                <td>{{ $paymentVoucher->total }}</td>
+                                <td>{{ $paymentVoucher->total_debit . $paymentVoucher->currency }}</td>
+                                <td>{{ $paymentVoucher->total_credit . $paymentVoucher->currency }}</td>
+                                <td>{{ $paymentVoucher->total . $paymentVoucher->currency }}</td>
+                                <td>{{ $paymentVoucher->created_at->format('d M, Y') }}</td>
                                 @role('Superadmin')
                                     <td>{{ $paymentVoucher->company->name }}</td>
                                 @endrole

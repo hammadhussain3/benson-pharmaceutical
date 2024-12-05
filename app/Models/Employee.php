@@ -25,6 +25,8 @@ class Employee extends Model
         'is_active',
         'branch_id',
         'company_id',
+        'created_by',
+        'updated_by'
     ];
 
     // Relationships

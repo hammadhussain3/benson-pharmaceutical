@@ -21,6 +21,8 @@ class SalarySlip extends Model
         'month',
         'year',
         'company_id',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

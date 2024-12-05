@@ -33,6 +33,7 @@
                         <tr>
                             <th>#</th>
                             <th>Country Name</th>
+                            <th>Currency</th>
                             @if(auth()->user()->hasPermission('Countries View') || auth()->user()->hasPermission('Countries Update') || auth()->user()->hasPermission('Countries Delete'))
                             <th>Action</th>
                             @endif
@@ -43,6 +44,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('countries.view', $country->id) }}">{{ $country->name }}</a></td>
+                                <td>{{ $country->currency }}</td>
                                 @if(auth()->user()->hasPermission('Countries View') || auth()->user()->hasPermission('Countries Update') || auth()->user()->hasPermission('Countries Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Countries View'))

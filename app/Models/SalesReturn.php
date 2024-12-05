@@ -11,6 +11,19 @@ class SalesReturn extends Model
 
     protected $fillable = ['code', 'party_id', 'inclusive_tax', 'tax_rate', 'total_tax', 'exclusive_tax', 'discount_type', 'discount', 'total_amount', 'company_id', 'created_by', 'updated_by'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->id();
+        });
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
@@ -25,5 +38,9 @@ class SalesReturn extends Model
     {
         return $this->hasMany(SalesReturnItem::class);
     }
-    
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class, 'sales_return_id');
+    }
 }

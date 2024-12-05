@@ -47,6 +47,7 @@ class StoreIssueRequisitionService
             } elseif(isset($item['raw_material_item'])){
                 $item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
             }
+            $item['batch_id'] = $item['batch'] ?? null;
 
             $requisition->items()->create($item);
             $item['company_id'] = $data['company_id'];

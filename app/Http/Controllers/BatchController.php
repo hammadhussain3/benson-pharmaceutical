@@ -25,6 +25,9 @@ class BatchController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Batch List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $batches = $this->batchService->getAllBatches();
         return view('admin.batch.index', compact('batches'));
     }
@@ -34,6 +37,10 @@ class BatchController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Batch Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
         return view('admin.batch.create', compact('companies','products'));
@@ -44,6 +51,9 @@ class BatchController extends Controller
      */
     public function store(BatchRequest $request)
     {
+        if (!auth()->user()->hasPermission('Batch Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->batchService->createBatch($request->validated());
         return redirect()->route('batches.index')->with('success', 'Batch created successfully.');
     }
@@ -53,6 +63,9 @@ class BatchController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Batch View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $batch = $this->batchService->getBatchById($id);
         return view('admin.batch.show', compact('batch'));
     }
@@ -62,6 +75,9 @@ class BatchController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Batch Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $batch = $this->batchService->getBatchById($id);
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
@@ -73,12 +89,18 @@ class BatchController extends Controller
      */
     public function update(BatchRequest $request, Batch $batch)
     {
+        if (!auth()->user()->hasPermission('Batch Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->batchService->updateBatch($batch, $request->validated());
         return redirect()->route('batches.index')->with('success', 'Batch updated successfully');
     }
 
     public function destroy(Batch $batch)
     {
+        if (!auth()->user()->hasPermission('Batch Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->batchService->deleteBatch($batch);
         return redirect()->route('batches.index')->with('success', 'Batch deleted successfully');
     }

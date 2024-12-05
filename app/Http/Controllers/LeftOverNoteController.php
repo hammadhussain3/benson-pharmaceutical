@@ -32,6 +32,9 @@ class LeftOverNoteController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Left Over Note List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $leftOverNotes = $this->leftOverNoteService->getAll();
         return view('admin.left-over-notes.index', compact('leftOverNotes'));
     }
@@ -41,6 +44,9 @@ class LeftOverNoteController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Left Over Note Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newLeftOverNoteCode = "LON";
         } else {
@@ -59,6 +65,9 @@ class LeftOverNoteController extends Controller
      */
     public function store(LeftOverNoteRequest $request)
     {
+        if (!auth()->user()->hasPermission('Left Over Note Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->leftOverNoteService->create($request->validated());
         return redirect()->route('left-over-notes.index')->with('success', 'Left Over Note created successfully.');
     }
@@ -68,6 +77,9 @@ class LeftOverNoteController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Left Over Note View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $leftOverNote = $this->leftOverNoteService->getById($id);
         return view('admin.left-over-notes.show', compact('leftOverNote'));
     }
@@ -77,6 +89,9 @@ class LeftOverNoteController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Left Over Note Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $leftOverNote = $this->leftOverNoteService->getById($id);
         $requisitions = $this->storeIssueRequisitionService->getAll();
         $departments = $this->departmentService->getAllDepartments();
@@ -91,12 +106,18 @@ class LeftOverNoteController extends Controller
      */
     public function update(LeftOverNoteRequest $request, LeftOverNote $leftOverNote)
     {
+        if (!auth()->user()->hasPermission('Left Over Note Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->leftOverNoteService->update($leftOverNote, $request->validated());
         return redirect()->route('left-over-notes.index')->with('success', 'Left Over Note updated successfully');
     }
 
     public function destroy(LeftOverNote $leftOverNote)
     {
+        if (!auth()->user()->hasPermission('Left Over Note Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->leftOverNoteService->delete($leftOverNote);
         return redirect()->route('left-over-notes.index')->with('success', 'Left Over Note deleted successfully');
     }

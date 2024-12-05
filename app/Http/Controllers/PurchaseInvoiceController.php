@@ -29,6 +29,9 @@ class PurchaseInvoiceController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Invoice List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoices = $this->invoiceService->getAllInvoices('purchase');
         return view('admin.purchase-invoice.index', compact('invoices'));
     }
@@ -38,6 +41,9 @@ class PurchaseInvoiceController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Invoice Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newInvoiceCode = 'PR';
         } else {
@@ -54,6 +60,9 @@ class PurchaseInvoiceController extends Controller
      */
     public function store(InvoiceRequest $request)
     {
+        if (!auth()->user()->hasPermission('Invoice Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->invoiceService->createInvoice($request->validated());
         return redirect()->route('purchase-invoices.index')->with('success', 'Invoice created successfully.');
     }
@@ -63,6 +72,9 @@ class PurchaseInvoiceController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Invoice View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         return view('admin.purchase-invoice.show', compact('invoice'));
     }
@@ -72,6 +84,9 @@ class PurchaseInvoiceController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Invoice Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         $parties = $this->partyService->getAllParties();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
@@ -83,6 +98,9 @@ class PurchaseInvoiceController extends Controller
      */
     public function update(InvoiceRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('Invoice Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         $this->invoiceService->updateInvoice($invoice, $request->validated());
         return redirect()->route('purchase-invoices.index')->with('success', 'Invoice updated successfully');
@@ -90,6 +108,9 @@ class PurchaseInvoiceController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('Invoice Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         $this->invoiceService->deleteInvoice($invoice);
         return redirect()->route('purchase-invoices.index')->with('success', 'Invoice deleted successfully');
@@ -109,7 +130,7 @@ class PurchaseInvoiceController extends Controller
 
     public function getInvoiceDetailsById($invoiceId)
     {
-        $invoice = Invoice::with('items.product', 'items.rawMaterialItem', 'party')->where('id', $invoiceId)->first();
+        $invoice = Invoice::with('items.productVariation', 'items.rawMaterialItem', 'party')->where('id', $invoiceId)->first();
         $goods_receivings = GoodsReceiving::with('items')->where('invoice_id', $invoice->id)->get();
 
         $invoice->items->map(function ($item) use ($goods_receivings) {

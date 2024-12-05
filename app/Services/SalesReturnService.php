@@ -31,6 +31,8 @@ class SalesReturnService
             $value['batch_id'] = $value['batch'];
 
             $salesReturn->items()->create($value);
+            $value['company_id'] = $data['company_id'];
+            $salesReturn->stocks()->create($value);
         }
 
         return $salesReturn;
@@ -47,10 +49,12 @@ class SalesReturnService
         $salesReturn->items()->delete();
 
         foreach ($items as $value) {
-            $value['product_variation_id'] = $value['product_variation'];
+            $value['product_variation_id'] = $value['product'];
             $value['batch_id'] = $value['batch'];
 
             $salesReturn->items()->create($value);
+            $value['company_id'] = $data['company_id'];
+            $salesReturn->stocks()->create($value);
         }
         
         return $salesReturn;        

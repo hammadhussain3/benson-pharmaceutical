@@ -18,10 +18,13 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-row row">
-                        <div class="mb-3 col-md-12">
+                        <div class="mb-3 col-md-6">
                             <label for="name">Country Name</label>
                             <input type="text" class="form-control" value="{{ $country->name ?? 'N/A' }}" readonly>
-                            <div class="invalid-feedback">Please provide a valid country name.</div>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="currency">Currency</label>
+                            <input type="text" class="form-control" value="{{ $country->currency ?? 'N/A' }}" readonly>
                         </div>
                     </div>
                     <div class="row justify-content-between align-items-center">

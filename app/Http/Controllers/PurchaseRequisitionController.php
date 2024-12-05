@@ -23,6 +23,9 @@ class PurchaseRequisitionController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Purchase Requisition List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $purchaseRequisitions = $this->purchaseRequisitionService->getAllPurchaseRequisitions();
         return view('admin.purchase-requisitions.index', compact('purchaseRequisitions'));
     }
@@ -32,6 +35,9 @@ class PurchaseRequisitionController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Purchase Requisition Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newPurchaseRequisitionCode = "MPR";
         } else {
@@ -47,6 +53,9 @@ class PurchaseRequisitionController extends Controller
      */
     public function store(PurchaseRequisitionRequest $request)
     {
+        if (!auth()->user()->hasPermission('Purchase Requisition Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->purchaseRequisitionService->createPurchaseRequisition($request->validated());
         return redirect()->route('purchase-requisitions.index')->with('success', 'Purchase Requisition created successfully.');
     }
@@ -56,6 +65,9 @@ class PurchaseRequisitionController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Purchase Requisition View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $purchaseRequisition = $this->purchaseRequisitionService->getPurchaseRequisitionById($id);
         return view('admin.purchase-requisitions.show', compact('purchaseRequisition'));
     }
@@ -65,6 +77,9 @@ class PurchaseRequisitionController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Purchase Requisition Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $purchaseRequisition = $this->purchaseRequisitionService->getPurchaseRequisitionById($id);
         $companies = $this->companyService->getAllCompanies();
         $suppliers = $this->supplierService->getAllSuppliers();
@@ -76,12 +91,18 @@ class PurchaseRequisitionController extends Controller
      */
     public function update(PurchaseRequisitionRequest $request, PurchaseRequisition $purchaseRequisition)
     {
+        if (!auth()->user()->hasPermission('Purchase Requisition Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->purchaseRequisitionService->updatePurchaseRequisition($purchaseRequisition, $request->validated());
         return redirect()->route('purchase-requisitions.index')->with('success', 'Purchase Requisition updated successfully');
     }
 
     public function destroy(PurchaseRequisition $purchaseRequisition)
     {
+        if (!auth()->user()->hasPermission('Purchase Requisition Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->purchaseRequisitionService->deletePurchaseRequisition($purchaseRequisition);
         return redirect()->route('purchase-requisitions.index')->with('success', 'Purchase Requisition deleted successfully');
     }

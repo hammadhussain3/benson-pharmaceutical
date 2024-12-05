@@ -52,6 +52,7 @@ class StoreIssueRequisitionRequest extends FormRequest
                 }
             ],
             'items.*.raw_material_item' => 'nullable|exists:raw_material_items,id|required_with:product',
+            'items.*.batch' => 'nullable|exists:batches,id',
             'items.*.unit' => 'required|string',
             'items.*.unit_price' => 'required|numeric|min:0',
             'items.*.quantity' => 'required|numeric|min:1',

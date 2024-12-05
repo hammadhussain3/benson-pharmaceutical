@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Designation extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'company_id'];
+    protected $fillable = ['name', 'company_id', 'created_by', 'updated_by'];
 
     public function company()
     {

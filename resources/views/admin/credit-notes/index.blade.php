@@ -33,12 +33,13 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
+                            <th>Code</th>
                             <th>Party</th>
                             <th>Address</th>
                             <th>Contact Person</th>
                             <th>Phone</th>
                             <th>Total</th>
+                            <th>Date</th>
                             @role('Superadmin')
                                 <th>Company</th>
                             @endrole
@@ -51,12 +52,13 @@
                         @foreach ($creditNotes as $creditNote)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> <a class="link-primary" href="{{ route('credit-notes.show', $creditNote->id) }}">{{ $creditNote->created_at->format('d M, Y') }}</a></td>
+                                <td> <a class="link-primary" href="{{ route('credit-notes.show', $creditNote->id) }}">{{ $creditNote->code }}</a></td>
                                 <td>{{ $creditNote->party->name }}</td>
                                 <td>{{ $creditNote->party->address }}</td>
                                 <td>{{ $creditNote->party->contact_person_name }}</td>
                                 <td>{{ $creditNote->party->contact_person_phone ?? $creditNote->party->phone }}</td>
                                 <td>{{ $creditNote->total }}</td>
+                                <td>{{ $creditNote->created_at->format('d M, Y') }}</td>
                                 @role('Superadmin')
                                     <td>{{ $creditNote->company->name }}</td>
                                 @endrole

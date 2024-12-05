@@ -20,11 +20,15 @@
                     <form action="{{ route('countries.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-row row">
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label for="name">Country Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Country Name" required value="{{ old('name') }}">
-                                <div class="invalid-feedback">Please provide a valid country name.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="currency">Currency</label>
+                                <input type="text" class="form-control" name="currency" id="currency"
+                                    placeholder="PKR / USD ..." required value="{{ old('currency') }}">
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

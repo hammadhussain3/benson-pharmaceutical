@@ -24,6 +24,8 @@ class Party extends Model
         'is_supplier',
         'is_distributor',
         'company_id',
+        'created_by',
+        'updated_by'
     ];
 
     protected static function boot()

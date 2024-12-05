@@ -10,7 +10,7 @@ class Stock extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id', 'raw_material_item_id', 'product_variation_id', 'batch_id', 'goods_receiving_id', 'finished_goods_receiving_id', 'store_issue_requisition_id', 'left_over_note_id', 'quantity', 'unit', 'unit_price', 'total', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['product_id', 'raw_material_item_id', 'product_variation_id', 'batch_id', 'goods_receiving_id', 'finished_goods_receiving_id', 'store_issue_requisition_id', 'left_over_note_id', 'sales_return_id', 'quantity', 'unit', 'unit_price', 'total', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -102,6 +102,7 @@ class Stock extends Model
             ->whereNull('finished_goods_receiving_id')
             ->whereNull('store_issue_requisition_id')
             ->whereNull('left_over_note_id')
+            ->whereNull('sales_return_id')
             ->groupBy('product_id', 'raw_material_item_id', 'product_variation_id')
             ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
             ->get();
@@ -113,7 +114,8 @@ class Stock extends Model
         $addQuantityWhenNotNull = self::where(function ($query) {
                 $query->whereNotNull('goods_receiving_id')
                     ->orWhereNotNull('finished_goods_receiving_id')
-                    ->orWhereNotNull('left_over_note_id');
+                    ->orWhereNotNull('left_over_note_id')
+                    ->orWhereNotNull('sales_return_id');
             })
             ->groupBy('product_id', 'raw_material_item_id', 'product_variation_id')
             ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
@@ -193,6 +195,7 @@ class Stock extends Model
             ->whereNull('finished_goods_receiving_id')
             ->whereNull('store_issue_requisition_id')
             ->whereNull('left_over_note_id')
+            ->whereNull('sales_return_id')
             ->groupBy('product_id', 'raw_material_item_id', 'product_variation_id')
             ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
             ->get();
@@ -201,7 +204,8 @@ class Stock extends Model
             ->where(function ($q) {
                 $q->whereNotNull('goods_receiving_id')
                     ->orWhereNotNull('finished_goods_receiving_id')
-                    ->orWhereNotNull('left_over_note_id');
+                    ->orWhereNotNull('left_over_note_id')
+                    ->orWhereNotNull('sales_return_id');
             })
             ->groupBy('product_id', 'raw_material_item_id', 'product_variation_id')
             ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))

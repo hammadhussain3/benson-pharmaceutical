@@ -29,6 +29,9 @@ class FinishedGoodsReceivingController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Finished Goods Receiving List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $finishedGoodsReceivings = $this->finishedGoodsReceivingService->getAllFinishedGoodsReceivings();
         return view('admin.finished-goods-receivings.index', compact('finishedGoodsReceivings'));
     }
@@ -38,6 +41,9 @@ class FinishedGoodsReceivingController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Finished Goods Receiving Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newFinishedGoodsCode = "FGR";
         } else {
@@ -55,6 +61,9 @@ class FinishedGoodsReceivingController extends Controller
      */
     public function store(FinishedGoodsReceivingRequest $request)
     {
+        if (!auth()->user()->hasPermission('Finished Goods Receiving Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->finishedGoodsReceivingService->createFinishedGoodsReceiving($request->validated());
         return redirect()->route('finished-goods-receivings.index')->with('success', 'Finished Goods Receiving Note created successfully.');
     }
@@ -64,6 +73,9 @@ class FinishedGoodsReceivingController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Finished Goods Receiving View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $finishedGoodsReceiving = $this->finishedGoodsReceivingService->getFinishedGoodsReceivingById($id);
         return view('admin.finished-goods-receivings.show', compact('finishedGoodsReceiving'));
     }
@@ -73,6 +85,9 @@ class FinishedGoodsReceivingController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Finished Goods Receiving Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $finishedGoodsReceiving = $this->finishedGoodsReceivingService->getFinishedGoodsReceivingById($id);
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
@@ -86,12 +101,18 @@ class FinishedGoodsReceivingController extends Controller
      */
     public function update(FinishedGoodsReceivingRequest $request, FinishedGoodsReceiving $finishedGoodsReceiving)
     {
+        if (!auth()->user()->hasPermission('Finished Goods Receiving Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->finishedGoodsReceivingService->updateFinishedGoodsReceiving($finishedGoodsReceiving, $request->validated());
         return redirect()->route('finished-goods-receivings.index')->with('success', 'Finished Goods Receiving Note updated successfully');
     }
 
     public function destroy(FinishedGoodsReceiving $finishedGoodsReceiving)
     {
+        if (!auth()->user()->hasPermission('Finished Goods Receiving Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->finishedGoodsReceivingService->deleteFinishedGoodsReceiving($finishedGoodsReceiving);
         return redirect()->route('finished-goods-receivings.index')->with('success', 'Finished Goods Receiving Note deleted successfully');
     }

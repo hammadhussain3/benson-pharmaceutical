@@ -128,7 +128,7 @@
                                                                 @endforeach
                                                             @endif
                                                         </select>
-                                                    </div>                                                    
+                                                    </div>
                                                     <div class="mb-3 col-md-4">
                                                         <label>Unit Price</label>
                                                         <div class="input-group">

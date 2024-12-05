@@ -25,6 +25,9 @@ class ProductVariationController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Product Variation List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $productVariations = $this->productVariationService->getAllProductVariations();
         return view('admin.product-variations.index', compact('productVariations'));
     }
@@ -34,6 +37,9 @@ class ProductVariationController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Product Variation Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllCompanies();
         $products = Product::orderBy('name', 'asc')->get();
         $dosage_forms = DosageForm::orderBy('name', 'asc')->get();
@@ -48,6 +54,9 @@ class ProductVariationController extends Controller
      */
     public function store(ProductVariationRequest $request)
     {
+        if (!auth()->user()->hasPermission('Product Variation Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productVariationService->createProductVariation($request->validated());
         return redirect()->route('product-variations.index')->with('success', 'Product Variation created successfully.');
     }
@@ -57,6 +66,9 @@ class ProductVariationController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Product Variation View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $productVariation = $this->productVariationService->getProductVariationById($id);
         return view('admin.product-variations.show', compact('productVariation'));
     }
@@ -66,6 +78,9 @@ class ProductVariationController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Product Variation Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $productVariation = $this->productVariationService->getProductVariationById($id);
         $companies = $this->companyService->getAllCompanies();
         $products = Product::orderBy('name', 'asc')->get();
@@ -81,12 +96,18 @@ class ProductVariationController extends Controller
      */
     public function update(ProductVariationRequest $request, ProductVariation $productVariation)
     {
+        if (!auth()->user()->hasPermission('Product Variation Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productVariationService->updateProductVariation($productVariation, $request->validated());
         return redirect()->route('product-variations.index')->with('success', 'Product Variation updated successfully');
     }
 
     public function destroy(ProductVariation $productVariation)
     {
+        if (!auth()->user()->hasPermission('Product Variation Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productVariationService->deleteProductVariation($productVariation);
         return redirect()->route('product-variations.index')->with('success', 'Product Variation deleted successfully');
     }

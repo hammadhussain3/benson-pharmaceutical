@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Party;
 use App\Models\ReceiptVoucher;
 use App\Models\ReceiptVoucherItem;
 
@@ -23,6 +24,11 @@ class ReceiptVoucherService
 
         $data['party_id'] = $data['party'];
         $data['company_id'] = $data['company'];
+        
+        $party = Party::with('country')->find($data['party_id']);
+        if ($party && $party->country) {
+            $data['currency'] = $party->country->currency;
+        }
 
         $receiptVoucher = ReceiptVoucher::create($data);
 
@@ -41,6 +47,11 @@ class ReceiptVoucherService
 
         $data['party_id'] = $data['party'];
         $data['company_id'] = $data['company'];
+
+        $party = Party::with('country')->find($data['party_id']);
+        if ($party && $party->country) {
+            $data['currency'] = $party->country->currency;
+        }
 
         $receiptVoucher->update($data);
         $receiptVoucher->items()->delete();

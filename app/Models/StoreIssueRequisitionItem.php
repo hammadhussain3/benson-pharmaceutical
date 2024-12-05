@@ -9,7 +9,7 @@ class StoreIssueRequisitionItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['store_issue_requisition_id', 'product_id', 'raw_material_item_id', 'product_variation_id', 'quantity', 'unit', 'unit_price', 'total'];
+    protected $fillable = ['store_issue_requisition_id', 'product_id', 'raw_material_item_id', 'product_variation_id', 'batch_id', 'quantity', 'unit', 'unit_price', 'total'];
 
     public function store_issue_requisition()
     {
@@ -29,5 +29,10 @@ class StoreIssueRequisitionItem extends Model
     public function product_variation()
     {
         return $this->belongsTo(ProductVariation::class);
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
     }
 }

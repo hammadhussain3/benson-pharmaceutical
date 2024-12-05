@@ -30,6 +30,9 @@ class RejectionReturnNoteController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Rejection Return Note List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $rejectionReturnNotes = $this->rejectionReturnNoteService->getAll();
         return view('admin.rejection-return-notes.index', compact('rejectionReturnNotes'));
     }
@@ -39,6 +42,9 @@ class RejectionReturnNoteController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Rejection Return Note Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newRejectionCode = "RRN";
         } else {
@@ -56,6 +62,9 @@ class RejectionReturnNoteController extends Controller
      */
     public function store(RejectionReturnNoteRequest $request)
     {
+        if (!auth()->user()->hasPermission('Rejection Return Note Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->rejectionReturnNoteService->create($request->validated());
         return redirect()->route('rejection-return-notes.index')->with('success', 'Rejection Return Note created successfully.');
     }
@@ -65,6 +74,9 @@ class RejectionReturnNoteController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Rejection Return Note View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $rejectionReturnNote = $this->rejectionReturnNoteService->getById($id);
         return view('admin.rejection-return-notes.show', compact('rejectionReturnNote'));
     }
@@ -74,6 +86,9 @@ class RejectionReturnNoteController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Rejection Return Note Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $rejectionReturnNote = $this->rejectionReturnNoteService->getById($id);
         $companies = $this->companyService->getAllCompanies();
         $invoices = $this->invoiceService->getAllInvoices('purchase');
@@ -87,12 +102,18 @@ class RejectionReturnNoteController extends Controller
      */
     public function update(RejectionReturnNoteRequest $request, RejectionReturnNote $rejectionReturnNote)
     {
+        if (!auth()->user()->hasPermission('Rejection Return Note Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->rejectionReturnNoteService->update($rejectionReturnNote, $request->validated());
         return redirect()->route('rejection-return-notes.index')->with('success', 'Rejection Return Note updated successfully');
     }
 
     public function destroy(RejectionReturnNote $rejectionReturnNote)
     {
+        if (!auth()->user()->hasPermission('Rejection Return Note Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->rejectionReturnNoteService->delete($rejectionReturnNote);
         return redirect()->route('rejection-return-notes.index')->with('success', 'Rejection Return Note deleted successfully');
     }

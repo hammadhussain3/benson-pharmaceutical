@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FinishedGoodsReceiving extends Model
 {
-    protected $fillable = ['code', 'batch_id', 'product_id', 'company_id'];
+    protected $fillable = ['code', 'batch_id', 'product_id', 'company_id', 'created_by', 'updated_by'];
 
     public function batch()
     {

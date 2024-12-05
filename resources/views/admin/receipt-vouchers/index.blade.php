@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
+                            <th>Code</th>
                             <th>Franchisers</th>
                             <th>Address</th>
                             <th>Contact Person</th>
@@ -41,6 +41,7 @@
                             <th>Debit</th>
                             <th>Credit</th>
                             <th>Total</th>
+                            <th>Date</th>
                             @role('Superadmin')
                                 <th>Company</th>
                             @endrole
@@ -53,14 +54,15 @@
                         @foreach ($receiptVouchers as $receiptVoucher)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> <a class="link-primary" href="{{ route('receipt-vouchers.show', $receiptVoucher->id) }}">{{ $receiptVoucher->created_at->format('d M, Y') }}</a></td>
+                                <td> <a class="link-primary" href="{{ route('receipt-vouchers.show', $receiptVoucher->id) }}">{{ $receiptVoucher->code }}</a></td>
                                 <td>{{ $receiptVoucher->party->name }}</td>
                                 <td>{{ $receiptVoucher->party->address }}</td>
                                 <td>{{ $receiptVoucher->party->contact_person_name }}</td>
                                 <td>{{ $receiptVoucher->party->contact_person_phone ?? $receiptVoucher->party->phone }}</td>
-                                <td>{{ $receiptVoucher->total_debit }}</td>
-                                <td>{{ $receiptVoucher->total_credit }}</td>
-                                <td>{{ $receiptVoucher->total }}</td>
+                                <td>{{ $receiptVoucher->total_debit . $receiptVoucher->currency }}</td>
+                                <td>{{ $receiptVoucher->total_credit . $receiptVoucher->currency }}</td>
+                                <td>{{ $receiptVoucher->total . $receiptVoucher->currency }}</td>
+                                <td>{{ $receiptVoucher->created_at->format('d M, Y') }}</td>
                                 @role('Superadmin')
                                     <td>{{ $receiptVoucher->company->name }}</td>
                                 @endrole

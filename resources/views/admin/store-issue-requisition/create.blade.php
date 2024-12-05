@@ -90,22 +90,14 @@
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-6">
                                                         <label for="">Product</label>
-                                                        <select name="items[{{ $i }}][product]" class="js-example-basic-single select2 products_dropdown" required>
+                                                        <select name="items[{{ $i }}][product]" class="js-example-basic-single select2 products_dropdown" onchange="selectBatchesForProducts(this.value, this)" required>
                                                             <option value="">Select Products</option>
                                                             @if(old('items[{{ $i }}][product]') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                                                 @php
                                                                     $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
                                                                 @endphp
-                                                                <optgroup label="Products">
-                                                                    @foreach ($products->where('company_id', $seletedCompanyId) as $product)
-                                                                        <option value="{{ 'product_' .$product->id }}"
-                                                                            {{ old("items.$i.product") == 'product_' .$product->id ? 'selected' : '' }}>
-                                                                            {{ $product->name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </optgroup>
                                                                 <optgroup label="Raw Materials">
                                                                     @foreach ($rawMaterialItems->where('company_id', $seletedCompanyId) as $rawMaterialItem)
                                                                         <option value="{{ 'raw_' .$rawMaterialItem->id }}"
@@ -125,6 +117,25 @@
                                                             @endif
                                                         </select>
                                                     </div>
+                                                    <div class="mb-3 col-md-6">
+                                                        <label for="">Batches</label>
+                                                        <select name="items[{{ $i }}][batch]" class="js-example-basic-single select2 batch_dropdown" required>
+                                                            <option value="">Select Batch</option>
+                                                            @if(old('items[{{ $i }}][batch]') || old('items[{{ $i }}][product]') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                                                @php
+                                                                    $selectedProductVariationId = old("items.$i.product");
+                                                                    $productVariation = $productVariations->find($selectedProductVariationId);
+                                                                    $productId = $productVariation->product_id ?? null;
+                                                                @endphp
+                                                                @foreach ($batches->where('product_id', $productId)->where('company_id', $seletedCompanyId) as $batch)
+                                                                    <option value="{{ $batch->id }}"
+                                                                        {{ old("items.$i.batch") == $batch->id ? 'selected' : '' }}>
+                                                                        {{ $batch->batch_no }}
+                                                                    </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
                                                     <div class="mb-3 col-md-4">
                                                         <label>Unit Price</label>
                                                         <div class="input-group">
@@ -134,12 +145,12 @@
                                                                 placeholder="Unit" required value="{{ old("items.$i.unit") }}">
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3 col-md-2">
+                                                    <div class="mb-3 col-md-4">
                                                         <label>Quantity</label>
                                                         <input type="number" class="form-control quantity" name="items[{{ $i }}][quantity]"
                                                             placeholder="Quantity" required value="{{ old("items.$i.quantity") }}" oninput="calculateSingleProductAmount()">
                                                     </div>
-                                                    <div class="mb-3 col-md-2">
+                                                    <div class="mb-3 col-md-4">
                                                         <label>Total</label>
                                                         <input type="number" class="form-control product_total" name="items[{{ $i }}][total]"
                                                             placeholder="Total" required value="{{ old("items.$i.total") }}" readonly>
@@ -174,9 +185,15 @@
                 </div>
                 <div class="card-body px-0 pb-0">
                     <div class="row">
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-6">
                             <label for="">Product</label>
-                            <select name="items[${ itemIndex }][product]" class="js-example-basic-single select2 products_dropdown" required></select>
+                            <select name="items[${ itemIndex }][product]" class="js-example-basic-single select2 products_dropdown" onchange="selectBatchesForProducts(this.value, this)" required></select>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="">Batches</label>
+                            <select name="items[${ itemIndex }][batch]" class="js-example-basic-single select2 batch_dropdown" required>
+                                <option value="">Select Batch</option>
+                            </select>
                         </div>
                         <div class="mb-3 col-md-4">
                             <label>Unit Price</label>
@@ -187,12 +204,12 @@
                                     placeholder="Unit" required value="{{ old("items.$i.unit") }}">
                             </div>
                         </div>
-                        <div class="mb-3 col-md-2">
+                        <div class="mb-3 col-md-4">
                             <label>Quantity</label>
                             <input type="number" class="form-control quantity" name="items[${ itemIndex }][quantity]"
                                 placeholder="Quantity" required value="{{ old("items.$i.quantity") }}" oninput="calculateSingleProductAmount()">
                         </div>
-                        <div class="mb-3 col-md-2">
+                        <div class="mb-3 col-md-4">
                             <label>Total</label>
                             <input type="number" class="form-control product_total" name="items[${ itemIndex }][total]"
                                 placeholder="Total" required value="{{ old("items.$i.total") }}" readonly>

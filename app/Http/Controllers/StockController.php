@@ -26,6 +26,9 @@ class StockController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Stock List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $stocks = $this->stockService->getAllStocks();
         return view('admin.stocks.index', compact('stocks'));
     }
@@ -35,6 +38,9 @@ class StockController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Stock Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllcompanies();
         $products = $this->productService->getAllProducts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
@@ -46,6 +52,9 @@ class StockController extends Controller
      */
     public function store(StockRequest $request)
     {
+        if (!auth()->user()->hasPermission('Stock Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->stockService->createStock($request->validated());
         return redirect()->route('stocks.index')->with('success', 'Stock created successfully.');
     }
@@ -55,6 +64,9 @@ class StockController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Stock View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $stock = $this->stockService->getStockById($id);
         return view('admin.stocks.show', compact('stock'));
     }
@@ -64,6 +76,9 @@ class StockController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Stock Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $stock = $this->stockService->getStockById($id);
         $companies = $this->companyService->getAllcompanies();
         $products = $this->productService->getAllProducts();
@@ -76,12 +91,18 @@ class StockController extends Controller
      */
     public function update(StockRequest $request, Stock $stock)
     {
+        if (!auth()->user()->hasPermission('Stock Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->stockService->updateStock($stock, $request->validated());
         return redirect()->route('stocks.index')->with('success', 'Stock updated successfully');
     }
 
     public function destroy(Stock $stock)
     {
+        if (!auth()->user()->hasPermission('Stock Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->stockService->deleteStock($stock);
         return redirect()->route('stocks.index')->with('success', 'Stock deleted successfully');
     }

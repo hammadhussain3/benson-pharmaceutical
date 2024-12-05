@@ -15,6 +15,8 @@ class Loan extends Model
         'payback_months',
         'remaining',
         'company_id',
+        'created_by',
+        'updated_by'
     ];
 
     public function employee()

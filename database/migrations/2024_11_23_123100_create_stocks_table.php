@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('finished_goods_receiving_id')->nullable();
             $table->unsignedBigInteger('store_issue_requisition_id')->nullable();
             $table->unsignedBigInteger('left_over_note_id')->nullable();
+            $table->unsignedBigInteger('sales_return_id')->nullable();
             $table->integer('quantity');
             $table->string('unit');
             $table->decimal('unit_price', 8, 2);

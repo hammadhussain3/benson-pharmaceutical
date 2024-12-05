@@ -26,6 +26,9 @@ class GoodsReceivingController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Goods Receiving List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $goodsReceivings = $this->goodsReceivingService->getAllGoodsReceivings();
         return view('admin.goods-receivings.index', compact('goodsReceivings'));
     }
@@ -35,6 +38,9 @@ class GoodsReceivingController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Goods Receiving Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newGoodsReceivingCode = "GRN";
         } else {
@@ -51,6 +57,9 @@ class GoodsReceivingController extends Controller
      */
     public function store(GoodsReceivingRequest $request)
     {
+        if (!auth()->user()->hasPermission('Goods Receiving Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->goodsReceivingService->createGoodsReceiving($request->validated());
         return redirect()->route('goods-receivings.index')->with('success', 'Goods Receiving Note created successfully.');
     }
@@ -60,6 +69,9 @@ class GoodsReceivingController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Goods Receiving View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $goodsReceiving = $this->goodsReceivingService->getGoodsReceivingById($id);
         return view('admin.goods-receivings.show', compact('goodsReceiving'));
     }
@@ -69,6 +81,9 @@ class GoodsReceivingController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Goods Receiving Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $goodsReceiving = $this->goodsReceivingService->getGoodsReceivingById($id);
         $invoices = $this->invoiceService->getAllInvoices('purchase');
         $companies = $this->companyService->getAllCompanies();
@@ -81,12 +96,18 @@ class GoodsReceivingController extends Controller
      */
     public function update(GoodsReceivingRequest $request, GoodsReceiving $goodsReceiving)
     {
+        if (!auth()->user()->hasPermission('Goods Receiving Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->goodsReceivingService->updateGoodsReceiving($goodsReceiving, $request->validated());
         return redirect()->route('goods-receivings.index')->with('success', 'Goods Receiving Note updated successfully');
     }
 
     public function destroy(GoodsReceiving $goodsReceiving)
     {
+        if (!auth()->user()->hasPermission('Goods Receiving Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $goodsReceiving = $this->goodsReceivingService->deleteGoodsReceiving($goodsReceiving);
         return redirect()->route('goods-receivings.index')->with('success', 'Goods Receiving deleted successfully');
     }

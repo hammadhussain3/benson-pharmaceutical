@@ -230,6 +230,11 @@ class PermissionSeeder extends Seeder
             ['id' => 213, 'name' => 'Sales Return Update', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 214, 'name' => 'Sales Return Delete', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 215, 'name' => 'Sales Return View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 216, 'name' => 'Journal Voucher List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 217, 'name' => 'Journal Voucher Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 218, 'name' => 'Journal Voucher Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 219, 'name' => 'Journal Voucher Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 220, 'name' => 'Journal Voucher View', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }
 }

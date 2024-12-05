@@ -23,6 +23,9 @@ class RawMaterialItemController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Raw Material Item List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
         return view('admin.raw-material-items.index', compact('rawMaterialItems'));
     }
@@ -32,6 +35,9 @@ class RawMaterialItemController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Raw Material Item Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newRawMaterialItemCode = "RMI";
         } else {
@@ -47,6 +53,9 @@ class RawMaterialItemController extends Controller
      */
     public function store(RawMaterialItemRequest $request)
     {
+        if (!auth()->user()->hasPermission('Raw Material Item Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->rawMaterialItemService->createRawMaterialItem($request->validated());
         return redirect()->route('raw-material-items.index')->with('success', 'Raw Material Item created successfully.');
     }
@@ -56,6 +65,9 @@ class RawMaterialItemController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Raw Material Item View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $rawMaterialItem = $this->rawMaterialItemService->getRawMaterialItemById($id);
         return view('admin.raw-material-items.show', compact('rawMaterialItem'));
     }
@@ -65,6 +77,9 @@ class RawMaterialItemController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Raw Material Item Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $rawMaterialItem = $this->rawMaterialItemService->getRawMaterialItemById($id);
         $companies = $this->companyService->getAllcompanies();
         $parties = $this->partyService->getAllParties();
@@ -76,12 +91,18 @@ class RawMaterialItemController extends Controller
      */
     public function update(RawMaterialItemRequest $request, RawMaterialItem $rawMaterialItem)
     {
+        if (!auth()->user()->hasPermission('Raw Material Item Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->rawMaterialItemService->updateRawMaterialItem($rawMaterialItem, $request->validated());
         return redirect()->route('raw-material-items.index')->with('success', 'Raw Material Item updated successfully');
     }
 
     public function destroy(RawMaterialItem $rawMaterialItem)
     {
+        if (!auth()->user()->hasPermission('Raw Material Item Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->rawMaterialItemService->deleteRawMaterialItem($rawMaterialItem);
         return redirect()->route('raw-material-items.index')->with('success', 'Raw Material Item deleted successfully');
     }

@@ -91,7 +91,7 @@
             <table class="table mt-3 border">
                 <tr>
                     <th>Net:</th>
-                    <td class="w-75">{{ number_format($receiptVoucher->total, 2) }}</td>
+                    <td class="w-75">{{ number_format($receiptVoucher->total, 2) . $receiptVoucher->currency }}</td>
                 </tr>
                 <tr>
                     <th>Amount in words:</th>

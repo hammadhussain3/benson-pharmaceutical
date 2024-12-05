@@ -20,6 +20,9 @@ class DosageFormController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Dosage Form List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $dosageForms = $this->dosageFormService->getAllDosageForms();
         return view('admin.dosage-forms.index', compact('dosageForms'));
     }
@@ -29,6 +32,9 @@ class DosageFormController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Dosage Form Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllCompanies();
         return view('admin.dosage-forms.create', compact('companies'));
     }
@@ -38,7 +44,10 @@ class DosageFormController extends Controller
      */
     public function store(DosageFormRequest $request)
     {
-        $dosageForms = $this->dosageFormService->createDosageForm($request->validated());
+        if (!auth()->user()->hasPermission('Dosage Form Create')) {
+            abort(403, 'Unauthorized action.');
+        }
+        $this->dosageFormService->createDosageForm($request->validated());
         return redirect()->route('dosage-forms.index')->with('success', 'DosageForm created successfully.');
     }
 
@@ -47,6 +56,9 @@ class DosageFormController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Dosage Form View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $dosageForm = $this->dosageFormService->getDosageFormById($id);
         return view('admin.dosage-forms.show', compact('dosageForm'));
     }
@@ -56,6 +68,9 @@ class DosageFormController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Dosage Form Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllCompanies();
         $dosageForm = $this->dosageFormService->getDosageFormById($id);
         return view('admin.dosage-forms.edit', compact('dosageForm', 'companies'));
@@ -66,12 +81,18 @@ class DosageFormController extends Controller
      */
     public function update(DosageFormRequest $request, DosageForm $dosageForm)
     {
+        if (!auth()->user()->hasPermission('Dosage Form Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->dosageFormService->updateDosageForm($dosageForm, $request->validated());
         return redirect()->route('dosage-forms.index')->with('success', 'DosageForm updated successfully');
     }
 
     public function destroy(DosageForm $dosageForm)
     {
+        if (!auth()->user()->hasPermission('Dosage Form Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->dosageFormService->deleteDosageForm($dosageForm);
         return redirect()->route('dosage-forms.index')->with('success', 'DosageForm deleted successfully');
     }

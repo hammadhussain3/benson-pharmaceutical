@@ -6,7 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class GoodsReceiving extends Model
 {
-    protected $fillable = ['code', 'invoice_id', 'party_id', 'supplier_bill_no', 'company_id', 'sales_tax', 'adv_tax', 'total_amount'];
+    protected $fillable = ['code', 'invoice_id', 'party_id', 'supplier_bill_no', 'company_id', 'sales_tax', 'adv_tax', 'total_amount', 'created_by', 'updated_by'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_by = auth()->id();
+        });
+
+        static::updating(function ($model) {
+            $model->updated_by = auth()->id();
+        });
+    }
 
     public function company()
     {

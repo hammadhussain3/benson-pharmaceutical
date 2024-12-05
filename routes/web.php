@@ -45,6 +45,7 @@ use App\Http\Controllers\{
     SalesReturnController,
     PaymentVoucherController,
     ReceiptVoucherController,
+    JournalVoucherController,
     CreditNoteController,
     ReportController,
 };
@@ -127,6 +128,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('sales-returns', SalesReturnController::class);
     Route::resource('payment-vouchers', PaymentVoucherController::class);
     Route::resource('receipt-vouchers', ReceiptVoucherController::class);
+    Route::resource('journal-vouchers', JournalVoucherController::class);
     Route::resource('credit-notes', CreditNoteController::class);
     Route::get('report/balance-report', [ReportController::class, 'balanceReport'])->name('reports.balance-report');
     Route::get('report/purchase-items', [ReportController::class, 'purchaseItems'])->name('reports.purchase-items');
@@ -180,6 +182,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/receipt-voucher', [ReceiptVoucherController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/credit-note', [CreditNoteController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/sales-return', [SalesReturnController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/journal-voucher', [JournalVoucherController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/companies/{companyId}/invoices', [PurchaseInvoiceController::class, 'getInvoicesByCompany']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);

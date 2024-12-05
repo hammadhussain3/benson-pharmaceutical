@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Party;
 use App\Models\PaymentVoucher;
 use App\Models\PaymentVoucherItem;
 
@@ -24,6 +25,11 @@ class PaymentVoucherService
         $data['party_id'] = $data['party'];
         $data['company_id'] = $data['company'];
 
+        $party = Party::with('country')->find($data['party_id']);
+        if ($party && $party->country) {
+            $data['currency'] = $party->country->currency;
+        }
+
         $paymentVoucher = PaymentVoucher::create($data);
 
         foreach ($items as $value) {
@@ -41,6 +47,11 @@ class PaymentVoucherService
 
         $data['party_id'] = $data['party'];
         $data['company_id'] = $data['company'];
+
+        $party = Party::with('country')->find($data['party_id']);
+        if ($party && $party->country) {
+            $data['currency'] = $party->country->currency;
+        }
 
         $paymentVoucher->update($data);
         $paymentVoucher->items()->delete();

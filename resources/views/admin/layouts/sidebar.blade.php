@@ -11,6 +11,87 @@
                 </li>
 
                 @if(
+                    auth()->user()->hasPermission('Credit Note List') ||
+                    auth()->user()->hasPermission('Journal Voucher List') ||
+                    auth()->user()->hasPermission('Payment Voucher List') ||
+                    auth()->user()->hasPermission('Receipt Voucher List') ||
+                    auth()->user()->hasPermission('Invoice List') ||
+                    auth()->user()->hasPermission('Sales Return List')
+                )
+                    <li class="submenu">
+                        <a class="{{ request()->is('banks*') ||
+                        request()->is('credit-notes*') ||
+                        request()->is('journal-vouchers*') ||
+                        request()->is('payment-vouchers*') ||
+                        request()->is('receipt-vouchers*') ||
+                        request()->is('sale-invoices*') ||
+                        request()->is('sales-returns*') ||
+                        request()->is('sale-warranties*') ? 'active' : '' }}" href="javascript:void(0);">
+                            <span>Accounts</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul>
+                            @if(auth()->user()->hasPermission('Credit Note List'))
+                                <li>
+                                    <a class="{{ request()->is('credit-notes*') ? 'active' : '' }}" href="{{ route('credit-notes.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Credit Notes
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Journal Voucher List'))
+                                <li>
+                                    <a class="{{ request()->is('journal-vouchers*') ? 'active' : '' }}" href="{{ route('journal-vouchers.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Journal Vouchers
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Payment Voucher List'))
+                                <li>
+                                    <a class="{{ request()->is('payment-vouchers*') ? 'active' : '' }}" href="{{ route('payment-vouchers.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Payment Vouchers
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Receipt Voucher List'))
+                                <li>
+                                    <a class="{{ request()->is('receipt-vouchers*') ? 'active' : '' }}" href="{{ route('receipt-vouchers.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Receipt Vouchers
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Invoice List'))
+                                <li>
+                                    <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Sale Invoices
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Sales Return List'))
+                                <li>
+                                    <a class="{{ request()->is('sales-returns*') ? 'active' : '' }}" href="{{ route('sales-returns.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Sales Returns
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Invoice List'))
+                                <li>
+                                    <a class="{{ request()->is('sale-warranties*') ? 'active' : '' }}" href="{{ route('sale-warranties.index') }}">
+                                        <i class="fa fa-store me-1"></i>
+                                        Sale Warranties
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
+
+                @if(
                     auth()->user()->hasPermission('Bank List') ||
                     auth()->user()->hasPermission('Branches List') ||
                     auth()->user()->hasPermission('Cities List') ||
@@ -178,9 +259,6 @@
                                     </a>
                                 </li>
                             @endif
-                            {{-- <li>
-                                <a class="{{ request()->is('salary-sheet*') ? 'active' : '' }}" href="{{ route('salary.sheet.index') }}">Salary Sheet</a>
-                            </li> --}}
                         </ul>
                     </li>
                 @endif
@@ -273,11 +351,11 @@
                                 </a>
                             </li>
                         @endif
-                        @if(auth()->user()->hasPermission('PackForm List'))
+                        @if(auth()->user()->hasPermission('Purchase Requisition List'))
                             <li>
-                                <a class="{{ request()->is('pack-forms*') ? 'active' : '' }}" href="{{ route('pack-forms.index') }}">
+                                <a class="{{ request()->is('purchase-requisitions*') ? 'active' : '' }}" href="{{ route('purchase-requisitions.index') }}">
                                     <i class="fa fa-store me-1"></i>
-                                    Pack Forms
+                                    Manual Purchase Requisitions
                                 </a>
                             </li>
                         @endif
@@ -286,6 +364,14 @@
                                 <a class="{{ request()->is('packingtypes*') ? 'active' : '' }}" href="{{ route('packingtypes.index') }}">
                                     <i class="fa fa-box me-1"></i>
                                     Packing Types
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('PackForm List'))
+                            <li>
+                                <a class="{{ request()->is('pack-forms*') ? 'active' : '' }}" href="{{ route('pack-forms.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Pack Forms
                                 </a>
                             </li>
                         @endif
@@ -329,14 +415,6 @@
                                 </a>
                             </li>
                         @endif
-                        @if(auth()->user()->hasPermission('Purchase Requisition List'))
-                            <li>
-                                <a class="{{ request()->is('purchase-requisitions*') ? 'active' : '' }}" href="{{ route('purchase-requisitions.index') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Manual Purchase Requisitions
-                                </a>
-                            </li>
-                        @endif
                         @if(auth()->user()->hasPermission('Raw Material Item List'))
                             <li>
                                 <a class="{{ request()->is('raw-material-items*') ? 'active' : '' }}" href="{{ route('raw-material-items.index') }}">
@@ -366,74 +444,20 @@
                 @endif
 
                 @if(
+                    auth()->user()->hasPermission('Stock List') ||
+                    auth()->user()->hasPermission('Batch List') ||
+                    auth()->user()->hasPermission('Store Issue Rquisition List') ||
                     auth()->user()->hasPermission('Finished Goods Receiving List') ||
-                    auth()->user()->hasPermission('Goods Receiving List') ||
-                    auth()->user()->hasPermission('Stock List')
+                    auth()->user()->hasPermission('Invoice List')
                 )
                 <li class="submenu">
-                    <a class="{{ request()->is('finished-goods-receivings*') ||
-                        request()->is('goods-receivings*') ||
-                        request()->is('stocks*') ? 'active' : ''}}" href="javascript:void(0);">
-                        <span>Store</span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul>
-                        @if(auth()->user()->hasPermission('Finished Goods Receiving List'))
-                            <li>
-                                <a class="{{ request()->is('finished-goods-receiving*') ? 'active' : '' }}" href="{{ route('finished-goods-receivings.index') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                   Finished Goods Receiving Notes
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Goods Receiving List'))
-                            <li>
-                                <a class="{{ request()->is('goods-receivings*') ? 'active' : '' }}" href="{{ route('goods-receivings.index') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Goods Receiving Notes
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Left Over Note List'))
-                            <li>
-                                <a class="{{ request()->is('left-over-notes*') ? 'active' : '' }}" href="{{ route('left-over-notes.index') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Left Over Note
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Rejection Return Note List'))
-                            <li>
-                                <a class="{{ request()->is('rejection-return-notes*') ? 'active' : '' }}" href="{{ route('rejection-return-notes.index') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Rejection Return Note
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Stock List'))
-                            <li>
-                                <a class="{{ request()->is('stocks*') ? 'active' : '' }}" href="{{ route('stocks.index') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Stocks
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Store Issue Rquisition List'))
-                            <li>
-                                <a class="{{ request()->is('store-issue-requisitions*') ? 'active' : '' }}" href="{{ route('store-issue-requisitions.index') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Store Issue Rquisitions
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
-                </li>
-                @endif
-                @if(
-                    auth()->user()->hasPermission('Stock List')
-                )
-                <li class="submenu">
-                    <a class="{{ request()->is('reports.balance-report*') ? 'active' : ''}}" href="javascript:void(0);">
+                    <a class="{{ request()->is('reports.balance-report*') ||
+                    request()->is('reports.batch-balance-report*') ||
+                    request()->is('reports.consumption-report*') ||
+                    request()->is('reports.production-report*') ||
+                    request()->is('reports.purchase-items*') ||
+                    request()->is('reports.purchase-requisitions*') ||
+                    request()->is('reports.requirement-report*') ? 'active' : ''}}" href="javascript:void(0);">
                         <span>Reports</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -498,73 +522,76 @@
                 </li>
                 @endif
 
-                @if(auth()->user()->hasPermission('Invoice List'))
-                    <li class="submenu">
-                        <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="javascript:void(0);">
-                            <span>Accounts</span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul>
-                            @if(auth()->user()->hasPermission('Credit Note List'))
-                                <li>
-                                    <a class="{{ request()->is('credit-notes*') ? 'active' : '' }}" href="{{ route('credit-notes.index') }}">
-                                        <i class="fa fa-store me-1"></i>
-                                        Credit Note
-                                    </a>
-                                </li>
-                            @endif
-                            @if(auth()->user()->hasPermission('Payment Voucher List'))
-                                <li>
-                                    <a class="{{ request()->is('payment-vouchers*') ? 'active' : '' }}" href="{{ route('payment-vouchers.index') }}">
-                                        <i class="fa fa-store me-1"></i>
-                                        Payment Voucher
-                                    </a>
-                                </li>
-                            @endif
-                            @if(auth()->user()->hasPermission('Receipt Voucher List'))
-                                <li>
-                                    <a class="{{ request()->is('receipt-vouchers*') ? 'active' : '' }}" href="{{ route('receipt-vouchers.index') }}">
-                                        <i class="fa fa-store me-1"></i>
-                                        Receipt Voucher
-                                    </a>
-                                </li>
-                            @endif
-                            @if(auth()->user()->hasPermission('Invoice List'))
-                                <li>
-                                    <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
-                                        <i class="fa fa-store me-1"></i>
-                                        Sale Invoice
-                                    </a>
-                                </li>
-                            @endif
-                            @if(auth()->user()->hasPermission('Sales Return List'))
-                                <li>
-                                    <a class="{{ request()->is('sales-returns*') ? 'active' : '' }}" href="{{ route('sales-returns.index') }}">
-                                        <i class="fa fa-store me-1"></i>
-                                        Sales Return
-                                    </a>
-                                </li>
-                            @endif
-                            @if(auth()->user()->hasPermission('Invoice List'))
-                                <li>
-                                    <a class="{{ request()->is('sale-warranties*') ? 'active' : '' }}" href="{{ route('sale-warranties.index') }}">
-                                        <i class="fa fa-store me-1"></i>
-                                        Sale Warranty
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
-                    </li>
-                @endif
-
-                {{-- @if(auth()->user()->hasPermission('Parties List'))
-                <li>
-                    <a class="{{ request()->is('parties*') ? 'active' : '' }}" href="{{ route('parties.index') }}">
-                        <i class="fa fa-users"></i>
-                        <span>Parties</span>
+                @if(
+                    auth()->user()->hasPermission('Finished Goods Receiving List') ||
+                    auth()->user()->hasPermission('Goods Receiving List') ||
+                    auth()->user()->hasPermission('Left Over Note List') ||
+                    auth()->user()->hasPermission('Rejection Return Note List') ||
+                    auth()->user()->hasPermission('Stock List') ||
+                    auth()->user()->hasPermission('Store Issue Rquisition List')
+                )
+                <li class="submenu">
+                    <a class="{{ request()->is('finished-goods-receivings*') ||
+                        request()->is('goods-receivings*') ||
+                        request()->is('left-over-notes*') ||
+                        request()->is('rejection-return-notes*') ||
+                        request()->is('stocks*') ||
+                        request()->is('store-issue-requisitions*') ? 'active' : ''}}" href="javascript:void(0);">
+                        <span>Store</span>
+                        <span class="menu-arrow"></span>
                     </a>
+                    <ul>
+                        @if(auth()->user()->hasPermission('Finished Goods Receiving List'))
+                            <li>
+                                <a class="{{ request()->is('finished-goods-receiving*') ? 'active' : '' }}" href="{{ route('finished-goods-receivings.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                   Finished Goods Receiving Notes
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Goods Receiving List'))
+                            <li>
+                                <a class="{{ request()->is('goods-receivings*') ? 'active' : '' }}" href="{{ route('goods-receivings.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Goods Receiving Notes
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Left Over Note List'))
+                            <li>
+                                <a class="{{ request()->is('left-over-notes*') ? 'active' : '' }}" href="{{ route('left-over-notes.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Left Over Note
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Rejection Return Note List'))
+                            <li>
+                                <a class="{{ request()->is('rejection-return-notes*') ? 'active' : '' }}" href="{{ route('rejection-return-notes.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Rejection Return Note
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Stock List'))
+                            <li>
+                                <a class="{{ request()->is('stocks*') ? 'active' : '' }}" href="{{ route('stocks.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Stocks
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Store Issue Rquisition List'))
+                            <li>
+                                <a class="{{ request()->is('store-issue-requisitions*') ? 'active' : '' }}" href="{{ route('store-issue-requisitions.index') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Store Issue Rquisitions
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
                 </li>
-                @endif --}}
+                @endif
 
             </ul>
         </div>

@@ -25,6 +25,9 @@ class ProductController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Product List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $products = $this->productService->getAllProducts();
         return view('admin.products.index', compact('products'));
     }
@@ -34,6 +37,9 @@ class ProductController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Product Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newProductCode = "PRD";
         } else {
@@ -49,6 +55,9 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        if (!auth()->user()->hasPermission('Product Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productService->createProduct($request->validated());
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
@@ -58,6 +67,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Product View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $product = $this->productService->getProductById($id);
         return view('admin.products.show', compact('product'));
     }
@@ -67,6 +79,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Product Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllCompanies();
         $product = $this->productService->getProductById($id);
         $productGroups = ProductGroup::orderBy('name', 'asc')->get();
@@ -78,12 +93,18 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
+        if (!auth()->user()->hasPermission('Product Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productService->updateProduct($product, $request->validated());
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
     public function destroy(Product $product)
     {
+        if (!auth()->user()->hasPermission('Product Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productService->deleteProduct($product);
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }

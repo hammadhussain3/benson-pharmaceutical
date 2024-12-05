@@ -36,7 +36,10 @@ class StoreIssueRequisitionController extends Controller
     }
 
     public function index()
-    {        
+    {
+        if (!auth()->user()->hasPermission('Store Issue Rquisition List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $requisitions = $this->storeIssueRequisitionService->getAll();
         return view('admin.store-issue-requisition.index', compact('requisitions'));
     }
@@ -46,6 +49,9 @@ class StoreIssueRequisitionController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Store Issue Rquisition Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newRequisitionCode = "SIR";
         } else {
@@ -56,11 +62,15 @@ class StoreIssueRequisitionController extends Controller
         $products = $this->productService->getAllProducts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
         $productVariations = $this->productVariationService->getAllProductVariations();
-        return view('admin.store-issue-requisition.create', compact('companies', 'products', 'rawMaterialItems', 'chartOfAccounts', 'productVariations', 'newRequisitionCode'));
+        $batches = $this->batchService->getAllBatches();
+        return view('admin.store-issue-requisition.create', compact('companies', 'products', 'rawMaterialItems', 'chartOfAccounts', 'productVariations', 'batches', 'newRequisitionCode'));
     }
 
     public function productionCreate()
     {
+        if (!auth()->user()->hasPermission('Store Issue Rquisition Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newRequisitionCode = "SIR";
         } else {
@@ -78,6 +88,9 @@ class StoreIssueRequisitionController extends Controller
      */
     public function store(StoreIssueRequisitionRequest $request)
     {
+        if (!auth()->user()->hasPermission('Store Issue Rquisition Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->storeIssueRequisitionService->create($request->validated());
         return redirect()->route('store-issue-requisitions.index')->with('success', 'Store Issue Requisition created successfully.');
     }
@@ -87,6 +100,9 @@ class StoreIssueRequisitionController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Store Issue Rquisition View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $requisition = $this->storeIssueRequisitionService->getById($id);
         return view('admin.store-issue-requisition.show', compact('requisition'));
     }
@@ -96,6 +112,9 @@ class StoreIssueRequisitionController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Store Issue Rquisition Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $requisition = $this->storeIssueRequisitionService->getById($id);
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
@@ -111,12 +130,18 @@ class StoreIssueRequisitionController extends Controller
      */
     public function update(StoreIssueRequisitionRequest $request, StoreIssueRequisition $storeIssueRequisition)
     {
+        if (!auth()->user()->hasPermission('Store Issue Rquisition Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->storeIssueRequisitionService->update($storeIssueRequisition, $request->validated());
         return redirect()->route('store-issue-requisitions.index')->with('success', 'Store Issue Requisition updated successfully');
     }
 
     public function destroy(StoreIssueRequisition $storeIssueRequisition)
     {
+        if (!auth()->user()->hasPermission('Store Issue Rquisition Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->storeIssueRequisitionService->delete($storeIssueRequisition);
         return redirect()->route('store-issue-requisitions.index')->with('success', 'Store Issue Requisition deleted successfully');
     }

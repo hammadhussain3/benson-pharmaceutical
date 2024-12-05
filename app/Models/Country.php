@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Country extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'currency', 'created_by', 'updated_by'];
 
     protected static function boot()
     {

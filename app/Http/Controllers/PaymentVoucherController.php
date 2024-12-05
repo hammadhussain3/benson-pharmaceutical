@@ -26,12 +26,18 @@ class PaymentVoucherController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Payment Voucher List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $paymentVouchers = $this->paymentVoucherService->getAll();
         return view('admin.payment-vouchers.index', compact('paymentVouchers'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Payment Voucher Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newPaymentVoucherCode = "PV";
         } else {
@@ -45,18 +51,27 @@ class PaymentVoucherController extends Controller
 
     public function store(PaymentVoucherRequest $request)
     {
+        if (!auth()->user()->hasPermission('Payment Voucher Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->paymentVoucherService->create($request->validated());
         return redirect()->route('payment-vouchers.index')->with('success', 'Payment Voucher created successfully.');
     }
 
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Payment Voucher View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $paymentVoucher = $this->paymentVoucherService->getById($id);
         return view('admin.payment-vouchers.show', compact('paymentVoucher'));
     }
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Payment Voucher Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $paymentVoucher = $this->paymentVoucherService->getById($id);
         $companies = $this->companyService->getAllCompanies();
         $charOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
@@ -66,6 +81,9 @@ class PaymentVoucherController extends Controller
 
     public function update(PaymentVoucherRequest $request, PaymentVoucher $paymentVoucher)
     {
+        if (!auth()->user()->hasPermission('Payment Voucher Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->paymentVoucherService->update($paymentVoucher, $request->validated());
         $paymentVoucher->update($request->validated());
         return redirect()->route('payment-vouchers.index')->with('success', 'Payment Voucher updated successfully');
@@ -73,6 +91,9 @@ class PaymentVoucherController extends Controller
 
     public function destroy(PaymentVoucher $paymentVoucher)
     {
+        if (!auth()->user()->hasPermission('Payment Voucher Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->paymentVoucherService->delete($paymentVoucher);
         return redirect()->route('payment-vouchers.index')->with('success', 'Payment Voucher deleted successfully');
     }

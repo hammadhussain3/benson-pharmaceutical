@@ -20,6 +20,9 @@ class PackFormController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('PackForm List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $packForms = $this->packFormService->getAllPackForms();
         return view('admin.pack-form.index', compact('packForms'));
     }
@@ -29,6 +32,9 @@ class PackFormController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('PackForm Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllCompanies();
         return view('admin.pack-form.create', compact('companies'));
     }
@@ -38,6 +44,9 @@ class PackFormController extends Controller
      */
     public function store(PackFormRequest $request)
     {
+        if (!auth()->user()->hasPermission('PackForm Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->packFormService->createPackForm($request->validated());
         return redirect()->route('pack-forms.index')->with('success', 'PackForm created successfully.');
     }
@@ -47,6 +56,9 @@ class PackFormController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('PackForm View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $packForm = $this->packFormService->getPackFormById($id);
         return view('admin.pack-form.show', compact('packForm'));
     }
@@ -56,6 +68,9 @@ class PackFormController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('PackForm Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $packForm = $this->packFormService->getPackFormById($id);
         $companies = $this->companyService->getAllCompanies();
         return view('admin.pack-form.edit', compact('packForm','companies'));
@@ -66,12 +81,18 @@ class PackFormController extends Controller
      */
     public function update(PackFormRequest $request, PackForm $packForm)
     {
+        if (!auth()->user()->hasPermission('PackForm Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->packFormService->updatePackForm($packForm, $request->validated());
         return redirect()->route('pack-forms.index')->with('success', 'PackForm updated successfully');
     }
 
     public function destroy(PackForm $packForm)
     {
+        if (!auth()->user()->hasPermission('PackForm Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->packFormService->deletePackForm($packForm);
         return redirect()->route('pack-forms.index')->with('success', 'PackForm deleted successfully');
     }

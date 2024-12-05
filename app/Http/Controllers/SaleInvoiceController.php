@@ -29,6 +29,9 @@ class SaleInvoiceController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Invoice List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoices = $this->invoiceService->getAllInvoices('sale');
         return view('admin.sale-invoice.index', compact('invoices'));
     }
@@ -38,6 +41,9 @@ class SaleInvoiceController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Invoice Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newInvoiceCode = 'SI';
         } else {
@@ -55,6 +61,9 @@ class SaleInvoiceController extends Controller
      */
     public function store(InvoiceRequest $request)
     {
+        if (!auth()->user()->hasPermission('Invoice Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->invoiceService->createInvoice($request->validated());
         return redirect()->route('sale-invoices.index')->with('success', 'Invoice created successfully.');
     }
@@ -64,18 +73,27 @@ class SaleInvoiceController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Invoice View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         return view('admin.sale-invoice.show', compact('invoice'));
     }
 
     public function saleWarranties()
     {
+        if (!auth()->user()->hasPermission('Invoice View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoices = $this->invoiceService->getAllInvoices('sale');
         return view('admin.sale-invoice.warranty-list', compact('invoices'));
     }
 
     public function warranty($id)
     {
+        if (!auth()->user()->hasPermission('Invoice View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         return view('admin.sale-invoice.warranty', compact('invoice'));
     }
@@ -85,6 +103,9 @@ class SaleInvoiceController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Invoice Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         $companies = $this->companyService->getAllCompanies();
         $parties = $this->partyService->getAllParties();
@@ -98,6 +119,9 @@ class SaleInvoiceController extends Controller
      */
     public function update(InvoiceRequest $request, $id)
     {
+        if (!auth()->user()->hasPermission('Invoice Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         $this->invoiceService->updateInvoice($invoice, $request->validated());
         return redirect()->route('sale-invoices.index')->with('success', 'Invoice updated successfully');
@@ -105,6 +129,9 @@ class SaleInvoiceController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('Invoice Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $invoice = $this->invoiceService->getInvoiceById($id);
         $this->invoiceService->deleteInvoice($invoice);
         return redirect()->route('sale-invoices.index')->with('success', 'Invoice deleted successfully');

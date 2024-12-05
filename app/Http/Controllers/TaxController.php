@@ -20,6 +20,9 @@ class TaxController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Tax List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $taxes = $this->taxService->getAllTaxes();
         return view('admin.taxes.index', compact('taxes'));
     }
@@ -29,6 +32,9 @@ class TaxController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('Tax Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllCompanies();
         return view('admin.taxes.create', compact('companies'));
     }
@@ -38,6 +44,9 @@ class TaxController extends Controller
      */
     public function store(TaxRequest $request)
     {
+        if (!auth()->user()->hasPermission('Tax Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->taxService->createTax($request->validated());
         return redirect()->route('taxes.index')->with('success', 'Tax created successfully.');
     }
@@ -47,6 +56,9 @@ class TaxController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Tax View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $tax = $this->taxService->getTaxById($id);
         return view('admin.taxes.show', compact('tax'));
     }
@@ -56,6 +68,9 @@ class TaxController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Tax Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $tax = $this->taxService->getTaxById($id);
         $companies = $this->companyService->getAllCompanies();
         return view('admin.taxes.edit', compact('tax', 'companies'));
@@ -66,12 +81,18 @@ class TaxController extends Controller
      */
     public function update(TaxRequest $request, Tax $tax)
     {
+        if (!auth()->user()->hasPermission('Tax Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->taxService->updateTax($tax, $request->validated());
         return redirect()->route('taxes.index')->with('success', 'Tax updated successfully');
     }
 
     public function destroy(Tax $tax)
     {
+        if (!auth()->user()->hasPermission('Tax Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->taxService->deleteTax($tax);
         return redirect()->route('taxes.index')->with('success', 'Tax deleted successfully');
     }

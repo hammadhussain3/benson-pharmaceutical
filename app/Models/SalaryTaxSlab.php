@@ -14,6 +14,8 @@ class SalaryTaxSlab extends Model
         'slab_end',
         'tax_value',
         'company_id',
+        'created_by',
+        'updated_by'
     ];
 
     public function company()

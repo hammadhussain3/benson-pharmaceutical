@@ -26,12 +26,18 @@ class CreditNoteController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Credit Note List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $creditNotes = $this->creditNoteService->getAll();
         return view('admin.credit-notes.index', compact('creditNotes'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Credit Note Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newCreditNoteCode = "CN";
         } else {
@@ -45,18 +51,27 @@ class CreditNoteController extends Controller
 
     public function store(CreditNoteRequest $request)
     {
+        if (!auth()->user()->hasPermission('Credit Note Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->creditNoteService->create($request->validated());
         return redirect()->route('credit-notes.index')->with('success', 'Credit Note created successfully.');
     }
 
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Credit Note View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $creditNote = $this->creditNoteService->getById($id);
         return view('admin.credit-notes.show', compact('creditNote'));
     }
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Credit Note Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $creditNote = $this->creditNoteService->getById($id);
         $companies = $this->companyService->getAllCompanies();
         $charOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
@@ -66,12 +81,18 @@ class CreditNoteController extends Controller
 
     public function update(CreditNoteRequest $request, CreditNote $creditNote)
     {
+        if (!auth()->user()->hasPermission('Credit Note Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->creditNoteService->update($creditNote, $request->validated());
         return redirect()->route('credit-notes.index')->with('success', 'Credit Note updated successfully');
     }
 
     public function destroy(CreditNote $creditNote)
     {
+        if (!auth()->user()->hasPermission('Credit Note Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->creditNoteService->delete($creditNote);
         return redirect()->route('credit-notes.index')->with('success', 'Credit Note deleted successfully');
     }

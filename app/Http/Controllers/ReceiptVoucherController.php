@@ -26,12 +26,18 @@ class ReceiptVoucherController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Receipt Voucher List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $receiptVouchers = $this->receiptVoucherService->getAll();
         return view('admin.receipt-vouchers.index', compact('receiptVouchers'));
     }
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Receipt Voucher Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         if (auth()->user()->hasRole('Superadmin')) {
             $newReceiptVoucherCode = "RV";
         } else {
@@ -45,18 +51,27 @@ class ReceiptVoucherController extends Controller
 
     public function store(ReceiptVoucherRequest $request)
     {
+        if (!auth()->user()->hasPermission('Receipt Voucher Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->receiptVoucherService->create($request->validated());
         return redirect()->route('receipt-vouchers.index')->with('success', 'Receipt Voucher created successfully.');
     }
 
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Receipt Voucher View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $receiptVoucher = $this->receiptVoucherService->getById($id);
         return view('admin.receipt-vouchers.show', compact('receiptVoucher'));
     }
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Receipt Voucher Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $receiptVoucher = $this->receiptVoucherService->getById($id);
         $companies = $this->companyService->getAllCompanies();
         $charOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
@@ -66,12 +81,18 @@ class ReceiptVoucherController extends Controller
 
     public function update(ReceiptVoucherRequest $request, ReceiptVoucher $receiptVoucher)
     {
+        if (!auth()->user()->hasPermission('Receipt Voucher Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->receiptVoucherService->update($receiptVoucher, $request->validated());
         return redirect()->route('receipt-vouchers.index')->with('success', 'Receipt Voucher updated successfully');
     }
 
     public function destroy(ReceiptVoucher $receiptVoucher)
     {
+        if (!auth()->user()->hasPermission('Receipt Voucher Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->receiptVoucherService->delete($receiptVoucher);
         return redirect()->route('receipt-vouchers.index')->with('success', 'Receipt Voucher deleted successfully');
     }

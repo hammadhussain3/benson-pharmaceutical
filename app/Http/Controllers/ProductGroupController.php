@@ -20,6 +20,9 @@ class ProductGroupController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('ProductGroup List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $productGroups = $this->productGroupService->getAllProductGroups();
         return view('admin.product-group.index', compact('productGroups'));
     }
@@ -29,6 +32,9 @@ class ProductGroupController extends Controller
      */
     public function create()
     {
+        if (!auth()->user()->hasPermission('ProductGroup Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $companies = $this->companyService->getAllCompanies();
         return view('admin.product-group.create', compact('companies'));
     }
@@ -38,6 +44,9 @@ class ProductGroupController extends Controller
      */
     public function store(ProductGroupRequest $request)
     {
+        if (!auth()->user()->hasPermission('ProductGroup Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productGroupService->createProductGroup($request->validated());
         return redirect()->route('product-groups.index')->with('success', 'Product Group created successfully.');
     }
@@ -47,6 +56,9 @@ class ProductGroupController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('ProductGroup View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $productGroup = $this->productGroupService->getProductGroupById($id);
         return view('admin.product-group.show', compact('productGroup'));
     }
@@ -56,6 +68,9 @@ class ProductGroupController extends Controller
      */
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('ProductGroup Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $productGroup = $this->productGroupService->getProductGroupById($id);
         $companies = $this->companyService->getAllCompanies();
         return view('admin.product-group.edit', compact('productGroup','companies'));
@@ -66,12 +81,18 @@ class ProductGroupController extends Controller
      */
     public function update(ProductGroupRequest $request, ProductGroup $productGroup)
     {
+        if (!auth()->user()->hasPermission('ProductGroup Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productGroupService->updateProductGroup($productGroup, $request->validated());
         return redirect()->route('product-groups.index')->with('success', 'Product Group updated successfully');
     }
 
     public function destroy(ProductGroup $productGroup)
     {
+        if (!auth()->user()->hasPermission('ProductGroup Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->productGroupService->deleteProductGroup($productGroup);
         return redirect()->route('product-groups.index')->with('success', 'Product Group deleted successfully');
     }
