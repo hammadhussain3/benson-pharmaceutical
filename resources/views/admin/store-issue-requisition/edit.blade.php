@@ -30,8 +30,11 @@
                                 <div class="mb-3 col-md-12">
                                     <label for="company">Company</label>
                                     <select name="company" id="company_id" class="js-example-basic-single select2" required 
-                                        onchange="selectAllTypeOfProducts(this.value);
+                                        onchange="createStoreRequisitionCode(this.value);
                                         @if ($requisition->is_general == '1') selectChartOfAccounts(this.value);
+                                        @elseif ($requisition->is_production == '1') selectProducts(this.value);
+                                        @endif
+                                        @if ($requisition->is_general == '1') selectAllTypeOfProducts(this.value);
                                         @elseif ($requisition->is_production == '1') selectRawMaterialItems(this.value);
                                         @endif">
                                         <option value="">Select Company</option>
@@ -46,7 +49,7 @@
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 {{ $requisition->is_general == '1' ? 'col-md-4' : 'col-md-6'; }}">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $requisition->code) }}">
                             </div>
@@ -61,7 +64,7 @@
                                         @foreach ($chartOfAccounts->where('company_id', $seletedCompanyId) as $chartOfAccount)
                                             <option value="{{ $chartOfAccount->id }}"
                                                 {{ old('chart_of_account', $requisition->chart_of_account_id) == $chartOfAccount->id ? 'selected' : '' }}>
-                                                {{ $chartOfAccount->name }}
+                                                {{ $chartOfAccount->particular }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -116,22 +119,14 @@
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-4">
-                                                        @if ($requisition->is_general == '1')
+                                                    @if ($requisition->is_general == '1')
+                                                        <div class="mb-3 col-md-6">
                                                             <label for="">Product</label>
-                                                            <select name="items[{{ $i }}][product]" class="js-example-basic-single select2 products_dropdown" required>
+                                                            <select name="items[{{ $i }}][product]" class="js-example-basic-single select2 products_dropdown" onchange="selectBatchesForProducts(this.value, this)" required>
                                                                 <option value="">Select Product</option>
                                                                 @php
                                                                     $seletedCompanyId = old('company', $requisition->company_id) ?? auth()->user()->employee->company_id;
                                                                 @endphp
-                                                                <optgroup label="Products">
-                                                                    @foreach ($products->where('company_id', $seletedCompanyId) as $product)
-                                                                        <option value="{{ 'product_' .$product->id }}"
-                                                                            {{ old("items.$i.product", 'product_' .$requisition->items[$i]->product_id ?? '') == 'product_' .$product->id ? 'selected' : '' }}>
-                                                                            {{ $product->name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </optgroup>
                                                                 <optgroup label="Raw Materials">
                                                                     @foreach ($rawMaterialItems->where('company_id', $seletedCompanyId) as $rawMaterialItem)
                                                                         <option value="{{ 'raw_' .$rawMaterialItem->id }}"
@@ -149,7 +144,29 @@
                                                                     @endforeach
                                                                 </optgroup>
                                                             </select>
-                                                        @elseif ($requisition->is_production == '1')
+                                                        </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="">Batches</label>
+                                                            <select name="items[{{ $i }}][batch]" class="js-example-basic-single select2 batch_dropdown" required>
+                                                                <option value="">Select Batch</option>
+                                                                @php
+                                                                    $selectedProductVariationId = old("items.$i.product", $requisition->items[$i]->product_variation_id);
+                                                                    $productVariation = $productVariations->find($selectedProductVariationId);
+                                                                    $productId = $productVariation->product_id ?? null;
+                                                                    $seletedCompanyId = old('company', $requisition->company_id) ?? auth()->user()->employee->company_id;
+                                                                @endphp
+                                                                @if ($productId)
+                                                                    @foreach ($batches->where('product_id', $productId)->where('company_id', $seletedCompanyId) as $batch)
+                                                                        <option value="{{ $batch->id }}"
+                                                                            {{ old("items.$i.batch", $requisition->items[$i]->batch_id) == $batch->id ? 'selected' : '' }}>
+                                                                            {{ $batch->batch_no }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    @elseif ($requisition->is_production == '1')
+                                                        <div class="mb-3 col-md-4">
                                                             <label for="">Raw Material</label>
                                                             <select name="items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required>
                                                                 <option value="">Select Raw Material</option>
@@ -163,8 +180,8 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
-                                                        @endif
-                                                    </div>
+                                                        </div>
+                                                    @endif
                                                     <div class="mb-3 col-md-4">
                                                         <label>Unit Price</label>
                                                         <div class="input-group">
@@ -174,12 +191,12 @@
                                                                 placeholder="Unit" required value="{{ old("items.$i.unit", $requisition->items[$i]->unit) }}">
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3 col-md-2">
+                                                    <div class="mb-3 {{ $requisition->is_general == '1' ? 'col-md-4' : 'col-md-2'; }}">
                                                         <label>Quantity</label>
                                                         <input type="number" class="form-control quantity" name="items[{{ $i }}][quantity]"
                                                             placeholder="Quantity" required value="{{ old("items.$i.quantity", $requisition->items[$i]->quantity) }}" oninput="calculateSingleProductAmount()">
                                                     </div>
-                                                    <div class="mb-3 col-md-2">
+                                                    <div class="mb-3 {{ $requisition->is_general == '1' ? 'col-md-4' : 'col-md-2'; }}">
                                                         <label>Total</label>
                                                         <input type="number" class="form-control product_total" name="items[{{ $i }}][total]"
                                                             placeholder="Total" required value="{{ old("items.$i.total", $requisition->items[$i]->total) }}" readonly>
@@ -217,7 +234,7 @@
                             <div class="mb-3 col-md-4">
                                 @if ($requisition->is_general == '1')
                                     <label for="">Product</label>
-                                    <select name="items[${ itemIndex }][product]" class="js-example-basic-single select2 products_dropdown" required></select>
+                                    <select name="items[${ itemIndex }][product]" class="js-example-basic-single select2 products_dropdown" onchange="selectBatchesForProducts(this.value, this)" required></select>
                                 @elseif ($requisition->is_production == '1')
                                     <label for="">Raw Material</label>
                                     <select name="items[${ itemIndex }][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required></select>

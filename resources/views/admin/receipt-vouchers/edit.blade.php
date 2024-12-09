@@ -37,11 +37,11 @@
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $receiptVoucher->code) }}" readonly>
                             </div>
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
                                 <label for="franchiser_id">Franchisers</label>
                                 <select name="party" id="franchiser_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Franchiser</option>
@@ -54,6 +54,14 @@
                                             {{ $franchiser->name }}
                                         </option>
                                     @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="payment_method">Payment Method</label>
+                                <select name="payment_method" class="form-select" id="payment_method">
+                                    <option value="cash" {{ old('payment_method', $receiptVoucher->payment_method) == 'cash' ? 'selected' : '' }}>Cash</option>
+                                    <option value="cheque" {{ old('payment_method', $receiptVoucher->payment_method) == 'cheque' ? 'selected' : '' }}>Cheque</option>
+                                    <option value="online" {{ old('payment_method', $receiptVoucher->payment_method) == 'online' ? 'selected' : '' }}>Online</option>
                                 </select>
                             </div>
                             <div class="col-md-12">

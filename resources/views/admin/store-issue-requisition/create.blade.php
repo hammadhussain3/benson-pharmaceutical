@@ -62,7 +62,7 @@
                                         @foreach ($chartOfAccounts->where('company_id', $seletedCompanyId) as $chartOfAccount)
                                             <option value="{{ $chartOfAccount->id }}"
                                                 {{ old('chart_of_account') == $chartOfAccount->id ? 'selected' : '' }}>
-                                                {{ $chartOfAccount->name }}
+                                                {{ $chartOfAccount->particular }}
                                             </option>
                                         @endforeach
                                     @endif

@@ -26,6 +26,7 @@ class ReceiptVoucherRequest extends FormRequest
 		return [
             'code' => 'required|string|max:255|unique:receipt_vouchers,code,' . $id . ',id,company_id,' . $this->company_id,
             'party' => 'required|exists:parties,id',
+            'payment_method' => 'required|in:cheque,cash,online',
             'total_debit' => 'required|numeric|min:0',
             'total_credit' => 'required|numeric|min:0',
             'total' => 'required|numeric',

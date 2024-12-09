@@ -52,7 +52,9 @@
                 </tr>
                 <tr>
                     <th>Address</th>
-                    <td colspan="7">{{ $receiptVoucher->party->address }}</td>
+                    <td colspan="5">{{ $receiptVoucher->party->address }}</td>
+                    <th>Payment Method: </th>
+                    <td>{{ $receiptVoucher->payment_method }}</td>
                 </tr>
             </table>
 

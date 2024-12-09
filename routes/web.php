@@ -139,6 +139,7 @@ Route::middleware('auth')->group(function () {
     Route::get('report/batch-balance-report', [ReportController::class, 'batchBalanceReport'])->name('reports.batch-balance-report');
     Route::get('report/batch-track-report/{id}', [ReportController::class, 'batchTrackReport'])->name('reports.batch-track-report');
     Route::get('report/costing-voucher/{id}', [ReportController::class, 'costingVoucher'])->name('reports.costing-voucher');
+    Route::get('report/financial-ledger', [ReportController::class, 'financialLedger'])->name('reports.financial-ledger');
     Route::get('product-variations/bin-card/{id}', [ReportController::class, 'stockBinCardForFinalProduct'])->name('product-variations.reports.bin-card');
     Route::get('raw-material-items/bin-card/{id}', [ReportController::class, 'stockBinCardForRawMaterial'])->name('raw-material-items.reports.bin-card');
     Route::get('products/bin-card/{id}', [ReportController::class, 'stockBinCardForProducts'])->name('products.reports.bin-card');

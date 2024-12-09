@@ -60,4 +60,49 @@ class Party extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function creditNotes()
+    {
+        return $this->hasMany(CreditNote::class);
+    }
+
+    public function paymentReceipts()
+    {
+        return $this->hasMany(ReceiptVoucher::class);
+    }
+
+    public function getCurrentBalanceAttribute()
+    {
+        // Total debit: invoices and credit notes
+        $totalDebit = $this->invoices()->sum('total_amount') 
+            + $this->creditNotes()->sum('total');
+
+        // Total credit: payment receipts
+        $totalCredit = $this->paymentReceipts()->sum('total');
+
+        return $totalDebit - $totalCredit;
+    }
+
+    public function getBalanceBeforeDate($date)
+    {
+        // Total debit: invoices and credit notes before the given date
+        $totalDebit = $this->invoices()
+            ->where('created_at', '<', $date)
+            ->sum('total_amount')
+            + $this->creditNotes()
+            ->where('created_at', '<', $date)
+            ->sum('total');
+
+        // Total credit: payment receipts before the given date
+        $totalCredit = $this->paymentReceipts()
+            ->where('created_at', '<', $date)
+            ->sum('total');
+
+        return $totalDebit - $totalCredit;
+    }
 }

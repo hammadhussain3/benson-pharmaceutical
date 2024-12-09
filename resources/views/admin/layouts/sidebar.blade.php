@@ -486,6 +486,14 @@
                                 </a>
                             </li>
                         @endif
+                        @if(auth()->user()->hasPermission('Franchise List'))
+                            <li>
+                                <a class="{{ request()->is('reports.financial-ledger*') ? 'active' : '' }}" href="{{ route('reports.financial-ledger') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Financial Ledger Report
+                                </a>
+                            </li>
+                        @endif
                         @if(auth()->user()->hasPermission('Finished Goods Receiving List'))
                             <li>
                                 <a class="{{ request()->is('reports.production-report*') ? 'active' : '' }}" href="{{ route('reports.production-report') }}">

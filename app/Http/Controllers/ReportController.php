@@ -3,17 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Batch;
+use App\Models\CreditNote;
+use App\Models\Invoice;
 use App\Models\LeftOverNote;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Models\RawMaterialItem;
+use App\Models\ReceiptVoucher;
 use App\Models\StoreIssueRequisition;
 use App\Services\FinishedGoodsReceivingService;
 use App\Services\StoreIssueRequisitionService;
 use App\Services\ProductVariationService;
+use App\Services\FranchiseService;
 use App\Services\InvoiceService;
 use App\Services\StockService;
 use App\Services\BatchService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -21,15 +26,23 @@ class ReportController extends Controller
     protected $finishedGoodsReceivingService;
     protected $storeIssueRequisitionService;
     protected $productVariationService;
+    protected $franchiseService;
     protected $invoiceService;
     protected $stockService;
     protected $batchService;
 
-    public function __construct(StockService $stockService, InvoiceService $invoiceService, FinishedGoodsReceivingService $finishedGoodsReceivingService, StoreIssueRequisitionService $storeIssueRequisitionService, BatchService $batchService, ProductVariationService $productVariationService)
+    public function __construct(StockService $stockService, 
+        InvoiceService $invoiceService, 
+        FinishedGoodsReceivingService $finishedGoodsReceivingService, 
+        StoreIssueRequisitionService $storeIssueRequisitionService, 
+        BatchService $batchService, 
+        ProductVariationService $productVariationService, 
+        FranchiseService $franchiseService)
     {
         $this->finishedGoodsReceivingService = $finishedGoodsReceivingService;
         $this->storeIssueRequisitionService = $storeIssueRequisitionService;
         $this->productVariationService = $productVariationService;
+        $this->franchiseService = $franchiseService;
         $this->invoiceService = $invoiceService;
         $this->stockService = $stockService;
         $this->batchService = $batchService;
@@ -188,4 +201,91 @@ class ReportController extends Controller
 
         return view('admin.reports.product-variant-batch-report', compact('items', 'from_date', 'to_date','array'));
     }
+
+    public function financialLedger(Request $request)
+    {
+        $franchiser = $request->has('franchiser') 
+            ? $this->franchiseService->getFranchiseById($request->input('franchiser')) 
+            : $this->franchiseService->getAllFranchises()->first();
+
+        $from_date = $request->has('from_date') 
+            ? $request->input('from_date') 
+            : now()->subDays(30)->format('Y-m-d');
+        $to_date = $request->has('to_date') 
+            ? $request->input('to_date') 
+            : now()->format('Y-m-d');
+
+        $parties = $this->franchiseService->getAllFranchises();
+
+        $currentBalance = $franchiser->getBalanceBeforeDate($from_date);
+
+        $financial_ledger[] = [
+            'vr' => 'OB0000',
+            'payment_method' => null,
+            'type' => 'balance',
+            'particular' => 'Opening Balance',
+            'amount' => $currentBalance,
+            'balance' => $currentBalance,
+            'created_at' => Carbon::parse($from_date)->format('d M, Y'),
+        ];
+
+        $commercial_invoices = Invoice::where('type', 'sale')
+            ->where('party_id', $franchiser->id)
+            ->whereBetween('created_at', [$from_date, $to_date])
+            ->get();
+
+        foreach ($commercial_invoices as $invoice) {
+            $currentBalance -= $invoice->total_amount;
+            $financial_ledger[] = [
+                'vr' => $invoice->code,
+                'payment_method' => null,
+                'type' => 'debit',
+                'particular' => $invoice->party->name,
+                'amount' => $invoice->total_amount,
+                'balance' => $currentBalance,
+                'created_at' => $invoice->created_at->format('d M, Y'),
+            ];
+        }
+
+        $general_invoices = CreditNote::where('party_id', $franchiser->id)
+            ->whereBetween('created_at', [$from_date, $to_date])
+            ->get();
+
+        foreach ($general_invoices as $invoice) {
+            $currentBalance -= $invoice->total;
+            $financial_ledger[] = [
+                'vr' => $invoice->code,
+                'payment_method' => null,
+                'type' => 'debit',
+                'particular' => $invoice->party->name,
+                'amount' => $invoice->total,
+                'balance' => $currentBalance,
+                'created_at' => $invoice->created_at->format('d M, Y'),
+            ];
+        }
+
+        $credit_vouchers = ReceiptVoucher::where('party_id', $franchiser->id)
+            ->whereBetween('created_at', [$from_date, $to_date])
+            ->get();
+
+        foreach ($credit_vouchers as $voucher) {
+            $currentBalance += $voucher->total;
+            $financial_ledger[] = [
+                'vr' => $voucher->code,
+                'payment_method' => $voucher->payment_method,
+                'type' => 'credit',
+                'particular' => $voucher->party->name,
+                'amount' => $voucher->total,
+                'balance' => $currentBalance,
+                'created_at' => $voucher->created_at->format('d M, Y'),
+            ];
+        }
+
+        usort($financial_ledger, function ($a, $b) {
+            return strtotime($a['created_at']) - strtotime($b['created_at']);
+        });
+
+        return view('admin.reports.financial-ledger', compact('franchiser', 'from_date', 'to_date', 'financial_ledger', 'parties'));
+    }
+
 }

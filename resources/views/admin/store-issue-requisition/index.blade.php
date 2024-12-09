@@ -50,7 +50,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $requisition->code ?? 'N/A' }}</td>
-                                <td>{{ $requisition->chart_of_account->name ?? 'N/A' }}</td>
+                                <td>{{ $requisition->chart_of_account->particular ?? 'N/A' }}</td>
                                 <td>{{ $requisition->product->name ?? 'N/A' }}</td>
                                 <td>{{ $requisition->batch->batch_no ?? 'N/A' }}</td>
                                 <td>{{ $requisition->batch->batch_size ?? 'N/A' }}</td>
