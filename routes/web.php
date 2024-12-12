@@ -140,10 +140,11 @@ Route::middleware('auth')->group(function () {
     Route::get('report/batch-track-report/{id}', [ReportController::class, 'batchTrackReport'])->name('reports.batch-track-report');
     Route::get('report/costing-voucher/{id}', [ReportController::class, 'costingVoucher'])->name('reports.costing-voucher');
     Route::get('report/financial-ledger', [ReportController::class, 'financialLedger'])->name('reports.financial-ledger');
-    Route::get('product-variations/bin-card/{id}', [ReportController::class, 'stockBinCardForFinalProduct'])->name('product-variations.reports.bin-card');
-    Route::get('raw-material-items/bin-card/{id}', [ReportController::class, 'stockBinCardForRawMaterial'])->name('raw-material-items.reports.bin-card');
-    Route::get('products/bin-card/{id}', [ReportController::class, 'stockBinCardForProducts'])->name('products.reports.bin-card');
-    Route::get('product-variations/batch-report/{id}', [ReportController::class, 'batchReport'])->name('product-variations.reports.product-variant-batch-report');
+    Route::get('report/customer-aging', [ReportController::class, 'customerAging'])->name('reports.customer-aging');
+    Route::get('report/franchiser-sales', [ReportController::class, 'franchiserSales'])->name('reports.franchiser-sales');
+    Route::get('report/country-sales', [ReportController::class, 'countrySales'])->name('reports.country-sales');
+    Route::get('report/stock-bin-card', [ReportController::class, 'stockBinCard'])->name('reports.stock-bin-card');
+    Route::get('report/batch-report', [ReportController::class, 'batchReport'])->name('reports.batch-report');
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);

@@ -14,7 +14,7 @@
     </div>
 
     <div class="mb-3">
-        <form action="{{ isset($product) ? route('products.reports.bin-card', $product->id) : (isset($rawMaterialItem) ? route('raw-material-items.reports.bin-card', $rawMaterialItem->id) : route('product-variations.reports.bin-card', $finalProduct->id)) }}" class="row gy-2 gx-3 align-items-end" method="get">
+        <form action="{{ route('reports.stock-bin-card') }}" class="row gy-2 gx-3 align-items-end" method="get">
             <div class="col-sm-6 col-md-3">
                 <label class="form-label" for="from_date">From</label>
                 <input type="date" class="form-control" name="from_date" id="from_date" value="{{ $from_date }}">
@@ -22,6 +22,22 @@
             <div class="col-sm-6 col-md-3">
                 <label class="form-label" for="to_date">To</label>
                 <input type="date" class="form-control" name="to_date" id="to_date" value="{{ $to_date }}">
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <label class="form-label" for="product">Products</label>
+                <select name="product" id="product" class="js-example-basic-single select2">
+                    <option value="">Select Product</option>
+                    <optgroup label="Final Products">
+                        @foreach ($finalProducts as $finalProduct)
+                            <option value="{{ 'product_'.$finalProduct->id }}" {{ $productType == 1 && $product->id == $finalProduct->id ? 'selected' : '' }}>{{ $finalProduct->product->name }}</option>
+                        @endforeach
+                    </optgroup>
+                    <optgroup label="Raw Materials">
+                        @foreach ($rawMaterials as $rawMaterial)
+                            <option value="{{ 'raw_'.$rawMaterial->id }}" {{ $productType == 0 && $product->id == $rawMaterial->id ? 'selected' : '' }}>{{ $rawMaterial->name }}</option>
+                        @endforeach
+                    </optgroup>
+                </select>
             </div>
             <div class="col-auto">
                 <button type="submit" class="btn btn-primary">Filter</button>
@@ -33,26 +49,28 @@
         <div class="card-body px-0 pb-0">
             <h5 class="text-center card-title mb-0">Stock Bin Card</h5>
             <p class="text-center text-muted mb-2">From {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }} to {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</p>
-            @if (isset($rawMaterialItem))
+            @if ($productType && $productType == 0)
                 <div class="row mx-0">
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <p class="mb-0">Max Level: {{ $rawMaterialItem->max_level }}</p>
-                                <p class="mb-0">Max Level: {{ $rawMaterialItem->min_level }}</p>
+                                <p class="mb-0">Max Level: {{ $product->max_level }}</p>
+                                <p class="mb-0">Max Level: {{ $product->min_level }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             @endif
-            <div class="row mx-0">
-                <div class="col-md-4">
-                    <p class="fs-6 mb-2">Material: <strong>{{ isset($product) ? $product->name : (isset($rawMaterialItem) ? $rawMaterialItem->name : $finalProduct->product->name) }}</strong></p>
+            @if ($productType)
+                <div class="row mx-0">
+                    <div class="col">
+                        <p class="fs-6 mb-2">Material: <strong>{{ $productType == 0 ? $product->name : $product->product->name. ' | ' .$product->packingType->name. ' | ' .$product->packSize->name  }}</strong></p>
+                    </div>
+                    <div class="col-auto">
+                        <p class="fs-6 mb-2">Code # <strong>{{ $productType == 0 ? $product->code : $product->product->code }}</strong></p>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <p class="fs-6 mb-2">Code # <strong>{{ isset($product) ? $product->code : (isset($rawMaterialItem) ? $rawMaterialItem->code : $finalProduct->product->code) }}</strong></p>
-                </div>
-            </div>
+            @endif
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead class="table-primary">
@@ -76,21 +94,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($stockBinCards as $stockBinCard)
-                            <tr>
-                                <td>{{ $stockBinCard['date'] }}</td>
-                                <td>{{ $stockBinCard['doc'] }}</td>
-                                <td>{{ number_format($stockBinCard['type'] == 'received' ? $stockBinCard['quantity'] : 0, 2) }}</td>
-                                <td>{{ number_format($stockBinCard['type'] == 'received' ? $stockBinCard['unit_price'] : 0, 2) }}</td>
-                                <td>{{ number_format($stockBinCard['type'] == 'received' ? $stockBinCard['total'] : 0, 2) }}</td>
-                                <td>{{ number_format($stockBinCard['type'] == 'issued' ? $stockBinCard['quantity'] : 0, 2) }}</td>
-                                <td>{{ number_format($stockBinCard['type'] == 'issued' ? $stockBinCard['unit_price'] : 0, 2) }}</td>
-                                <td>{{ number_format($stockBinCard['type'] == 'issued' ? $stockBinCard['total'] : 0, 2) }}</td>
-                                <td>{{ $stockBinCard['balance_quantity'] }}</td>
-                                <td>{{ $stockBinCard['balance_unit_price'] }}</td>
-                                <td>{{ $stockBinCard['balance_total'] }}</td>
-                            </tr>
-                        @endforeach
+                        @if ($stockBinCards)
+                            @foreach ($stockBinCards as $stockBinCard)
+                                <tr>
+                                    <td>{{ $stockBinCard['date'] }}</td>
+                                    <td>{{ $stockBinCard['doc'] }}</td>
+                                    <td>{{ number_format($stockBinCard['type'] == 'received' ? $stockBinCard['quantity'] : 0, 2) }}</td>
+                                    <td>{{ number_format($stockBinCard['type'] == 'received' ? $stockBinCard['unit_price'] : 0, 2) }}</td>
+                                    <td>{{ number_format($stockBinCard['type'] == 'received' ? $stockBinCard['total'] : 0, 2) }}</td>
+                                    <td>{{ number_format($stockBinCard['type'] == 'issued' ? $stockBinCard['quantity'] : 0, 2) }}</td>
+                                    <td>{{ number_format($stockBinCard['type'] == 'issued' ? $stockBinCard['unit_price'] : 0, 2) }}</td>
+                                    <td>{{ number_format($stockBinCard['type'] == 'issued' ? $stockBinCard['total'] : 0, 2) }}</td>
+                                    <td>{{ $stockBinCard['balance_quantity'] }}</td>
+                                    <td>{{ $stockBinCard['balance_unit_price'] }}</td>
+                                    <td>{{ $stockBinCard['balance_total'] }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

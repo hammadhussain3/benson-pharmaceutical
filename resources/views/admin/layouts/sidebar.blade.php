@@ -478,11 +478,43 @@
                                 </a>
                             </li>
                         @endif
+                        @if(auth()->user()->hasPermission('Batch List'))
+                            <li>
+                                <a class="{{ request()->is('reports.batch-report*') ? 'active' : '' }}" href="{{ route('reports.batch-report') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Batch Report
+                                </a>
+                            </li>
+                        @endif
                         @if(auth()->user()->hasPermission('Store Issue Rquisition List'))
                             <li>
                                 <a class="{{ request()->is('reports.consumption-report*') ? 'active' : '' }}" href="{{ route('reports.consumption-report') }}">
                                     <i class="fa fa-store me-1"></i>
                                     Consumption Report
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Invoice List'))
+                            <li>
+                                <a class="{{ request()->is('reports.country-sales*') ? 'active' : '' }}" href="{{ route('reports.country-sales') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Country Sales Report
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Franchise List'))
+                            <li>
+                                <a class="{{ request()->is('reports.customer-aging*') ? 'active' : '' }}" href="{{ route('reports.customer-aging') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Customer Aging Report
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Invoice List'))
+                            <li>
+                                <a class="{{ request()->is('reports.franchiser-sales*') ? 'active' : '' }}" href="{{ route('reports.franchiser-sales') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Distributor Sales Report
                                 </a>
                             </li>
                         @endif
@@ -523,6 +555,14 @@
                                 <a class="{{ request()->is('reports.requirement-report*') ? 'active' : '' }}" href="{{ route('reports.requirement-report') }}">
                                     <i class="fa fa-store me-1"></i>
                                     Requirement Report
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Stock List'))
+                            <li>
+                                <a class="{{ request()->is('reports.stock-bin-card*') ? 'active' : '' }}" href="{{ route('reports.stock-bin-card') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Stock Bin Card
                                 </a>
                             </li>
                         @endif

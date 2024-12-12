@@ -22,6 +22,23 @@ class Invoice extends Model
         static::updating(function ($model) {
             $model->updated_by = auth()->id();
         });
+
+        static::saving(function ($model) {
+            if ($model->total_amount == $model->due_amount) {
+                $model->payment_status = 'paid';
+            } elseif ($model->due_amount > 0 && $model->due_amount < $model->total_amount) {
+                $model->payment_status = 'partial';
+            } else {
+                $model->payment_status = 'unpaid';
+            }
+
+            if ($model->product_variation_id) {
+                $productVariation = ProductVariation::find($model->product_variation_id);
+                if ($productVariation && $productVariation->product) {
+                    $model->product_group_id = $productVariation->product->product_group_id;
+                }
+            }
+        });
     }
 
     public function items()

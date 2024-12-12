@@ -167,6 +167,26 @@
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"
                                     placeholder="Total Amount" required value="{{ old('total_amount', $invoice->total_amount) }}" readonly>
                             </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="payment_deadline">Payment Deadline</label>
+                                <input type="date" class="form-control" name="payment_deadline" id="payment_deadline"
+                                    placeholder="Payment Deadline" required value="{{ old('payment_deadline', 0) }}">
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="paid_amount">Paid Amount</label>
+                                <input type="number" class="form-control" name="paid_amount" id="paid_amount"
+                                    placeholder="Paid Amount" required value="{{ old('paid_amount', $invoice->paid_amount) }}" oninput="calculatePurchaseInvoiceAmount()">
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="returned_amount">Returned Amount</label>
+                                <input type="number" class="form-control" name="returned_amount" id="returned_amount"
+                                    placeholder="Returned Amount" required value="{{ old('returned_amount', $invoice->returned_amount) }}" oninput="calculatePurchaseInvoiceAmount()">
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="due_amount">Due Amount</label>
+                                <input type="number" class="form-control" name="due_amount" id="due_amount"
+                                    placeholder="Due Amount" required value="{{ old('due_amount', $invoice->due_amount) }}" readonly>
+                            </div>
                             <div class="mb-3 col-md-12">
                                 <label for="note">Special Note</label>
                                 <textarea type="text" class="form-control" name="note" id="note"

@@ -21,14 +21,23 @@ class InvoiceRequest extends FormRequest
      */
     public function rules(): array
     {
-		$invoiceId = $this->invoice ? $this->invoice->id : null;
+		$id = $this->route('purchase_invoice') ? $this->route('purchase_invoice') : ($this->route('sale_invoice') ? $this->route('sale_invoice') : null);
+		$isEdit = !is_null($id);
 
 		return [
-			'code' => 'required|string|max:255|unique:invoices,code,' . $invoiceId . ',id,company_id,' . $this->company_id,
+			'code' => 'required|string|max:255|unique:invoices,code,' . $id . ',id,company_id,' . $this->company_id,
 			'type' => 'required|string|in:sale,purchase,quotation',
 			'prefix' => 'required|string|size:2',
 			'party' => 'required|exists:parties,id',
-			'required_date' => 'required_if:type,purchase|date|after:today',
+			'required_date' => [
+				'required_if:type,purchase',
+				'date',
+				function ($attribute, $value, $fail) use ($isEdit) {
+					if (!$isEdit && $value <= today()->format('Y-m-d')) {
+						$fail('The ' . $attribute . ' must be a date after today.');
+					}
+				},
+			],
 			'order_number' => 'required_if:type,sale|string|max:255',
 			'order_date' => 'required_if:type,sale|date|before:today',
 			'is_urgent' => 'required_if:type,purchase|in:0,1',
@@ -42,6 +51,9 @@ class InvoiceRequest extends FormRequest
 			'total_amount' => 'required|numeric|min:1',
 			'discount_type' => 'required|string|in:percent,flat',
 			'discount' => 'required|numeric|min:0',
+			'paid_amount' => 'required|numeric|min:0',
+			'returned_amount' => 'required|numeric|min:0',
+			'due_amount' => 'required|numeric|min:0',
 			'note' => 'nullable|string|max:1000',
 			'payment_deadline' => 'required_if:type,sale|date|after:today',
 			'invoice_items' => 'required|array|min:1',

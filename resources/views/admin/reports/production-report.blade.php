@@ -75,18 +75,31 @@
 
 <style>
     @media print {
-       @page {
-           margin: 0;
-       }
-   
-       html, body {
-           height: 100%;
-           margin: 0;
-           padding: 0;
-           overflow: hidden;
-       }
-   
-       body * {
+        @page {
+            margin: 0;
+            size: landscape;
+        }
+
+        body {
+            font-size: 12px;
+            line-height: 1.2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card {
+            border: none;
+            margin: 0;
+        }
+
+        .table-primary th {
+            background-color: #e3f2fd !important;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+            
+        }
+
+        body * {
            visibility: hidden;
        }
    
@@ -106,6 +119,19 @@
            background-color: #e3f2fd !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
+           font-size: 11px;
        }
-   }   
+
+       .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            padding: 4px 8px;
+            font-size: 10px;
+        }
+    }
 </style>

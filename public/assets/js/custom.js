@@ -1911,11 +1911,14 @@ function calculateSaleInvoiceAmount() {
     let itemsCostWithTax = 0;
     let itemsCostWithoutTax = 0;
     let totalAmount = 0;
+    let dueAmount = 0;
 
     var shippingCost = parseFloat(document.getElementById('shipping_cost').value) || 0;
     var invoiceTaxRate = parseFloat(document.getElementById('invoice_tax_rate').value) || 0;
     var invdiscount = parseFloat(document.getElementById('discount').value) || 0;
     var invdiscounttype = document.getElementById('discount_type').value || 'flat';
+    var paidAmount = parseFloat(document.getElementById('paid_amount').value) || 0;
+    var returnedAmount = parseFloat(document.getElementById('returned_amount').value) || 0;
 
     document.querySelectorAll('.item-set').forEach((itemSet, index) => {
         const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
@@ -1952,10 +1955,13 @@ function calculateSaleInvoiceAmount() {
         totalAmount -= invdiscount;
     }
 
+    dueAmount = totalAmount - paidAmount + returnedAmount;
+
     document.getElementById('items_cost_without_tax').value = itemsCostWithoutTax.toFixed(2);
     document.getElementById('total_invoice_tax').value = totalInvoiceTax.toFixed(2);
     document.getElementById('items_cost_with_tax').value = itemsCostWithTax.toFixed(2);
     document.getElementById('total_amount').value = totalAmount.toFixed(2);
+    document.getElementById('due_amount').value = dueAmount.toFixed(2);
 }
 
 function calculateSalesReturnAmount() {
@@ -2012,10 +2018,13 @@ function calculatePurchaseInvoiceAmount() {
     let itemsCostWithTax = 0;
     let itemsCostWithoutTax = 0;
     let totalAmount = 0;
+    let dueAmount = 0;
 
     var invoiceTaxRate = parseFloat(document.getElementById('invoice_tax_rate').value) || 0;
     var invdiscount = parseFloat(document.getElementById('discount').value) || 0;
     var invdiscounttype = document.getElementById('discount_type').value || 'flat';
+    var paid_amount = parseFloat(document.getElementById('paid_amount').value) || 0;
+    var returned_amount = parseFloat(document.getElementById('returned_amount').value) || 0;
 
     document.querySelectorAll('.item-set').forEach((itemSet, index) => {
         const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
@@ -2050,10 +2059,13 @@ function calculatePurchaseInvoiceAmount() {
         totalAmount -= invdiscount;
     }
 
+    dueAmount = totalAmount - paid_amount + returned_amount;
+
     document.getElementById('items_cost_without_tax').value = itemsCostWithoutTax.toFixed(2);
     document.getElementById('total_invoice_tax').value = totalInvoiceTax.toFixed(2);
     document.getElementById('items_cost_with_tax').value = itemsCostWithTax.toFixed(2);
     document.getElementById('total_amount').value = totalAmount.toFixed(2);
+    document.getElementById('due_amount').value = dueAmount.toFixed(2);
 }
 
 function calculateGoodsRecievingAmount() {

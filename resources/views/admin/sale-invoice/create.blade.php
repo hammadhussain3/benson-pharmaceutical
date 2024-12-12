@@ -225,6 +225,21 @@
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"
                                     placeholder="Total Amount" required value="{{ old('total_amount', 0) }}" readonly>
                             </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="paid_amount">Paid Amount</label>
+                                <input type="number" class="form-control" name="paid_amount" id="paid_amount"
+                                    placeholder="Paid Amount" required value="{{ old('paid_amount', 0) }}" oninput="calculateSaleInvoiceAmount()">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="returned_amount">Returned Amount</label>
+                                <input type="number" class="form-control" name="returned_amount" id="returned_amount"
+                                    placeholder="Returned Amount" required value="{{ old('returned_amount', 0) }}" oninput="calculateSaleInvoiceAmount()">
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <label for="due_amount">Due Amount</label>
+                                <input type="number" class="form-control" name="due_amount" id="due_amount"
+                                    placeholder="Due Amount" required value="{{ old('due_amount', 0) }}" readonly>
+                            </div>
                             <div class="mb-3 col-md-12">
                                 <label for="note">Special Note</label>
                                 <textarea type="text" class="form-control" name="note" id="note"
