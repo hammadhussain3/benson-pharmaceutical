@@ -205,9 +205,7 @@ class ReportController extends Controller
                 "avgCost" => $avg,
             ];
 
-
         }
-
 
         $items = $finalProduct->product->batches->toArray();
 

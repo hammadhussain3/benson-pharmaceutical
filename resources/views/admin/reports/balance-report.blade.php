@@ -8,16 +8,25 @@
                 <li class="breadcrumb-item active">Current Balance Report</li>
             </ul>
         </div>
-        <div class="text-right">
+        {{-- <div class="text-right">
             <button class="btn btn-primary" onclick="window.print()">Print Report</button>
-        </div>
+        </div> --}}
     </div>
 
     <div class="card">
-        <div class="card-body p-0">
+        <div class="card-body">
+            <div class="table-top">
+                <div class="search-set">
+                    <div class="search-input">
+                        <a class="btn btn-searchset">
+                            <img src="{{ asset('assets/img/icons/search-white.svg') }}" alt="img">
+                        </a>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead class="table-primary">
+                <table class="table datanew dataTable no-footer table-striped">
+                    <thead>
                         <tr>
                             <th>Code</th>
                             <th>Item Description</th>
@@ -45,7 +54,7 @@
     </div>
 @endsection
 
-<style>
+{{-- <style>
     @media print {
        @page {
            margin: 0;
@@ -80,4 +89,4 @@
            color-adjust: exact;
        }
    }   
-</style>
+</style> --}}

@@ -61,7 +61,7 @@
                                 <td>{{ $purchaseRequisitions->status }}</td>
                                 <td>
                                     @foreach ($purchaseRequisitions->items as $item)
-                                        {!! $item->item_code. ' ' .$item->item_name. '<br>QTY=' .$item->product_quantity. ' RECV=' .$item->received_quantity !!}<br>
+                                        {!! $item->item_code. ' ' .$item->item_name. '<br>QTY=' .$item->quantity. ' RECV=' .$item->received_quantity !!}<br>
                                     @endforeach
                                 </td>
                             </tr>

@@ -94,14 +94,11 @@ class InvoiceService
                 'invoice' => function ($query) {
                     $query->select('id', 'code', 'invoice_date', 'required_date', 'status', 'company_id');
                 },
-                'product' => function ($query) {
-                    $query->select('id', 'code', 'name');
-                },
                 'rawMaterialItem' => function ($query) {
                     $query->select('id', 'code', 'name');
                 }
             ])
-            ->select('id', 'invoice_id', 'product_id', 'raw_material_item_id', 'product_quantity')
+            ->select('id', 'invoice_id', 'raw_material_item_id', 'quantity')
             ->get();
 
         $filteredItems = $invoiceItems->filter(function ($invoiceItem) use ($status) {
@@ -119,7 +116,7 @@ class InvoiceService
             }
 
             $invoiceItem->received_quantity = $receivedQuantity;
-            $invoiceItem->status = $invoiceItem->product_quantity != $receivedQuantity ? 'Pending' : 'Completed';
+            $invoiceItem->status = $invoiceItem->quantity != $receivedQuantity ? 'Pending' : 'Completed';
             $invoiceItem->item_code = $invoiceItem->product->code ?? $invoiceItem->rawMaterialItem->code;
 
             return $status === null || $invoiceItem->status === $status;
@@ -145,10 +142,7 @@ class InvoiceService
         $invoices = $invoiceQuery
             ->with([
                 'items' => function ($query) {
-                    $query->select('id', 'invoice_id', 'product_id', 'raw_material_item_id', 'product_quantity');  // Select only necessary invoice item columns
-                },
-                'items.product' => function ($query) {
-                    $query->select('id', 'code', 'name');
+                    $query->select('id', 'invoice_id', 'raw_material_item_id', 'quantity');  // Select only necessary invoice item columns
                 },
                 'items.rawMaterialItem' => function ($query) {
                     $query->select('id', 'code', 'name');
@@ -198,7 +192,7 @@ class InvoiceService
                 'invoice' => function ($query) {
                     $query->select('id', 'code');
                 },
-            ])->select('id', 'invoice_id', 'product_quantity')
+            ])->select('id', 'invoice_id', 'quantity')
             ->get();
 
             $uniqueInvoiceIds = $orderedItems->pluck('invoice_id')->unique();
@@ -225,7 +219,7 @@ class InvoiceService
                 $product->invoice_codes = $invoice_codes;
             });
 
-            $product->ordered_quantity = $orderedItems->sum('product_quantity');
+            $product->ordered_quantity = $orderedItems->sum('quantity');
         });
 
         return $products;

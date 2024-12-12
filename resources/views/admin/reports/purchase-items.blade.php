@@ -64,7 +64,7 @@
                                 <td>{{ $purchaseItem->status }}</td>
                                 <td>{{ $purchaseItem->item_code }}</td>
                                 <td>{{ $purchaseItem->product->name ?? $purchaseItem->rawMaterialItem->name }}</td>
-                                <td>{{ $purchaseItem->product_quantity }}</td>
+                                <td>{{ $purchaseItem->quantity }}</td>
                                 <td>{{ $purchaseItem->received_quantity }}</td>
                             </tr>
                         @endforeach

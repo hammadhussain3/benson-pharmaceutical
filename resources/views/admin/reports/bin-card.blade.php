@@ -29,12 +29,18 @@
                     <option value="">Select Product</option>
                     <optgroup label="Final Products">
                         @foreach ($finalProducts as $finalProduct)
-                            <option value="{{ 'product_'.$finalProduct->id }}" {{ $productType == 1 && $product->id == $finalProduct->id ? 'selected' : '' }}>{{ $finalProduct->product->name }}</option>
+                            <option value="{{ 'product_'.$finalProduct->id }}" 
+                                {{ isset($productType, $product) && $productType == 1 && $product->id == $finalProduct->id ? 'selected' : '' }}>
+                                {{ $finalProduct->product->name }}
+                            </option>
                         @endforeach
                     </optgroup>
                     <optgroup label="Raw Materials">
                         @foreach ($rawMaterials as $rawMaterial)
-                            <option value="{{ 'raw_'.$rawMaterial->id }}" {{ $productType == 0 && $product->id == $rawMaterial->id ? 'selected' : '' }}>{{ $rawMaterial->name }}</option>
+                            <option value="{{ 'raw_'.$rawMaterial->id }}" 
+                                {{ isset($productType, $product) && $productType == 1 && $product->id == $rawMaterial->id ? 'selected' : '' }}>
+                                {{ $rawMaterial->name }}
+                            </option>
                         @endforeach
                     </optgroup>
                 </select>

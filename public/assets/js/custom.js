@@ -1534,7 +1534,7 @@ function getInvoiceDetails(invoiceId) {
                                     <div class="mb-3 col-md-4">
                                         <label>Balance Recievable</label>
                                         <input type="number" class="form-control balance_receivable" name="items[${itemIndex}][balance_receivable]"
-                                            placeholder="Balance Recievable" required value="" max="${item.product_quantity - item.received_quantity}" oninput="calculateGoodsRecievingAmount()">
+                                            placeholder="Balance Recievable" required value="" max="${item.quantity - item.received_quantity}" oninput="calculateGoodsRecievingAmount()">
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label>Unit</label>
