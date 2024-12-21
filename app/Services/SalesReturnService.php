@@ -32,6 +32,7 @@ class SalesReturnService
 
             $salesReturn->items()->create($value);
             $value['company_id'] = $data['company_id'];
+            $value['total'] = $value['total_amount'];
             $salesReturn->stocks()->create($value);
         }
 
@@ -47,6 +48,7 @@ class SalesReturnService
 
         $salesReturn->update($data);
         $salesReturn->items()->delete();
+        $salesReturn->stocks()->delete();
 
         foreach ($items as $value) {
             $value['product_variation_id'] = $value['product'];
@@ -54,6 +56,7 @@ class SalesReturnService
 
             $salesReturn->items()->create($value);
             $value['company_id'] = $data['company_id'];
+            $value['total'] = $value['total_amount'];
             $salesReturn->stocks()->create($value);
         }
         
@@ -62,6 +65,7 @@ class SalesReturnService
 
     public function delete(SalesReturn $salesReturn)
     {
+        $salesReturn->stocks()->delete();
         return $salesReturn->delete();
     }
 

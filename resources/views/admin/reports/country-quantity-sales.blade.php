@@ -3,13 +3,13 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Distributors Sales Report</h4>
+            <h4>Distributors Sales Report Quantity Wise</h4>
             <ul class="breadcrumb">
-                <li class="breadcrumb-item active">Distributors Sales Report</li>
+                <li class="breadcrumb-item active">Distributors Sales Report Quantity Wise</li>
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Distributors Sales Report</button>
+            <button class="btn btn-primary" onclick="window.print()">Print Report</button>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
 
     <div class="card">
         <div class="card-body px-0 pb-0">
-            <h5 class="text-center card-title mb-0">Distributors Sales Report - {{ $country->name }}</h5>
+            <h5 class="text-center card-title mb-0">Distributors Sales Report Quantity Wise - {{ $country->name }}</h5>
             <p class="text-center text-muted">From {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }} to {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</p>
             <div class="table-responsive">
                 <table class="table table-striped">

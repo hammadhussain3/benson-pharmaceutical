@@ -11,6 +11,20 @@ class InvoiceItem extends Model
 
     protected $fillable = ['invoice_id', 'product_variation_id', 'raw_material_item_id', 'product_group_id', 'batch_id', 'unit', 'unit_price', 'quantity', 'tax_rate', 'discount_type', 'discount','total_amount'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            if ($model->product_variation_id) {
+                $productVariation = ProductVariation::find($model->product_variation_id);
+                if ($productVariation && $productVariation->product) {
+                    $model->product_group_id = $productVariation->product->product_group_id;
+                }
+            }
+        });
+    }
+
     public function invoice()
     {
         return $this->belongsTo(Invoice::class);

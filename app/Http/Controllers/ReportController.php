@@ -430,7 +430,7 @@ class ReportController extends Controller
         return view('admin.reports.franchiser-sales', compact('franchiser', 'from_date', 'to_date', 'parties', 'all_months', 'product_group_sales'));
     }
 
-    public function countrySales(Request $request)
+    public function countryQuantitySales(Request $request)
     {
         $countries = $this->countryService->getAllCountries();
 
@@ -502,6 +502,81 @@ class ReportController extends Controller
         // Get all product groups' data in the right order
         $all_product_groups = ProductGroup::whereIn('id', $all_product_groups)->get();
 
-        return view('admin.reports.country-sales', compact('country', 'from_date', 'to_date', 'franchiser_sales', 'countries', 'all_product_groups'));
+        return view('admin.reports.country-quantity-sales', compact('country', 'from_date', 'to_date', 'franchiser_sales', 'countries', 'all_product_groups'));
+    }
+
+    public function countryAmountSales(Request $request)
+    {
+        $countries = $this->countryService->getAllCountries();
+
+        $country = $request->has('country') 
+            ? $this->countryService->getCountryById($request->input('country')) 
+            : $this->countryService->getAllCountries()->first();
+
+        $franchisers = Party::where('is_distributor', '1')
+            ->where('country_id', $country->id)
+            ->get();
+
+        $from_date = $request->has('from_date') 
+            ? $request->input('from_date') 
+            : now()->subDays(30)->format('Y-m-d');
+
+        $to_date = $request->has('to_date') 
+            ? $request->input('to_date') 
+            : now()->format('Y-m-d');
+
+        // Check if the date range is greater than 12 months
+        $fromDate = Carbon::parse($from_date);
+        $toDate = Carbon::parse($to_date);
+        $monthDiff = $fromDate->diffInMonths($toDate);
+
+        if ($monthDiff > 12) {
+            return back()->withErrors(['date_range' => 'The date range cannot exceed 12 months.']);
+        }
+
+        $franchiser_sales = []; // To store the required data structure
+        $all_product_groups = []; // To store unique product groups
+
+        foreach ($franchisers as $franchiser) {
+            $invoices = InvoiceItem::whereHas('invoice', function ($query) use ($franchiser, $from_date, $to_date) {
+                $query->where('party_id', $franchiser->id)
+                    ->whereBetween('invoice_date', [$from_date, $to_date]);
+            })->get();
+
+            $product_group_sales = [];
+
+            foreach ($invoices as $invoice) {
+                $product_group_id = $invoice->product_group_id;
+                $product_group_name = $invoice->productGroup->name ?? null;
+                $amount = $invoice->total_amount;
+
+                // Add product group to the list of all unique product groups
+                if (!in_array($product_group_id, $all_product_groups)) {
+                    $all_product_groups[] = $product_group_id;
+                }
+
+                if (!isset($product_group_sales[$product_group_id])) {
+                    $product_group_sales[$product_group_id] = [
+                        'product_group_id' => $product_group_id,
+                        'product_group_name' => $product_group_name,
+                        'amount' => 0,
+                    ];
+                }
+
+                $product_group_sales[$product_group_id]['amount'] += $amount;
+            }
+
+            // Append franchiser data
+            $franchiser_sales[] = [
+                'franchiser_id' => $franchiser->id,
+                'franchiser_name' => $franchiser->name,
+                'franchiser_sales' => array_values($product_group_sales), // Reset array keys
+            ];
+        }
+
+        // Get all product groups' data in the right order
+        $all_product_groups = ProductGroup::whereIn('id', $all_product_groups)->get();
+
+        return view('admin.reports.country-amount-sales', compact('country', 'from_date', 'to_date', 'franchiser_sales', 'countries', 'all_product_groups'));
     }
 }

@@ -142,7 +142,8 @@ Route::middleware('auth')->group(function () {
     Route::get('report/financial-ledger', [ReportController::class, 'financialLedger'])->name('reports.financial-ledger');
     Route::get('report/customer-aging', [ReportController::class, 'customerAging'])->name('reports.customer-aging');
     Route::get('report/franchiser-sales', [ReportController::class, 'franchiserSales'])->name('reports.franchiser-sales');
-    Route::get('report/country-sales', [ReportController::class, 'countrySales'])->name('reports.country-sales');
+    Route::get('report/country-quantity-sales', [ReportController::class, 'countryQuantitySales'])->name('reports.country-quantity-sales');
+    Route::get('report/country-amount-sales', [ReportController::class, 'countryAmountSales'])->name('reports.country-amount-sales');
     Route::get('report/stock-bin-card', [ReportController::class, 'stockBinCard'])->name('reports.stock-bin-card');
     Route::get('report/batch-report', [ReportController::class, 'batchReport'])->name('reports.batch-report');
 

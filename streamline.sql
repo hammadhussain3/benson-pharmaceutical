@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 12, 2024 at 12:14 PM
+-- Generation Time: Dec 21, 2024 at 07:49 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.0
 
@@ -180,7 +180,8 @@ CREATE TABLE `chart_of_accounts` (
 --
 
 INSERT INTO `chart_of_accounts` (`id`, `code`, `particular`, `abbreviation`, `open_debit`, `open_credit`, `act_debit`, `act_credit`, `cl_debit`, `cl_credit`, `budget`, `company_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 'COA00001', 'Rejected Items', 'RI', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 1, 1, 1, '2024-12-02 07:01:30', '2024-12-02 07:03:24');
+(1, 'COA00001', 'Rejected Items', 'RI', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 1, 1, 1, '2024-12-02 07:01:30', '2024-12-02 07:03:24'),
+(2, 'COA00002', 'Sale Items', 'SI', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 1, 1, NULL, '2024-12-19 06:02:35', '2024-12-19 06:02:35');
 
 -- --------------------------------------------------------
 
@@ -281,6 +282,13 @@ CREATE TABLE `credit_notes` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `credit_notes`
+--
+
+INSERT INTO `credit_notes` (`id`, `code`, `party_id`, `description`, `total`, `company_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+(2, 'CN00001', 1, 'Checking', '100.00', 1, 1, NULL, '2024-12-19 06:03:47', '2024-12-19 06:03:47');
+
 -- --------------------------------------------------------
 
 --
@@ -296,6 +304,14 @@ CREATE TABLE `credit_note_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `credit_note_items`
+--
+
+INSERT INTO `credit_note_items` (`id`, `credit_note_id`, `chart_of_account_id`, `debit`, `credit`, `created_at`, `updated_at`) VALUES
+(3, 2, 2, '0.00', '100.00', '2024-12-19 06:03:47', '2024-12-19 06:03:47'),
+(4, 2, 2, '100.00', '0.00', '2024-12-19 06:03:47', '2024-12-19 06:03:47');
 
 -- --------------------------------------------------------
 
@@ -689,6 +705,13 @@ CREATE TABLE `journal_vouchers` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `journal_vouchers`
+--
+
+INSERT INTO `journal_vouchers` (`id`, `code`, `year`, `total_debit`, `total_credit`, `currency`, `company_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+(2, 'JV00001', '24-25', '1000.00', '0.00', 'PKR', 1, 1, NULL, '2024-12-19 06:04:47', '2024-12-19 06:04:47');
+
 -- --------------------------------------------------------
 
 --
@@ -705,6 +728,13 @@ CREATE TABLE `journal_voucher_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `journal_voucher_items`
+--
+
+INSERT INTO `journal_voucher_items` (`id`, `journal_voucher_id`, `chart_of_account_id`, `description`, `debit`, `credit`, `created_at`, `updated_at`) VALUES
+(7, 2, 2, 'Checking', '1000.00', '0.00', '2024-12-19 06:04:47', '2024-12-19 06:04:47');
 
 -- --------------------------------------------------------
 
@@ -1127,6 +1157,13 @@ CREATE TABLE `payment_vouchers` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `payment_vouchers`
+--
+
+INSERT INTO `payment_vouchers` (`id`, `code`, `party_id`, `total_debit`, `total_credit`, `total`, `currency`, `payment_method`, `company_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+(1, 'PV00001', 3, '500.00', '0.00', '500.00', 'PKR', 'cash', 1, 1, NULL, '2024-12-19 06:20:03', '2024-12-19 06:20:03');
+
 -- --------------------------------------------------------
 
 --
@@ -1143,6 +1180,13 @@ CREATE TABLE `payment_voucher_items` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payment_voucher_items`
+--
+
+INSERT INTO `payment_voucher_items` (`id`, `payment_voucher_id`, `chart_of_account_id`, `description`, `debit`, `credit`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, 'Checking', '500.00', '0.00', '2024-12-19 06:20:03', '2024-12-19 06:20:03');
 
 -- --------------------------------------------------------
 
@@ -1978,6 +2022,11 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (63, 2),
 (64, 2),
 (65, 2),
+(66, 2),
+(67, 2),
+(68, 2),
+(69, 2),
+(70, 2),
 (71, 2),
 (72, 2),
 (73, 2),
@@ -2003,7 +2052,125 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (98, 2),
 (99, 2),
 (100, 2),
+(101, 2),
+(102, 2),
+(103, 2),
+(104, 2),
+(105, 2),
+(106, 2),
+(107, 2),
+(108, 2),
+(109, 2),
+(110, 2),
+(111, 2),
+(112, 2),
+(113, 2),
+(114, 2),
+(115, 2),
+(116, 2),
+(117, 2),
+(118, 2),
+(119, 2),
+(120, 2),
+(121, 2),
+(122, 2),
+(123, 2),
+(124, 2),
+(125, 2),
+(126, 2),
+(127, 2),
+(128, 2),
+(129, 2),
+(130, 2),
+(131, 2),
+(132, 2),
+(133, 2),
+(134, 2),
+(135, 2),
+(136, 2),
+(137, 2),
+(138, 2),
+(139, 2),
+(140, 2),
+(141, 2),
+(142, 2),
+(143, 2),
+(144, 2),
+(145, 2),
+(146, 2),
+(147, 2),
+(148, 2),
+(149, 2),
+(150, 2),
+(151, 2),
+(152, 2),
+(153, 2),
+(154, 2),
+(155, 2),
+(156, 2),
+(157, 2),
+(158, 2),
+(159, 2),
+(160, 2),
+(161, 2),
+(162, 2),
+(163, 2),
+(164, 2),
+(165, 2),
+(171, 2),
+(172, 2),
+(173, 2),
+(174, 2),
+(175, 2),
+(176, 2),
+(177, 2),
+(178, 2),
+(179, 2),
+(180, 2),
+(181, 2),
+(182, 2),
+(183, 2),
+(184, 2),
+(185, 2),
+(186, 2),
+(187, 2),
+(188, 2),
+(189, 2),
+(190, 2),
+(191, 2),
+(192, 2),
+(193, 2),
+(194, 2),
+(195, 2),
+(196, 2),
+(197, 2),
+(198, 2),
+(199, 2),
+(200, 2),
+(201, 2),
+(202, 2),
+(203, 2),
+(204, 2),
+(205, 2),
+(206, 2),
+(207, 2),
+(208, 2),
+(209, 2),
+(210, 2),
+(211, 2),
+(212, 2),
+(213, 2),
+(214, 2),
+(215, 2),
+(216, 2),
+(217, 2),
+(218, 2),
+(219, 2),
+(220, 2),
 (1, 3),
+(2, 3),
+(3, 3),
+(4, 3),
 (5, 3),
 (6, 3),
 (7, 3),
@@ -2040,6 +2207,11 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (63, 3),
 (64, 3),
 (65, 3),
+(66, 3),
+(67, 3),
+(68, 3),
+(69, 3),
+(70, 3),
 (71, 3),
 (72, 3),
 (73, 3),
@@ -2059,7 +2231,122 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (97, 3),
 (98, 3),
 (99, 3),
-(100, 3);
+(100, 3),
+(101, 3),
+(102, 3),
+(103, 3),
+(104, 3),
+(105, 3),
+(106, 3),
+(107, 3),
+(108, 3),
+(109, 3),
+(110, 3),
+(111, 3),
+(112, 3),
+(113, 3),
+(114, 3),
+(115, 3),
+(116, 3),
+(117, 3),
+(118, 3),
+(119, 3),
+(120, 3),
+(121, 3),
+(122, 3),
+(123, 3),
+(124, 3),
+(125, 3),
+(126, 3),
+(127, 3),
+(128, 3),
+(129, 3),
+(130, 3),
+(131, 3),
+(132, 3),
+(133, 3),
+(134, 3),
+(135, 3),
+(136, 3),
+(137, 3),
+(138, 3),
+(139, 3),
+(140, 3),
+(141, 3),
+(142, 3),
+(143, 3),
+(144, 3),
+(145, 3),
+(146, 3),
+(147, 3),
+(148, 3),
+(149, 3),
+(150, 3),
+(151, 3),
+(152, 3),
+(153, 3),
+(154, 3),
+(155, 3),
+(156, 3),
+(157, 3),
+(158, 3),
+(159, 3),
+(160, 3),
+(161, 3),
+(162, 3),
+(163, 3),
+(164, 3),
+(165, 3),
+(171, 3),
+(172, 3),
+(173, 3),
+(174, 3),
+(175, 3),
+(176, 3),
+(177, 3),
+(178, 3),
+(179, 3),
+(180, 3),
+(181, 3),
+(182, 3),
+(183, 3),
+(184, 3),
+(185, 3),
+(186, 3),
+(187, 3),
+(188, 3),
+(189, 3),
+(190, 3),
+(191, 3),
+(192, 3),
+(193, 3),
+(194, 3),
+(195, 3),
+(196, 3),
+(197, 3),
+(198, 3),
+(199, 3),
+(200, 3),
+(201, 3),
+(202, 3),
+(203, 3),
+(204, 3),
+(205, 3),
+(206, 3),
+(207, 3),
+(208, 3),
+(209, 3),
+(210, 3),
+(211, 3),
+(212, 3),
+(213, 3),
+(214, 3),
+(215, 3),
+(216, 3),
+(217, 3),
+(218, 3),
+(219, 3),
+(220, 3);
 
 -- --------------------------------------------------------
 
@@ -2191,7 +2478,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('eKrMqW65eRmgJFSjPzKoXcUhkn1IzW24mH6oo9Bx', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiZlQzeWtwbWh2MzIxUEx5TEdVSlNBNEJaV2lybkZHZUxvWE5iRG9GbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDM6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yZXBvcnQvYmFsYW5jZS1yZXBvcnQiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6NDoiYXV0aCI7YToxOntzOjIxOiJwYXNzd29yZF9jb25maXJtZWRfYXQiO2k6MTczMzk5MjYzMzt9fQ==', 1734005598);
+('eKrMqW65eRmgJFSjPzKoXcUhkn1IzW24mH6oo9Bx', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiZlQzeWtwbWh2MzIxUEx5TEdVSlNBNEJaV2lybkZHZUxvWE5iRG9GbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yb2xlcyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzMzOTkyNjMzO319', 1734012522),
+('NyMovziGUZy0876YgCBurCJJbi5hvmIFbwtTEvIe', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidE1kWEZ6TVlNSGJWanFHdFlIeGdtbGJXQjBhOUN0MmtWQkZCZGdHUiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yZXBvcnQvY291bnRyeS1hbW91bnQtc2FsZXMiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6NDoiYXV0aCI7YToxOntzOjIxOiJwYXNzd29yZF9jb25maXJtZWRfYXQiO2k6MTczNDYwMzU2Nzt9fQ==', 1734607830);
 
 -- --------------------------------------------------------
 
@@ -2910,7 +3198,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `chart_of_accounts`
 --
 ALTER TABLE `chart_of_accounts`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -2934,13 +3222,13 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `credit_notes`
 --
 ALTER TABLE `credit_notes`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `credit_note_items`
 --
 ALTER TABLE `credit_note_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -3018,13 +3306,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `journal_vouchers`
 --
 ALTER TABLE `journal_vouchers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `journal_voucher_items`
 --
 ALTER TABLE `journal_voucher_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `leaves`
@@ -3096,13 +3384,13 @@ ALTER TABLE `payment_types`
 -- AUTO_INCREMENT for table `payment_vouchers`
 --
 ALTER TABLE `payment_vouchers`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `payment_voucher_items`
 --
 ALTER TABLE `payment_voucher_items`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `permissions`

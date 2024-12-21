@@ -31,13 +31,6 @@ class Invoice extends Model
             } else {
                 $model->payment_status = 'unpaid';
             }
-
-            if ($model->product_variation_id) {
-                $productVariation = ProductVariation::find($model->product_variation_id);
-                if ($productVariation && $productVariation->product) {
-                    $model->product_group_id = $productVariation->product->product_group_id;
-                }
-            }
         });
     }
 

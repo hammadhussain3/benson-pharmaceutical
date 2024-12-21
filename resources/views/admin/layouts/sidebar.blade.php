@@ -496,9 +496,17 @@
                         @endif
                         @if(auth()->user()->hasPermission('Invoice List'))
                             <li>
-                                <a class="{{ request()->is('reports.country-sales*') ? 'active' : '' }}" href="{{ route('reports.country-sales') }}">
+                                <a class="{{ request()->is('reports.country-quantity-sales*') ? 'active' : '' }}" href="{{ route('reports.country-quantity-sales') }}">
                                     <i class="fa fa-store me-1"></i>
-                                    Country Sales Report
+                                    Country Sales Report Quantity Wise
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Invoice List'))
+                            <li>
+                                <a class="{{ request()->is('reports.amount-sales*') ? 'active' : '' }}" href="{{ route('reports.country-amount-sales') }}">
+                                    <i class="fa fa-store me-1"></i>
+                                    Country Sales Report Amount Wise
                                 </a>
                             </li>
                         @endif
