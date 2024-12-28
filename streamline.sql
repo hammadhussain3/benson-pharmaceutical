@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 21, 2024 at 07:49 AM
+-- Generation Time: Dec 28, 2024 at 01:00 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.2.0
 
@@ -2478,8 +2478,8 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('eKrMqW65eRmgJFSjPzKoXcUhkn1IzW24mH6oo9Bx', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiZlQzeWtwbWh2MzIxUEx5TEdVSlNBNEJaV2lybkZHZUxvWE5iRG9GbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yb2xlcyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzMzOTkyNjMzO319', 1734012522),
-('NyMovziGUZy0876YgCBurCJJbi5hvmIFbwtTEvIe', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidE1kWEZ6TVlNSGJWanFHdFlIeGdtbGJXQjBhOUN0MmtWQkZCZGdHUiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yZXBvcnQvY291bnRyeS1hbW91bnQtc2FsZXMiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6NDoiYXV0aCI7YToxOntzOjIxOiJwYXNzd29yZF9jb25maXJtZWRfYXQiO2k6MTczNDYwMzU2Nzt9fQ==', 1734607830);
+('EtbMiPknA4b5zLcMcLRzQMQkgk5UZ9sbx6sDe1dE', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoibFVLaDVrdjJHY2RsNXlQS1NxZWtkd2UwWVR4Mk1BUUE2aFpIWTRPeSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9kYXNoYm9hcmQiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6NDoiYXV0aCI7YToxOntzOjIxOiJwYXNzd29yZF9jb25maXJtZWRfYXQiO2k6MTczNTM4MzQ0ODt9fQ==', 1735385867),
+('okdhMb8rnQutgJaepJFzY5dIdq5o6rVUpT0jNX00', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiVW41eXg3NmVVdW54TmF6V2JQRVpETzJmcXpwZDVGUm9CcGpENGJGYyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjk6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wcm9maWxlIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjQ6ImF1dGgiO2E6MTp7czoyMToicGFzc3dvcmRfY29uZmlybWVkX2F0IjtpOjE3MzUyODM4OTM7fX0=', 1735300195);
 
 -- --------------------------------------------------------
 
@@ -2618,6 +2618,7 @@ CREATE TABLE `users` (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -2628,13 +2629,13 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `employee_id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 0, 'Superadmin', 'superadmin@gmail.com', NULL, '$2y$12$vB70eKOaJFmUe7oDgzkEDOm1cVscMBrUrR.cgOxJ20JWa7K.TvIpS', NULL, '2024-11-06 03:01:15', '2024-11-06 03:01:15'),
-(2, 2, 'Test Admin', 'testing@gmail.com', NULL, '$2y$12$0WkLR6sXdcTiXaiQdxz7xuZRHIbl2pt0oixlA.uFdzd1FqqdSTpDG', NULL, '2024-11-06 04:02:08', '2024-11-06 04:02:08'),
-(3, 4, 'Test Admin 2', 'testing35@gmail.com', NULL, '$2y$12$4gQ9s/TvdX.QxYc3EVg/geHEblwpO3YX08dD0RhZKxE5dGcnc9mQe', NULL, '2024-11-06 04:02:37', '2024-11-06 07:12:54'),
-(4, 3, 'Test Manager', 'testing2@gmail.com', NULL, '$2y$12$bcMjwOThSgTMGxY2OvNFyumNKMcp0Y3CRT1YUiWnDY/VPIWXEvSr.', NULL, '2024-11-06 04:16:48', '2024-11-06 04:16:48'),
-(5, 5, 'Test User', 'testinguser@gmail.com', NULL, '$2y$12$UNT6ySfqNssVpjZs2xMUGeSWb3CDKuDza.xBwIpjykTwu/NvP03MO', NULL, '2024-11-06 04:42:41', '2024-11-06 04:42:41'),
-(6, 6, 'Test Manager 2', 'testing5@gmail.com', NULL, '$2y$12$gVma9NGAOq.VJI57fsh7KOoTZLtPe0hvMN1CTMKhUQtoGAVd8E8Wi', NULL, '2024-11-06 05:37:10', '2024-11-06 05:37:10');
+INSERT INTO `users` (`id`, `employee_id`, `name`, `email`, `email_verified_at`, `image`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 0, 'Superadmin', 'superadmin@gmail.com', NULL, NULL, '$2y$12$NuImJ31lGdylo.5N93QZjudxo9vsPGKmjioW1neSDWDOqclg7YCui', NULL, '2024-11-06 03:01:15', '2024-12-27 06:29:43'),
+(2, 2, 'Test Admin', 'testing@gmail.com', NULL, NULL, '$2y$12$0WkLR6sXdcTiXaiQdxz7xuZRHIbl2pt0oixlA.uFdzd1FqqdSTpDG', NULL, '2024-11-06 04:02:08', '2024-11-06 04:02:08'),
+(3, 4, 'Test Admin 2', 'testing35@gmail.com', NULL, NULL, '$2y$12$4gQ9s/TvdX.QxYc3EVg/geHEblwpO3YX08dD0RhZKxE5dGcnc9mQe', NULL, '2024-11-06 04:02:37', '2024-11-06 07:12:54'),
+(4, 3, 'Test Manager', 'testing2@gmail.com', NULL, NULL, '$2y$12$bcMjwOThSgTMGxY2OvNFyumNKMcp0Y3CRT1YUiWnDY/VPIWXEvSr.', NULL, '2024-11-06 04:16:48', '2024-11-06 04:16:48'),
+(5, 5, 'Test User', 'testinguser@gmail.com', NULL, NULL, '$2y$12$UNT6ySfqNssVpjZs2xMUGeSWb3CDKuDza.xBwIpjykTwu/NvP03MO', NULL, '2024-11-06 04:42:41', '2024-11-06 04:42:41'),
+(6, 6, 'Test Manager 2', 'testing5@gmail.com', NULL, NULL, '$2y$12$gVma9NGAOq.VJI57fsh7KOoTZLtPe0hvMN1CTMKhUQtoGAVd8E8Wi', NULL, '2024-11-06 05:37:10', '2024-11-06 05:37:10');
 
 --
 -- Indexes for dumped tables

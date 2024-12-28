@@ -27,6 +27,7 @@
                         request()->is('sale-invoices*') ||
                         request()->is('sales-returns*') ||
                         request()->is('sale-warranties*') ? 'active' : '' }}" href="javascript:void(0);">
+                            <i class="fa fa-money-bill"></i>
                             <span>Accounts</span>
                             <span class="menu-arrow"></span>
                         </a>
@@ -34,7 +35,6 @@
                             @if(auth()->user()->hasPermission('Credit Note List'))
                                 <li>
                                     <a class="{{ request()->is('credit-notes*') ? 'active' : '' }}" href="{{ route('credit-notes.index') }}">
-                                        <i class="fa fa-store me-1"></i>
                                         Credit Notes
                                     </a>
                                 </li>
@@ -42,7 +42,6 @@
                             @if(auth()->user()->hasPermission('Journal Voucher List'))
                                 <li>
                                     <a class="{{ request()->is('journal-vouchers*') ? 'active' : '' }}" href="{{ route('journal-vouchers.index') }}">
-                                        <i class="fa fa-store me-1"></i>
                                         Journal Vouchers
                                     </a>
                                 </li>
@@ -50,7 +49,6 @@
                             @if(auth()->user()->hasPermission('Payment Voucher List'))
                                 <li>
                                     <a class="{{ request()->is('payment-vouchers*') ? 'active' : '' }}" href="{{ route('payment-vouchers.index') }}">
-                                        <i class="fa fa-store me-1"></i>
                                         Payment Vouchers
                                     </a>
                                 </li>
@@ -58,7 +56,6 @@
                             @if(auth()->user()->hasPermission('Receipt Voucher List'))
                                 <li>
                                     <a class="{{ request()->is('receipt-vouchers*') ? 'active' : '' }}" href="{{ route('receipt-vouchers.index') }}">
-                                        <i class="fa fa-store me-1"></i>
                                         Receipt Vouchers
                                     </a>
                                 </li>
@@ -66,7 +63,6 @@
                             @if(auth()->user()->hasPermission('Invoice List'))
                                 <li>
                                     <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
-                                        <i class="fa fa-store me-1"></i>
                                         Sale Invoices
                                     </a>
                                 </li>
@@ -74,7 +70,6 @@
                             @if(auth()->user()->hasPermission('Sales Return List'))
                                 <li>
                                     <a class="{{ request()->is('sales-returns*') ? 'active' : '' }}" href="{{ route('sales-returns.index') }}">
-                                        <i class="fa fa-store me-1"></i>
                                         Sales Returns
                                     </a>
                                 </li>
@@ -82,11 +77,41 @@
                             @if(auth()->user()->hasPermission('Invoice List'))
                                 <li>
                                     <a class="{{ request()->is('sale-warranties*') ? 'active' : '' }}" href="{{ route('sale-warranties.index') }}">
-                                        <i class="fa fa-store me-1"></i>
                                         Sale Warranties
                                     </a>
                                 </li>
                             @endif
+                            <li class="mx-3">
+                                <div class="position-relative mx-1">
+                                    <hr>
+                                    <div class="position-absolute top-0 start-0 translate-middle-y px-1 fw-bold" style="background-color: ghostwhite;">Reports</div>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="{{ request()->is('reports.amount-sales*') ? 'active' : '' }}" href="{{ route('reports.country-amount-sales') }}">
+                                    Country Sales Report Amount Wise
+                                </a>
+                            </li>
+                            <li>
+                                <a class="{{ request()->is('reports.country-quantity-sales*') ? 'active' : '' }}" href="{{ route('reports.country-quantity-sales') }}">
+                                    Country Sales Report Quantity Wise
+                                </a>
+                            </li>
+                            <li>
+                                <a class="{{ request()->is('reports.customer-aging*') ? 'active' : '' }}" href="{{ route('reports.customer-aging') }}">
+                                    Customer Aging Report
+                                </a>
+                            </li>
+                            <li>
+                                <a class="{{ request()->is('reports.franchiser-sales*') ? 'active' : '' }}" href="{{ route('reports.franchiser-sales') }}">
+                                    Distributor Sales Report
+                                </a>
+                            </li>
+                            <li>
+                                <a class="{{ request()->is('reports.financial-ledger*') ? 'active' : '' }}" href="{{ route('reports.financial-ledger') }}">
+                                    Financial Ledger Report
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endif
@@ -110,6 +135,7 @@
                         request()->is('departments*') ||
                         request()->is('roles*') ||
                         request()->is('users*') ? 'active' : '' }}" href="javascript:void(0);">
+                            <i class="fa fa-user-tie"></i>
                             <span>Admin</span>
                             <span class="menu-arrow"></span>
                         </a>
@@ -117,7 +143,6 @@
                             @if(auth()->user()->hasPermission('Bank List'))
                                 <li>
                                     <a class="{{ request()->is('banks*') ? 'active' : '' }}" href="{{ route('banks.index') }}">
-                                        <i class="fa fa-building me-1"></i>
                                         Banks
                                     </a>
                                 </li>
@@ -125,7 +150,6 @@
                             @if(auth()->user()->hasPermission('Branches List'))
                                 <li>
                                     <a class="{{ request()->is('branches*') ? 'active' : '' }}" href="{{ route('branches.index') }}">
-                                        <i class="fa fa-code-branch me-1"></i>
                                         Branches
                                     </a>
                                 </li>
@@ -133,7 +157,6 @@
                             @if(auth()->user()->hasPermission('Cities List'))
                                 <li>
                                     <a class="{{ request()->is('cities*') ? 'active' : '' }}" href="{{ route('cities.index') }}">
-                                        <i class="fa fa-city me-1"></i>
                                         Cities
                                     </a>
                                 </li>
@@ -141,7 +164,6 @@
                             @if(auth()->user()->hasPermission('Companies List'))
                                 <li>
                                     <a class="{{ request()->is('companies*') ? 'active' : '' }}" href="{{ route('companies.index') }}">
-                                        <i class="fa fa-building me-1"></i>
                                         Companies
                                     </a>
                                 </li>
@@ -149,7 +171,6 @@
                             @if(auth()->user()->hasPermission('Countries List'))
                                 <li>
                                     <a class="{{ request()->is('countries*') ? 'active' : '' }}" href="{{ route('countries.index') }}">
-                                        <i class="fa fa-globe me-1"></i>
                                         Countries
                                     </a>
                                 </li>
@@ -157,7 +178,6 @@
                             @if(auth()->user()->hasPermission('Departments List'))
                                 <li>
                                     <a class="{{ request()->is('departments*') ? 'active' : '' }}" href="{{ route('departments.index') }}">
-                                        <i class="fa fa-sitemap me-1"></i>
                                         Departments
                                     </a>
                                 </li>
@@ -165,7 +185,6 @@
                             @if(auth()->user()->hasPermission('Roles List'))
                                 <li>
                                     <a class="{{ request()->is('roles*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
-                                        <i class="fa fa-lock me-1"></i>
                                         Roles
                                     </a>
                                 </li>
@@ -173,7 +192,6 @@
                             @if(auth()->user()->hasPermission('Users List'))
                                 <li>
                                     <a class="{{ request()->is('users*') ? 'active' : '' }}" href="{{ route('users.index') }}">
-                                        <i class="fa fa-user me-1"></i>
                                         Users
                                     </a>
                                 </li>
@@ -199,6 +217,7 @@
                         request()->is('loans*') ||
                         request()->is('salary_slips*') ||
                         request()->is('tax-slabs*') ? 'active' : '' }}" href="javascript:void(0);">
+                            <i class="fa fa-users"></i>
                             <span>Human Resource</span>
                             <span class="menu-arrow"></span>
                         </a>
@@ -206,7 +225,6 @@
                             @if(auth()->user()->hasPermission('Designation List'))
                                 <li>
                                     <a class="{{ request()->is('designations*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
-                                        <i class="fa fa-briefcase me-1"></i>
                                         Designations
                                     </a>
                                 </li>
@@ -214,7 +232,6 @@
                             @if(auth()->user()->hasPermission('Employee List'))
                                 <li>
                                     <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
-                                        <i class="fa fa-users me-1"></i>
                                         Employees
                                     </a>
                                 </li>
@@ -222,7 +239,6 @@
                             @if(auth()->user()->hasPermission('Leave List'))
                                 <li>
                                     <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
-                                        <i class="fa fa-calendar me-1"></i>
                                         Leave
                                     </a>
                                 </li>
@@ -230,7 +246,6 @@
                             @if(auth()->user()->hasPermission('Leave Type List'))
                                 <li>
                                     <a class="{{ request()->is('leave_types*') ? 'active' : '' }}" href="{{ route('leave_types.index') }}">
-                                        <i class="fa fa-tags me-1"></i>
                                         Leave Type
                                     </a>
                                 </li>
@@ -238,7 +253,6 @@
                             @if(auth()->user()->hasPermission('Loan List'))
                                 <li>
                                     <a class="{{ request()->is('loans*') ? 'active' : '' }}" href="{{ route('loans.index') }}">
-                                        <i class="fa fa-handshake me-1"></i>
                                         Loan
                                     </a>
                                 </li>
@@ -246,7 +260,6 @@
                             @if(auth()->user()->hasPermission('Salaries List'))
                                 <li>
                                     <a class="{{ request()->is('salary_slips*') ? 'active' : '' }}" href="{{ route('salary_slips.index') }}">
-                                        <i class="fa fa-calculator me-1"></i>
                                         Salaries
                                     </a>
                                 </li>
@@ -254,7 +267,6 @@
                             @if(auth()->user()->hasPermission('Salary Tax Slabs List'))
                                 <li>
                                     <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
-                                        <i class="fa fa-percent me-1"></i>
                                         Salary Tax Slabs
                                     </a>
                                 </li>
@@ -300,6 +312,7 @@
                     request()->is('raw-material-items*') ||
                     request()->is('suppliers*') ||
                     request()->is('taxes*') ? 'active' : '' }}" href="javascript:void(0);">
+                        <i class="fa fa-truck"></i>
                         <span>Procurement</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -307,7 +320,6 @@
                         @if(auth()->user()->hasPermission('Batch List'))
                             <li>
                                 <a class="{{ request()->is('batches*') ? 'active' : '' }}" href="{{ route('batches.index') }}">
-                                    <i class="fa fa-layer-group me-1"></i>
                                     Batches
                                 </a>
                             </li>
@@ -315,7 +327,6 @@
                         @if(auth()->user()->hasPermission('Category List'))
                             <li>
                                 <a class="{{ request()->is('categories*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
-                                    <i class="fa fa-layer-group me-1"></i>
                                     Categories
                                 </a>
                             </li>
@@ -323,7 +334,6 @@
                         @if(auth()->user()->hasPermission('Chart Of Accounts List'))
                             <li>
                                 <a class="{{ request()->is('chart_of_accounts*') ? 'active' : '' }}" href="{{ route('chart_of_accounts.index') }}">
-                                    <i class="fa fa-list-alt"></i>
                                     Chart Of Accounts
                                 </a>
                             </li>
@@ -331,7 +341,6 @@
                         @if(auth()->user()->hasPermission('Dosage Form List'))
                             <li>
                                 <a class="{{ request()->is('dosage-forms*') ? 'active' : '' }}" href="{{ route('dosage-forms.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Dosage Form
                                 </a>
                             </li>
@@ -339,14 +348,13 @@
                         @if(auth()->user()->hasPermission('Franchise List'))
                             <li>
                                 <a class="{{ request()->is('franchises*') ? 'active' : '' }}" href="{{ route('franchises.index') }}">
-                                    <i class="fa fa-truck me-1"></i>Franchises
+                                    Franchises
                                 </a>
                             </li>
                         @endif
                         @if(auth()->user()->hasPermission('Invoice List'))
                             <li>
                                 <a class="{{ request()->is('purchase-invoices*') ? 'active' : '' }}" href="{{ route('purchase-invoices.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Invoices
                                 </a>
                             </li>
@@ -354,7 +362,6 @@
                         @if(auth()->user()->hasPermission('Purchase Requisition List'))
                             <li>
                                 <a class="{{ request()->is('purchase-requisitions*') ? 'active' : '' }}" href="{{ route('purchase-requisitions.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Manual Purchase Requisitions
                                 </a>
                             </li>
@@ -362,7 +369,6 @@
                         @if(auth()->user()->hasPermission('PackingType List'))
                             <li>
                                 <a class="{{ request()->is('packingtypes*') ? 'active' : '' }}" href="{{ route('packingtypes.index') }}">
-                                    <i class="fa fa-box me-1"></i>
                                     Packing Types
                                 </a>
                             </li>
@@ -370,7 +376,6 @@
                         @if(auth()->user()->hasPermission('PackForm List'))
                             <li>
                                 <a class="{{ request()->is('pack-forms*') ? 'active' : '' }}" href="{{ route('pack-forms.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Pack Forms
                                 </a>
                             </li>
@@ -378,7 +383,6 @@
                         @if(auth()->user()->hasPermission('PackSize List'))
                             <li>
                                 <a class="{{ request()->is('pack_size*') ? 'active' : '' }}" href="{{ route('pack_size.index') }}">
-                                    <i class="fa fa-boxes me-1"></i>
                                     Pack Size
                                 </a>
                             </li>
@@ -386,7 +390,6 @@
                         @if(auth()->user()->hasPermission('Payment Types List'))
                             <li>
                                 <a class="{{ request()->is('payment_types*') ? 'active' : '' }}" href="{{ route('payment_types.index') }}">
-                                    <i class="fa fa-credit-card me-1"></i>
                                     Payment Types
                                 </a>
                             </li>
@@ -394,7 +397,6 @@
                         @if(auth()->user()->hasPermission('Product List'))
                             <li>
                                 <a class="{{ request()->is('products*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Products
                                 </a>
                             </li>
@@ -402,7 +404,6 @@
                         @if(auth()->user()->hasPermission('ProductGroup List'))
                             <li>
                                 <a class="{{ request()->is('product-groups*') ? 'active' : '' }}" href="{{ route('product-groups.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Product Groups
                                 </a>
                             </li>
@@ -410,7 +411,6 @@
                         @if(auth()->user()->hasPermission('Product Variation List'))
                             <li>
                                 <a class="{{ request()->is('product-variations*') ? 'active' : '' }}" href="{{ route('product-variations.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Product Variations
                                 </a>
                             </li>
@@ -418,7 +418,6 @@
                         @if(auth()->user()->hasPermission('Raw Material Item List'))
                             <li>
                                 <a class="{{ request()->is('raw-material-items*') ? 'active' : '' }}" href="{{ route('raw-material-items.index') }}">
-                                    <i class="fa fa-layer-group me-1"></i>
                                     Raw Material Items
                                 </a>
                             </li>
@@ -426,7 +425,6 @@
                         @if(auth()->user()->hasPermission('Supplier List'))
                             <li>
                                 <a class="{{ request()->is('suppliers*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Supplier
                                 </a>
                             </li>
@@ -434,146 +432,36 @@
                         @if(auth()->user()->hasPermission('Tax List'))
                             <li>
                                 <a class="{{ request()->is('taxes*') ? 'active' : '' }}" href="{{ route('taxes.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Taxes
                                 </a>
                             </li>
                         @endif
-                    </ul>
-                </li>
-                @endif
-
-                @if(
-                    auth()->user()->hasPermission('Stock List') ||
-                    auth()->user()->hasPermission('Batch List') ||
-                    auth()->user()->hasPermission('Store Issue Rquisition List') ||
-                    auth()->user()->hasPermission('Finished Goods Receiving List') ||
-                    auth()->user()->hasPermission('Invoice List')
-                )
-                <li class="submenu">
-                    <a class="{{ request()->is('reports.balance-report*') ||
-                    request()->is('reports.batch-balance-report*') ||
-                    request()->is('reports.consumption-report*') ||
-                    request()->is('reports.production-report*') ||
-                    request()->is('reports.purchase-items*') ||
-                    request()->is('reports.purchase-requisitions*') ||
-                    request()->is('reports.requirement-report*') ? 'active' : ''}}" href="javascript:void(0);">
-                        <span>Reports</span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <ul>
-                        @if(auth()->user()->hasPermission('Stock List'))
-                            <li>
-                                <a class="{{ request()->is('reports.balance-report*') ? 'active' : '' }}" href="{{ route('reports.balance-report') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Balance Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Batch List'))
-                            <li>
-                                <a class="{{ request()->is('reports.batch-balance-report*') ? 'active' : '' }}" href="{{ route('reports.batch-balance-report') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Batch Balance Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Batch List'))
-                            <li>
-                                <a class="{{ request()->is('reports.batch-report*') ? 'active' : '' }}" href="{{ route('reports.batch-report') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Batch Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Store Issue Rquisition List'))
-                            <li>
-                                <a class="{{ request()->is('reports.consumption-report*') ? 'active' : '' }}" href="{{ route('reports.consumption-report') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Consumption Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Invoice List'))
-                            <li>
-                                <a class="{{ request()->is('reports.country-quantity-sales*') ? 'active' : '' }}" href="{{ route('reports.country-quantity-sales') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Country Sales Report Quantity Wise
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Invoice List'))
-                            <li>
-                                <a class="{{ request()->is('reports.amount-sales*') ? 'active' : '' }}" href="{{ route('reports.country-amount-sales') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Country Sales Report Amount Wise
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Franchise List'))
-                            <li>
-                                <a class="{{ request()->is('reports.customer-aging*') ? 'active' : '' }}" href="{{ route('reports.customer-aging') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Customer Aging Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Invoice List'))
-                            <li>
-                                <a class="{{ request()->is('reports.franchiser-sales*') ? 'active' : '' }}" href="{{ route('reports.franchiser-sales') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Distributor Sales Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Franchise List'))
-                            <li>
-                                <a class="{{ request()->is('reports.financial-ledger*') ? 'active' : '' }}" href="{{ route('reports.financial-ledger') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Financial Ledger Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Finished Goods Receiving List'))
-                            <li>
-                                <a class="{{ request()->is('reports.production-report*') ? 'active' : '' }}" href="{{ route('reports.production-report') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Production Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Invoice List'))
-                            <li>
-                                <a class="{{ request()->is('reports.purchase-items*') ? 'active' : '' }}" href="{{ route('reports.purchase-items') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Purchase Items
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Invoice List'))
-                            <li>
-                                <a class="{{ request()->is('reports.purchase-requisitions*') ? 'active' : '' }}" href="{{ route('reports.purchase-requisitions') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Purchase Requisition
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Invoice List'))
-                            <li>
-                                <a class="{{ request()->is('reports.requirement-report*') ? 'active' : '' }}" href="{{ route('reports.requirement-report') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Requirement Report
-                                </a>
-                            </li>
-                        @endif
-                        @if(auth()->user()->hasPermission('Stock List'))
-                            <li>
-                                <a class="{{ request()->is('reports.stock-bin-card*') ? 'active' : '' }}" href="{{ route('reports.stock-bin-card') }}">
-                                    <i class="fa fa-store me-1"></i>
-                                    Stock Bin Card
-                                </a>
-                            </li>
-                        @endif
+                        <li class="mx-3">
+                            <div class="position-relative mx-1">
+                                <hr>
+                                <div class="position-absolute top-0 start-0 translate-middle-y px-1 fw-bold" style="background-color: ghostwhite;">Reports</div>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.balance-report*') ? 'active' : '' }}" href="{{ route('reports.balance-report') }}">
+                                Balance Report
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.purchase-items*') ? 'active' : '' }}" href="{{ route('reports.purchase-items') }}">
+                                Purchase Items
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.purchase-requisitions*') ? 'active' : '' }}" href="{{ route('reports.purchase-requisitions') }}">
+                                Purchase Requisition
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.requirement-report*') ? 'active' : '' }}" href="{{ route('reports.requirement-report') }}">
+                                Requirement Report
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endif
@@ -593,6 +481,7 @@
                         request()->is('rejection-return-notes*') ||
                         request()->is('stocks*') ||
                         request()->is('store-issue-requisitions*') ? 'active' : ''}}" href="javascript:void(0);">
+                        <i class="fa fa-store"></i>
                         <span>Store</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -600,7 +489,6 @@
                         @if(auth()->user()->hasPermission('Finished Goods Receiving List'))
                             <li>
                                 <a class="{{ request()->is('finished-goods-receiving*') ? 'active' : '' }}" href="{{ route('finished-goods-receivings.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                    Finished Goods Receiving Notes
                                 </a>
                             </li>
@@ -608,7 +496,6 @@
                         @if(auth()->user()->hasPermission('Goods Receiving List'))
                             <li>
                                 <a class="{{ request()->is('goods-receivings*') ? 'active' : '' }}" href="{{ route('goods-receivings.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Goods Receiving Notes
                                 </a>
                             </li>
@@ -616,7 +503,6 @@
                         @if(auth()->user()->hasPermission('Left Over Note List'))
                             <li>
                                 <a class="{{ request()->is('left-over-notes*') ? 'active' : '' }}" href="{{ route('left-over-notes.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Left Over Note
                                 </a>
                             </li>
@@ -624,7 +510,6 @@
                         @if(auth()->user()->hasPermission('Rejection Return Note List'))
                             <li>
                                 <a class="{{ request()->is('rejection-return-notes*') ? 'active' : '' }}" href="{{ route('rejection-return-notes.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Rejection Return Note
                                 </a>
                             </li>
@@ -632,7 +517,6 @@
                         @if(auth()->user()->hasPermission('Stock List'))
                             <li>
                                 <a class="{{ request()->is('stocks*') ? 'active' : '' }}" href="{{ route('stocks.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Stocks
                                 </a>
                             </li>
@@ -640,15 +524,44 @@
                         @if(auth()->user()->hasPermission('Store Issue Rquisition List'))
                             <li>
                                 <a class="{{ request()->is('store-issue-requisitions*') ? 'active' : '' }}" href="{{ route('store-issue-requisitions.index') }}">
-                                    <i class="fa fa-store me-1"></i>
                                     Store Issue Rquisitions
                                 </a>
                             </li>
                         @endif
+                        <li class="mx-3">
+                            <div class="position-relative mx-1">
+                                <hr>
+                                <div class="position-absolute top-0 start-0 translate-middle-y px-1 fw-bold" style="background-color: ghostwhite;">Reports</div>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.batch-balance-report*') ? 'active' : '' }}" href="{{ route('reports.batch-balance-report') }}">
+                                Batch Balance Report
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.batch-report*') ? 'active' : '' }}" href="{{ route('reports.batch-report') }}">
+                                Batch Report
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.consumption-report*') ? 'active' : '' }}" href="{{ route('reports.consumption-report') }}">
+                                Consumption Report
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.production-report*') ? 'active' : '' }}" href="{{ route('reports.production-report') }}">
+                                Production Report
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->is('reports.stock-bin-card*') ? 'active' : '' }}" href="{{ route('reports.stock-bin-card') }}">
+                                Stock Bin Card
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endif
-
             </ul>
         </div>
     </div>
