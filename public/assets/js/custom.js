@@ -335,6 +335,31 @@ function SelectEmployeeDetails(employeeId) {
     }
 }
 
+function selectBanks(companyId)
+{
+    var bankSelect = document.getElementById('bank_id');
+    
+    if (companyId && bankSelect) {
+        bankSelect.innerHTML = '<option value="">Select Bank</option>';
+        fetch(`/companies/${companyId}/banks`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching banks');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.banks.forEach(function (bank) {
+                    var option = document.createElement('option');
+                    option.value = bank.id;
+                    option.textContent = bank.name;
+                    bankSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching banks:', error));
+    }
+}
+
 function selectBranches(companyId)
 {
     var branchSelect = document.getElementById('branch_id');

@@ -82,7 +82,7 @@
                 <button class="btn btn-submit" type="submit">Update Password</button>
             </form>
         </div>
-        @if (!auth()->user()->hasRole('Superadmin'))
+        {{-- @if (!auth()->user()->hasRole('Superadmin'))
             <div class="col-lg-12">
                 <form id="delete-form" method="post" action="{{ route('profile.destroy') }}">
                     @csrf
@@ -94,7 +94,7 @@
                     <button class="btn btn-danger" type="submit">Delete Account</button>
                 </form>
             </div>
-        @endif
+        @endif --}}
     </div>
     </div>
     </div>

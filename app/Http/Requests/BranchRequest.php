@@ -8,9 +8,11 @@ class BranchRequest extends FormRequest
 {
     public function rules()
     {
+        $id = $this->branch ? $this->branch->id : null;
+
         return [
             'company' => 'required|exists:companies,id',
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:branches,name,' . $id . ',id,company_id,' . $this->input('company'),
             'address' => 'required|string',
             'country' => 'required|exists:countries,id',
             'city' => 'required|exists:cities,id',

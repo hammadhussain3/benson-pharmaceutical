@@ -33,28 +33,7 @@
                             <textarea class="form-control" readonly>{{ $dosageForm->description }}</textarea>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Dosage Form Update'))
-                            <a class="btn btn-primary" href="{{ route('dosage-forms.edit', $dosageForm->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('dosage-forms.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Dosage Form Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $dosageForm->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $dosageForm->id }}"
-                                action="{{ route('dosage-forms.destroy', $dosageForm->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('dosage-forms.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

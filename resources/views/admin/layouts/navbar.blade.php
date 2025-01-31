@@ -33,7 +33,7 @@
                             <span class="status online"></span>
                         </span>
                         <div class="profilesets">
-                            <p class="mb-0 small fw-bold">{{ Auth::user()->name }}</p>
+                            <p class="mb-0 small fw-bold">{{ explode(' ', Auth::user()->name)[0] }}</p>
                             <p class="mb-0 small">{{ Auth::user()->role }}</p>
                         </div>
                     </div>

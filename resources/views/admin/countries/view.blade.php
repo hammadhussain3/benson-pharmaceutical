@@ -27,28 +27,7 @@
                             <input type="text" class="form-control" value="{{ $country->currency ?? 'N/A' }}" readonly>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Countries Update'))
-                            <a class="btn btn-primary" href="{{ route('countries.edit', $country->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('countries.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Countries Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $country->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $country->id }}"
-                                action="{{ route('countries.destroy', $country->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('countries.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

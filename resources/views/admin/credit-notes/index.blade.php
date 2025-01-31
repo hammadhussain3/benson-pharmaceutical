@@ -1,5 +1,6 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Credit Notes List')
 
 @section('content')
 

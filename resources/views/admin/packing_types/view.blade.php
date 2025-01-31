@@ -37,28 +37,7 @@
                         </div>
                         
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('PackingType Update'))
-                            <a class="btn btn-primary" href="{{ route('packingtypes.edit', $packing_type->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('packingtypes.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('PackingType Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $packing_type->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $packing_type->id }}"
-                                action="{{ route('packingtypes.destroy', $packing_type->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('packingtypes.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

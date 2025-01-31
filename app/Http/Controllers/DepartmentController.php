@@ -42,7 +42,8 @@ class DepartmentController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $companies = Company::orderBy('name', 'asc')->get();
-        return view('admin.departments.create', compact('companies'));
+        $branches = Branch::orderBy('name', 'asc')->get();
+        return view('admin.departments.create', compact('companies', 'branches'));
     }
 
     public function store(DepartmentRequest $request)

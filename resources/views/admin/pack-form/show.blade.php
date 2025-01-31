@@ -34,28 +34,7 @@
                             <textarea class="form-control" readonly>{{ $packForm->description ?? 'N/A' }}</textarea>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('PackForm Update'))
-                            <a class="btn btn-primary" href="{{ route('pack-forms.edit', $packForm->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('pack-forms.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('PackForm Delete'))
-                            <div class="col-auto">
-                                <a class="btn btn-danger" href="javascript:void(0);"
-                                    onclick="confirmDelete('{{ $packForm->id }}')">
-                                    Delete
-                                </a>
-                                <form id="delete-form-{{ $packForm->id }}"
-                                    action="{{ route('pack-forms.destroy', $packForm->id) }}" method="POST"
-                                    style="display:none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('pack-forms.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

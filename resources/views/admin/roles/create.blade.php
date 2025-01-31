@@ -180,11 +180,11 @@
                                     </tr>
                                     <tr>
                                         <td>Invoice</td>
-                                        <td><input class="form-check-input" type="checkbox" value="66" name="permissions[]" id="permissions"></td>
-                                        <td><input class="form-check-input" type="checkbox" value="67" name="permissions[]" id="permissions"></td>
-                                        <td><input class="form-check-input" type="checkbox" value="68" name="permissions[]" id="permissions"></td>
-                                        <td><input class="form-check-input" type="checkbox" value="69" name="permissions[]" id="permissions"></td>
-                                        <td><input class="form-check-input" type="checkbox" value="70" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="166" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="167" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="168" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="169" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="170" name="permissions[]" id="permissions"></td>
                                     </tr>
                                     <tr>
                                         <td>Journal Voucher</td>

@@ -30,28 +30,7 @@
                             <input type="text" class="form-control" value="{{ $productGroup->name ?? 'N/A' }}" readonly>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('ProductGroup Update'))
-                            <a class="btn btn-primary" href="{{ route('product-groups.edit', $productGroup->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('product-groups.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('ProductGroup Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $productGroup->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $productGroup->id }}"
-                                action="{{ route('product-groups.destroy', $productGroup->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('product-groups.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

@@ -98,6 +98,13 @@
                                 <input type="text" class="form-control" name="contact_person_phone"
                                     placeholder="+123 1234567890" value="{{ old('contact_person_phone') }}">
                             </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="is_active">Is Active</label>
+                                <select name="is_active" id="is_active" class="form-control">
+                                    <option value="1" {{ old('is_active', 1) == 1 ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('is_active', 1) == 0 ? 'selected' : '' }}>No</option>
+                                </select>
+                            </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('branches.index') }}">Cancel</a>

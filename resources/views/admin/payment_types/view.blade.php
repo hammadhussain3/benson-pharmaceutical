@@ -33,28 +33,7 @@
                         </div>
                         @endrole
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Payment Types Update'))
-                            <a class="btn btn-primary" href="{{ route('payment_types.edit', $paymentType->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('payment_types.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Payment Types Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $paymentType->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $paymentType->id }}"
-                                action="{{ route('payment_types.destroy', $paymentType->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('payment_types.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

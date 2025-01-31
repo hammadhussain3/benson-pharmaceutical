@@ -15,7 +15,7 @@ class StoreCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:companies,name,NULL,id,country_id,' . $this->input('country'),
             'address' => 'required|string|max:255',
             'country' => 'required|exists:countries,id',
             'city' => 'required|exists:cities,id',
@@ -25,7 +25,7 @@ class StoreCompanyRequest extends FormRequest
             'ntn' => 'nullable|string|max:20',
             'strn' => 'nullable|string|max:20',
             'is_active' => 'boolean',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:512',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:1024',
         ];
     }
 }

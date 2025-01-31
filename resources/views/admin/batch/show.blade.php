@@ -52,28 +52,7 @@
 
                         
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Batch Update'))
-                            <a class="btn btn-primary" href="{{ route('batches.edit', $batch->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('batches.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Batch Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $batch->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $batch->id }}"
-                                action="{{ route('batches.destroy', $batch->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('batches.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

@@ -71,7 +71,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value); selectDesignations(this.value); createEmployeeCode(this.value);" @endrole>
+                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectBranches(this.value); selectBanks(this.value); selectDepartments(this.value); selectDesignations(this.value); createEmployeeCode(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -140,9 +140,18 @@
                                 <label for="bank_id">Bank (optional)</label>
                                 <select name="bank" id="bank_id" class="form-control" value="{{ old('bank') }}">
                                     <option value="">Select Bank</option>
-                                    @foreach ($banks as $bank)
-                                        <option value="{{ $bank->id }}">{{ $bank->name }}</option>
-                                    @endforeach
+                                    @if(old('bank') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                            $company = App\Models\Company::findOrFail($selectedCompanyId);
+                                        @endphp
+                                        @foreach ($banks->where('company_id', $seletedCompanyId) as $bank)
+                                            <option value="{{ $bank->id }}"
+                                                {{ old('bank') == $bank->id ? 'selected' : '' }}>
+                                                {{ $bank->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">

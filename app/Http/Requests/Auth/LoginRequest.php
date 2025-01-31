@@ -41,6 +41,25 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        $user = \App\Models\User::where('email', $this->input('email'))->first();
+
+        if ($user && $user->role !== 'Superadmin') {
+            // Check if the user has an associated employee
+            $employee = \App\Models\Employee::where('id', $user->employee_id)->first();
+
+            if ($employee) {
+                // Check if the company or branch is disabled
+                $company = \App\Models\Company::find($employee->company_id);
+                $branch = \App\Models\Branch::find($employee->branch_id);
+
+                if (($company && $company->is_active != 1) || ($branch && $branch->is_active != 1)) {
+                    throw ValidationException::withMessages([
+                        'email' => 'Your company or branch is disabled. Please contact support.',
+                    ]);
+                }
+            }
+        }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 

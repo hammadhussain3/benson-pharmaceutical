@@ -35,28 +35,7 @@
                             <textarea class="form-control" readonly>{{ $pack_size->description ?? 'N/A' }}</textarea>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('PackSize Update'))
-                            <a class="btn btn-primary" href="{{ route('pack_size.edit', $pack_size->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('pack_size.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('PackSize Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $pack_size->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $pack_size->id }}"
-                                action="{{ route('pack_size.destroy', $pack_size->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('pack_size.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

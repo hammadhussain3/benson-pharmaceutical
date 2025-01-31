@@ -40,28 +40,7 @@
                             <textarea class="form-control" readonly>{{ $department->description ?? 'N/A' }}</textarea>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Departments Update'))
-                            <a class="btn btn-primary" href="{{ route('departments.edit', $department->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('departments.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Departments Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $department->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $department->id }}"
-                                action="{{ route('departments.destroy', $department->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('departments.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

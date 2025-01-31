@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-
+@section('title', 'Banks List')
 @section('content')
     <div class="page-header">
         <div class="page-title">

@@ -50,7 +50,7 @@
                                     <option value="">Select Country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ $country->id == old('country', $company->country_id) ? 'selected' : '' }}>
+                                            {{ $country->id == old('country', $branch->country_id) ? 'selected' : '' }}>
                                             {{ $country->name }}</option>
                                     @endforeach
                                 </select>
@@ -99,6 +99,13 @@
                                 <label for="contact_person_phone">Contact Person Phone (Optional)</label>
                                 <input type="text" class="form-control" name="contact_person_phone"
                                     value="{{ old('contact_person_phone', $branch->contact_person_phone) }}" placeholder="+123 1234567890">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="is_active">Is Active</label>
+                                <select name="is_active" id="is_active" class="form-control">
+                                    <option value="1" {{ old('is_active', $branch->is_active) == 1 ? 'selected' : '' }}>Yes</option>
+                                    <option value="0" {{ old('is_active', $branch->is_active) == 0 ? 'selected' : '' }}>No</option>
+                                </select>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

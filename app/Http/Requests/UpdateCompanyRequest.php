@@ -13,8 +13,10 @@ class UpdateCompanyRequest extends FormRequest
 
     public function rules()
     {
+        $id = $this->company ? $this->company->id : null;
+
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:companies,name,' . $id . ',id,country_id,' . $this->input('country'),
             'address' => 'required|string|max:255',
             'country' => 'required|exists:countries,id',
             'city' => 'required|exists:cities,id',

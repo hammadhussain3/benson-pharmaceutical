@@ -1,5 +1,7 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Rejection Return Notes List')
+
 @section('content')
     <div class="page-header">
         <div class="page-title">

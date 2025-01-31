@@ -12,7 +12,7 @@
     <title>Login - Streamline</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.jpg') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.png') }}">
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
@@ -45,7 +45,7 @@
                         <!-- Session Status -->
                         <x-auth-session-status class="mb-4" :status="session('status')" />
 
-                        <form method="POST" action="{{ route('login') }}">
+                        <form method="POST" action="{{ route('user.login') }}">
                             @csrf
 
                             <!-- Email Address -->

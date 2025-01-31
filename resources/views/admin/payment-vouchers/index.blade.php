@@ -1,5 +1,6 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Payment Vouchers List')
 
 @section('content')
 

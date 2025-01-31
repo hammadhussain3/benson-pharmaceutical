@@ -45,28 +45,7 @@
                             <input type="text" class="form-control" value="{{ $stock->total }}" readonly>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Stock Update'))
-                            <a class="btn btn-primary" href="{{ route('stocks.edit', $stock->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('stocks.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Stock Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $stock->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $stock->id }}"
-                                action="{{ route('stocks.destroy', $stock->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('stocks.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

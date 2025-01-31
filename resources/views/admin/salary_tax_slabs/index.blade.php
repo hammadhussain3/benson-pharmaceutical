@@ -1,5 +1,7 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Salary Tax Slabs List')
+
 @section('content')
     <div class="page-header">
         <div class="page-title">

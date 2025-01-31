@@ -47,6 +47,17 @@
                                 <label for="branch">Branch</label>
                                 <select id="branch_id" name="branch" class="js-example-basic-single select2">
                                     <option value="">Select Branch</option>
+                                    @if(old('branch') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($branches->where('company_id', $seletedCompanyId) as $branch)
+                                            <option value="{{ $branch->id }}"
+                                                {{ old('branch') == $branch->id ? 'selected' : '' }}>
+                                                {{ $branch->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="mb-3 col-md-12">

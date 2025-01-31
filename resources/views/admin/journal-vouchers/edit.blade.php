@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Add New Journal Voucher</h3>
+                <h3 class="page-title">Edit Journal Voucher</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('journal-vouchers.index') }}">Journal Vouchers</a></li>
-                    <li class="breadcrumb-item active">Add Journal Voucher</li>
+                    <li class="breadcrumb-item active">Edit Journal Voucher</li>
                 </ul>
             </div>
         </div>

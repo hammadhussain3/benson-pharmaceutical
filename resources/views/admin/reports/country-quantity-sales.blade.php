@@ -14,7 +14,7 @@
     </div>
 
     <div class="mb-3">
-        <form action="{{ route('reports.franchiser-sales') }}" class="row gy-2 gx-3 align-items-end" method="get">
+        <form action="{{ route('reports.country-quantity-sales') }}" class="row gy-2 gx-3 align-items-end" method="get">
             <div class="col-sm-6 col-md-3">
                 <label class="form-label" for="from_date">From</label>
                 <input type="date" class="form-control" name="from_date" id="from_date" value="{{ $from_date }}">

@@ -1,5 +1,6 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Receipt Vouchers List')
 
 @section('content')
 

@@ -137,7 +137,7 @@ Route::middleware('auth')->group(function () {
     Route::get('report/requirement-report', [ReportController::class, 'requirementReport'])->name('reports.requirement-report');
     Route::get('report/production-report', [ReportController::class, 'productionReport'])->name('reports.production-report');
     Route::get('report/consumption-report', [ReportController::class, 'consumptionReport'])->name('reports.consumption-report');
-    Route::get('report/batch-balance-report', [ReportController::class, 'batchBalanceReport'])->name('reports.batch-balance-report');
+    Route::get('report/batch-balance', [ReportController::class, 'batchBalanceReport'])->name('reports.batch-balance-report');
     Route::get('report/batch-track-report/{id}', [ReportController::class, 'batchTrackReport'])->name('reports.batch-track-report');
     Route::get('report/costing-voucher/{id}', [ReportController::class, 'costingVoucher'])->name('reports.costing-voucher');
     Route::get('report/financial-ledger', [ReportController::class, 'financialLedger'])->name('reports.financial-ledger');
@@ -148,6 +148,7 @@ Route::middleware('auth')->group(function () {
     Route::get('report/stock-bin-card', [ReportController::class, 'stockBinCard'])->name('reports.stock-bin-card');
     Route::get('report/batch-report', [ReportController::class, 'batchReport'])->name('reports.batch-report');
 
+    Route::get('/companies/{companyId}/banks', [BankController::class, 'getBanksByCompany']);
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
     Route::get('/companies/{companyId}/designations', [DesignationController::class, 'getDesignationsByCompany']);

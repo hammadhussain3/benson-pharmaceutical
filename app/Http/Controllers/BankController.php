@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBankRequest;
 use App\Http\Requests\UpdateBankRequest;
 use App\Models\Bank;
+use App\Models\Company;
 use App\Models\Country;
 use App\Services\BankService;
 use Illuminate\Http\Request;
@@ -69,13 +70,12 @@ class BankController extends Controller
         return view('admin.banks.edit', compact('bank', 'countries'));
     }
 
-    public function update(UpdateBankRequest $request, $id)
+    public function update(UpdateBankRequest $request, Bank $bank)
     {
         if (!auth()->user()->hasPermission('Bank Update')) {
             abort(403, 'Unauthorized action.');
         }
 
-        $bank = Bank::findOrFail($id); // Use findOrFail to fetch the bank
         $this->bankService->updateBank($bank, $request->validated());
         return redirect()->route('banks.index')->with('success', 'Bank updated successfully.');
     }
@@ -88,5 +88,12 @@ class BankController extends Controller
 
         $this->bankService->deleteBank($bank);
         return redirect()->route('banks.index')->with('success', 'Bank deleted successfully.');
+    }
+
+    public function getBanksByCompany($companyId)
+    {
+        $company = Company::findOrFail($companyId);
+        $banks = Bank::where('country_id', $company->country_id)->get();
+        return response()->json(['banks' => $banks]);
     }
 }

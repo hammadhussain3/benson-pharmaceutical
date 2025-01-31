@@ -49,28 +49,7 @@
                             <input type="text" class="form-control" value="{{ $rawMaterialItem->party->name }}" readonly>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Raw Material Item Update'))
-                            <a class="btn btn-primary" href="{{ route('raw-material-items.edit', $rawMaterialItem->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('raw-material-items.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Raw Material Item Delete'))
-                            <div class="col-auto">
-                                <a class="btn btn-danger" href="javascript:void(0);"
-                                    onclick="confirmDelete('{{ $rawMaterialItem->id }}')">
-                                    Delete
-                                </a>
-                                <form id="delete-form-{{ $rawMaterialItem->id }}"
-                                    action="{{ route('raw-material-items.destroy', $rawMaterialItem->id) }}" method="POST"
-                                    style="display:none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('raw-material-items.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

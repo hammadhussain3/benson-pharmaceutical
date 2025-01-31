@@ -78,28 +78,7 @@
                             <input type="text" class="form-control" value="{{ $party->is_distributor == '1' ? 'Yes' : 'No' }}" readonly>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Parties Update'))
-                            <a class="btn btn-primary" href="{{ route('parties.edit', $party->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('parties.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Parties Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $party->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $party->id }}"
-                                action="{{ route('parties.destroy', $party->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('parties.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

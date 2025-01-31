@@ -35,28 +35,7 @@
                             <input type="text" class="form-control" name="name" id="name" value="{{ $taxSlabs->company->name }}" readonly>
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Salary Tax Slabs Update'))
-                            <a class="btn btn-primary" href="{{ route('tax-slabs.edit', $taxSlabs->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('tax-slabs.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Salary Tax Slabs Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $taxSlabs->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $taxSlabs->id }}"
-                                action="{{ route('tax-slabs.destroy', $taxSlabs->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('tax-slabs.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

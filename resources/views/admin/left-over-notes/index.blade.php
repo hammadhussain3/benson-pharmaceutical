@@ -1,5 +1,7 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Left Over Notes List')
+
 @section('content')
     <div class="page-header">
         <div class="page-title">

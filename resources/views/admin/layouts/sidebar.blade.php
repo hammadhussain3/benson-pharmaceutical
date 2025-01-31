@@ -26,7 +26,12 @@
                         request()->is('receipt-vouchers*') ||
                         request()->is('sale-invoices*') ||
                         request()->is('sales-returns*') ||
-                        request()->is('sale-warranties*') ? 'active' : '' }}" href="javascript:void(0);">
+                        request()->is('sale-warranties*') ||
+                        request()->is('*amount-sales') ||
+                        request()->is('*country-quantity-sales') ||
+                        request()->is('*customer-aging') ||
+                        request()->is('*franchiser-sales') ||
+                        request()->is('*financial-ledger') ? 'active' : '' }}" href="javascript:void(0);">
                             <i class="fa fa-money-bill"></i>
                             <span>Accounts</span>
                             <span class="menu-arrow"></span>
@@ -83,32 +88,32 @@
                             @endif
                             <li class="mx-3">
                                 <div class="position-relative mx-1">
-                                    <hr>
-                                    <div class="position-absolute top-0 start-0 translate-middle-y px-1 fw-bold" style="background-color: ghostwhite;">Reports</div>
+                                    <hr class="border border-1">
+                                    <div class="position-absolute top-0 start-0 translate-middle-y badge bg-secondary">Reports</div>
                                 </div>
                             </li>
                             <li>
-                                <a class="{{ request()->is('reports.amount-sales*') ? 'active' : '' }}" href="{{ route('reports.country-amount-sales') }}">
+                                <a class="{{ request()->is('*amount-sales') ? 'active' : '' }}" href="{{ route('reports.country-amount-sales') }}">
                                     Country Sales Report Amount Wise
                                 </a>
                             </li>
                             <li>
-                                <a class="{{ request()->is('reports.country-quantity-sales*') ? 'active' : '' }}" href="{{ route('reports.country-quantity-sales') }}">
+                                <a class="{{ request()->is('*country-quantity-sales') ? 'active' : '' }}" href="{{ route('reports.country-quantity-sales') }}">
                                     Country Sales Report Quantity Wise
                                 </a>
                             </li>
                             <li>
-                                <a class="{{ request()->is('reports.customer-aging*') ? 'active' : '' }}" href="{{ route('reports.customer-aging') }}">
+                                <a class="{{ request()->is('*customer-aging') ? 'active' : '' }}" href="{{ route('reports.customer-aging') }}">
                                     Customer Aging Report
                                 </a>
                             </li>
                             <li>
-                                <a class="{{ request()->is('reports.franchiser-sales*') ? 'active' : '' }}" href="{{ route('reports.franchiser-sales') }}">
+                                <a class="{{ request()->is('*franchiser-sales') ? 'active' : '' }}" href="{{ route('reports.franchiser-sales') }}">
                                     Distributor Sales Report
                                 </a>
                             </li>
                             <li>
-                                <a class="{{ request()->is('reports.financial-ledger*') ? 'active' : '' }}" href="{{ route('reports.financial-ledger') }}">
+                                <a class="{{ request()->is('*financial-ledger') ? 'active' : '' }}" href="{{ route('reports.financial-ledger') }}">
                                     Financial Ledger Report
                                 </a>
                             </li>
@@ -311,7 +316,11 @@
                     request()->is('purchase-requisitions*') ||
                     request()->is('raw-material-items*') ||
                     request()->is('suppliers*') ||
-                    request()->is('taxes*') ? 'active' : '' }}" href="javascript:void(0);">
+                    request()->is('taxes*') ||
+                    request()->is('*balance-report') ||
+                    request()->is('*purchase-items') ||
+                    request()->is('*purchase-requisition') ||
+                    request()->is('*requirement-report') ? 'active' : '' }}" href="javascript:void(0);">
                         <i class="fa fa-truck"></i>
                         <span>Procurement</span>
                         <span class="menu-arrow"></span>
@@ -438,27 +447,27 @@
                         @endif
                         <li class="mx-3">
                             <div class="position-relative mx-1">
-                                <hr>
-                                <div class="position-absolute top-0 start-0 translate-middle-y px-1 fw-bold" style="background-color: ghostwhite;">Reports</div>
+                                <hr class="border border-1">
+                                <div class="position-absolute top-0 start-0 translate-middle-y badge bg-secondary">Reports</div>
                             </div>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.balance-report*') ? 'active' : '' }}" href="{{ route('reports.balance-report') }}">
+                            <a class="{{ request()->is('*balance-report') ? 'active' : '' }}" href="{{ route('reports.balance-report') }}">
                                 Balance Report
                             </a>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.purchase-items*') ? 'active' : '' }}" href="{{ route('reports.purchase-items') }}">
+                            <a class="{{ request()->is('*purchase-items') ? 'active' : '' }}" href="{{ route('reports.purchase-items') }}">
                                 Purchase Items
                             </a>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.purchase-requisitions*') ? 'active' : '' }}" href="{{ route('reports.purchase-requisitions') }}">
+                            <a class="{{ request()->is('*purchase-requisition') ? 'active' : '' }}" href="{{ route('reports.purchase-requisitions') }}">
                                 Purchase Requisition
                             </a>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.requirement-report*') ? 'active' : '' }}" href="{{ route('reports.requirement-report') }}">
+                            <a class="{{ request()->is('*requirement-report') ? 'active' : '' }}" href="{{ route('reports.requirement-report') }}">
                                 Requirement Report
                             </a>
                         </li>
@@ -480,7 +489,12 @@
                         request()->is('left-over-notes*') ||
                         request()->is('rejection-return-notes*') ||
                         request()->is('stocks*') ||
-                        request()->is('store-issue-requisitions*') ? 'active' : ''}}" href="javascript:void(0);">
+                        request()->is('store-issue-requisitions*') ||
+                        request()->is('*batch-balance') ||
+                        request()->is('*batch-report') ||
+                        request()->is('*consumption-report') ||
+                        request()->is('*production-report') ||
+                        request()->is('*stock-bin-card') ? 'active' : ''}}" href="javascript:void(0);">
                         <i class="fa fa-store"></i>
                         <span>Store</span>
                         <span class="menu-arrow"></span>
@@ -530,32 +544,32 @@
                         @endif
                         <li class="mx-3">
                             <div class="position-relative mx-1">
-                                <hr>
-                                <div class="position-absolute top-0 start-0 translate-middle-y px-1 fw-bold" style="background-color: ghostwhite;">Reports</div>
+                                <hr class="border border-1">
+                                <div class="position-absolute top-0 start-0 translate-middle-y badge bg-secondary">Reports</div>
                             </div>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.batch-balance-report*') ? 'active' : '' }}" href="{{ route('reports.batch-balance-report') }}">
+                            <a class="{{ request()->is('*batch-balance') ? 'active' : '' }}" href="{{ route('reports.batch-balance-report') }}">
                                 Batch Balance Report
                             </a>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.batch-report*') ? 'active' : '' }}" href="{{ route('reports.batch-report') }}">
+                            <a class="{{ request()->is('*batch-report') ? 'active' : '' }}" href="{{ route('reports.batch-report') }}">
                                 Batch Report
                             </a>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.consumption-report*') ? 'active' : '' }}" href="{{ route('reports.consumption-report') }}">
+                            <a class="{{ request()->is('*consumption-report') ? 'active' : '' }}" href="{{ route('reports.consumption-report') }}">
                                 Consumption Report
                             </a>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.production-report*') ? 'active' : '' }}" href="{{ route('reports.production-report') }}">
+                            <a class="{{ request()->is('*production-report') ? 'active' : '' }}" href="{{ route('reports.production-report') }}">
                                 Production Report
                             </a>
                         </li>
                         <li>
-                            <a class="{{ request()->is('reports.stock-bin-card*') ? 'active' : '' }}" href="{{ route('reports.stock-bin-card') }}">
+                            <a class="{{ request()->is('*stock-bin-card') ? 'active' : '' }}" href="{{ route('reports.stock-bin-card') }}">
                                 Stock Bin Card
                             </a>
                         </li>

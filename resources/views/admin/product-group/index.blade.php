@@ -1,5 +1,6 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Product Groups List')
 
 @section('content')
 

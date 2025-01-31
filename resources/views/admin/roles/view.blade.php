@@ -30,28 +30,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-auto">
-                            @if(auth()->user()->hasPermission('Roles Update'))
-                            <a class="btn btn-primary" href="{{ route('roles.edit', $role->id) }}">Update</a>
-                            @endif
-                            <a class="btn btn-secondary" href="{{ route('roles.index') }}">Cancel</a>
-                        </div>
-                        @if(auth()->user()->hasPermission('Roles Delete'))
-                        <div class="col-auto">
-                            <a class="btn btn-danger" href="javascript:void(0);"
-                                onclick="confirmDelete('{{ $role->id }}')">
-                                Delete
-                            </a>
-                            <form id="delete-form-{{ $role->id }}"
-                                action="{{ route('roles.destroy', $role->id) }}" method="POST"
-                                style="display:none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
-                        @endif
-                    </div>
+                    <a class="btn btn-secondary" href="{{ route('roles.index') }}">Cancel</a>
                 </div>
             </div>
         </div>

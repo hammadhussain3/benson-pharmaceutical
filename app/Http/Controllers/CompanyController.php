@@ -85,12 +85,12 @@ class CompanyController extends Controller
         return view('admin.companies.edit', compact('company', 'countries', 'cities'));
     }
 
-    public function update(UpdateCompanyRequest $request, $id)
+    public function update(UpdateCompanyRequest $request, Company $company)
     {
         if (!auth()->user()->hasPermission('Companies Update')) {
             abort(403, 'Unauthorized action.');
         }
-        $company = Company::findOrFail($id);
+        
         $data = [
             'name' => $request->name,
             'address' => $request->address,

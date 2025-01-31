@@ -1,6 +1,9 @@
 $(document).ready(function(){var $wrapper=$('.main-wrapper');var $slimScrolls=$('.slimscroll');var $pageWrapper=$('.page-wrapper');feather.replace();$(window).resize(function(){if($('.page-wrapper').length>0){var height=$(window).height();$(".page-wrapper").css("min-height",height);}});$('body').append('<div class="sidebar-overlay"></div>');$(document).on('click','#mobile_btn',function(){$wrapper.toggleClass('slide-nav');$('.sidebar-overlay').toggleClass('opened');$('html').addClass('menu-opened');$('#task_window').removeClass('opened');return false;});$(".sidebar-overlay").on("click",function(){$('html').removeClass('menu-opened');$(this).removeClass('opened');$wrapper.removeClass('slide-nav');$('.sidebar-overlay').removeClass('opened');$('#task_window').removeClass('opened');});$(document).on("click",".hideset",function(){$(this).parent().parent().parent().hide();});$(document).on("click",".delete-set",function(){$(this).parent().parent().hide();});if($('.product-slide').length>0){$('.product-slide').owlCarousel({items:1,margin:30,dots:false,nav:true,loop:false,responsiveClass:true,responsive:{0:{items:1},800:{items:1},1170:{items:1}}});}
 if($('.owl-product').length>0){var owl=$('.owl-product');owl.owlCarousel({margin:10,dots:false,nav:true,loop:false,touchDrag:false,mouseDrag:false,responsive:{0:{items:2},768:{items:4},1170:{items:8}}});}
 if ($(".datanew").length > 0) {
+    let pageTitle = document.title || "Streamline"; // Get the page title
+    let fileName = pageTitle.toLowerCase().replace(/\s+/g, '-'); // Convert to lowercase and replace spaces with hyphens
+
     $(".datanew").DataTable({
         bFilter: true,
         dom: '<"top"fB>t<"bottom"lpi><"clear">', // Include buttons (B) in the layout
@@ -16,10 +19,12 @@ if ($(".datanew").length > 0) {
             {
                 extend: 'pdfHtml5',
                 text: 'PDF',
-                title: 'Streamline',
+                title: pageTitle, // Use the actual page title
+                filename: fileName, // Use formatted filename (lowercase with hyphens)
                 orientation: 'portrait',
                 pageSize: 'A4',
                 customize: function (doc) {
+                    doc.content[0].text = pageTitle; // Set title dynamically
                     doc.content[0].alignment = 'center'; // Center the title
 
                     // Set margins and layout for the table
@@ -52,7 +57,25 @@ if ($(".datanew").length > 0) {
                     doc.defaultStyle.fontSize = 10;
                 }
             },
-            'copy', 'excel', 'csv', 'print' // Include other buttons if needed
+            {
+                extend: 'excelHtml5',
+                text: 'Excel',
+                title: pageTitle, // Use actual page title
+                filename: fileName, // Use formatted filename
+                sheetName: pageTitle, // Use actual page title for sheet name
+            },
+            {
+                extend: 'csvHtml5',
+                text: 'CSV',
+                title: pageTitle, // Use actual page title
+                filename: fileName, // Use formatted filename
+            },
+            {
+                extend: 'print',
+                text: 'Print',
+                title: pageTitle, // Use actual page title
+            },
+            'copy' // Copy does not require title customization
         ],
         initComplete: (settings, json) => {
             $(".dataTables_filter").appendTo("#tableSearch");

@@ -1,5 +1,7 @@
 @extends('admin.layouts.app')
 
+@section('title', 'Sales Returns List')
+
 @section('content')
     <div class="page-header">
         <div class="page-title">
