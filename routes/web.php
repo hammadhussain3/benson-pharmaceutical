@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeTypeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
@@ -131,6 +132,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('receipt-vouchers', ReceiptVoucherController::class);
     Route::resource('journal-vouchers', JournalVoucherController::class);
     Route::resource('credit-notes', CreditNoteController::class);
+    Route::resource('employee-types', EmployeeTypeController::class);
     Route::get('report/balance-report', [ReportController::class, 'balanceReport'])->name('reports.balance-report');
     Route::get('report/purchase-items', [ReportController::class, 'purchaseItems'])->name('reports.purchase-items');
     Route::get('report/purchase-requisition', [ReportController::class, 'purchaseRequisitions'])->name('reports.purchase-requisitions');
@@ -152,6 +154,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
     Route::get('/companies/{companyId}/designations', [DesignationController::class, 'getDesignationsByCompany']);
+    Route::get('/companies/{companyId}/employee-types', [EmployeeTypeController::class, 'getEmployeeTypesByCompany']);
     Route::get('/companies/{companyId}/employees', [EmployeeController::class, 'getEmployeesByCompany']);
     Route::get('/companies/{companyId}/product-groups', [ProductGroupController::class, 'getProductGroupsByCompany']);
     Route::get('/companies/{companyId}/product-variations', [ProductVariationController::class, 'getProductVariationsByComapny']);

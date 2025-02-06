@@ -73,7 +73,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select name="company" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectBanks(this.value); selectDepartments(this.value); selectDesignations(this.value);" @endrole>
+                                <select name="company" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectBanks(this.value); selectDepartments(this.value); selectEmployeeTypes(this.value); selectDesignations(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -154,6 +154,22 @@
                                 <label for="bank_account">Bank Account (optional)</label>
                                 <input type="number" class="form-control" name="bank_account" id="bank_account"
                                     value="{{ old('bank_account', $employee->bank_account) }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="employee_type_id">Employee Type</label>
+                                <select name="employee_type" id="employee_type_id" class="form-control" required value="{{ old('employee_type') }}"">
+                                    <option value="">Select Employee Type</option>
+                                    @php
+                                        $selectedCompanyId = old('company', $employee->company_id);
+                                    @endphp
+                                    @foreach ($employeeTypes->where('company_id', $selectedCompanyId) as $employeeType)
+                                        <option value="{{ $employeeType->id }}"
+                                            {{ old('employee_type', $employee->employee_type_id) == $employeeType->id ? 'selected' : '' }}>
+                                            {{ $employeeType->type }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Please select a employee type.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="is_active">Is Active</label>

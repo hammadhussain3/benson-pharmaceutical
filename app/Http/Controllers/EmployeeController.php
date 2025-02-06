@@ -11,14 +11,17 @@ use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Employee;
 use App\Services\EmployeeService;
+use App\Services\EmployeeTypeService;
 
 class EmployeeController extends Controller
 {
     protected $employeeService;
+    protected $employeeTypeService;
 
-    public function __construct(EmployeeService $employeeService)
+    public function __construct(EmployeeService $employeeService, EmployeeTypeService $employeeTypeService)
     {
         $this->employeeService = $employeeService;
+        $this->employeeTypeService = $employeeTypeService;
     }
 
     public function index()
@@ -54,6 +57,7 @@ class EmployeeController extends Controller
         $branches = Branch::orderBy('name', 'asc')->get();
         $departments = Department::orderBy('name', 'asc')->get();
         $designations = Designation::orderBy('name', 'asc')->get();
+        $employeeTypes = $this->employeeTypeService->getAllEmployeeTypes();
 
         if (!auth()->user()->hasRole('Superadmin')) {
             $branches = Branch::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
@@ -61,7 +65,7 @@ class EmployeeController extends Controller
             $designations = Designation::orderBy('name', 'asc')->where('company_id', auth()->user()->employee->company_id)->get();
         }
 
-        return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'newEmployeeCode'));
+        return view('admin.employees.create', compact('designations', 'departments', 'banks', 'branches', 'companies', 'newEmployeeCode', 'employeeTypes'));
     }
 
     public function edit(Employee $employee)
@@ -75,8 +79,9 @@ class EmployeeController extends Controller
         $branches = Branch::orderBy('name', 'asc')->get();
         $departments = Department::orderBy('name', 'asc')->get();
         $designations = Designation::orderBy('name', 'asc')->get();
+        $employeeTypes = $this->employeeTypeService->getAllEmployeeTypes();
 
-        return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies'));
+        return view('admin.employees.edit', compact('employee', 'designations', 'departments', 'banks', 'branches', 'companies', 'employeeTypes'));
     }
     public function store(StoreEmployeeRequest $request)
     {

@@ -30,6 +30,7 @@ class StoreEmployeeRequest extends FormRequest
             'is_active' => 'boolean',
             'branch' => 'required|exists:branches,id',
             'company' => 'required|exists:companies,id',
+            'employee_type' => 'required|exists:employee_types,id',
         ];
     }
 }

@@ -435,6 +435,31 @@ function selectDesignations(companyId)
     }
 }
 
+function selectEmployeeTypes(companyId)
+{
+    var employeeTypeSelect = document.getElementById('employee_type_id');
+    
+    if (companyId && employeeTypeSelect) {
+        employeeTypeSelect.innerHTML = '<option value="">Select Employee Type</option>';
+        fetch(`/companies/${companyId}/employee-types`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching employee types');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.employeeTypes.forEach(function (employeeType) {
+                    var option = document.createElement('option');
+                    option.value = employeeType.id;
+                    option.textContent = employeeType.type;
+                    employeeTypeSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching  employee types:', error));
+    }
+}
+
 function selectEmployee(companyId)
 {
     var employeeSelect = document.getElementById('employee_id');

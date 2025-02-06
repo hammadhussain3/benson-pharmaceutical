@@ -16,6 +16,7 @@ class EmployeeService
         $data['department_id'] = $data['department'];
         $data['designation_id'] = $data['designation'];
         $data['bank_id'] = $data['bank'];
+        $data['employee_type_id'] = $data['employee_type'];
         return Employee::create($data);
     }
 
@@ -26,6 +27,7 @@ class EmployeeService
         $data['department_id'] = $data['department'];
         $data['designation_id'] = $data['designation'];
         $data['bank_id'] = $data['bank'];
+        $data['employee_type_id'] = $data['employee_type'];
         User::where('employee_id', $employee->id)->update([
             'name' => $data['first_name']. ' ' .$data['last_name'],
             'email' => $data['email']

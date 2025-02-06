@@ -227,13 +227,6 @@
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
-                            @if(auth()->user()->hasPermission('Designation List'))
-                                <li>
-                                    <a class="{{ request()->is('designations*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
-                                        Designations
-                                    </a>
-                                </li>
-                            @endif
                             @if(auth()->user()->hasPermission('Employee List'))
                                 <li>
                                     <a class="{{ request()->is('employees*') ? 'active' : '' }}" href="{{ route('employees.index') }}">
@@ -245,13 +238,6 @@
                                 <li>
                                     <a class="{{ request()->is('leaves*') ? 'active' : '' }}" href="{{ route('leaves.index') }}">
                                         Leave
-                                    </a>
-                                </li>
-                            @endif
-                            @if(auth()->user()->hasPermission('Leave Type List'))
-                                <li>
-                                    <a class="{{ request()->is('leave_types*') ? 'active' : '' }}" href="{{ route('leave_types.index') }}">
-                                        Leave Type
                                     </a>
                                 </li>
                             @endif
@@ -273,6 +259,33 @@
                                 <li>
                                     <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
                                         Salary Tax Slabs
+                                    </a>
+                                </li>
+                            @endif
+                            <li class="mx-3">
+                                <div class="position-relative mx-1">
+                                    <hr class="border border-1">
+                                    <div class="position-absolute top-0 start-0 translate-middle-y badge bg-secondary">Config</div>
+                                </div>
+                            </li>
+                            @if(auth()->user()->hasPermission('Employee List'))
+                                <li>
+                                    <a class="{{ request()->is('employee-types*') ? 'active' : '' }}" href="{{ route('employee-types.index') }}">
+                                        Employee Types
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Designation List'))
+                                <li>
+                                    <a class="{{ request()->is('designations*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
+                                        Designations
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Leave Type List'))
+                                <li>
+                                    <a class="{{ request()->is('leave_types*') ? 'active' : '' }}" href="{{ route('leave_types.index') }}">
+                                        Leave Type
                                     </a>
                                 </li>
                             @endif

@@ -76,11 +76,15 @@
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="bank_id">Bank</label>
-                            <input type="text" class="form-control" name="name" id="name" value="{{ $employees->bank ?? 'N/A' }}" readonly>
+                            <input type="text" class="form-control" name="name" id="name" value="{{ $employees->bank->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="bank_account">Bank Account</label>
                             <input type="text" class="form-control" value="{{ $employees->bank_account ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="employee_type">Employee Type</label>
+                            <input type="text" class="form-control" value="{{ $employees->employee_type->type ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="is_active">Is Active</label>

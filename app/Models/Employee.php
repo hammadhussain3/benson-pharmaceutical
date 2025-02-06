@@ -25,6 +25,7 @@ class Employee extends Model
         'is_active',
         'branch_id',
         'company_id',
+        'employee_type_id',
         'created_by',
         'updated_by'
     ];
@@ -53,6 +54,11 @@ class Employee extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function employee_type()
+    {
+        return $this->belongsTo(EmployeeType::class);
     }
 
     public function leaves() // Add this method
