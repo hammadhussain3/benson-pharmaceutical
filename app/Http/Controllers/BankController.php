@@ -54,9 +54,13 @@ class BankController extends Controller
         if (!auth()->user()->hasPermission('Bank Create')) {
             abort(403, 'Unauthorized action.');
         }
-
-        $this->bankService->createBank($request->validated());
-        return redirect()->route('banks.index')->with('success', 'Bank created successfully.');
+    
+        try {
+            $this->bankService->createBank($request->validated());
+            return redirect()->route('banks.index')->with('success', 'Bank created successfully.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        }
     }
 
     public function edit($id)

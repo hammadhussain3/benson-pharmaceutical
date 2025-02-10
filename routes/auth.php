@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('users/register', [RegisteredUserController::class, 'create'])
         ->name('users.register');
     
-    Route::post('register', [RegisteredUserController::class, 'store'])
+    Route::post('store', [RegisteredUserController::class, 'store'])
     ->name('users.store');
 
     Route::get('users/{id}/edit', [RegisteredUserController::class, 'edit'])

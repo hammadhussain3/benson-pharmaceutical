@@ -255,19 +255,26 @@
                                     </a>
                                 </li>
                             @endif
-                            @if(auth()->user()->hasPermission('Salary Tax Slabs List'))
+                            {{-- @if(auth()->user()->hasPermission('Salary Tax Slabs List'))
                                 <li>
                                     <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
                                         Salary Tax Slabs
                                     </a>
                                 </li>
-                            @endif
+                            @endif --}}
                             <li class="mx-3">
                                 <div class="position-relative mx-1">
                                     <hr class="border border-1">
                                     <div class="position-absolute top-0 start-0 translate-middle-y badge bg-secondary">Config</div>
                                 </div>
                             </li>
+                            @if(auth()->user()->hasPermission('Salary Tax Slabs List'))
+                            <li>
+                                <a class="{{ request()->is('tax-slabs*') ? 'active' : '' }}" href="{{ route('tax-slabs.index') }}">
+                                    Salary Tax Slabs
+                                </a>
+                            </li>
+                        @endif
                             @if(auth()->user()->hasPermission('Employee List'))
                                 <li>
                                     <a class="{{ request()->is('employee-types*') ? 'active' : '' }}" href="{{ route('employee-types.index') }}">

@@ -5634,6 +5634,8 @@ span.select2-container.select2-container--default.select2-container--open {
   padding: 0;
 }
 .dash-widget {
+  /* min-height: 120px; */
+
   background: #fff;
   margin-bottom: 25px;
   border-radius: 6px;
@@ -5665,6 +5667,7 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 .dash-widget .dash-widgetimg span {
   width: 48px;
+  padding: 12px;
   height: 48px;
   background: rgba(249, 110, 111, 0.12);
   border-radius: 50px;
