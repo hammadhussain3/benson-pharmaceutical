@@ -71,7 +71,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectBranches(this.value); selectBanks(this.value); selectDepartments(this.value); selectDesignations(this.value); selectEmployeeTypes(this.value); createEmployeeCode(this.value);" @endrole>
+                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value); selectDesignations(this.value); selectEmployeeTypes(this.value); createEmployeeCode(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -87,7 +87,7 @@
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="branch_id">Branch</label>
-                                <select name="branch" id="branch_id" class="form-control" required value="{{ old('branch') }}" onchange="selectDepartmentsByBranch(this.value);">
+                                <select name="branch" id="branch_id" class="form-control" required value="{{ old('branch') }}" onchange="selectDepartmentsByBranch(this.value); selectBanks(this.value);">
                                     <option value="">Select Branch</option>
                                     @if(old('branch') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
@@ -140,12 +140,11 @@
                                 <label for="bank_id">Bank (optional)</label>
                                 <select name="bank" id="bank_id" class="form-control" value="{{ old('bank') }}">
                                     <option value="">Select Bank</option>
-                                    @if(old('bank') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                    @if(old('bank') || old('branch'))
                                         @php
-                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
-                                            $company = App\Models\Company::findOrFail($seletedCompanyId);
+                                            $countryId = $branches->where('id', old('branch'))->value('country_id');
                                         @endphp
-                                        @foreach ($banks->where('company_id', $seletedCompanyId) as $bank)
+                                        @foreach ($banks->where('country_id', $countryId) as $bank)
                                             <option value="{{ $bank->id }}"
                                                 {{ old('bank') == $bank->id ? 'selected' : '' }}>
                                                 {{ $bank->name }}

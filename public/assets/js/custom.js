@@ -335,13 +335,13 @@ function SelectEmployeeDetails(employeeId) {
     }
 }
 
-function selectBanks(companyId)
+function selectBanks(branchId)
 {
     var bankSelect = document.getElementById('bank_id');
     
-    if (companyId && bankSelect) {
+    if (branchId && bankSelect) {
         bankSelect.innerHTML = '<option value="">Select Bank</option>';
-        fetch(`/companies/${companyId}/banks`)
+        fetch(`/branches/${branchId}/banks`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unauthorized or error fetching banks');

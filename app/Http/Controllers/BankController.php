@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBankRequest;
 use App\Http\Requests\UpdateBankRequest;
 use App\Models\Bank;
+use App\Models\Branch;
 use App\Models\Company;
 use App\Models\Country;
 use App\Services\BankService;
@@ -94,10 +95,10 @@ class BankController extends Controller
         return redirect()->route('banks.index')->with('success', 'Bank deleted successfully.');
     }
 
-    public function getBanksByCompany($companyId)
+    public function getBanksByBranch($branchId)
     {
-        $company = Company::findOrFail($companyId);
-        $banks = Bank::where('country_id', $company->country_id)->get();
+        $branch = Branch::findOrFail($branchId);
+        $banks = Bank::where('country_id', $branch->country_id)->get();
         return response()->json(['banks' => $banks]);
     }
 }

@@ -150,7 +150,6 @@ Route::middleware('auth')->group(function () {
     Route::get('report/stock-bin-card', [ReportController::class, 'stockBinCard'])->name('reports.stock-bin-card');
     Route::get('report/batch-report', [ReportController::class, 'batchReport'])->name('reports.batch-report');
 
-    Route::get('/companies/{companyId}/banks', [BankController::class, 'getBanksByCompany']);
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
     Route::get('/companies/{companyId}/designations', [DesignationController::class, 'getDesignationsByCompany']);
@@ -210,6 +209,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/store-requisitions/{requisitionId}/general-details', [StoreIssueRequisitionController::class, 'getGeneralStoreRequisitionDetailsById']);
     Route::get('/store-requisitions/{requisitionId}/production-details', [StoreIssueRequisitionController::class, 'getProductionStoreRequisitionDetailsById']);
     Route::get('/branches/{branchId}/departments', [DepartmentController::class, 'getDepartmentsByBranch']);
+    Route::get('/branches/{branchId}/banks', [BankController::class, 'getBanksByBranch']);
     Route::get('/parties/{partyId}/supplier_code', [PartyController::class, 'getSupplierCodeByPartyId']);
 
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');

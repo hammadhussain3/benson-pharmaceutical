@@ -73,7 +73,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
-                                <select name="company" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectBanks(this.value); selectDepartments(this.value); selectEmployeeTypes(this.value); selectDesignations(this.value);" @endrole>
+                                <select name="company" id="company_id" class="form-control" required @role('Superadmin') onchange="selectBranches(this.value); selectDepartments(this.value); selectEmployeeTypes(this.value); selectDesignations(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -89,7 +89,7 @@
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="branch_id">Branch</label>
-                                <select name="branch" id="branch_id" class="form-control" required onchange="selectDepartmentsByBranch(this.value);">
+                                <select name="branch" id="branch_id" class="form-control" required onchange="selectDepartmentsByBranch(this.value); selectBanks(this.value);">
                                     <option value="">Select Branch</option>
                                     @php
                                         $selectedCompanyId = old('company', $employee->company_id);
@@ -140,9 +140,9 @@
                                 <select name="bank" id="bank_id" class="form-control">
                                     <option value="">Select Bank</option>
                                     @php
-                                        $company = App\Models\Company::findOrFail($selectedCompanyId);
+                                        $countryId = $branches->where('id', old('branch', $employee->branch_id))->value('country_id');
                                     @endphp
-                                    @foreach ($banks->where('country_id', $company->country_id) as $bank)
+                                    @foreach ($banks->where('country_id', $countryId) as $bank)
                                         <option value="{{ $bank->id }}"
                                             {{ $bank->id == old('bank', $employee->bank_id) ? 'selected' : '' }}>
                                             {{ $bank->name }}
