@@ -8,11 +8,7 @@ use App\Models\Loan;
 class SalarySlipService
 {
     public function createSalarySlip(array $data)
-    {
-        $date = \DateTime::createFromFormat('Y-m', $data['month']);
-        
-        $data['month'] = $date->format('m');
-        $data['year'] = $date->format('Y');
+    {        
         $data['employee_id'] = $data['employee'];
         $data['company_id'] = $data['company'];
 
@@ -41,10 +37,6 @@ class SalarySlipService
 
     public function updateSalarySlip(SalarySlip $salarySlip, array $data)
     {
-        $date = \DateTime::createFromFormat('Y-m', $data['month']);
-    
-        $data['month'] = $date->format('m');
-        $data['year'] = $date->format('Y');
         $data['employee_id'] = $data['employee'];
         $data['company_id'] = $data['company'];
 

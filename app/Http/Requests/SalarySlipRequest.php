@@ -13,11 +13,11 @@ class SalarySlipRequest extends FormRequest
 
     public function rules()
     {
+        $currentYear = date('Y');
+        $currentMonth = date('n');
+
         return [
             'employee' => 'required|exists:employees,id',
-            // 'auth_leave' => 'required|integer|min:0',
-            // 'unauth_leave' => 'required|integer|min:0',
-            // 'approved_with_pay' => 'required|numeric|min:0',
             'leaves' => 'required',
             'leave_id' => 'required',
             'late_in_early_out_deduction' => 'required|numeric|min:0',
@@ -26,7 +26,28 @@ class SalarySlipRequest extends FormRequest
             'income_tax' => 'required|numeric|min:0',
             'loan_advance' => 'required|numeric|min:0',
             'payment_mode' => 'required|in:bank_transfer,cash',
-            'month' => 'required',
+
+            // Validate month (1-12)
+            'month' => [
+                'required',
+                'integer',
+                'min:1',
+                'max:12',
+                function ($attribute, $value, $fail) use ($currentYear, $currentMonth) {
+                    if (request()->year == $currentYear && $value > $currentMonth) {
+                        $fail('The selected month cannot be in the future.');
+                    }
+                },
+            ],
+
+            // Validate year (not in the future and within last 10 years)
+            'year' => [
+                'required',
+                'integer',
+                'min:' . ($currentYear - 9),
+                'max:' . $currentYear,
+            ],
+
             'company' => 'required|exists:companies,id',
         ];
     }

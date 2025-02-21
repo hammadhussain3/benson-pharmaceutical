@@ -65,20 +65,20 @@ class SalarySlipController extends Controller
         if (!auth()->user()->hasPermission('Salaries Create')) {
             abort(403, 'Unauthorized action.');
         }
-        $date = \DateTime::createFromFormat('Y-m', $request['month']);
-    
-        $month = $date->format('m');
-        $year = $date->format('Y');
 
-        $salarySlip = SalarySlip::where('employee_id', $request->employee)->where('month', $month)->where('year', $year)->first();
+        $salarySlip = SalarySlip::where('employee_id', $request->employee)->where('month', $request['month'])->where('year', $request['year'])->first();
 
         if ($salarySlip) {
             return back()->with('error', 'salary slip already created for the selected employee and month.');
         }
+        
         $this->salarySlipService->createSalarySlip($request->validated());
+
+        $month = \DateTime::createFromFormat('Y-m', "{$request->year}-{$request->month}");
+
         return redirect()->route('salary.sheet.show', [
             'employee_id' => $request->employee,
-            'month' => $request->month
+            'month' => $month->format('Y-m')
         ])->with('success', 'Salary Slip created successfully.');
     }
 
@@ -107,11 +107,15 @@ class SalarySlipController extends Controller
         if (!auth()->user()->hasPermission('Salaries Update')) {
             abort(403, 'Unauthorized action.');
         }
-        $salarySlip = SalarySlip::findOrFail($id);
+        $salarySlip = SalarySlip::find($id);
+
         $this->salarySlipService->updateSalarySlip($salarySlip, $request->validated());
-        return redirect()->route('salary.sheet.show', [
+
+        $month = \DateTime::createFromFormat('Y-m', "{$request->year}-{$request->month}");
+
+        return redirect()->route('salary.sheet.show', parameters: [
             'employee_id' => $request->employee,
-            'month' => $request->month
+            'month' => $month->format('Y-m')
         ])->with('success', 'Salary Slip updated successfully.');
     }
 

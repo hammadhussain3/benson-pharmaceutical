@@ -20,10 +20,9 @@
                     <form action="{{ route('salary_slips.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-row row" id="formContainer">
-
                             <div class="col-md-6">
                                 <label>Select Employee </label>
-                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelectLeaves(this.value); SelectIncomeTax(this.value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
+                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelectLeaves(this.value); SelectIncomeTax(this.value); SelectLoanDate(document.getElementById('month').value, document.getElementById('year').value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
                                     <option value="">--Select Employee--</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
@@ -40,24 +39,31 @@
                                 $currentMonth = date('n');
                                 $currentYear = date('Y');
                             @endphp
-
                             <div class="mb-3 col-md-6">
-                                <label for="month">Month and Year</label>
-                                <select class="form-select" name="month" id="month" onchange="SelectLoanDate(this.value);">
-                                    @foreach(['1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April', '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August', '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'] as $key => $month)
-                                        @php
-                                            // Determine the year for each month
-                                            $year = $key > $currentMonth ? $currentYear - 1 : $currentYear;
-                                            // Format the value as YYYY-MM
-                                            $formattedValue = sprintf('%04d-%02d', $year, $key);
-                                        @endphp
-                                        <option value="{{ $formattedValue }}" 
-                                            {{ old('month', sprintf('%04d-%02d', $currentYear, $currentMonth)) == $formattedValue ? 'selected' : '' }}>
-                                            {{ $month }} {{ $year }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a month.</div>
+                                <label for="month-year">Month and Year</label>
+                                <div class="input-group">
+                                    <!-- Month Dropdown -->
+                                    <select class="form-select" name="month" id="month" onchange="SelectLoanDate(this.value, document.getElementById('year').value);">
+                                        @foreach([
+                                            '1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April',
+                                            '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August',
+                                            '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
+                                        ] as $key => $month)
+                                            <option value="{{ $key }}" {{ old('month', $currentMonth) == $key ? 'selected' : '' }}>
+                                                {{ $month }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    
+                                    <!-- Year Dropdown -->
+                                    <select class="form-select" name="year" id="year" onchange="SelectLoanDate(document.getElementById('month').value, this.value);">
+                                        @for ($y = $currentYear; $y >= $currentYear - 9; $y--)
+                                            <option value="{{ $y }}" {{ old('year', $currentYear) == $y ? 'selected' : '' }}>
+                                                {{ $y }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>                                
                             </div>
 
                             {{-- <div class="mb-3 col-md-6">

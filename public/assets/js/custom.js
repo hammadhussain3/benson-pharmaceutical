@@ -72,7 +72,6 @@ function Selectcountry()
     }
 }
 
-
 function SelectLoan(employeeId)
 {
     var loanAdvance = document.getElementById('loan_advance');
@@ -92,13 +91,15 @@ function SelectLoan(employeeId)
     }
 }
 
-function SelectLoanDate(month)
+function SelectLoanDate(month, year)
 {
     var employeeId = document.getElementById('employee_id').value;
     var loan_advance = document.getElementById('loan_advance');
+    var selectMonth = `${year}-${String(month).padStart(2, '0')}`;
+    console.log(selectMonth)
 
-    if (month && employeeId) {
-        fetch(`/getloan/${employeeId}?month=${month}`)
+    if (selectMonth && employeeId) {
+        fetch(`/getloan/${employeeId}?month=${selectMonth}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unauthorized or error fetching branches');
