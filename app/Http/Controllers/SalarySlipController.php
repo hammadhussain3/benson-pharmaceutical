@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SalarySlipRequest;
+use App\Models\SalaryAllowances;
 use Illuminate\Support\Facades\DB;
 use App\Models\SalarySlip;
 use App\Models\Employee;
@@ -98,8 +99,10 @@ class SalarySlipController extends Controller
         $singleBranch = Branch::where('id', $currentEmployee->branch_id)->first();
         $singleDepartment = Department::where('id', $currentEmployee->department_id)->first();
         $singleDesignation = Designation::where('id', $currentEmployee->designation_id)->first();
+        $salaryDeductions = SalaryAllowances::where('employee_id', $currentEmployee->id)->where('salary_slip_id', $id)->where('type', 'deduction')->get();
+        $salaryAllowances = SalaryAllowances::where('employee_id', $currentEmployee->id)->where('salary_slip_id', $id)->where('type', 'allowance')->get();
 
-        return view('admin.salary_slips.edit', compact('salarySlip', 'currentEmployee', 'employees', 'companies', 'branches', 'departments', 'designations', 'singleBranch', 'singleDepartment', 'singleDesignation'));
+        return view('admin.salary_slips.edit', compact('salarySlip', 'currentEmployee', 'employees', 'companies', 'branches', 'departments', 'designations', 'singleBranch', 'singleDepartment', 'singleDesignation', 'salaryAllowances', 'salaryDeductions'));
     }
 
     public function update(SalarySlipRequest $request, $id)

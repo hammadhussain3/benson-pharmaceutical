@@ -134,6 +134,19 @@
                         <td>{{ number_format($incomeTax, 2) }}</td>
                         <td></td>
                     </tr>
+                    @foreach ($salaryAllowances as $salaryAllowance)
+                        <tr>
+                            <td>{{ $salaryAllowance->name }}</td>
+                            <td colspan="3"></td>
+                            @if ($salaryAllowance->type == 'allowance')
+                                <td></td>
+                                <td>{{ number_format($salaryAllowance->amount, 2) }}</td>
+                            @elseif ($salaryAllowance->type == 'deduction')
+                                <td>{{ number_format($salaryAllowance->amount, 2) }}</td>
+                                <td></td>
+                            @endif
+                        </tr>
+                    @endforeach
                 </tbody>
                 <tfoot>
                     <tr>

@@ -8,7 +8,7 @@ class SalarySlipRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // Adjust according to your authorization logic
+        return true;
     }
 
     public function rules()
@@ -27,7 +27,6 @@ class SalarySlipRequest extends FormRequest
             'loan_advance' => 'required|numeric|min:0',
             'payment_mode' => 'required|in:bank_transfer,cash',
 
-            // Validate month (1-12)
             'month' => [
                 'required',
                 'integer',
@@ -40,7 +39,6 @@ class SalarySlipRequest extends FormRequest
                 },
             ],
 
-            // Validate year (not in the future and within last 10 years)
             'year' => [
                 'required',
                 'integer',
@@ -49,6 +47,16 @@ class SalarySlipRequest extends FormRequest
             ],
 
             'company' => 'required|exists:companies,id',
+            
+            'allowance_names' => 'nullable|array',
+            'allowance_names.*' => 'required_with:allowance_amounts.*|string|max:255',
+            'allowance_amounts' => 'nullable|array',
+            'allowance_amounts.*' => 'required_with:allowance_names.*|numeric|min:0',
+
+            'deduction_names' => 'nullable|array',
+            'deduction_names.*' => 'required_with:deduction_amounts.*|string|max:255',
+            'deduction_amounts' => 'nullable|array',
+            'deduction_amounts.*' => 'required_with:deduction_names.*|numeric|min:0',
         ];
     }
 }

@@ -2210,3 +2210,17 @@ function calculateJournalVoucherAmount() {
     document.getElementById('total_debit').value = totalDebit.toFixed(2);
     document.getElementById('total_credit').value = totalCredit.toFixed(2);
 }
+
+function addAllowance() {
+    let container = document.getElementById('allowance-container');
+    let input = `<div class="col-md-6 mb-3"><input type="text" name="allowance_names[]" placeholder="Allowance Name" class="form-control" required></div>
+                 <div class="col-md-6 mb-3"><input type="number" name="allowance_amounts[]" placeholder="Amount" class="form-control" required></div>`;
+    container.insertAdjacentHTML('beforeend', input);
+}
+
+function addDeduction() {
+    let container = document.getElementById('deduction-container');
+    let input = `<div class="col-md-6 mb-3"><input type="text" name="deduction_names[]" placeholder="Deduction Name" class="form-control" required></div>
+                 <div class="col-md-6 mb-3"><input type="number" name="deduction_amounts[]" placeholder="Amount" class="form-control" required></div>`;
+    container.insertAdjacentHTML('beforeend', input);
+}

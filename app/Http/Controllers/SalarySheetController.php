@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SalaryAllowances;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\Loan;
@@ -47,6 +48,8 @@ class SalarySheetController extends Controller
             ->where('year', $year)
             ->first();
 
+        $salaryAllowances = SalaryAllowances::where('employee_id', $request->employee_id)->where('salary_slip_id', $salarySlip->id)->get();
+
         if (!$salarySlip) {
             return back()->with('error', 'No salary slip found for the selected employee and month.');
         }
@@ -73,7 +76,9 @@ class SalarySheetController extends Controller
             }
         }
         $lateDeduction = $salaryPerHour * $salarySlip->late_in_early_out_deduction;
-        $overtimePay = ($salaryPerHour * $salarySlip->overtime + (0.25 * $salaryPerHour));
+        $overtimePay = $salarySlip->overtime > 0 
+            ? ($salaryPerHour * $salarySlip->overtime + (0.25 * $salaryPerHour)) 
+            : 0;
         $loan = Loan::where('employee_id', $employee->id)
             ->where('company_id', $employee->company_id)
             ->first();
@@ -85,8 +90,10 @@ class SalarySheetController extends Controller
         $incomeTax = $taxSlab ? $salarySlip->income_tax : 0;
         $totalDeductions = $leavesTotalAmount + $lateDeduction + $loanDeduction + $incomeTax;
         $netSalary = $employee->net_salary;
-        $totalDebit = $leavesTotalAmount + $lateDeduction + $salarySlip->loan_advance + $incomeTax;
-        $totalCredit = $netSalary + $overtimePay + $salarySlip->arrears;
+        $salaryDeductionAmount = $salaryAllowances->where('type', 'deduction')->sum('amount');
+        $salaryAllowanceAmount = $salaryAllowances->where('type', 'allowance')->sum('amount');
+        $totalDebit = $leavesTotalAmount + $lateDeduction + $salarySlip->loan_advance + $incomeTax + $salaryDeductionAmount;
+        $totalCredit = $netSalary + $overtimePay + $salarySlip->arrears + $salaryAllowanceAmount;
         $totalSalary = $totalCredit - $totalDebit;
         $totalSalaryRounded = round($totalSalary, 2);
         $formatter = new NumberFormatter('en', NumberFormatter::SPELLOUT);
@@ -111,7 +118,8 @@ class SalarySheetController extends Controller
             'incomeTax',
             'totalSalaryInWords',
             'daysInMonth',
-            'company'
+            'company',
+            'salaryAllowances'
         ));
     }
 }

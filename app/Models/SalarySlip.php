@@ -38,6 +38,12 @@ class SalarySlip extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function allowances()
+    {
+        return $this->hasMany(SalaryAllowances::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

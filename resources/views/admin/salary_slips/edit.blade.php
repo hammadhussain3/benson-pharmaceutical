@@ -106,6 +106,62 @@
                                 <div class="invalid-feedback">Please provide the overtime amount.</div>
                             </div>
 
+                        </div>
+                        
+                        <div class="row" id="allowance-container">
+                            <div class="col-12 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 me-3">
+                                        <h3 class="fs-6 fw-bold">Allowances</h3>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="badge border-0 bg-transparent link-primary" onclick="addAllowance()">+ Add Allowance</button>
+                                    </div>
+                                </div>
+                            </div>
+                            @php
+                                $allowanceNames = old('allowance_names', $salaryAllowances->pluck('name')->toArray());
+                                $allowanceAmounts = old('allowance_amounts', $salaryAllowances->pluck('amount')->toArray());
+                            @endphp
+
+                            @foreach ($allowanceNames as $index => $name)
+                                <div class="col-md-6 mb-3">
+                                    <input type="text" name="allowance_names[]" placeholder="Allowance Name" value="{{ $name }}" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <input type="number" name="allowance_amounts[]" placeholder="Amount" value="{{ $allowanceAmounts[$index] ?? '' }}" class="form-control" required>
+                                </div>
+                            @endforeach
+                        </div>
+                    
+                        <div class="row" id="deduction-container">
+                            <div class="col-12 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 me-3">
+                                        <h3 class="fs-6 fw-bold">Deductions</h3>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="badge border-0 bg-transparent link-primary" onclick="addDeduction()">+ Add Deduction</button>
+                                    </div>
+                                </div>
+                            </div>
+                            @php
+                                $deductionNames = old('deduction_names', $salaryDeductions->pluck('name')->toArray());
+                                $deductionAmounts = old('deduction_amounts', $salaryDeductions->pluck('amount')->toArray());
+                            @endphp
+
+                            @foreach ($deductionNames as $index => $name)
+                                <div class="col-md-6 mb-3">
+                                    <input type="text" name="deduction_names[]" placeholder="Deduction Name" value="{{ $name }}" class="form-control" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <input type="number" name="deduction_amounts[]" placeholder="Amount" value="{{ $deductionAmounts[$index] ?? '' }}" class="form-control" required>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="row" id="formContainer">
+
                             <div class="mb-3 col-md-6">
                                 <label for="income_tax">Income Tax</label>
                                 <input type="number" class="form-control" name="income_tax" id="income_tax"

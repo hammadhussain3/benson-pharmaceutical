@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <form action="{{ route('salary_slips.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
-                        <div class="form-row row" id="formContainer">
+                        <div class="form-row row">
                             <div class="col-md-6">
                                 <label>Select Employee </label>
                                 <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelectLeaves(this.value); SelectIncomeTax(this.value); SelectLoanDate(document.getElementById('month').value, document.getElementById('year').value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
@@ -100,7 +100,55 @@
                                 <input type="number" class="form-control" name="overtime" id="overtime" required value="{{ old('overtime') }}">
                                 <div class="invalid-feedback">Please provide the overtime amount.</div>
                             </div>
+                        </div>
+                        
+                        <div class="row" id="allowance-container">
+                            <div class="col-12 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 me-3">
+                                        <h3 class="fs-6 fw-bold">Allowances</h3>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="badge border-0 bg-transparent link-primary" onclick="addAllowance()">+ Add Allowance</button>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(old('allowance_names'))
+                                @foreach (old('allowance_names') as $index => $name)
+                                    <div class="col-md-6 mb-3">
+                                        <input type="text" name="allowance_names[]" placeholder="Allowance Name" value="{{ $name }}" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <input type="number" name="allowance_amounts[]" placeholder="Amount" value="{{ old('allowance_amounts')[$index] }}" class="form-control" required>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    
+                        <div class="row" id="deduction-container">
+                            <div class="col-12 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 me-3">
+                                        <h3 class="fs-6 fw-bold">Deductions</h3>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <button type="button" class="badge border-0 bg-transparent link-primary" onclick="addDeduction()">+ Add Deduction</button>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(old('deduction_names'))
+                                @foreach (old('deduction_names') as $index => $name)
+                                    <div class="col-md-6 mb-3">
+                                        <input type="text" name="deduction_names[]" placeholder="Deduction Name" value="{{ $name }}" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <input type="number" name="deduction_amounts[]" placeholder="Amount" value="{{ old('deduction_amounts')[$index] }}" class="form-control" required>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
 
+                        <div class="row" id="formContainer">
                             <div class="mb-3 col-md-6">
                                 <label for="income_tax">Income Tax</label>
                                 <input type="number" class="form-control" name="income_tax" id="income_tax" required readonly value="{{ old('income_tax') }}">
