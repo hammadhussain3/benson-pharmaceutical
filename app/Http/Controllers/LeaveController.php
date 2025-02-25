@@ -65,11 +65,15 @@ class LeaveController extends Controller
         if (!auth()->user()->hasPermission('Leave Create')) {
             abort(403, 'Unauthorized action.');
         }
+
+        $created_at = now()->setDate($request->year, $request->month, now()->day);
+
         $data = [
             'employee_id' => $request->employee,
             'company_id' => $request->company,
             'leave_type_id' => $request->leave_type,
             'days' => $request->days,
+            'created_at' => $created_at,
         ];
         Leave::create($data);
         return redirect()->route('leaves.index')->with('success', 'Leave created successfully.');
@@ -94,12 +98,15 @@ class LeaveController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $leave = Leave::findOrFail($id);
+        $created_at = now()->setDate($request->year, $request->month, now()->day);
         $data = [
             'employee_id' => $request->employee,
             'company_id' => $request->company,
             'leave_type_id' => $request->leave_type,
             'days' => $request->days,
+            'created_at' => $created_at,
         ];
+        
         $leave->update($data);
         return redirect()->route('leaves.index')->with('success', 'Leave updated successfully.');
     }

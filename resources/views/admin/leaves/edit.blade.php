@@ -24,7 +24,7 @@
                         <div class="form-row row">
 
                             @role('Superadmin')
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label for="company_id">Company</label>
                                 @php
                                     $selectedCompanyId = old('company', $leave->company_id);
@@ -36,7 +36,7 @@
                                 <input type="hidden" name="company" value="{{ $leave->company_id }}">
                             @endrole
 
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label for="employee">Employee</label>
                                 <select name="employee" id="employee" class="js-example-basic-single select2" required @role('Superadmin') onchange="SelectCompany(this.value);" @endrole>
                                     <option value="">Select Employee</option>
@@ -49,7 +49,43 @@
                                 </select>
                                 <div class="invalid-feedback">Please select an employee.</div>
                             </div>
-                            <div class="mb-3 col-md-12">
+
+                            @php
+                                $currentMonth = date('n'); // Current month (1-12)
+                                $currentYear = date('Y'); // Current year
+                                $selectedMonth = old('month', isset($leave->created_at) ? \Carbon\Carbon::parse($leave->created_at)->month : $currentMonth);
+                                $selectedYear = old('year', isset($leave->created_at) ? \Carbon\Carbon::parse($leave->created_at)->year : $currentYear);
+                            @endphp
+
+                            <div class="mb-3 col-md-6">
+                                <label for="month-year">Month and Year</label>
+                                <div class="input-group">
+                                    <!-- Month Dropdown -->
+                                    <select class="form-select" name="month" id="month" onchange="SelectLoanDate(this.value, document.getElementById('year').value);">
+                                        @foreach([
+                                            '1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April',
+                                            '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August',
+                                            '9' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
+                                        ] as $key => $month)
+                                            <option value="{{ $key }}" {{ $key == $selectedMonth ? 'selected' : '' }}>
+                                                {{ $month }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    <!-- Year Dropdown -->
+                                    <select class="form-select" name="year" id="year" onchange="SelectLoanDate(document.getElementById('month').value, this.value);">
+                                        @for($year = $currentYear - 9; $year <= $currentYear; $year++)
+                                            <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>
+                                                {{ $year }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="invalid-feedback">Please select a valid month and year.</div>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
                                 <label for="leave_type">Leave Type</label>
                                 <select name="leave_type" id="leave_type" class="js-example-basic-single select2"
                                     required>
@@ -63,7 +99,8 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a leave type.</div>
                             </div>
-                            <div class="mb-3 col-md-12">
+                            
+                            <div class="mb-3 col-md-6">
                                 <label for="days">Number of Days</label>
                                 <input type="number" class="form-control" name="days" id="days" placeholder="Days"
                                     value="{{ old('days', $leave->days) }}" required>

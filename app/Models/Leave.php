@@ -9,7 +9,7 @@ class Leave extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['employee_id', 'leave_type_id', 'days', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['employee_id', 'leave_type_id', 'days', 'company_id', 'created_by', 'updated_by', 'created_at'];
 
     public function leaveType()
     {

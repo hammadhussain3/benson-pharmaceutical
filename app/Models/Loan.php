@@ -16,7 +16,8 @@ class Loan extends Model
         'remaining',
         'company_id',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'created_at'
     ];
 
     public function employee()
