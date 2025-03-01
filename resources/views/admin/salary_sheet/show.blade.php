@@ -129,6 +129,12 @@
                         <td></td>
                     </tr>
                     <tr>
+                        <td>E.O.B</td>
+                        <td colspan="3"></td>
+                        <td>{{ number_format($salarySlip->eob, 2) }}</td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td>Income Tax Deducted</td>
                         <td colspan="3"></td>
                         <td>{{ number_format($incomeTax, 2) }}</td>

@@ -13,6 +13,7 @@ class CreateSalarySlipsTable extends Migration
             $table->foreignId('employee_id')->constrained()->onDelete('cascade'); // Assuming you have an employees table
             $table->json('leaves')->nullable();
             $table->decimal('late_in_early_out_deduction', 10, 2)->default(0);
+            $table->decimal('eob', 10, 2)->default(0);
             $table->decimal('overtime', 10, 2)->default(0);
             $table->decimal('arrears', 10, 2)->default(0);
             $table->decimal('income_tax', 10, 2)->default(0);

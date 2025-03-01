@@ -13,6 +13,7 @@ class SalarySlip extends Model
         'employee_id',
         'leaves',
         'late_in_early_out_deduction',
+        'eob',
         'overtime',
         'arrears',
         'income_tax',

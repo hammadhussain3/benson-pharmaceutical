@@ -92,7 +92,7 @@ class SalarySheetController extends Controller
         $netSalary = $employee->net_salary;
         $salaryDeductionAmount = $salaryAllowances->where('type', 'deduction')->sum('amount');
         $salaryAllowanceAmount = $salaryAllowances->where('type', 'allowance')->sum('amount');
-        $totalDebit = $leavesTotalAmount + $lateDeduction + $salarySlip->loan_advance + $incomeTax + $salaryDeductionAmount;
+        $totalDebit = $leavesTotalAmount + $lateDeduction + $salarySlip->loan_advance + $incomeTax + $salaryDeductionAmount + $salarySlip->eob;
         $totalCredit = $netSalary + $overtimePay + $salarySlip->arrears + $salaryAllowanceAmount;
         $totalSalary = $totalCredit - $totalDebit;
         $totalSalaryRounded = round($totalSalary, 2);

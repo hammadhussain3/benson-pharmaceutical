@@ -13,8 +13,10 @@ class StoreLeaveRequest extends FormRequest
         
         return [
             'employee' => 'required|exists:employees,id',
-            'leave_type' => 'required|exists:leave_types,id',
-            'days' => 'required|integer|min:1',
+            'leave_type' => 'required|array',
+            'leave_type.*' => 'required|exists:leave_types,id',
+            'days' => 'required|array',
+            'days.*' => 'required|integer|min:0',
             'company' => 'required|exists:companies,id',
             'month' => [
                 'required',

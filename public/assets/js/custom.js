@@ -72,6 +72,25 @@ function Selectcountry()
     }
 }
 
+function SelectEob(employeeId)
+{
+    var eob = document.getElementById('eob');
+    
+    if (employeeId && eob) {
+        fetch(`/geteob/${employeeId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching eob');
+                }
+                return response.json();
+            })
+            .then(data => {
+                eob.value = data.eob;
+            })
+            .catch(error => console.error('Error fetching eob:', error));
+    }
+}
+
 function SelectLoan(employeeId)
 {
     var loanAdvance = document.getElementById('loan_advance');
@@ -96,7 +115,6 @@ function SelectLoanDate(month, year)
     var employeeId = document.getElementById('employee_id').value;
     var loan_advance = document.getElementById('loan_advance');
     var selectMonth = `${year}-${String(month).padStart(2, '0')}`;
-    console.log(selectMonth)
 
     if (selectMonth && employeeId) {
         fetch(`/getloan/${employeeId}?month=${selectMonth}`)
@@ -114,9 +132,10 @@ function SelectLoanDate(month, year)
 }
 
 
-function SelectLeaves(employeeId) {
+function SelectLeaves(employeeId, year, month) {
+
     if (employeeId) {
-        fetch(`/getleaves/${employeeId}`)
+        fetch(`/getleaves/${employeeId}?month=${month}&year=${year}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unauthorized or error fetching leaves');
@@ -124,6 +143,7 @@ function SelectLeaves(employeeId) {
                 return response.json();
             })
             .then(data => {
+                console.log(data.leaves);
                 const container = document.getElementById('formContainer');
                 const existingLeaves = container.querySelectorAll('.leaves');
                 existingLeaves.forEach(leaveDiv => leaveDiv.remove());

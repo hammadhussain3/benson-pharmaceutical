@@ -21,6 +21,7 @@ class SalarySlipRequest extends FormRequest
             'leaves' => 'required',
             'leave_id' => 'required',
             'late_in_early_out_deduction' => 'required|numeric|min:0',
+            'eob' => 'required|numeric|min:0',
             'overtime' => 'required|numeric|min:0',
             'arrears' => 'required|numeric|min:0',
             'income_tax' => 'required|numeric|min:0',

@@ -157,4 +157,13 @@ class SalarySlipController extends Controller
         $salarySlip->delete();
         return redirect()->route('salary_slips.index')->with('success', 'Salary Slip deleted successfully.');
     }
+
+    public function getEmployeeEob($employeeId)
+    {
+        $eob = SalarySlip::where('employee_id', $employeeId)
+            ->latest()
+            ->value('eob') ?? 0;
+
+        return response()->json(['eob' => $eob]);
+    }
 }

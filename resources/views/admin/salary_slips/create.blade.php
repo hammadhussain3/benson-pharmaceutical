@@ -22,7 +22,7 @@
                         <div class="form-row row">
                             <div class="col-md-6">
                                 <label>Select Employee </label>
-                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectLoan(this.value); SelectLeaves(this.value); SelectIncomeTax(this.value); SelectLoanDate(document.getElementById('month').value, document.getElementById('year').value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
+                                <select name="employee" id="employee_id" class="js-example-basic-single select2" required onchange="SelectEob(this.value); SelectLoan(this.value); SelectLeaves(this.value, document.getElementById('year').value, document.getElementById('month').value); SelectIncomeTax(this.value); SelectLoanDate(document.getElementById('month').value, document.getElementById('year').value); @role('Superadmin') SelectCompany(this.value); @endrole SelectEmployeeDetails(this.value);">
                                     <option value="">--Select Employee--</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{ $employee->id }}"
@@ -43,7 +43,7 @@
                                 <label for="month-year">Month and Year</label>
                                 <div class="input-group">
                                     <!-- Month Dropdown -->
-                                    <select class="form-select" name="month" id="month" onchange="SelectLoanDate(this.value, document.getElementById('year').value);">
+                                    <select class="form-select" name="month" id="month" onchange="SelectLoanDate(this.value, document.getElementById('year').value); SelectLeaves(document.getElementById('employee_id').value, document.getElementById('year').value, this.value);">
                                         @foreach([
                                             '1' => 'January', '2' => 'February', '3' => 'March', '4' => 'April',
                                             '5' => 'May', '6' => 'June', '7' => 'July', '8' => 'August',
@@ -56,7 +56,7 @@
                                     </select>
                                     
                                     <!-- Year Dropdown -->
-                                    <select class="form-select" name="year" id="year" onchange="SelectLoanDate(document.getElementById('month').value, this.value);">
+                                    <select class="form-select" name="year" id="year" onchange="SelectLoanDate(document.getElementById('month').value, this.value); SelectLeaves(document.getElementById('employee_id').value, this.value, document.getElementById('month').value);">
                                         @for ($y = $currentYear; $y >= $currentYear - 9; $y--)
                                             <option value="{{ $y }}" {{ old('year', $currentYear) == $y ? 'selected' : '' }}>
                                                 {{ $y }}
@@ -99,6 +99,11 @@
                                 <label for="overtime">Overtime</label>
                                 <input type="number" class="form-control" name="overtime" id="overtime" required value="{{ old('overtime') }}">
                                 <div class="invalid-feedback">Please provide the overtime amount.</div>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="eob">E.O.B</label>
+                                <input type="number" class="form-control" name="eob" id="eob" required value="{{ old('eob') }}">
                             </div>
                         </div>
                         

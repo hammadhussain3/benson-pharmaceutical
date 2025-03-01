@@ -73,26 +73,15 @@
                                     </select>
                                 </div>                                
                             </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="leave_type">Leave Type</label>
-                                <select name="leave_type" id="leave_type" class="js-example-basic-single select2"
-                                    required>
-                                    <option value="">Select Leave Type</option>
-                                    @foreach ($leaveTypes as $leaveType)
-                                        <option value="{{ $leaveType->id }}"
-                                            {{ old('leave_type') == $leaveType->id ? 'selected' : '' }}>
-                                            {{ $leaveType->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a leave type.</div>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="days">Number of Days</label>
-                                <input type="number" class="form-control" name="days" id="days" placeholder="Days"
-                                    required value="{{ old('days') }}">
-                                <div class="invalid-feedback">Please provide a valid number of days.</div>
-                            </div>
+                            
+                            @foreach ($leaveTypes as $key => $leaveType)
+                                <div class="mb-3 col-md-6">
+                                    <label for="days-{{ $key }}">{{ $leaveType->name }}</label>
+                                    <input type="number" class="form-control" name="days[{{ $key }}]" id="days-{{ $key }}" 
+                                        placeholder="Days" required value="{{ old('days.' . $key, 0) }}" min="0">
+                                    <input type="hidden" name="leave_type[{{ $key }}]" value="{{ $leaveType->id }}">
+                                </div>
+                            @endforeach
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('leaves.index') }}">Cancel</a>

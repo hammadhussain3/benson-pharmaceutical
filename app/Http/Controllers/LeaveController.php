@@ -36,8 +36,10 @@ class LeaveController extends Controller
         }
     
         $leaves = $leavesQuery->get();
+
+        $leaveTypes = LeaveType::all();
     
-        return view('admin.leaves.index', compact('leaves', 'companies'));
+        return view('admin.leaves.index', compact('leaves', 'companies', 'leaveTypes'));
     }
 
     public function view($id)
@@ -46,7 +48,12 @@ class LeaveController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $leave = Leave::findOrFail($id);
-        return view('admin.leaves.view', compact('leave'));
+        $leaves = Leave::where('employee_id', $leave->employee_id)
+            ->whereYear('created_at', $leave->created_at->year)
+            ->whereMonth('created_at', $leave->created_at->month)
+            ->get();
+        $leaveTypes = LeaveType::all();
+        return view('admin.leaves.view', compact('leave', 'leaves', 'leaveTypes'));
     }
 
     public function create()
@@ -68,14 +75,19 @@ class LeaveController extends Controller
 
         $created_at = now()->setDate($request->year, $request->month, now()->day);
 
-        $data = [
-            'employee_id' => $request->employee,
-            'company_id' => $request->company,
-            'leave_type_id' => $request->leave_type,
-            'days' => $request->days,
-            'created_at' => $created_at,
-        ];
-        Leave::create($data);
+        foreach ($request->leave_type as $key => $leave_type_id) {
+            // Ensure there's a corresponding days value
+            if (isset($request->days[$key]) && $request->days[$key] > 0) {
+                Leave::create([
+                    'employee_id' => $request->employee,
+                    'company_id' => $request->company,
+                    'leave_type_id' => $leave_type_id,
+                    'days' => $request->days[$key], // Get corresponding days
+                    'created_at' => $created_at,
+                ]);
+            }
+        }
+
         return redirect()->route('leaves.index')->with('success', 'Leave created successfully.');
     }
 
@@ -85,10 +97,14 @@ class LeaveController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $leave = Leave::findOrFail($id);
+        $leaves = Leave::where('employee_id', $leave->employee_id)
+            ->whereYear('created_at', $leave->created_at->year)
+            ->whereMonth('created_at', $leave->created_at->month)
+            ->get();
         $leaveTypes = LeaveType::all();
         $employees = $this->employeeService->getAllEmployees();
         $companies = Company::orderBy('name', 'asc')->get();
-        return view('admin.leaves.edit', compact('leave', 'leaveTypes', 'employees', 'companies'));
+        return view('admin.leaves.edit', compact('leave', 'leaveTypes', 'employees', 'companies', 'leaves'));
     }
 
 
@@ -99,15 +115,43 @@ class LeaveController extends Controller
         }
         $leave = Leave::findOrFail($id);
         $created_at = now()->setDate($request->year, $request->month, now()->day);
-        $data = [
-            'employee_id' => $request->employee,
-            'company_id' => $request->company,
-            'leave_type_id' => $request->leave_type,
-            'days' => $request->days,
-            'created_at' => $created_at,
-        ];
-        
-        $leave->update($data);
+        $existingLeaves = Leave::where('employee_id', $leave->employee_id)
+            ->whereYear('created_at', $leave->created_at->year)
+            ->whereMonth('created_at', $leave->created_at->month)
+            ->get()
+            ->keyBy('leave_type_id');
+
+        $updatedLeaveTypeIds = [];
+
+        foreach ($request->leave_type as $key => $leave_type_id) {
+            $days = $request->days[$key] ?? 0;
+
+            if ($days > 0) {
+                if (isset($existingLeaves[$leave_type_id])) {
+                    $existingLeaves[$leave_type_id]->update([
+                        'days' => $days,
+                        'created_at' => $created_at,
+                    ]);
+                } else {
+                    Leave::create([
+                        'employee_id' => $request->employee,
+                        'company_id' => $request->company,
+                        'leave_type_id' => $leave_type_id,
+                        'days' => $days,
+                        'created_at' => $created_at,
+                    ]);
+                }
+
+                $updatedLeaveTypeIds[] = $leave_type_id;
+            }
+        }
+
+        Leave::where('employee_id', $request->employee)
+            ->whereYear('created_at', $request->year)
+            ->whereMonth('created_at', $request->month)
+            ->whereNotIn('leave_type_id', $updatedLeaveTypeIds)
+            ->delete();
+
         return redirect()->route('leaves.index')->with('success', 'Leave updated successfully.');
     }
 
@@ -117,7 +161,11 @@ class LeaveController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $leave = Leave::findOrFail($id);
-        $leave->delete();
+        Leave::where('employee_id', $leave->employee_id)
+            ->whereYear('created_at', $leave->created_at->year)
+            ->whereMonth('created_at', $leave->created_at->month)
+            ->delete();
+            
         return redirect()->route('leaves.index')->with('success', 'Leave deleted successfully.');
     }
 
@@ -137,15 +185,19 @@ class LeaveController extends Controller
         return response()->json(['leaves' => $leaves]);
     }
 
-    public function getLeavesByEmployee($employeeId)
+    public function getLeavesByEmployee(Request $request, $employeeId)
     {
         $employee = Employee::findOrFail($employeeId);
 
         // Get all leave types for the employee's company
         $leaveTypes = LeaveType::where('company_id', $employee->company_id)->get();
+
+        $created_at = now()->setDate($request->year, $request->month, now()->day);
     
         // Get total days for each leave_type_id from the leaves table
         $leaveTotals = Leave::where('employee_id', $employeeId)
+            ->whereYear('created_at', $created_at->year)
+            ->whereMonth('created_at', $created_at->month)
             ->select('leave_type_id', DB::raw('SUM(days) as total_days'))
             ->groupBy('leave_type_id')
             ->pluck('total_days', 'leave_type_id');
