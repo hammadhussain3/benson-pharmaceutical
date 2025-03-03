@@ -10,6 +10,7 @@ use App\Models\Company;
 use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Employee;
+use App\Models\SalarySlip;
 use App\Services\EmployeeService;
 use App\Services\EmployeeTypeService;
 
@@ -126,6 +127,7 @@ class EmployeeController extends Controller
         $branch = Branch::findOrFail($employee->branch_id);
         $department = Department::findOrFail($employee->department_id);
         $designation = Designation::findOrFail($employee->designation_id);
+        $salary = SalarySlip::where('employee_id', $employeeId)->latest()->value('income');
 
         return response()->json([
             'code' => $employee->code,
@@ -138,7 +140,7 @@ class EmployeeController extends Controller
             'branch' => $branch->name,
             'department' => $department->name,
             'designation' => $designation->name,
-            'basic_pay' => $employee->basic_pay,
+            'basic_pay' => $salary == 0 ? $employee->basic_pay : $salary,
             'allowances' => $employee->allowances,
             'date_of_joining' => $employee->date_of_joining,
         ]);

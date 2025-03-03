@@ -19,6 +19,7 @@ class SalarySlipRequest extends FormRequest
         return [
             'employee' => 'required|exists:employees,id',
             'leaves' => 'required',
+            'income' => 'required|numeric|min:0',
             'leave_id' => 'required',
             'late_in_early_out_deduction' => 'required|numeric|min:0',
             'eob' => 'required|numeric|min:0',

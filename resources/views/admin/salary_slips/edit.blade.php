@@ -111,6 +111,12 @@
                                 <input type="number" class="form-control" name="eob" id="eob" required value="{{ old('eob', $salarySlip->eob) }}">
                             </div>
 
+                            <div class="mb-3 col-md-6">
+                                <label for="basic_pay">Basic Pay</label>
+                                <input type="number" class="form-control" name="income" id="basic_pay"
+                                    value="{{ old('income', ($salarySlip->income == 0 ? $currentEmployee->basic_pay : $salarySlip->income)) }}" required>
+                                <div class="invalid-feedback">Please provide the number of basic pay.</div>
+                            </div>
                         </div>
                         
                         <div class="row" id="allowance-container">
@@ -179,13 +185,6 @@
                                 <input type="number" class="form-control" name="loan_advance" id="loan_advance"
                                     value="{{ old('loan_advance', $salarySlip->loan_advance) }}" required readonly >
                                 <div class="invalid-feedback">Please provide the loan/advance amount.</div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="basic_pay">Basic Pay</label>
-                                <input type="number" class="form-control" name="basic_pay" id="basic_pay"
-                                    value="{{ old('basic_pay', $currentEmployee->basic_pay) }}" required readonly>
-                                <div class="invalid-feedback">Please provide the number of basic pay.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">

@@ -11,6 +11,7 @@ class SalarySlip extends Model
 
     protected $fillable = [
         'employee_id',
+        'income',
         'leaves',
         'late_in_early_out_deduction',
         'eob',

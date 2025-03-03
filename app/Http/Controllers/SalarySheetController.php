@@ -25,7 +25,7 @@ class SalarySheetController extends Controller
 
     // Process the form and display the salary sheet
     public function showSalarySheet(Request $request)
-    {
+    {       
         if (!auth()->user()->hasPermission('Salaries View')) {
             abort(403, 'Unauthorized action.');
         }
@@ -57,7 +57,9 @@ class SalarySheetController extends Controller
         // Calculate the number of days in the given month and year
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
-        $salaryPerDay = $employee->net_salary / $daysInMonth;
+        $netSalary = ($salarySlip->income == 0 ? $employee->basic_pay : $salarySlip->income) + $employee->allowances;
+
+        $salaryPerDay = $netSalary / $daysInMonth;
         $salaryPerHour = $salaryPerDay / 8;
         $leaveIds = collect($salarySlip->leaves)->pluck('id');
         $leaveTypes = LeaveType::whereIn('id', $leaveIds)->get()->keyBy('id');
@@ -83,13 +85,10 @@ class SalarySheetController extends Controller
             ->where('company_id', $employee->company_id)
             ->first();
         $loanDeduction = $loan ? $loan->amount : 0;
-        $taxSlab = SalaryTaxSlab::where('company_id', $employee->company_id)
-            ->where('slab_start', '<=', $employee->net_salary)
-            ->where('slab_end', '>=', $employee->net_salary)
-            ->first();
-        $incomeTax = $taxSlab ? $salarySlip->income_tax : 0;
+        // Example usage
+        $incomeTax = $this->calculateTaxDistribution($netSalary, $employee);
+        
         $totalDeductions = $leavesTotalAmount + $lateDeduction + $loanDeduction + $incomeTax;
-        $netSalary = $employee->net_salary;
         $salaryDeductionAmount = $salaryAllowances->where('type', 'deduction')->sum('amount');
         $salaryAllowanceAmount = $salaryAllowances->where('type', 'allowance')->sum('amount');
         $totalDebit = $leavesTotalAmount + $lateDeduction + $salarySlip->loan_advance + $incomeTax + $salaryDeductionAmount + $salarySlip->eob;
@@ -122,4 +121,44 @@ class SalarySheetController extends Controller
             'salaryAllowances'
         ));
     }
+
+    private function calculateTaxDistribution($netSalary, $employee) {
+        $annualSalary = $netSalary * 12;
+    
+        // Fetch all tax slabs for the given company, ordered by slab_start
+        $slabs = SalaryTaxSlab::where('company_id', $employee->company_id)
+            ->orderBy('slab_start', 'asc')
+            ->get(['slab_start', 'slab_end', 'tax_value']); // Fix: Use tax_value instead of tax_rate
+    
+        $remainingSalary = $annualSalary;
+        $salaryDistribution = [];
+        $totalTax = 0;
+    
+        foreach ($slabs as $index => $slab) {
+            if ($remainingSalary <= 0) break; // Stop if no salary left to distribute
+    
+            $previousSlab = $index > 0 ? $slabs[$index - 1]->slab_end : 0; // Previous slab limit
+            $maxSlabAmount = $slab->slab_end - $previousSlab; // Max amount allowed in this slab
+            $amountInSlab = min($remainingSalary, $maxSlabAmount); // Amount assigned to this slab
+    
+            // Calculate tax for this slab
+            $taxForSlab = ($amountInSlab * $slab->tax_value) / 100; 
+            $totalTax += $taxForSlab;
+    
+            // Store slab breakdown
+            $salaryDistribution[] = [
+                'slab_range' => "{$slab->slab_start} - {$slab->slab_end}", // Correct range display
+                'amount' => $amountInSlab,
+                'tax_rate' => $slab->tax_value . '%', // Correct tax value usage
+                'tax_amount' => $taxForSlab
+            ];
+    
+            $remainingSalary -= $amountInSlab; // Deduct assigned amount
+        }
+    
+        // Calculate the monthly tax
+        $monthlyTax = $totalTax / 12;
+    
+        return $monthlyTax;
+    }         
 }

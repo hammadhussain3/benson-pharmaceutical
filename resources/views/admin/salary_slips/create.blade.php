@@ -105,6 +105,11 @@
                                 <label for="eob">E.O.B</label>
                                 <input type="number" class="form-control" name="eob" id="eob" required value="{{ old('eob') }}">
                             </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="basic_pay">Income</label>
+                                <input type="number" class="form-control" name="income" id="basic_pay" required value="{{ old('income') }}">
+                            </div>
                         </div>
                         
                         <div class="row" id="allowance-container">
@@ -164,12 +169,6 @@
                                 <label for="loan_advance">Loan/Advance</label>
                                 <input type="number" class="form-control" name="loan_advance" id="loan_advance" required readonly value="{{ old('loan_advance') }}">
                                 <div class="invalid-feedback">Please provide the loan/advance amount.</div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="basic_pay">Basic Pay</label>
-                                <input type="number" class="form-control" name="basic_pay" id="basic_pay" required readonly value="{{ old('basic_pay') }}">
-                                <div class="invalid-feedback">Please provide the number of basic pay.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">

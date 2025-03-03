@@ -56,7 +56,7 @@
                 </tr>
                 <tr>
                     <th>Basic Pay</th>
-                    <td>{{ number_format($employee->basic_pay, 2) }}</td>
+                    <td>{{ number_format(($salarySlip->income == 0 ? $employee->basic_pay : $salarySlip->income), 2) }}</td>
                     <th>Allowances</th>
                     <td>{{ number_format($employee->allowances, 2) }}</td>
                     <th>Net Salary</th>
