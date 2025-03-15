@@ -129,7 +129,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>E.O.B</td>
+                        <td>EOBI</td>
                         <td colspan="3"></td>
                         <td>{{ number_format($salarySlip->eob, 2) }}</td>
                         <td></td>
@@ -157,13 +157,13 @@
                 <tfoot>
                     <tr>
                         <th colspan="4" class="text-right"> <strong>Total</strong></th>
-                        <th>{{ number_format($totalDebit, 2) }}</th>
-                        <th>{{ number_format($totalCredit, 2) }}</th>
+                        <th>{{ number_format(round($totalDebit), 0) }}</th>
+                        <th>{{ number_format(round($totalCredit), 0) }}</th>
                     </tr>
                     <tr>
                         <th colspan="4" class="text-right"> <strong>Total Salary:</strong></th>
-                        <th colspan="2">{{ number_format($totalSalaryRounded, 2) }}</th>
-                    </tr>
+                        <th colspan="2">{{ number_format(round($totalSalaryRounded), 0) }}</th>
+                    </tr>                    
                     <tr>
                         <th colspan="4" class="text-right"> <strong>Total Salary in Words:</strong></th>
                         <td colspan="2">{{ ucfirst($totalSalaryInWords) }}</td>

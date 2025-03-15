@@ -102,7 +102,7 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="eob">E.O.B</label>
+                                <label for="eob">EOBI</label>
                                 <input type="number" class="form-control" name="eob" id="eob" required value="{{ old('eob') }}">
                             </div>
 
@@ -161,7 +161,7 @@
                         <div class="row" id="formContainer">
                             <div class="mb-3 col-md-6">
                                 <label for="income_tax">Income Tax</label>
-                                <input type="number" class="form-control" name="income_tax" id="income_tax" required readonly value="{{ old('income_tax') }}">
+                                <input type="number" class="form-control" name="income_tax" id="income_tax" required value="{{ old('income_tax') }}">
                                 <div class="invalid-feedback">Please provide the income tax amount.</div>
                             </div>
 

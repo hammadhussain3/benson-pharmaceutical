@@ -49,7 +49,7 @@ class SalarySlipRequest extends FormRequest
             ],
 
             'company' => 'required|exists:companies,id',
-            
+
             'allowance_names' => 'nullable|array',
             'allowance_names.*' => 'required_with:allowance_amounts.*|string|max:255',
             'allowance_amounts' => 'nullable|array',
@@ -60,5 +60,42 @@ class SalarySlipRequest extends FormRequest
             'deduction_amounts' => 'nullable|array',
             'deduction_amounts.*' => 'required_with:deduction_names.*|numeric|min:0',
         ];
+    }
+
+    /**
+     * Remove empty allowances and deductions before validation.
+     */
+    protected function prepareForValidation()
+    {
+        $filteredAllowances = [];
+        $filteredAllowanceAmounts = [];
+
+        if ($this->has('allowance_names') && $this->has('allowance_amounts')) {
+            foreach ($this->allowance_names as $key => $name) {
+                if (!empty($name) && !empty($this->allowance_amounts[$key])) {
+                    $filteredAllowances[] = $name;
+                    $filteredAllowanceAmounts[] = $this->allowance_amounts[$key];
+                }
+            }
+        }
+
+        $filteredDeductions = [];
+        $filteredDeductionAmounts = [];
+
+        if ($this->has('deduction_names') && $this->has('deduction_amounts')) {
+            foreach ($this->deduction_names as $key => $name) {
+                if (!empty($name) && !empty($this->deduction_amounts[$key])) {
+                    $filteredDeductions[] = $name;
+                    $filteredDeductionAmounts[] = $this->deduction_amounts[$key];
+                }
+            }
+        }
+
+        $this->merge([
+            'allowance_names' => $filteredAllowances,
+            'allowance_amounts' => $filteredAllowanceAmounts,
+            'deduction_names' => $filteredDeductions,
+            'deduction_amounts' => $filteredDeductionAmounts,
+        ]);
     }
 }
