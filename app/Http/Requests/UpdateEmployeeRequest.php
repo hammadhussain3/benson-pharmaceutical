@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\EmployeeType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEmployeeRequest extends FormRequest
@@ -13,6 +14,11 @@ class UpdateEmployeeRequest extends FormRequest
 
     public function rules()
     {
+        $employeeType = null;
+        if ($this->employee_type) {
+            $employeeType = EmployeeType::find($this->employee_type);
+        }
+
         return [
             'code' => 'required|string|max:255|unique:employees,code,' . $this->route('employee')->id . ',id,company_id,' . $this->company_id,
             'first_name' => 'required|string|max:255',
@@ -30,6 +36,7 @@ class UpdateEmployeeRequest extends FormRequest
             'branch' => 'required|exists:branches,id',
             'company' => 'required|exists:companies,id',
             'employee_type' => 'required|exists:employee_types,id',
+            'date_of_appointment' => ($employeeType && strtolower($employeeType->type) == 'permanent') ? 'required|date' : 'nullable|date',
         ];
     }
 }

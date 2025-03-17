@@ -18,6 +18,7 @@ class Employee extends Model
         'basic_pay',
         'allowances',
         'date_of_joining',
+        'date_of_appointment',
         'designation_id',
         'department_id',
         'bank_id',

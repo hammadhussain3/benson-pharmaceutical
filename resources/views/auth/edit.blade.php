@@ -40,7 +40,7 @@
                             <!-- Employee Select Dropdown -->
                             <div class="col-md-6 mb-3">
                                 <label>Select Employee</label>
-                                <select name="user" id="employee_id" class="js-example-basic-single select2" required>
+                                <select name="user" id="employee_id" class="js-example-basic-single select2" required onchange="SelectEmployeeDetails(this.value)">
                                     <option value="">--Select Employee--</option>
                                     @php
                                         $selectedCompanyId = old('company', $employee_details->company_id);
@@ -97,15 +97,6 @@
                                 <label for="email">Email</label>
                                 <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" value="{{ old('email', $user->email) }}" required readonly>
                             </div>
-
-                            @role('Superadmin')
-                            @else
-                            <div class="col-md-6 mb-3">
-                                <label for="company">Company</label>
-                                <input type="text" class="form-control" value="{{ App\Models\Company::where('id', auth()->user()->employee->company_id)->value('name'); }}" required readonly>
-                                <input type="hidden" id="company" name="company" class="form-control" value="{{ auth()->user()->employee->company_id }}">
-                            </div>
-                            @endrole
 
                             <div class="col-md-6 mb-3">
                                 <label for="branch">Branch</label>

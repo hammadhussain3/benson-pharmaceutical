@@ -157,7 +157,7 @@
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="employee_type_id">Employee Type</label>
-                                <select name="employee_type" id="employee_type_id" class="form-control" required value="{{ old('employee_type') }}"">
+                                <select name="employee_type" id="employee_type_id" class="form-control" required>
                                     <option value="">Select Employee Type</option>
                                     @php
                                         $selectedCompanyId = old('company', $employee->company_id);
@@ -170,6 +170,12 @@
                                     @endforeach
                                 </select>
                                 <div class="invalid-feedback">Please select a employee type.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="date_of_appointment">Date of Appointment</label>
+                                <input type="date" class="form-control" name="date_of_appointment" id="date_of_appointment"
+                                    required max="{{ date('Y-m-d') }}" value="{{ old('date_of_appointment', $employee->date_of_appointment) }}" disabled>
+                                <div class="invalid-feedback">Please select a date.</div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="is_active">Is Active</label>

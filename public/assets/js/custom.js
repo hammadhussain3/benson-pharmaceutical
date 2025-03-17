@@ -1925,24 +1925,25 @@ function calculateTotalAmount() {
     document.getElementById('total_amount').value = totalAmount.toFixed(2);
 }
 
-document.getElementById('addProductButton').addEventListener('click', function() {
-    // Get the table body and clone the row
-    const table = document.getElementById('productList').getElementsByTagName('tbody')[0];
-    const newRow = document.querySelector('.product-row').cloneNode(true);
+document.addEventListener('DOMContentLoaded', function() {
+    const addProductBtn = document.getElementById('addProductButton');
 
-    // Update row index in the first cell
-    const rowCount = table.querySelectorAll('.product-row').length + 1;
-    newRow.cells[0].textContent = rowCount;
+    if (addProductBtn) {
+        addProductBtn.addEventListener('click', function() {
+            const table = document.getElementById('productList').getElementsByTagName('tbody')[0];
+            const newRow = document.querySelector('.product-row').cloneNode(true);
 
-    // Clear input values in the cloned row
-    newRow.querySelectorAll('input').forEach(input => input.value = '');
+            const rowCount = table.querySelectorAll('.product-row').length + 1;
+            newRow.cells[0].textContent = rowCount;
 
-    // Add "Remove" button only to new rows
-    newRow.cells[6].innerHTML = '<button type="button" class="btn btn-danger btn-sm removeProductButton" onclick="removeProductRow(this)"><i class="fa fa-trash"></i></button>';
+            newRow.querySelectorAll('input').forEach(input => input.value = '');
 
-    // Insert the new row before the "Total" row
-    const totalRow = table.lastElementChild;
-    table.insertBefore(newRow, totalRow);
+            newRow.cells[6].innerHTML = '<button type="button" class="btn btn-danger btn-sm removeProductButton" onclick="removeProductRow(this)"><i class="fa fa-trash"></i></button>';
+
+            const totalRow = table.lastElementChild;
+            table.insertBefore(newRow, totalRow);
+        });
+    }
 });
 
 function removeProductRow(button) {
@@ -2244,3 +2245,26 @@ function addDeduction() {
                  <div class="col-md-6 mb-3"><input type="number" name="deduction_amounts[]" placeholder="Amount" class="form-control" required></div>`;
     container.insertAdjacentHTML('beforeend', input);
 }
+
+$(document).ready(function () {
+    const $dateOfJoiningInput = $('#date_of_appointment');
+
+    // Only run if the date_of_appointment element is present
+    if ($dateOfJoiningInput.length) {
+        const $employeeTypeSelect = $('#employee_type_id');
+
+        if (!$employeeTypeSelect.length) return;
+
+        function toggleDateField() {
+            const selectedText = $employeeTypeSelect.find('option:selected').text().toLowerCase().trim();
+            if (selectedText === 'permanent') {
+                $dateOfJoiningInput.prop('disabled', false);
+            } else {
+                $dateOfJoiningInput.prop('disabled', true).val('');
+            }
+        }
+
+        toggleDateField();
+        $employeeTypeSelect.on('change', toggleDateField);
+    }
+});

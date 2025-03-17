@@ -177,6 +177,12 @@
                                 <div class="invalid-feedback">Please select a employee type.</div>
                             </div>
                             <div class="mb-3 col-md-6">
+                                <label for="date_of_appointment">Date of Appointment</label>
+                                <input type="date" class="form-control" name="date_of_appointment" id="date_of_appointment"
+                                    required max="{{ date('Y-m-d') }}" value="{{ old('date_of_appointment') }}" disabled>
+                                <div class="invalid-feedback">Please select a date.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="is_active">Is Active</label>
                                 <select name="is_active" id="is_active" class="form-control" required>
                                     <option value="1" {{ old('is_active', 1) == '1' ? 'selected' : '' }}>Yes</option>

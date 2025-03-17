@@ -17,6 +17,7 @@ class CreateEmployeesTable extends Migration
             $table->decimal('allowances', 10, 2);
             $table->decimal('net_salary', 10, 2)->virtualAs('basic_pay + allowances');
             $table->date('date_of_joining');
+            $table->date('date_of_appointment')->nullable();
             $table->foreignId('designation_id')->constrained()->onDelete('cascade');
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
             $table->foreignId('bank_id')->nullable()->constrained()->onDelete('set null');

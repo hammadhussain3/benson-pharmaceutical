@@ -59,6 +59,11 @@
                                     max="{{ date('Y-m-d') }}" value="{{ $employees->date_of_joining }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
+                            <label for="date_of_appointment">Date of Appointment</label>
+                            <input type="date" class="form-control" name="date_of_appointment" id="date_of_appointment"
+                                    max="{{ date('Y-m-d') }}" value="{{ $employees->date_of_appointment }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
                             <label for="company_id">Company</label>
                             <input type="text" class="form-control" name="name" id="name" value="{{ $employees->company->name }}" readonly>
                         </div>

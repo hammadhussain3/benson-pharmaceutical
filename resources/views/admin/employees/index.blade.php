@@ -32,11 +32,14 @@
                 <table class="table datanew dataTable no-footer table-striped">
                     <thead>
                         <tr>
-
                             <th>Emp Code</th>
                             <th>Full Name</th>
                             <th>Contact</th>
+                            <th>Basic Pay</th>
+                            <th>Allowances</th>
+                            <th>Net Salary</th>
                             <th>Date of Joining</th>
+                            <th>Date of Appointment</th>
                             <th>Designation</th>
                             <th>Department</th>
                             <th>Branch</th>
@@ -44,7 +47,7 @@
                             <th>Company</th>
                             @endrole
                             <th>Bank</th>
-                            <th>Net Salary</th>
+                            <th>Type</th>
                             <th>Status</th>
                             @if(auth()->user()->hasPermission('Employee View') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
                             <th>Action</th>
@@ -57,15 +60,19 @@
                                 <td><a class="link-primary" href="{{ route('employees.view', $employee->id) }}">{{ $employee->code }}</a></td>
                                 <td><a class="me-3" href="{{ route('employees.view', $employee->id) }}">{{ $employee->first_name }} {{ $employee->last_name }}</a></td>
                                 <td>{{ $employee->email }}<br><small class="text-muted">{{ $employee->phone }}</small></td>
+                                <td>{{ number_format($employee->basic_pay, 2) }}</td>
+                                <td>{{ number_format($employee->allowances, 2) }}</td>
+                                <td>{{ number_format($employee->net_salary, 2) }}</td>
                                 <td>{{ $employee->date_of_joining }}</td>
+                                <td>{{ $employee->date_of_appointment }}</td>
                                 <td>{{ $employee->designation->name ?? 'N/A' }}</td>
                                 <td>{{ $employee->department->name ?? 'N/A' }}</td>
                                 <td>{{ $employee->branch->name ?? 'N/A' }}</td>
                                 @role('Superadmin')
                                 <td>{{ $employee->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                <td>{{ $employee->bank->name ?? 'N/A' }}</td>
-                                <td>{{ number_format($employee->net_salary, 2) }}</td>
+                                <td>{{ $employee->bank->name ?? 'N/A' }}<br><span class="text-muted text-sm">{{ $employee->bank_account ?? 'N/A' }}</span></td>
+                                <td>{{ $employee->employee_type->type ?? 'N/A' }}</td>
                                 <td>
                                     <span class="badges {{ $employee->is_active ? 'bg-lightgreen' : 'bg-lightred' }}">
                                         {{ $employee->is_active ? 'Active' : 'Inactive' }}
