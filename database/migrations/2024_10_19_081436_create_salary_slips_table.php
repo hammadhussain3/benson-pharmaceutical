@@ -19,6 +19,7 @@ class CreateSalarySlipsTable extends Migration
             $table->decimal('income_tax', 10, 2)->default(0);
             $table->decimal('loan_advance', 10, 2)->default(0);
             $table->enum('payment_mode', ['bank_transfer', 'cash']);
+            $table->boolean('is_approved')->default(false);
             $table->foreignId('company_id')->constrained()->onDelete('cascade'); // Assuming you have a companies table
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');

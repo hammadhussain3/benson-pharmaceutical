@@ -405,6 +405,27 @@
                                         <td><input class="form-check-input" type="checkbox" value="90" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(90) ? 'checked' : '' }}></td>
                                     </tr>
                                 </tbody>
+                                <thead>
+                                    <th colspan="6" class="text-center">Approvals</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Approved Document</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td><input class="form-check-input" type="checkbox" value="221" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(221) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="222" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(222) ? 'checked' : '' }}></td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Document Approvals</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td><input class="form-check-input" type="checkbox" value="223" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(223) ? 'checked' : '' }}></td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>

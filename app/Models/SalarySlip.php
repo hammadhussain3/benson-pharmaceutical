@@ -22,6 +22,7 @@ class SalarySlip extends Model
         'payment_mode',
         'month',
         'year',
+        'is_approved',
         'company_id',
         'created_by',
         'updated_by'

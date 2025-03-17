@@ -19,8 +19,10 @@
     <!-- Card Component -->
     <div class="card">
         <div class="card-body">
-
-            <div class="row justify-content-between">
+            @if ($salarySlip->is_approved == 1)
+                <span class="position-absolute top-0 end-0 ps-2 mt-2 pe-3 bg-success text-light approved-target">{{ $salarySlip->is_approved == 1 ? 'Approved' : '' }}</span>
+            @endif
+            <div class="row justify-content-between print-header">
                 <div class="col-auto">
                     <div class="d-flex">
                         <div class="flex-shrink-0">
@@ -33,7 +35,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto text-end">
+                <div class="col-auto text-end mt-2">
                     <h2>Salary Sheet</h2>
                     <h5>Month: {{ $formattedMonth }}</h5>
                 </div>
@@ -229,6 +231,15 @@
            left: 0;
            top: 0;
            width: 100%;
+       }
+
+       .approved-target{
+            background-color: #e3f2fd !important;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+       }
+       .print-header{
+            margin-top: 10px !important;
        }
    
        .table-primary th {

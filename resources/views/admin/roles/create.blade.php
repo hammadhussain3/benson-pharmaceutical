@@ -403,6 +403,27 @@
                                         <td><input class="form-check-input" type="checkbox" value="90" name="permissions[]" id="permissions"></td>
                                     </tr>
                                 </tbody>
+                                <thead>
+                                    <th colspan="6" class="text-center">Approvals</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Approved Document</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td><input class="form-check-input" type="checkbox" value="221" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="222" name="permissions[]" id="permissions"></td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Document Approvals</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td><input class="form-check-input" type="checkbox" value="223" name="permissions[]" id="permissions"></td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

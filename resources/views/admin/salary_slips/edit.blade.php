@@ -238,6 +238,16 @@
                                     <input type="hidden" name="leave_id[]" id="leave_id_{{ $leave->id }}" value="{{ old('leave_id')[$index] ?? $savedLeavesId[$index]['id'] ?? 0 }}">
                                 </div>
                             @endforeach
+
+                            @if(auth()->user()->hasPermission('Document Approval Edit'))
+                                <div class="mb-3 col-md-6">
+                                    <label for="is_approved">Is Approved</label>
+                                    <select name="is_approved" id="is_approved" class="form-control" required>
+                                        <option value="1" {{ old('is_approved', $salarySlip->is_approved) == '1' ? 'selected' : '' }}>Yes</option>
+                                        <option value="0" {{ old('is_approved', $salarySlip->is_approved) == '0' ? 'selected' : '' }}>No</option>
+                                    </select>
+                                </div>
+                            @endif
                         </div>
                         <button class="btn btn-primary" type="submit">Update</button>
                         <a class="btn btn-secondary" href="{{ route('salary_slips.index') }}">Cancel</a>

@@ -59,6 +59,8 @@ class SalarySlipRequest extends FormRequest
             'deduction_names.*' => 'required_with:deduction_amounts.*|string|max:255',
             'deduction_amounts' => 'nullable|array',
             'deduction_amounts.*' => 'required_with:deduction_names.*|numeric|min:0',
+            
+            'is_approved' => 'nullable|boolean',
         ];
     }
 
