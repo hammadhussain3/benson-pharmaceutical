@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('discount_type', ['flat', 'percent'])->default('flat');
             $table->decimal('discount', 15, 2);
             $table->decimal('total_amount', 15, 2);
+            $table->boolean('is_approved')->default(false);
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

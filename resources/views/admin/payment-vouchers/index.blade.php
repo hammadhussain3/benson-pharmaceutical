@@ -46,6 +46,7 @@
                             @role('Superadmin')
                                 <th>Company</th>
                             @endrole
+                            <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Payment Voucher View') || auth()->user()->hasPermission('Payment Voucher Update') || auth()->user()->hasPermission('Payment Voucher Delete'))
                             <th>Action</th>
                             @endif
@@ -67,6 +68,7 @@
                                 @role('Superadmin')
                                     <td>{{ $paymentVoucher->company->name }}</td>
                                 @endrole
+                                <td><span class="badge {{ $paymentVoucher->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $paymentVoucher->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Payment Voucher View') || auth()->user()->hasPermission('Payment Voucher Update') || auth()->user()->hasPermission('Payment Voucher Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Payment Voucher View'))
@@ -74,12 +76,16 @@
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Payment Voucher Update'))
+                                    @if(auth()->user()->hasPermission('Payment Voucher Update') && 
+                                        ($paymentVoucher->is_approved == 0 || ($paymentVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    )
                                     <a class="me-3" href="{{ route('payment-vouchers.edit', $paymentVoucher->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Payment Voucher Delete'))
+                                    @if(auth()->user()->hasPermission('Payment Voucher Delete') && 
+                                        ($paymentVoucher->is_approved == 0 || ($paymentVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    )
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $paymentVoucher->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">

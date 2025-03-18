@@ -28,6 +28,7 @@ class CreditNoteRequest extends FormRequest
             'party' => 'required|exists:parties,id',
             'description' => 'required|string',
             'total' => 'required|numeric',
+            'is_approved' => 'nullable|boolean',
             'company' => 'required|exists:companies,id',
             'items' => 'required|array|min:1',
             'items.*.chart_of_account' => 'required|exists:chart_of_accounts,id',

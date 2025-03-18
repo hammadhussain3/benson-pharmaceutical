@@ -33,6 +33,7 @@ class SalesReturnRequest extends FormRequest
             'discount_type' => 'required|string|in:percent,flat',
 			'discount' => 'required|numeric|min:0',
             'total_amount' => 'required|numeric|min:1',
+            'is_approved' => 'nullable|boolean',
             'company' => 'required|exists:companies,id',
             'items' => 'required|array|min:1',
             'items.*.product' => 'required|string|exists:product_variations,id',

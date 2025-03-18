@@ -111,6 +111,15 @@
                                     <button type="button" onclick="addItem()" class="btn btn-primary">Add Item</button>
                                 </div>
                             </div>
+                            @if(auth()->user()->hasPermission('Document Approval Edit'))
+                                <div class="mb-3 col-md-6">
+                                    <label for="is_approved">Is Approved</label>
+                                    <select name="is_approved" id="is_approved" class="form-control" required>
+                                        <option value="1" {{ old('is_approved', $creditNote->is_approved) == '1' ? 'selected' : '' }}>Yes</option>
+                                        <option value="0" {{ old('is_approved', $creditNote->is_approved) == '0' ? 'selected' : '' }}>No</option>
+                                    </select>
+                                </div>
+                            @endif
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('credit-notes.index') }}">Cancel</a>

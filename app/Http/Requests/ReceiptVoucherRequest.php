@@ -30,6 +30,7 @@ class ReceiptVoucherRequest extends FormRequest
             'total_debit' => 'required|numeric|min:0',
             'total_credit' => 'required|numeric|min:0',
             'total' => 'required|numeric',
+            'is_approved' => 'nullable|boolean',
             'company' => 'required|exists:companies,id',
             'items' => 'required|array|min:1',
             'items.*.chart_of_account' => 'required|exists:chart_of_accounts,id',

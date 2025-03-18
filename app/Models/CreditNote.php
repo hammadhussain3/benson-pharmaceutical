@@ -9,7 +9,7 @@ class CreditNote extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'party_id', 'description', 'total', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'party_id', 'description', 'total', 'is_approved', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {

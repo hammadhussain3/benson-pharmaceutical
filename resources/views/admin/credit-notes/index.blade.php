@@ -44,6 +44,7 @@
                             @role('Superadmin')
                                 <th>Company</th>
                             @endrole
+                            <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Credit Note View') || auth()->user()->hasPermission('Credit Note Update') || auth()->user()->hasPermission('Credit Note Delete'))
                             <th>Action</th>
                             @endif
@@ -63,6 +64,7 @@
                                 @role('Superadmin')
                                     <td>{{ $creditNote->company->name }}</td>
                                 @endrole
+                                <td><span class="badge {{ $creditNote->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $creditNote->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Credit Note View') || auth()->user()->hasPermission('Credit Note Update') || auth()->user()->hasPermission('Credit Note Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Credit Note View'))
@@ -70,12 +72,16 @@
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Credit Note Update'))
+                                    @if(auth()->user()->hasPermission('Credit Note Update') && 
+                                        ($creditNote->is_approved == 0 || ($creditNote->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    )
                                     <a class="me-3" href="{{ route('credit-notes.edit', $creditNote->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Credit Note Delete'))
+                                    @if(auth()->user()->hasPermission('Credit Note Delete') && 
+                                        ($creditNote->is_approved == 0 || ($creditNote->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    )
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $creditNote->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">

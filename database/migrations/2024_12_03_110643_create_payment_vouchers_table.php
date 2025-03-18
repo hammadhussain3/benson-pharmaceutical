@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('total', 10, 2);
             $table->string('currency', 5);
             $table->enum('payment_method', ['cheque', 'cash', 'online']);
+            $table->boolean('is_approved')->default(false);
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

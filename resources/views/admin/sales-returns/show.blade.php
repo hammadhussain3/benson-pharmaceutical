@@ -18,7 +18,9 @@
     <!-- Card Component -->
     <div class="card">
         <div class="card-body">
-
+            @if ($salesReturn->is_approved == 1)
+                <span class="position-absolute top-0 end-0 ps-2 mt-2 pe-3 bg-success text-light approved-target">{{ $salesReturn->is_approved == 1 ? 'Approved' : '' }}</span>
+            @endif
             <div class="row justify-content-between">
                 <div class="col-auto">
                     <div class="d-flex">
@@ -32,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto text-end">
+                <div class="col-auto text-end print-header">
                     <h2 class="mb-0">Sales Return</h2>
                     <p class="mb-0"><strong>Ref No:</strong> {{ $salesReturn->code }}</p>
                     <p class="mb-0"><strong>Date:</strong> {{ \Carbon\Carbon::parse($salesReturn->created_at)->format('d M, Y') }}</p>
@@ -155,6 +157,9 @@
 @endsection
 
 <style>
+    .print-header{
+        margin-top: 10px !important;
+    }
     @media print {
         @page {
             margin: 0;
@@ -213,6 +218,15 @@
         .table td {
             padding: 4px 8px;
             font-size: 10px;
+        }
+
+        .approved-target{
+            background-color: #e3f2fd !important;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+       }
+       .print-header{
+            margin-top: 15px !important;
         }
     }
 </style>

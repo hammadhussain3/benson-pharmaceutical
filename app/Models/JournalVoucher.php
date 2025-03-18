@@ -11,7 +11,7 @@ class JournalVoucher extends Model
     
     protected $perPage = 20;
 
-    protected $fillable = ['code', 'year', 'total_debit', 'total_credit', 'currency', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'year', 'total_debit', 'total_credit', 'currency', 'is_approved', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {

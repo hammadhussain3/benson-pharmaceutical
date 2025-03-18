@@ -9,7 +9,7 @@ class SalesReturn extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'party_id', 'inclusive_tax', 'tax_rate', 'total_tax', 'exclusive_tax', 'discount_type', 'discount', 'total_amount', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'party_id', 'inclusive_tax', 'tax_rate', 'total_tax', 'exclusive_tax', 'discount_type', 'discount', 'total_amount', 'is_approved', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
