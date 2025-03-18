@@ -18,7 +18,9 @@
     <!-- Card Component -->
     <div class="card">
         <div class="card-body">
-
+            @if ($invoice->is_approved == 1)
+                <span class="position-absolute top-0 end-0 ps-2 mt-2 pe-3 bg-success text-light approved-target">{{ $invoice->is_approved == 1 ? 'Approved' : '' }}</span>
+            @endif
             <div class="row justify-content-between">
                 <div class="col-auto">
                     <div class="d-flex">
@@ -32,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto text-end">
+                <div class="col-auto text-end mt-2 print-header">
                     <h2 class="mb-0">{{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</h2>
                     <p class="mb-0"><strong>Ref No:</strong> {{ $invoice->code }}</p>
                     <p class="mb-0"><strong>Date:</strong> {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</p>
@@ -236,5 +238,14 @@
             padding: 4px 8px;
             font-size: 10px;
         }
+
+        .approved-target{
+            background-color: #e3f2fd !important;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+       }
+       .print-header{
+            margin-top: 10px !important;
+       }
     }
 </style>

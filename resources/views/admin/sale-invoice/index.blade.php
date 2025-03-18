@@ -49,6 +49,7 @@
                             @role('Superadmin')
                                 <th>Company</th>
                             @endrole
+                            <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
                                 <th>Action</th>
                             @endif
@@ -74,6 +75,7 @@
                                 @role('Superadmin')
                                     <td>{{ $invoice->company->name }}</td>
                                 @endrole
+                                <td><span class="badge {{ $invoice->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $invoice->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
                                     <td>
                                         @if(auth()->user()->hasPermission('Invoice View'))

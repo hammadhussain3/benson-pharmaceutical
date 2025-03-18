@@ -40,6 +40,7 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->date('payment_deadline')->nullable();
             $table->timestamp('invoice_date')->useCurrent();
+            $table->boolean('is_approved')->default(false);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

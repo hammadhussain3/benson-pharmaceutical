@@ -68,6 +68,7 @@ class InvoiceRequest extends FormRequest
 			'invoice_items.*.discount' => 'nullable|numeric|min:0',
 			'invoice_items.*.trans_code' => 'nullable|numeric|min:0',
             'invoice_items.*.total_amount' => 'required|numeric|min:1',
+			'is_approved' => 'nullable|boolean',
 		];
     }
 }
