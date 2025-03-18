@@ -120,6 +120,15 @@
                                 <label for="special_instructions">Special Instruction</label>
                                 <textarea class="form-control" name="special_instructions" id="special_instructions">{{ old('special_instructions', $purchaseRequisition->special_instructions) }}</textarea>
                             </div>
+                            @if(auth()->user()->hasPermission('Document Approval Edit'))
+                                <div class="mb-3 col-md-6">
+                                    <label for="is_approved">Is Approved</label>
+                                    <select name="is_approved" id="is_approved" class="form-control" required>
+                                        <option value="1" {{ old('is_approved', $purchaseRequisition->is_approved) == '1' ? 'selected' : '' }}>Yes</option>
+                                        <option value="0" {{ old('is_approved', $purchaseRequisition->is_approved) == '0' ? 'selected' : '' }}>No</option>
+                                    </select>
+                                </div>
+                            @endif
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('purchase-requisitions.index') }}">Cancel</a>

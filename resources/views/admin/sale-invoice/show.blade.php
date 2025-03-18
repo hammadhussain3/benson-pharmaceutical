@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto text-end mt-2 print-header">
+                <div class="col-auto text-end print-header">
                     <h2 class="mb-0">{{ $invoice->type == 'purchase' ? 'Purchase Requisition' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</h2>
                     <p class="mb-0"><strong>Ref No:</strong> {{ $invoice->code }}</p>
                     <p class="mb-0"><strong>Date:</strong> {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</p>
@@ -179,6 +179,9 @@
 @endsection
 
 <style>
+    .print-header{
+        margin-top: 10px !important;
+    }
     @media print {
         @page {
             margin: 0;
@@ -245,7 +248,7 @@
             color-adjust: exact;
        }
        .print-header{
-            margin-top: 10px !important;
+            margin-top: 15px !important;
        }
     }
 </style>

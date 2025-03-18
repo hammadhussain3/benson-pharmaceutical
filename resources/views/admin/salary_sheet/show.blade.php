@@ -35,7 +35,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-auto text-end mt-2 print-header">
+                <div class="col-auto text-end print-header">
                     <h2>Salary Sheet</h2>
                     <h5>Month: {{ $formattedMonth }}</h5>
                 </div>
@@ -205,6 +205,9 @@
 @endsection
 
 <style>
+    .print-header{
+        margin-top: 15px !important;
+    }
     @media print {
        @page {
            margin: 0;
@@ -239,7 +242,7 @@
             color-adjust: exact;
        }
        .print-header{
-            margin-top: 10px !important;
+            margin-top: 15px !important;
        }
    
        .table-primary th {

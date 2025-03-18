@@ -9,7 +9,7 @@ class PurchaseRequisition extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['code', 'required_date', 'supplier_id', 'total_amount', 'special_instructions', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'required_date', 'supplier_id', 'total_amount', 'special_instructions', 'is_approved', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {

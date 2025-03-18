@@ -35,6 +35,7 @@ class PurchaseRequisitionRequest extends FormRequest
             'unit.*' => 'nullable|string|max:255',
             'price.*' => 'nullable|numeric|min:0',
             'amount.*' => 'nullable|numeric|min:0',
+            'is_approved' => 'nullable|boolean',
         ];
     }
 }

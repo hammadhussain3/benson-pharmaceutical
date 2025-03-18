@@ -25,6 +25,7 @@ class PurchaseRequisitionService
         $purchaseRequisitionData['total_amount'] = $data['total_amount'];
         $purchaseRequisitionData['special_instructions'] = $data['special_instructions'];
         $purchaseRequisitionData['company_id'] = $data['company'];
+        $purchaseRequisitionData['is_approved'] = $data['is_approved'];
         $purchaseRequisition = PurchaseRequisition::create($purchaseRequisitionData);
         foreach ($data['name'] as $key => $name) {
             $purchaseRequisitionItemData['purchase_requisition_id'] = $purchaseRequisition->id;
@@ -46,6 +47,7 @@ class PurchaseRequisitionService
         $purchaseRequisitionData['total_amount'] = $data['total_amount'];
         $purchaseRequisitionData['special_instructions'] = $data['special_instructions'];
         $purchaseRequisitionData['company_id'] = $data['company'];
+        $purchaseRequisitionData['is_approved'] = $data['is_approved'];
         $purchaseRequisition->update($purchaseRequisitionData);
         $purchaseRequisition->purchaseRequisitionItems()->delete();
         foreach ($data['name'] as $key => $name) {

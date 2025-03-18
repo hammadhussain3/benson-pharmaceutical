@@ -83,12 +83,16 @@
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Invoice Update'))
+                                        @if(auth()->user()->hasPermission('Invoice Update') && 
+                                            ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                        )
                                             <a class="me-3" href="{{ route('purchase-invoices.edit', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Invoice Delete'))
+                                        @if(auth()->user()->hasPermission('Invoice Delete') && 
+                                            ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                        )
                                             <a class="confirm-text" href="javascript:void(0);"
                                                 onclick="confirmDelete('{{ $invoice->id }}')">
                                                 <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
