@@ -29,6 +29,7 @@ class RejectionReturnNoteRequest extends FormRequest
             'invoice' => 'required|exists:invoices,id',
             'supplier_bill_no' => 'required|string|max:255',
             'store_issue_requisition' => 'required|exists:store_issue_requisitions,id',
+            'is_approved' => 'nullable|boolean',
             'company' => 'required|exists:companies,id',
             'items' => 'required|array|min:1',
             'items.*.product' => 'nullable|required_if:items.*.types,product|exists:products,id',

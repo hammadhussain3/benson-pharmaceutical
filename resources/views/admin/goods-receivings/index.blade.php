@@ -44,6 +44,7 @@
                             <th>Adv Tax</th>
                             <th>Total amount</th>
                             <th>Date</th>
+                            <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Goods Receiving View') || auth()->user()->hasPermission('Goods Receiving Update') || auth()->user()->hasPermission('Goods Receiving Delete'))
                             <th>Action</th>
                             @endif
@@ -65,6 +66,7 @@
                                 <td>{{ $goodsReceiving->adv_tax }}</td>
                                 <td>{{ $goodsReceiving->total_amount }}</td>
                                 <td>{{ $goodsReceiving->created_at->format('d M, Y') }}</td>
+                                <td><span class="badge {{ $goodsReceiving->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $goodsReceiving->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Goods Receiving View') || auth()->user()->hasPermission('Goods Receiving Update') || auth()->user()->hasPermission('Goods Receiving Delete'))
                                 <td>
                                     @if(auth()->user()->hasPermission('Goods Receiving View'))
@@ -72,12 +74,16 @@
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Goods Receiving Update'))
+                                    @if(auth()->user()->hasPermission('Goods Receiving Update') && 
+                                        ($goodsReceiving->is_approved == 0 || ($goodsReceiving->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    )
                                     <a class="me-3" href="{{ route('goods-receivings.edit', $goodsReceiving->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Goods Receiving Delete'))
+                                    @if(auth()->user()->hasPermission('Goods Receiving Delete') && 
+                                        ($goodsReceiving->is_approved == 0 || ($goodsReceiving->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    )
                                     <a class="confirm-text" href="javascript:void(0);"
                                         onclick="confirmDelete('{{ $goodsReceiving->id }}')">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">

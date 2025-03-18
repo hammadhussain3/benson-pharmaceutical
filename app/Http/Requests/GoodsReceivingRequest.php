@@ -32,6 +32,7 @@ class GoodsReceivingRequest extends FormRequest
             'sales_tax' => 'required|numeric|min:0',
             'adv_tax' => 'required|numeric|min:0',
             'total_amount' => 'required|numeric|min:1',
+            'is_approved' => 'nullable|boolean',
             'items' => 'required|array|min:1',
             'items.*.code' => 'required|string|max:50',
             'items.*.product' => 'nullable|integer|exists:products,id|required_without:items.*.raw_material_item',

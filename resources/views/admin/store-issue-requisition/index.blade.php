@@ -42,6 +42,7 @@
                             @role('Superadmin')
                                 <th>Company</th>
                             @endrole
+                            <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Store Issue Rquisition View') || auth()->user()->hasPermission('Store Issue Rquisition Update') || auth()->user()->hasPermission('Store Issue Rquisition Delete'))
                                 <th>Action</th>
                             @endif
@@ -60,6 +61,7 @@
                                 @role('Superadmin')
                                     <td>{{ $requisition->company->name ?? 'N/A' }}</td>
                                 @endrole
+                                <td><span class="badge {{ $requisition->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $requisition->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Store Issue Rquisition View') || auth()->user()->hasPermission('Store Issue Rquisition Update') || auth()->user()->hasPermission('Store Issue Rquisition Delete'))
                                     <td>
                                         @if(auth()->user()->hasPermission('Store Issue Rquisition View'))
@@ -67,12 +69,16 @@
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Store Issue Rquisition Update'))
+                                        @if(auth()->user()->hasPermission('Store Issue Rquisition Update') && 
+                                            ($requisition->is_approved == 0 || ($requisition->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                        )
                                             <a class="me-3" href="{{ route('store-issue-requisitions.edit', $requisition->id) }}">
                                                 <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Store Issue Rquisition Delete'))
+                                        @if(auth()->user()->hasPermission('Store Issue Rquisition Delete') && 
+                                            ($requisition->is_approved == 0 || ($requisition->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                        )
                                             <a class="confirm-text" href="javascript:void(0);"
                                                 onclick="confirmDelete('{{ $requisition->id }}')">
                                                 <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">

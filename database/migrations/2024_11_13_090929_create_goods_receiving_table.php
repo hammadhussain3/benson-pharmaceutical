@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('sales_tax', 10, 2);
             $table->decimal('adv_tax', 10, 2);
             $table->decimal('total_amount', 15, 2);
+            $table->boolean('is_approved')->default(false);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

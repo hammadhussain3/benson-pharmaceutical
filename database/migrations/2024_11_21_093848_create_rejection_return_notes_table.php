@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('supplier_bill_no');
             $table->unsignedBigInteger('batch_id')->nullable();
             $table->unsignedBigInteger('store_issue_requisition_id');
+            $table->boolean('is_approved')->default(false);
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

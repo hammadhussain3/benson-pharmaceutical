@@ -39,6 +39,7 @@
                             @role('Superadmin')
                                 <th>Company</th>
                             @endrole
+                            <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Finished Goods Receiving View') || auth()->user()->hasPermission('Finished Goods Receiving Update') || auth()->user()->hasPermission('Finished Goods Receiving Delete'))
                                 <th>Action</th>
                             @endif
@@ -54,6 +55,7 @@
                                 @role('Superadmin')
                                 <td>{{ $finishedGoodsReceiving->company->name }}</td>
                                 @endrole
+                                <td><span class="badge {{ $finishedGoodsReceiving->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $finishedGoodsReceiving->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Finished Goods Receiving View') || auth()->user()->hasPermission('Finished Goods Receiving Update') || auth()->user()->hasPermission(' FinishedGoods Receiving Delete'))
                                     <td>
                                         @if(auth()->user()->hasPermission('Finished Goods Receiving View'))
@@ -61,12 +63,16 @@
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Finished Goods Receiving Update'))
+                                        @if(auth()->user()->hasPermission('Finished Goods Receiving Update') && 
+                                            ($finishedGoodsReceiving->is_approved == 0 || ($finishedGoodsReceiving->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                        )
                                             <a class="me-3" href="{{ route('finished-goods-receivings.edit', $finishedGoodsReceiving->id) }}">
                                                 <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Finished Goods Receiving Delete'))
+                                        @if(auth()->user()->hasPermission('Finished Goods Receiving Delete') && 
+                                            ($finishedGoodsReceiving->is_approved == 0 || ($finishedGoodsReceiving->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                        )
                                             <a class="confirm-text" href="javascript:void(0);"
                                                 onclick="confirmDelete('{{ $finishedGoodsReceiving->id }}')">
                                                 <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">

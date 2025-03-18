@@ -9,7 +9,7 @@ class StoreIssueRequisition extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'chart_of_account_id', 'product_id','batch_id', 'dn_gp', 'company_id', 'created_by', 'updated_by', 'is_general', 'is_production'];
+    protected $fillable = ['code', 'chart_of_account_id', 'product_id','batch_id', 'dn_gp', 'is_approved', 'company_id', 'created_by', 'updated_by', 'is_general', 'is_production'];
 
     protected static function boot()
     {

@@ -9,7 +9,7 @@ class RejectionReturnNote extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['code', 'party_id', 'invoice_id', 'supplier_bill_no', 'batch_id', 'store_issue_requisition_id', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'party_id', 'invoice_id', 'supplier_bill_no', 'batch_id', 'store_issue_requisition_id', 'is_approved', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {

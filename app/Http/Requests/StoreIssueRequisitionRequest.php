@@ -30,6 +30,7 @@ class StoreIssueRequisitionRequest extends FormRequest
             'product' => 'nullable|exists:products,id|required_without:chart_of_account',
             'batch' => 'nullable|exists:batches,id',
             'dn_gp' => 'required|string',
+            'is_approved' => 'nullable|boolean',
             'company' => 'required|exists:companies,id',
             'is_general' => 'required|boolean',
             'is_production' => 'required|boolean',

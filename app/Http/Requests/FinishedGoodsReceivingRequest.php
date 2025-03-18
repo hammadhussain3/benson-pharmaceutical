@@ -27,6 +27,7 @@ class FinishedGoodsReceivingRequest extends FormRequest
             'code' => 'required|string|max:255|unique:goods_receivings,code,' . $finishedgoodsReceivingId . ',id,company_id,' . $this->company_id,
             'batch' => 'required|integer|exists:batches,id',
             'product' => 'required|integer|exists:products,id',
+            'is_approved' => 'nullable|boolean',
             'company' => 'required|integer|exists:companies,id',
             'items' => 'required|array|min:1',
             'items.*.product_variation' => 'required|integer|exists:product_variations,id',

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('code');
             $table->unsignedBigInteger('batch_id');
             $table->unsignedBigInteger('product_id');
+            $table->boolean('is_approved')->default(false);
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

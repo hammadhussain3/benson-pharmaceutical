@@ -9,7 +9,7 @@ class LeftOverNote extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['code', 'product_id', 'batch_id', 'department_id', 'store_issue_requisition_id', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'product_id', 'batch_id', 'department_id', 'store_issue_requisition_id', 'is_approved', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {

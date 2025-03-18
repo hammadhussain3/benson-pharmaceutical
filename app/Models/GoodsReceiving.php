@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GoodsReceiving extends Model
 {
-    protected $fillable = ['code', 'invoice_id', 'party_id', 'supplier_bill_no', 'company_id', 'sales_tax', 'adv_tax', 'total_amount', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'invoice_id', 'party_id', 'supplier_bill_no', 'is_approved', 'company_id', 'sales_tax', 'adv_tax', 'total_amount', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
