@@ -14,8 +14,9 @@
                     auth()->user()->hasPermission('Credit Note List') ||
                     auth()->user()->hasPermission('Journal Voucher List') ||
                     auth()->user()->hasPermission('Payment Voucher List') ||
-                    auth()->user()->hasPermission('Receipt Voucher List') ||
-                    auth()->user()->hasPermission('Invoice List') ||
+                    auth()->user()->hasPermission('Receipt Voucher List') || 
+                    auth()->user()->hasPermission('Sale Invoice List') ||
+                    auth()->user()->hasPermission('Sale Warranties List') ||
                     auth()->user()->hasPermission('Sales Return List')
                 )
                     <li class="submenu">
@@ -65,7 +66,7 @@
                                     </a>
                                 </li>
                             @endif
-                            @if(auth()->user()->hasPermission('Invoice List'))
+                            @if(auth()->user()->hasPermission('Sale Invoice List'))
                                 <li>
                                     <a class="{{ request()->is('sale-invoices*') ? 'active' : '' }}" href="{{ route('sale-invoices.index') }}">
                                         Sale Invoices
@@ -79,7 +80,7 @@
                                     </a>
                                 </li>
                             @endif
-                            @if(auth()->user()->hasPermission('Invoice List'))
+                            @if(auth()->user()->hasPermission('Sale Warranties List'))
                                 <li>
                                     <a class="{{ request()->is('sale-warranties*') ? 'active' : '' }}" href="{{ route('sale-warranties.index') }}">
                                         Sale Warranties
@@ -306,7 +307,7 @@
                     auth()->user()->hasPermission('Chart Of Accounts List') ||
                     auth()->user()->hasPermission('Dosage Form List') ||
                     auth()->user()->hasPermission('Franchise List') ||
-                    auth()->user()->hasPermission('Invoice List') ||
+                    auth()->user()->hasPermission('Purchase Invoice List') ||
                     auth()->user()->hasPermission('PackForm List') ||
                     auth()->user()->hasPermission('PackingType List') ||
                     auth()->user()->hasPermission('PackSize List') ||
@@ -381,10 +382,10 @@
                                 </a>
                             </li>
                         @endif
-                        @if(auth()->user()->hasPermission('Invoice List'))
+                        @if(auth()->user()->hasPermission('Purchase Invoice List'))
                             <li>
                                 <a class="{{ request()->is('purchase-invoices*') ? 'active' : '' }}" href="{{ route('purchase-invoices.index') }}">
-                                    Invoices
+                                    Purchase Requisitions
                                 </a>
                             </li>
                         @endif

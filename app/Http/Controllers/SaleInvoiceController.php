@@ -29,7 +29,7 @@ class SaleInvoiceController extends Controller
 
     public function index()
     {
-        if (!auth()->user()->hasPermission('Invoice List')) {
+        if (!auth()->user()->hasPermission('Sale Invoice List')) {
             abort(403, 'Unauthorized action.');
         }
         $invoices = $this->invoiceService->getAllInvoices('sale');
@@ -41,7 +41,7 @@ class SaleInvoiceController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->hasPermission('Invoice Create')) {
+        if (!auth()->user()->hasPermission('Sale Invoice Create')) {
             abort(403, 'Unauthorized action.');
         }
         if (auth()->user()->hasRole('Superadmin')) {
@@ -61,7 +61,7 @@ class SaleInvoiceController extends Controller
      */
     public function store(InvoiceRequest $request)
     {
-        if (!auth()->user()->hasPermission('Invoice Create')) {
+        if (!auth()->user()->hasPermission('Sale Invoice Create')) {
             abort(403, 'Unauthorized action.');
         }
         $this->invoiceService->createInvoice($request->validated());
@@ -73,7 +73,7 @@ class SaleInvoiceController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->hasPermission('Invoice View')) {
+        if (!auth()->user()->hasPermission('Sale Invoice View')) {
             abort(403, 'Unauthorized action.');
         }
         $invoice = $this->invoiceService->getInvoiceById($id);
@@ -82,7 +82,7 @@ class SaleInvoiceController extends Controller
 
     public function saleWarranties()
     {
-        if (!auth()->user()->hasPermission('Invoice View')) {
+        if (!auth()->user()->hasPermission('Sale Invoice View')) {
             abort(403, 'Unauthorized action.');
         }
         $invoices = $this->invoiceService->getAllInvoices('sale');
@@ -91,7 +91,7 @@ class SaleInvoiceController extends Controller
 
     public function warranty($id)
     {
-        if (!auth()->user()->hasPermission('Invoice View')) {
+        if (!auth()->user()->hasPermission('Sale Invoice View')) {
             abort(403, 'Unauthorized action.');
         }
         $invoice = $this->invoiceService->getInvoiceById($id);
@@ -103,7 +103,7 @@ class SaleInvoiceController extends Controller
      */
     public function edit($id)
     {
-        if (!auth()->user()->hasPermission('Invoice Update')) {
+        if (!auth()->user()->hasPermission('Sale Invoice Update')) {
             abort(403, 'Unauthorized action.');
         }
         $invoice = $this->invoiceService->getInvoiceById($id);
@@ -119,7 +119,7 @@ class SaleInvoiceController extends Controller
      */
     public function update(InvoiceRequest $request, $id)
     {
-        if (!auth()->user()->hasPermission('Invoice Update')) {
+        if (!auth()->user()->hasPermission('Sale Invoice Update')) {
             abort(403, 'Unauthorized action.');
         }
         $invoice = $this->invoiceService->getInvoiceById($id);
@@ -129,7 +129,7 @@ class SaleInvoiceController extends Controller
 
     public function destroy($id)
     {
-        if (!auth()->user()->hasPermission('Invoice Delete')) {
+        if (!auth()->user()->hasPermission('Sale Invoice Delete')) {
             abort(403, 'Unauthorized action.');
         }
         $invoice = $this->invoiceService->getInvoiceById($id);

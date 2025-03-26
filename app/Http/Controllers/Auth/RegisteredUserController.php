@@ -110,7 +110,8 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required'],
-            'role' => ['required', 'exists:roles,id'],
+            'role' => ['required', 'array'],
+            'role.*' => ['exists:roles,id'],
         ]);
 
         $user = User::create([
@@ -127,6 +128,7 @@ class RegisteredUserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'User Created successfully.');
     }
+    
     public function update(Request $request, $id): RedirectResponse
     {
         // Validate the incoming request
@@ -135,7 +137,8 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $id], // Ignore current user's email for uniqueness
             'password' => ['nullable'],
-            'role' => ['required', 'exists:roles,id'],
+            'role' => ['required', 'array'],
+            'role.*' => ['exists:roles,id'],
         ]);
     
         // Find the user by ID
@@ -155,12 +158,11 @@ class RegisteredUserController extends Controller
         }
     
         // Sync the role to ensure only one role is assigned at a time
-        $user->roles()->sync([$request->role]);
+        $user->roles()->sync($request->role);
     
         // Return a redirect with a success message
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
-    
 
     public function destroy($id)
     {

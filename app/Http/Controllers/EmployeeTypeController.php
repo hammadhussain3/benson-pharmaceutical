@@ -22,7 +22,7 @@ class EmployeeTypeController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->hasPermission('Employee List')) {
+        if (!auth()->user()->hasPermission('Employee Type List')) {
             abort(403, 'Unauthorized action.');
         }
         $employeeTypes = $this->employeeTypeService->getAllEmployeeTypes();
@@ -34,7 +34,7 @@ class EmployeeTypeController extends Controller
      */
     public function create()
     {
-        if (!auth()->user()->hasPermission('Employee View')) {
+        if (!auth()->user()->hasPermission('Employee Type View')) {
             abort(403, 'Unauthorized action.');
         }
         $companies = $this->companyService->getAllCompanies();
@@ -46,7 +46,7 @@ class EmployeeTypeController extends Controller
      */
     public function store(EmployeeTypeResquest $request)
     {
-        if (!auth()->user()->hasPermission('Employee Create')) {
+        if (!auth()->user()->hasPermission('Employee Type Create')) {
             abort(403, 'Unauthorized action.');
         }
         $this->employeeTypeService->createEmployeeType($request->validated());
@@ -58,7 +58,7 @@ class EmployeeTypeController extends Controller
      */
     public function show(EmployeeType $employeeType)
     {
-        if (!auth()->user()->hasPermission('Employee View')) {
+        if (!auth()->user()->hasPermission('Employee Type View')) {
             abort(403, 'Unauthorized action.');
         }
         return view('admin.employee-types.view', compact('employeeType'));
@@ -69,7 +69,7 @@ class EmployeeTypeController extends Controller
      */
     public function edit(EmployeeType $employeeType)
     {
-        if (!auth()->user()->hasPermission('Employee Update')) {
+        if (!auth()->user()->hasPermission('Employee Type Update')) {
             abort(403, 'Unauthorized action.');
         }
         $companies = $this->companyService->getAllCompanies();
@@ -81,7 +81,7 @@ class EmployeeTypeController extends Controller
      */
     public function update(EmployeeTypeResquest $request, EmployeeType $employeeType)
     {
-        if (!auth()->user()->hasPermission('Employee Update')) {
+        if (!auth()->user()->hasPermission('Employee Type Update')) {
             abort(403, 'Unauthorized action.');
         }
         $this->employeeTypeService->updateEmployeeType($employeeType, $request->validated());
@@ -93,7 +93,7 @@ class EmployeeTypeController extends Controller
      */
     public function destroy(EmployeeType $employeeType)
     {
-        if (!auth()->user()->hasPermission('Employee Delete')) {
+        if (!auth()->user()->hasPermission('Employee Type Delete')) {
             abort(403, 'Unauthorized action.');
         }
         $this->employeeTypeService->deleteEmployeeType($employeeType);

@@ -5,13 +5,13 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Invoice List</h4>
-            <h6>Manage your Invoices</h6>
+            <h4>Purchase Requisitions List</h4>
+            <h6>Manage your Purchase Requisitions</h6>
         </div>
-        @if(auth()->user()->hasPermission('Invoice Create'))
+        @if(auth()->user()->hasPermission('Purchase Invoice Create'))
         <div class="page-btn">
             <a href="{{ route('purchase-invoices.create') }}" class="btn btn-added">
-                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Invoice
+                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Purchase Requisitions
             </a>
         </div>
         @endif
@@ -45,12 +45,12 @@
                             <th>Due Amount</th>
                             <th>Total Amount</th>
                             <th>Payment Status</th>
-                            <th>Invoice Date</th>
+                            <th>Date</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
+                            @if(auth()->user()->hasPermission('Purchase Invoice View') || auth()->user()->hasPermission('Purchase Invoice Update') || auth()->user()->hasPermission('Purchase Invoice Delete'))
                                 <th>Action</th>
                             @endif
                         </tr>
@@ -76,21 +76,21 @@
                                     <td>{{ $invoice->company->name }}</td>
                                 @endrole
                                 <td><span class="badge {{ $invoice->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $invoice->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
+                                @if(auth()->user()->hasPermission('Purchase Invoice View') || auth()->user()->hasPermission('Purchase Invoice Update') || auth()->user()->hasPermission('Purchase Invoice Delete'))
                                     <td>
-                                        @if(auth()->user()->hasPermission('Invoice View'))
+                                        @if(auth()->user()->hasPermission('Purchase Invoice View'))
                                             <a class="me-3" href="{{ route('purchase-invoices.show', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Invoice Update') && 
+                                        @if(auth()->user()->hasPermission('Purchase Invoice Update') && 
                                             ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
                                         )
                                             <a class="me-3" href="{{ route('purchase-invoices.edit', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Invoice Delete') && 
+                                        @if(auth()->user()->hasPermission('Purchase Invoice Delete') && 
                                             ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
                                         )
                                             <a class="confirm-text" href="javascript:void(0);"

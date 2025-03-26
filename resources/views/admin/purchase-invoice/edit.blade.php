@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Edit Invoice</h3>
+                <h3 class="page-title">Edit Purchase Requisition</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('purchase-invoices.index') }}">Invoices</a></li>
-                    <li class="breadcrumb-item active">Edit Invoice</li>
+                    <li class="breadcrumb-item"><a href="{{ route('purchase-invoices.index') }}">Purchase Requisitions</a></li>
+                    <li class="breadcrumb-item active">Edit Purchase Requisition</li>
                 </ul>
             </div>
         </div>
@@ -136,12 +136,12 @@
                                     placeholder="Items Cost Without Tax" required value="{{ old('items_cost_without_tax', $invoice->items_cost_without_tax) }}" readonly>
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="invoice_tax_rate">Invoice Tax Rate</label>
+                                <label for="invoice_tax_rate">Tax Rate</label>
                                 <input type="number" class="form-control" name="invoice_tax_rate" id="invoice_tax_rate"
                                     placeholder="Invoice Tax Rate" required value="{{ old('invoice_tax_rate', $invoice->invoice_tax_rate) }}" oninput="calculatePurchaseInvoiceAmount()">
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="total_invoice_tax">Total Invoice Tax</label>
+                                <label for="total_invoice_tax">Total Tax</label>
                                 <input type="number" class="form-control" name="total_invoice_tax" id="total_invoice_tax"
                                     placeholder="Total Invoice Tax" required value="{{ old('total_invoice_tax', $invoice->total_invoice_tax) }}" readonly>
                             </div>
@@ -192,18 +192,20 @@
                                 <textarea type="text" class="form-control" name="note" id="note"
                                     placeholder="Note" required>{{ old('note', $invoice->note) }}</textarea>
                             </div>
-                            @if(auth()->user()->hasPermission('Document Approval Edit'))
-                                <div class="mb-3 col-md-6">
-                                    <label for="is_approved">Is Approved</label>
-                                    <select name="is_approved" id="is_approved" class="form-control" required>
-                                        <option value="1" {{ old('is_approved', $invoice->is_approved) == '1' ? 'selected' : '' }}>Yes</option>
-                                        <option value="0" {{ old('is_approved', $invoice->is_approved) == '0' ? 'selected' : '' }}>No</option>
-                                    </select>
-                                </div>
-                            @endif
                         </div>
-                        <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('purchase-invoices.index') }}">Cancel</a>
+                        <input type="hidden" name="is_approved" id="is_approved" value="0">
+
+                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('is_approved').value = 0;">
+                            Save
+                        </button>
+
+                        @if(auth()->user()->hasPermission('Document Approval Edit'))
+                            <button type="submit" class="btn btn-success" onclick="document.getElementById('is_approved').value = 1;">
+                                Approve
+                            </button>
+                        @endif
+                        
                     </form>
                 </div>
             </div>

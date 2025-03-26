@@ -56,8 +56,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="roles">Roles</label>
                                 <div class="input-group">
-                                    <select class="form-select" id="roles" required name="role">
-                                        <option value="" selected disabled>Select Role</option>
+                                    <select class="js-example-basic-multiple" id="roles" required name="role[]" multiple>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}"
                                                 {{ old('role') == $role->id ? 'selected' : '' }}>
@@ -119,5 +118,5 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>   
 @endsection

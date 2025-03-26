@@ -183,18 +183,20 @@
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"
                                     placeholder="Total Amount" required value="{{ old('total_amount', $salesReturn->total_amount) }}" readonly>
                             </div>
-                            @if(auth()->user()->hasPermission('Document Approval Edit'))
-                                <div class="mb-3 col-md-6">
-                                    <label for="is_approved">Is Approved</label>
-                                    <select name="is_approved" id="is_approved" class="form-control" required>
-                                        <option value="1" {{ old('is_approved', $salesReturn->is_approved) == '1' ? 'selected' : '' }}>Yes</option>
-                                        <option value="0" {{ old('is_approved', $salesReturn->is_approved) == '0' ? 'selected' : '' }}>No</option>
-                                    </select>
-                                </div>
-                            @endif
                         </div>
-                        <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('sales-returns.index') }}">Cancel</a>
+                        <input type="hidden" name="is_approved" id="is_approved" value="0">
+
+                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('is_approved').value = 0;">
+                            Save
+                        </button>
+
+                        @if(auth()->user()->hasPermission('Document Approval Edit'))
+                            <button type="submit" class="btn btn-success" onclick="document.getElementById('is_approved').value = 1;">
+                                Approve
+                            </button>
+                        @endif
+                        
                     </form>
                 </div>
             </div>

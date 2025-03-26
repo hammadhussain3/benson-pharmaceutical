@@ -8,7 +8,7 @@
             <h4>Sale Invoice List</h4>
             <h6>Manage your sale invoices</h6>
         </div>
-        @if(auth()->user()->hasPermission('Invoice Create'))
+        @if(auth()->user()->hasPermission('Sale Invoice Create'))
         <div class="page-btn">
             <a href="{{ route('sale-invoices.create') }}" class="btn btn-added">
                 <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Sale Invoice
@@ -50,7 +50,7 @@
                                 <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
+                            @if(auth()->user()->hasPermission('Sale Invoice View') || auth()->user()->hasPermission('Sale Invoice Update') || auth()->user()->hasPermission('Sale Invoice Delete'))
                                 <th>Action</th>
                             @endif
                         </tr>
@@ -76,21 +76,21 @@
                                     <td>{{ $invoice->company->name }}</td>
                                 @endrole
                                 <td><span class="badge {{ $invoice->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $invoice->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Invoice View') || auth()->user()->hasPermission('Invoice Update') || auth()->user()->hasPermission('Invoice Delete'))
+                                @if(auth()->user()->hasPermission('Sale Invoice View') || auth()->user()->hasPermission('Sale Invoice Update') || auth()->user()->hasPermission('Sale Invoice Delete'))
                                     <td>
-                                        @if(auth()->user()->hasPermission('Invoice View'))
+                                        @if(auth()->user()->hasPermission('Sale Invoice View'))
                                             <a class="me-3" href="{{ route('sale-invoices.show', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Invoice Update') && 
+                                        @if(auth()->user()->hasPermission('Sale Invoice Update') && 
                                             ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
                                         )
                                             <a class="me-3" href="{{ route('sale-invoices.edit', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                             </a>
                                         @endif
-                                        @if(auth()->user()->hasPermission('Invoice Delete') && 
+                                        @if(auth()->user()->hasPermission('Sale Invoice Delete') && 
                                             ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
                                         )
                                             <a class="confirm-text" href="javascript:void(0);"

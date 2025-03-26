@@ -155,6 +155,14 @@
                                         <td><input class="form-check-input" type="checkbox" value="5" name="permissions[]" id="permissions"></td>
                                     </tr>
                                     <tr>
+                                        <td>Employee Type</td>
+                                        <td><input class="form-check-input" type="checkbox" value="224" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="225" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="226" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="227" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="228" name="permissions[]" id="permissions"></td>
+                                    </tr>
+                                    <tr>
                                         <td>Finished Goods Receiving</td>
                                         <td><input class="form-check-input" type="checkbox" value="176" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="177" name="permissions[]" id="permissions"></td>
@@ -177,14 +185,6 @@
                                         <td><input class="form-check-input" type="checkbox" value="173" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="174" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="175" name="permissions[]" id="permissions"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Invoice</td>
-                                        <td><input class="form-check-input" type="checkbox" value="166" name="permissions[]" id="permissions"></td>
-                                        <td><input class="form-check-input" type="checkbox" value="167" name="permissions[]" id="permissions"></td>
-                                        <td><input class="form-check-input" type="checkbox" value="168" name="permissions[]" id="permissions"></td>
-                                        <td><input class="form-check-input" type="checkbox" value="169" name="permissions[]" id="permissions"></td>
-                                        <td><input class="form-check-input" type="checkbox" value="170" name="permissions[]" id="permissions"></td>
                                     </tr>
                                     <tr>
                                         <td>Journal Voucher</td>
@@ -299,6 +299,14 @@
                                         <td><input class="form-check-input" type="checkbox" value="145" name="permissions[]" id="permissions"></td>
                                     </tr>
                                     <tr>
+                                        <td>Purchase Invoice</td>
+                                        <td><input class="form-check-input" type="checkbox" value="229" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="230" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="231" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="232" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="233" name="permissions[]" id="permissions"></td>
+                                    </tr>
+                                    <tr>
                                         <td>Purchase Requisition</td>
                                         <td><input class="form-check-input" type="checkbox" value="161" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="162" name="permissions[]" id="permissions"></td>
@@ -355,12 +363,28 @@
                                         <td><input class="form-check-input" type="checkbox" value="80" name="permissions[]" id="permissions"></td>
                                     </tr>
                                     <tr>
-                                        <td>Sales Return List</td>
+                                        <td>Sale Invoice</td>
+                                        <td><input class="form-check-input" type="checkbox" value="166" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="167" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="168" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="169" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="170" name="permissions[]" id="permissions"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sales Return</td>
                                         <td><input class="form-check-input" type="checkbox" value="211" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="212" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="213" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="214" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="215" name="permissions[]" id="permissions"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sale Warranties</td>
+                                        <td><input class="form-check-input" type="checkbox" value="234" name="permissions[]" id="permissions"></td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td><input class="form-check-input" type="checkbox" value="235" name="permissions[]" id="permissions"></td>
                                     </tr>
                                     <tr>
                                         <td>Stock</td>
