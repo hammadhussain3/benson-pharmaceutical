@@ -79,14 +79,14 @@ class SalarySheetController extends Controller
         }
         $lateDeduction = $salaryPerHour * $salarySlip->late_in_early_out_deduction;
         $overtimePay = $salarySlip->overtime > 0 
-            ? ($salaryPerHour * $salarySlip->overtime + (0.25 * $salaryPerHour)) 
+            ? ($salarySlip->overtime * (1.25 * $salaryPerHour))
             : 0;
         $loan = Loan::where('employee_id', $employee->id)
             ->where('company_id', $employee->company_id)
             ->first();
         $loanDeduction = $loan ? $loan->amount : 0;
         // Example usage
-        $incomeTax = $this->calculateTaxDistribution($netSalary, $employee);
+        $incomeTax = $salarySlip->income_tax;
         
         $totalDeductions = $leavesTotalAmount + $lateDeduction + $loanDeduction + $incomeTax;
         $salaryDeductionAmount = $salaryAllowances->where('type', 'deduction')->sum('amount');

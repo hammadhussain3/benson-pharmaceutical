@@ -381,6 +381,50 @@ function selectBanks(branchId)
     }
 }
 
+function selectCategoryPrefix(categoryId)
+{
+    var categoryPrefix = document.getElementById('category_prefix');
+    
+    if (categoryId && categoryPrefix) {
+        fetch(`/category/${categoryId}/prefix`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching category prefix');
+                }
+                return response.json();
+            })
+            .then(data => {
+                categoryPrefix.value = data.prefix + '-';
+            })
+            .catch(error => console.error('Error fetching category prefix:', error));
+    }
+}
+
+function selectCategories(companyId)
+{
+    var categorySelect = document.getElementById('category_id');
+    
+    if (companyId && categorySelect) {
+        categorySelect.innerHTML = '<option value="">Select Category</option>';
+        fetch(`/companies/${companyId}/categories`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching categories');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.categories.forEach(function (category) {
+                    var option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching categories:', error));
+    }
+}
+
 function selectBranches(companyId)
 {
     var branchSelect = document.getElementById('branch_id');

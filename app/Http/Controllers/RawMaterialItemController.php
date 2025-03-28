@@ -7,16 +7,19 @@ use App\Http\Requests\RawMaterialItemRequest;
 use App\Services\RawMaterialItemService;
 use App\Services\CompanyService;
 use App\Services\PartyService;
+use App\Services\CategoryService;
 
 class RawMaterialItemController extends Controller
 {
     protected $companyService;
     protected $rawMaterialItemService;
     protected $partyService;
+    protected $categoryService;
 
-    public function __construct(RawMaterialItemService $rawMaterialItemService, CompanyService $companyService, PartyService $partyService)
+    public function __construct(RawMaterialItemService $rawMaterialItemService, CompanyService $companyService, PartyService $partyService, CategoryService $categoryService)
     {
         $this->companyService = $companyService;
+        $this->categoryService = $categoryService;
         $this->partyService = $partyService;
         $this->rawMaterialItemService = $rawMaterialItemService;
     }
@@ -43,9 +46,10 @@ class RawMaterialItemController extends Controller
         } else {
             $newRawMaterialItemCode = $this->rawMaterialItemService->createRawMaterialItemCode(auth()->user()->employee->company_id);
         }
+        $categories = $this->categoryService->getAllCategories();
         $companies = $this->companyService->getAllcompanies();
         $parties = $this->partyService->getAllParties();
-        return view('admin.raw-material-items.create', compact('companies', 'parties', 'newRawMaterialItemCode'));
+        return view('admin.raw-material-items.create', compact('companies', 'parties', 'newRawMaterialItemCode', 'categories'));
     }
 
     /**
@@ -81,9 +85,10 @@ class RawMaterialItemController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $rawMaterialItem = $this->rawMaterialItemService->getRawMaterialItemById($id);
+        $categories = $this->categoryService->getAllCategories();
         $companies = $this->companyService->getAllcompanies();
         $parties = $this->partyService->getAllParties();
-        return view('admin.raw-material-items.edit', compact('rawMaterialItem', 'companies', 'parties'));
+        return view('admin.raw-material-items.edit', compact('rawMaterialItem', 'companies', 'parties', 'categories'));
     }
 
     /**

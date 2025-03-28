@@ -18,17 +18,31 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-row row">
+                        @role('Superadmin')
+                            <div class="mb-3 col-md-12">
+                                <label>Company</label>
+                                <input type="text" class="form-control" value="{{ $rawMaterialItem->company->name }}" readonly>
+                            </div>
+                        @endrole
                         <div class="mb-3 col-md-6">
-                            <label>Name</label>
-                            <input type="text" class="form-control" value="{{ $rawMaterialItem->name }}" readonly>
+                            <label>Category</label>
+                            <input type="text" class="form-control" value="{{ $rawMaterialItem->category->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Code</label>
-                            <input type="text" class="form-control" value="{{ $rawMaterialItem->code }}" readonly>
+                            <input type="text" class="form-control" value="{{  $rawMaterialItem->category->prefix . '-' . $rawMaterialItem->code }}" readonly>
                         </div>
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-4">
+                            <label>Name</label>
+                            <input type="text" class="form-control" value="{{ $rawMaterialItem->name }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
                             <label>Unit</label>
                             <input type="text" class="form-control" value="{{ $rawMaterialItem->unit }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label>Party</label>
+                            <input type="text" class="form-control" value="{{ $rawMaterialItem->party->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Min Level</label>
@@ -38,15 +52,9 @@
                             <label>Max Level</label>
                             <input type="text" class="form-control" value="{{ $rawMaterialItem->max_level }}" readonly>
                         </div>
-                        @role('Superadmin')
-                            <div class="mb-3 col-md-6">
-                                <label>Company</label>
-                                <input type="text" class="form-control" value="{{ $rawMaterialItem->company->name }}" readonly>
-                            </div>
-                        @endrole
-                        <div class="mb-3 col-md-6">
-                            <label>Party</label>
-                            <input type="text" class="form-control" value="{{ $rawMaterialItem->party->name }}" readonly>
+                        <div class="mb-3 col-md-12">
+                            <label>Description</label>
+                            <textarea class="form-control" readonly>{{ $rawMaterialItem->description }}</textarea>
                         </div>
                     </div>
                     <a class="btn btn-secondary" href="{{ route('raw-material-items.index') }}">Cancel</a>

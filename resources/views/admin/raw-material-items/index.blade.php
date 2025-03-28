@@ -48,7 +48,7 @@
                         @foreach ($rawMaterialItems as $rawMaterialItem)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><a class="link-primary" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">{{ $rawMaterialItem->code }}</a></td>
+                                <td><a class="link-primary" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">{{ optional($rawMaterialItem->category)->prefix }}-{{ $rawMaterialItem->code }}</a></td>
                                 <td>{{ $rawMaterialItem->name }}</td>
                                 <td>
                                     {{ $rawMaterialItem->party->name . ' (' . 

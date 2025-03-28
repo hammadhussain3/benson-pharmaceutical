@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('raw_material_items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description', 1000)->nullable();
             $table->string('code');
             $table->string('unit');
             $table->string('min_level');
             $table->string('max_level');
+            $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('party_id')->nullable();
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
@@ -26,6 +28,7 @@ return new class extends Migration
 
             // Foreign key
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

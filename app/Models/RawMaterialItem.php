@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RawMaterialItem extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'code', 'unit', 'min_level', 'max_level', 'party_id', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'description', 'code', 'unit', 'min_level', 'max_level', 'category_id', 'party_id', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -31,6 +31,11 @@ class RawMaterialItem extends Model
     public function party()
     {
         return $this->belongsTo(Party::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
     
     public function orders()

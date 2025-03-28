@@ -192,6 +192,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/journal-voucher', [JournalVoucherController::class, 'createCodeByCompany']);
     Route::get('/countries/{countryId}/cities', [CityController::class, 'getCitiesByCountry']);
     Route::get('/companies/{companyId}/invoices', [PurchaseInvoiceController::class, 'getInvoicesByCompany']);
+    Route::get('/companies/{companyId}/categories', [CategoryController::class, 'getCategoriesByCompany']);
+    Route::get('/category/{categoryId}/prefix', [CategoryController::class, 'getCategoryPrefix']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
     Route::get('/getemployee/{employeeId}', [EmployeeController::class, 'getEmployeeDetails']);
     Route::get('/geteob/{employeeId}', [SalarySlipController::class, 'getEmployeeEob']);

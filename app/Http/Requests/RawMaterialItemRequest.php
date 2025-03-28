@@ -25,10 +25,12 @@ class RawMaterialItemRequest extends FormRequest
 
         return [
 			'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
 			'code' => 'required|string|unique:employees,code,' . $rawMaterialItemId . ',id,company_id,' . $this->company_id,
 			'unit' => 'required|string|max:10',
             'min_level' => 'required|string|max:10',
             'max_level' => 'required|string|max:10',
+            'category' => 'required|exists:categories,id',
             'party' => 'required|exists:parties,id',
 			'company' => 'required|exists:companies,id',
         ];

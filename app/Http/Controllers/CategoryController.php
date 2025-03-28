@@ -89,4 +89,10 @@ class CategoryController extends Controller
         $categories = Category::where('company_id', $companyId)->orderBy('name', 'asc')->get();
         return response()->json(['categories' => $categories]);
     }
+
+    public function getCategoryPrefix($categoryId)
+    {
+        $category = $this->categoryService->getCategoryById($categoryId);
+        return response()->json(['prefix' => $category->prefix]);
+    }
 }
