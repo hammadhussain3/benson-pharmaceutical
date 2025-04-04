@@ -30,7 +30,7 @@
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Code</label>
-                            <input type="text" class="form-control" value="{{  $rawMaterialItem->category->prefix . '-' . $rawMaterialItem->code }}" readonly>
+                            <input type="text" class="form-control" value="{{ $rawMaterialItem->code }}" readonly>
                         </div>
                         <div class="mb-3 col-md-4">
                             <label>Name</label>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="mb-3 col-md-4">
                             <label>Party</label>
-                            <input type="text" class="form-control" value="{{ $rawMaterialItem->party->name }}" readonly>
+                            <input type="text" class="form-control" value="{{ $rawMaterialItem->party->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Min Level</label>

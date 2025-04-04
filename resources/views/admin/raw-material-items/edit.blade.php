@@ -46,7 +46,7 @@
                                     @endphp
                                     @foreach ($categories->where('company_id', $seletedCompanyId) as $category)
                                         <option value="{{ $category->id }}"
-                                            {{ old('category') == $category->id ? 'selected' : '' }}>
+                                            {{ old('category', $rawMaterialItem->category->id) == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -55,9 +55,9 @@
                             <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <div class="input-group">
-                                    <input type="text" name="category_prefix" id="category_prefix" class="form-control" value="{{ old('category_prefix', optional($rawMaterialItem->category)->prefix) }}" readonly>
+                                    <input type="text" name="category_prefix" id="category_prefix" class="form-control" value="{{ old('category_prefix', optional($rawMaterialItem->category)->prefix) }}-" readonly>
                                     <input type="text" class="form-control" name="code" id="code" style="width: 300px;"
-                                        placeholder="Code" required value="{{ old('code', $rawMaterialItem->code) }}">
+                                        placeholder="Code" required value="{{ old('code', collect(explode('-', $rawMaterialItem->code))->last()) }}" readonly>
                                 </div>
                             </div>
                             <div class="mb-3 col-md-4">

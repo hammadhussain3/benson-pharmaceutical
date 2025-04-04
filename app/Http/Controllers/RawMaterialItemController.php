@@ -41,9 +41,8 @@ class RawMaterialItemController extends Controller
         if (!auth()->user()->hasPermission('Raw Material Item Create')) {
             abort(403, 'Unauthorized action.');
         }
-        if (auth()->user()->hasRole('Superadmin')) {
-            $newRawMaterialItemCode = "RMI";
-        } else {
+        $newRawMaterialItemCode = null;
+        if (!auth()->user()->hasRole('Superadmin')) {
             $newRawMaterialItemCode = $this->rawMaterialItemService->createRawMaterialItemCode(auth()->user()->employee->company_id);
         }
         $categories = $this->categoryService->getAllCategories();

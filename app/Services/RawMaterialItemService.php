@@ -18,6 +18,7 @@ class RawMaterialItemService
 
     public function createRawMaterialItem(array $data)
     {
+        $data['code'] = $data['category_prefix'] . $data['code'];
         $data['party_id'] = $data['party'];
         $data['category_id'] = $data['category'];
         $data['company_id'] = $data['company'];
@@ -26,6 +27,7 @@ class RawMaterialItemService
 
     public function updateRawMaterialItem(RawMaterialItem $rawMaterialItem, array $data)
     {
+        $data['code'] = $data['category_prefix'] . $data['code'];
         $data['party_id'] = $data['party'];
         $data['category_id'] = $data['category'];
         $data['company_id'] = $data['company'];
@@ -45,14 +47,18 @@ class RawMaterialItemService
 
     public function createRawMaterialItemCode($company_id)
     {
-        $lastRawMaterialItemCode = RawMaterialItem::latest('id')->where('company_id', $company_id)->value('code');
+        $lastRawMaterialItemCode = RawMaterialItem::latest('id')
+            ->where('company_id', $company_id)
+            ->value('code');
+
         if ($lastRawMaterialItemCode) {
-            $numberPart = (int) substr($lastRawMaterialItemCode, 3);
-            $newNumberPart = $numberPart + 1;
-            $newRawMaterialItemCode = 'RMI' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+            $parts = explode('-', $lastRawMaterialItemCode);
+            $lastPart = array_pop($parts); // get last numeric part
+            $numberPart = (int) $lastPart;
+            $newNumberPart = str_pad($numberPart + 1, strlen($lastPart), '0', STR_PAD_LEFT);
+            return $newNumberPart;
         } else {
-            $newRawMaterialItemCode = 'RMI00001';
+            return '00001';
         }
-        return $newRawMaterialItemCode;
     }
 }
