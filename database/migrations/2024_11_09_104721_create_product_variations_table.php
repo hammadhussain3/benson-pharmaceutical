@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('product_variations', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
+            $table->string('reg_no');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('dosage_form_id');
             $table->unsignedBigInteger('pack_form_id');
@@ -21,6 +23,8 @@ return new class extends Migration
             $table->decimal('trade_price', 10, 2);
             $table->decimal('our_mrp', 10, 2);
             $table->decimal('drap_mrp', 10, 2);
+            $table->unsignedBigInteger('product_group_id');
+            $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -33,6 +37,8 @@ return new class extends Migration
             $table->foreign('pack_form_id')->references('id')->on('pack_forms')->onDelete('cascade');
             $table->foreign('packing_type_id')->references('id')->on('packing_types')->onDelete('cascade');
             $table->foreign('pack_size_id')->references('id')->on('pack_sizes')->onDelete('cascade');
+            $table->foreign('product_group_id')->references('id')->on('product_groups')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

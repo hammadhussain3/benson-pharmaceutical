@@ -7,8 +7,10 @@ use App\Models\PackForm;
 use App\Models\PackingType;
 use App\Models\PackSize;
 use App\Models\Product;
+use App\Models\ProductGroup;
 use App\Models\ProductVariation;
 use App\Http\Requests\ProductVariationRequest;
+use App\Services\CategoryService;
 use App\Services\ProductVariationService;
 use App\Services\CompanyService;
 
@@ -16,10 +18,12 @@ class ProductVariationController extends Controller
 {
     protected $companyService;
     protected $productVariationService;
+    protected $categoryService;
 
-    public function __construct(ProductVariationService $productVariationService, CompanyService $companyService)
+    public function __construct(ProductVariationService $productVariationService, CompanyService $companyService, CategoryService $categoryService)
     {
         $this->companyService = $companyService;
+        $this->categoryService = $categoryService;
         $this->productVariationService = $productVariationService;
     }
 
@@ -40,13 +44,19 @@ class ProductVariationController extends Controller
         if (!auth()->user()->hasPermission('Product Variation Create')) {
             abort(403, 'Unauthorized action.');
         }
+        $newCode = null;
+        if (!auth()->user()->hasRole('Superadmin')) {
+            $newCode = $this->productVariationService->createCode(auth()->user()->employee->company_id);
+        }
         $companies = $this->companyService->getAllCompanies();
         $products = Product::orderBy('name', 'asc')->get();
         $dosage_forms = DosageForm::orderBy('name', 'asc')->get();
         $pack_forms = PackForm::orderBy('name', 'asc')->get();
         $pack_sizes = PackSize::orderBy('name', 'asc')->get();
         $packing_types = PackingType::orderBy('name', 'asc')->get();
-        return view('admin.product-variations.create', compact('companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types'));
+        $productGroups = ProductGroup::orderBy('name', 'asc')->get();
+        $categories = $this->categoryService->getAllCategories();
+        return view('admin.product-variations.create', compact('companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories', 'newCode'));
     }
 
     /**
@@ -88,7 +98,9 @@ class ProductVariationController extends Controller
         $pack_forms = PackForm::orderBy('name', 'asc')->get();
         $pack_sizes = PackSize::orderBy('name', 'asc')->get();
         $packing_types = PackingType::orderBy('name', 'asc')->get();
-        return view('admin.product-variations.edit', compact('productVariation', 'companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types'));
+        $productGroups = ProductGroup::orderBy('name', 'asc')->get();
+        $categories = $this->categoryService->getAllCategories();
+        return view('admin.product-variations.edit', compact('productVariation', 'companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories'));
     }
 
     /**
@@ -122,5 +134,11 @@ class ProductVariationController extends Controller
     {
         $productVariations = ProductVariation::with(['product', 'packingType', 'packSize'])->where('company_id', $companyId)->get();
         return response()->json(['productVariations' => $productVariations]);
+    }
+
+    public function createCodeByCompany($companyId)
+    {
+        $product_code = $this->productVariationService->createCode($companyId);
+        return response()->json(['product_code' => $product_code]);
     }
 }

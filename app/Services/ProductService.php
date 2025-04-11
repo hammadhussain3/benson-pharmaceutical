@@ -18,14 +18,14 @@ class ProductService
 
     public function createProduct(array $data)
     {
-        $data['product_group_id'] = $data['product_group'];
+        // $data['product_group_id'] = $data['product_group'];
         $data['company_id'] = $data['company'];
         return Product::create($data);
     }
 
     public function updateProduct(Product $product, array $data)
     {
-        $data['product_group_id'] = $data['product_group'];
+        // $data['product_group_id'] = $data['product_group'];
         $data['company_id'] = $data['company'];
         $product->update($data);
         return $product;

@@ -24,13 +24,13 @@ class ProductRequest extends FormRequest
         $productId = $this->product ? $this->product->id : null;
 
         return [
-			'reg_no' => 'required|string|unique:employees,code,' . $productId . ',id,company_id,' . $this->company_id,
-			'name' => 'required|string|max:255',
+			// 'reg_no' => 'required|string|unique:employees,code,' . $productId . ',id,company_id,' . $this->company_id,
+			// 'name' => 'required|string|max:255',
 			'generic_name' => 'required|string|max:255',
 			'brand_name' => 'required|string|max:255',
 			'therapeutic_class' => 'required|string|max:255',
-			'code' => 'required|string|unique:employees,code,' . $productId . ',id,company_id,' . $this->company_id,
-			'product_group' => 'required|exists:product_groups,id',
+			// 'code' => 'required|string|unique:employees,code,' . $productId . ',id,company_id,' . $this->company_id,
+			// 'product_group' => 'required|exists:product_groups,id',
 			'company' => 'required|exists:companies,id',
         ];
     }

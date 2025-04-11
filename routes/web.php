@@ -24,6 +24,7 @@ use App\Http\Controllers\{
     SupplierController,
     FranchiseController,
     CategoryController,
+    SubCategoryController,
     PackingTypesController,
     PackSizeController,
     TaxController,
@@ -103,6 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('franchises', FranchiseController::class);
     Route::resource('categories', CategoryController::class);
     Route::get('categories/view/{id}', [CategoryController::class, 'view'])->name('categories.view');
+    Route::resource('sub-categories', SubCategoryController::class);
     Route::resource('packingtypes', PackingTypesController::class);
     Route::get('packingtypes/view/{id}', [PackingTypesController::class, 'view'])->name('packingtypes.view');
     Route::resource('pack_size', PackSizeController::class);
@@ -174,7 +176,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/employee-code', [EmployeeController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/supplier-code', [SupplierController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/franchise-code', [FranchiseController::class, 'createCodeByCompany']);
-    Route::get('/companies/{companyId}/product-code', [ProductController::class, 'createCodeByCompany']);
+    Route::get('/companies/{companyId}/product-code', [ProductVariationController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/raw-material-item-code', [RawMaterialItemController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/purchase-requisition-code', [PurchaseRequisitionController::class, 'createCodeByCompany']);
     Route::get('/companies/{companyId}/goods-receivings-code', [GoodsReceivingController::class, 'createCodeByCompany']);

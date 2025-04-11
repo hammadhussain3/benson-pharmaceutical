@@ -37,22 +37,28 @@ class ProductVariationService
 
     public function createProductVariation(array $data)
     {
+        $data['code'] = $data['category_prefix'] . $data['code'];
         $data['product_id'] = $data['product'];
         $data['dosage_form_id'] = $data['dosage_form'];
         $data['pack_form_id'] = $data['pack_form'];
         $data['pack_size_id'] = $data['pack_size'];
         $data['packing_type_id'] = $data['packing_type'];
+        $data['product_group_id'] = $data['product_group'];
+        $data['category_id'] = $data['category'];
         $data['company_id'] = $data['company'];
         return ProductVariation::create($data);
     }
 
     public function updateProductVariation(ProductVariation $productVariation, array $data)
     {
+        $data['code'] = $data['category_prefix'] . $data['code'];
         $data['product_id'] = $data['product'];
         $data['dosage_form_id'] = $data['dosage_form'];
         $data['pack_form_id'] = $data['pack_form'];
         $data['pack_size_id'] = $data['pack_size'];
         $data['packing_type_id'] = $data['packing_type'];
+        $data['product_group_id'] = $data['product_group'];
+        $data['category_id'] = $data['category'];
         $data['company_id'] = $data['company'];
         $productVariation->update($data);
         return $productVariation;
@@ -66,5 +72,23 @@ class ProductVariationService
     public function getProductVariationById($id)
     {
         return ProductVariation::findOrFail($id);
+    }
+
+    public function createCode($company_id)
+    {
+        $lastCode = ProductVariation::latest('id')
+            ->where('company_id', $company_id)
+            ->value('code');
+
+        if ($lastCode) {
+            $parts = explode('-', $lastCode);
+            $lastPart = array_pop($parts); // get last numeric part
+            $numberPart = (int) $lastPart;
+            $code = str_pad($numberPart + 1, strlen($lastPart), '0', STR_PAD_LEFT);
+        } else {
+            $code = '00001';
+        }
+
+        return $code;
     }
 }

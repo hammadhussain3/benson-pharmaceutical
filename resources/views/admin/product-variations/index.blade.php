@@ -1,17 +1,17 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Product Variations List')
+@section('title', 'Products List')
 
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Product Variation List</h4>
-            <h6>Manage your Product Variations</h6>
+            <h4>Products List</h4>
+            <h6>Manage your Products</h6>
         </div>
         @if(auth()->user()->hasPermission('Product Variation Create'))
         <div class="page-btn">
             <a href="{{ route('product-variations.create') }}" class="btn btn-added">
-                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Product Variation
+                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Product
             </a>
         </div>
         @endif
@@ -33,11 +33,15 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Code</th>
+                            <th>Reg. No.</th>
                             <th>Product</th>
                             <th>Dosage Forms</th>
                             <th>Pack Forms</th>
                             <th>Packing Types</th>
                             <th>Pack Sizes</th>
+                            <th>Group</th>
+                            <th>Category</th>
                             <th>Trade Price</th>
                             <th>Our MRP</th>
                             <th>Drap MRP</th>
@@ -53,11 +57,15 @@
                         @foreach ($productVariations as $productVariation)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><a class="link-primary" href="{{ route('product-variations.show', $productVariation->id) }}">{{ $productVariation->product->brand_name ?? 'N/A' }}</a></td>
+                                <td><a class="link-primary" href="{{ route('product-variations.show', $productVariation->id) }}">{{ $productVariation->code ?? 'N/A' }}</a></td>
+                                <td>{{ $productVariation->reg_no ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->product->brand_name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->dosageForm->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packForm->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packSize->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packingType->name ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->productGroup->name ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->category->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->trade_price ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->our_mrp ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->drap_mrp ?? 'N/A' }}</td>

@@ -604,7 +604,7 @@ function selectProducts(companyId) {
                     data.products.forEach(product => {
                         const option = document.createElement('option');
                         option.value = product.id;
-                        option.textContent = product.name;
+                        option.textContent = product.brand_name;
                         select.appendChild(option);
                     });
                 });

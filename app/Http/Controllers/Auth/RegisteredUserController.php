@@ -163,7 +163,7 @@ class RegisteredUserController extends Controller
         // Return a redirect with a success message
         return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
-
+    
     public function destroy($id)
     {
         $user = User::findOrFail($id);

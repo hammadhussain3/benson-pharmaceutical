@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Product Variation Details</h3>
+                <h3 class="page-title">Product Details</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('product-variations.index') }}">Product Variations</a></li>
-                    <li class="breadcrumb-item active">Product Variation Details</li>
+                    <li class="breadcrumb-item active">Product Details</li>
                 </ul>
             </div>
         </div>
@@ -27,8 +27,24 @@
                             <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                         @endrole
                         <div class="mb-3 col-md-6">
+                            <label>Category</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->category->name ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Code</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->code ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Registration Number</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->reg_no ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
                             <label>Product</label>
-                            <input type="text" class="form-control" value="{{ $productVariation->product->name ?? 'N/A' }}" readonly>
+                            <input type="text" class="form-control" value="{{ $productVariation->product->brand_name ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Product</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->productGroup->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Dosage Form</label>

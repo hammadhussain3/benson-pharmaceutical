@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Edit Product Variation</h3>
+                <h3 class="page-title">Edit Product</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('product-variations.index') }}">Product Variations</a></li>
-                    <li class="breadcrumb-item active">Edit Product Variation</li>
+                    <li class="breadcrumb-item"><a href="{{ route('product-variations.index') }}">Products</a></li>
+                    <li class="breadcrumb-item active">Edit Product</li>
                 </ul>
             </div>
         </div>
@@ -22,9 +22,9 @@
                         @method('PUT')
                         <div class="form-row row">
                             @role('Superadmin')
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-12">
                                 <label for="company">Company</label>
-                                <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="selectProducts(this.value); selectDosageForms(this.value); selectPackForms(this.value); selectPackSizes(this.value); selectPackingTypes(this.value);" @endrole>
+                                <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="selectCategoryPrefix(this.value); selectProductGroups(this.value); selectProducts(this.value); selectDosageForms(this.value); selectPackForms(this.value); selectPackSizes(this.value); selectPackingTypes(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -38,6 +38,34 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
+                                <label for="category">Category</label>
+                                <select name="category" id="category_id" class="js-example-basic-single select2" required onchange="selectCategoryPrefix(this.value);">
+                                    <option value="">Select Category</option>
+                                    @php
+                                        $seletedCompanyId = old('company', $productVariation->company_id) ?? auth()->user()->employee->company_id;
+                                    @endphp
+                                    @foreach ($categories->where('company_id', $seletedCompanyId) as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ old('category', $productVariation->category->id) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="code">Code</label>
+                                <div class="input-group">
+                                    <input type="text" name="category_prefix" id="category_prefix" class="form-control" value="{{ old('category_prefix', optional($productVariation->category)->prefix) }}-" readonly>
+                                    <input type="text" class="form-control" name="code" id="code" style="width: 300px;"
+                                        placeholder="Code" required value="{{ old('code', collect(explode('-', $productVariation->code))->last()) }}" readonly>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="reg_no">Registration Number</label>
+                                <input type="number" class="form-control" name="reg_no" id="reg_no"
+                                    placeholder="Registration Number" required value="{{ old('reg_no', $productVariation->reg_no) }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="product_id">Product</label>
                                 <select name="product" id="product_id" class="form-control" required>
                                     <option value="">Select Product</option>
@@ -47,7 +75,22 @@
                                     @foreach ($products->where('company_id', $selectedCompanyId) as $product)
                                         <option value="{{ $product->id }}"
                                             {{ $product->id == old('product', $productVariation->product_id) ? 'selected' : '' }}>
-                                            {{ $product->name }}
+                                            {{ $product->brand_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="product_group">Product Group</label>
+                                <select name="product_group" id="product_group_id" class="js-example-basic-single select2" required>
+                                    <option value="">Select Product Group</option>
+                                    @php
+                                        $selectedCompanyId = old('company', $productVariation->company_id);
+                                    @endphp
+                                    @foreach ($productGroups->where('company_id', $selectedCompanyId) as $productGroup)
+                                        <option value="{{ $productGroup->id }}"
+                                            {{ old('product_group', $productVariation->product_group_id) == $productGroup->id ? 'selected' : '' }}>
+                                            {{ $productGroup->name }}
                                         </option>
                                     @endforeach
                                 </select>

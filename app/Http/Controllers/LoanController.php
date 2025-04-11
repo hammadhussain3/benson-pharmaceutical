@@ -114,7 +114,7 @@ class LoanController extends Controller
         $currentMonth = $request->has('month') ? Carbon::createFromFormat('Y-m', $request->input('month')) : Carbon::now();
 
         $loans = Loan::where('employee_id', $employeeId)
-            ->where('remaining', '>=', 0)
+            ->where('remaining', '>', 0)
             ->whereMonth('created_at', '<=', $currentMonth->month)
             ->whereYear('created_at', '<=', $currentMonth->year)
             ->sum('amount');

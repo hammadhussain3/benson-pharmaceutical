@@ -15,12 +15,12 @@ class StoreEmployeeRequest extends FormRequest
     public function rules()
     {
         $employeeId = $this->employee ? $this->employee->id : null;
-
+        
         $employeeType = null;
         if ($this->employee_type) {
             $employeeType = EmployeeType::find($this->employee_type);
         }
-
+        
         return [
             'code' => 'required|string|max:255|unique:employees,code,' . $employeeId . ',id,company_id,' . $this->company_id,
             'first_name' => 'required|string|max:255',

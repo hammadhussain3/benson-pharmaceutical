@@ -79,7 +79,7 @@ class SalarySheetController extends Controller
         }
         $lateDeduction = $salaryPerHour * $salarySlip->late_in_early_out_deduction;
         $overtimePay = $salarySlip->overtime > 0 
-            ? ($salarySlip->overtime * (1.25 * $salaryPerHour))
+            ? ($salarySlip->overtime * (1.25 * $salaryPerHour)) 
             : 0;
         $loan = Loan::where('employee_id', $employee->id)
             ->where('company_id', $employee->company_id)

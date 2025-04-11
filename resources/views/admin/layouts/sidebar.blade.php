@@ -427,7 +427,7 @@
                         @if(auth()->user()->hasPermission('Product List'))
                             <li>
                                 <a class="{{ request()->is('products*') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                                    Products
+                                    Brands
                                 </a>
                             </li>
                         @endif
@@ -441,7 +441,7 @@
                         @if(auth()->user()->hasPermission('Product Variation List'))
                             <li>
                                 <a class="{{ request()->is('product-variations*') ? 'active' : '' }}" href="{{ route('product-variations.index') }}">
-                                    Product Variations
+                                    Products
                                 </a>
                             </li>
                         @endif
