@@ -29,7 +29,7 @@ class ProductVariationRequest extends FormRequest
             'category_prefix' => 'required',
 			'product' => 'required|exists:products,id',
 			'dosage_form' => 'required|exists:dosage_forms,id',
-			'pack_form' => 'required|exists:pack_forms,id',
+			'pack_form' => 'nullable|exists:pack_forms,id',
 			'packing_type' => 'required|exists:packing_types,id',
 			'pack_size' => 'required|exists:pack_sizes,id',
 			'trade_price' => 'required|numeric|min:0',
@@ -37,6 +37,8 @@ class ProductVariationRequest extends FormRequest
 			'category' => 'required|exists:categories,id',
             'our_mrp' => 'required|numeric|min:0',
             'drap_mrp' => 'required|numeric|min:0',
+            'min_level' => 'required|numeric|min:0',
+            'max_level' => 'required|numeric|min:0',
 			'company' => 'required|exists:companies,id',
         ];
     }

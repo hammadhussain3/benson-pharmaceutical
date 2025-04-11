@@ -50,10 +50,10 @@
                             <label>Dosage Form</label>
                             <input type="text" class="form-control" value="{{ $productVariation->dosageForm->name ?? 'N/A' }}" readonly>
                         </div>
-                        <div class="mb-3 col-md-6">
+                        {{-- <div class="mb-3 col-md-6">
                             <label>Pack Form</label>
                             <input type="text" class="form-control" value="{{ $productVariation->packForm->name ?? 'N/A' }}" readonly>
-                        </div>
+                        </div> --}}
                         <div class="mb-3 col-md-6">
                             <label>Pack Size</label>
                             <input type="text" class="form-control" value="{{ $productVariation->packSize->name ?? 'N/A' }}" readonly>
@@ -73,6 +73,14 @@
                         <div class="mb-3 col-md-6">
                             <label>Drap MRP</label>
                             <input type="text" class="form-control" value="{{ $productVariation->drap_mrp ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Min Level</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->min_level }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Max Level</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->max_level }}" readonly>
                         </div>
                     </div>
                     <a class="btn btn-secondary" href="{{ route('product-variations.index') }}">Cancel</a>

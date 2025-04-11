@@ -12,16 +12,16 @@ class ProductVariationService
             ->join('products', 'product_variations.product_id', '=', 'products.id')
             ->join('companies', 'product_variations.company_id', '=', 'companies.id')
             ->join('dosage_forms', 'product_variations.dosage_form_id', '=', 'dosage_forms.id')
-            ->join('pack_forms', 'product_variations.pack_form_id', '=', 'pack_forms.id')
+            // ->join('pack_forms', 'product_variations.pack_form_id', '=', 'pack_forms.id')
             ->join('pack_sizes', 'product_variations.pack_size_id', '=', 'pack_sizes.id')
             ->join('packing_types', 'product_variations.packing_type_id', '=', 'packing_types.id')
-            ->orderBy('products.name', 'asc')
+            ->orderBy('products.brand_name', 'asc')
             ->select(
                 'product_variations.*', 
                 'products.name as product_name', 
                 'companies.name as company_name',
                 'dosage_forms.name as dosage_form_name',
-                'pack_forms.name as pack_form_name',
+                // 'pack_forms.name as pack_form_name',
                 'pack_sizes.name as pack_size_name',
                 'packing_types.name as packing_type_name'
             );
@@ -40,7 +40,7 @@ class ProductVariationService
         $data['code'] = $data['category_prefix'] . $data['code'];
         $data['product_id'] = $data['product'];
         $data['dosage_form_id'] = $data['dosage_form'];
-        $data['pack_form_id'] = $data['pack_form'];
+        $data['pack_form_id'] = $data['pack_form'] ?? null;
         $data['pack_size_id'] = $data['pack_size'];
         $data['packing_type_id'] = $data['packing_type'];
         $data['product_group_id'] = $data['product_group'];
@@ -54,7 +54,7 @@ class ProductVariationService
         $data['code'] = $data['category_prefix'] . $data['code'];
         $data['product_id'] = $data['product'];
         $data['dosage_form_id'] = $data['dosage_form'];
-        $data['pack_form_id'] = $data['pack_form'];
+        $data['pack_form_id'] = $data['pack_form'] ?? null;
         $data['pack_size_id'] = $data['pack_size'];
         $data['packing_type_id'] = $data['packing_type'];
         $data['product_group_id'] = $data['product_group'];

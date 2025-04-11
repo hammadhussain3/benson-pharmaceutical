@@ -117,7 +117,7 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-6">
+                            {{-- <div class="mb-3 col-md-6">
                                 <label for="pack_form_id">Pack Form</label>
                                 <select name="pack_form" id="pack_form_id" class="form-control" required>
                                     <option value="">Select Pack Form</option>
@@ -133,7 +133,7 @@
                                         @endforeach
                                     @endif
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="mb-3 col-md-6">
                                 <label for="pack_size_id">Pack Size</label>
                                 <select name="pack_size" id="pack_size_id" class="form-control" required>
@@ -182,6 +182,16 @@
                                 <label for="drap_mrp">Drap MRP</label>
                                 <input type="number" class="form-control" name="drap_mrp" id="drap_mrp" min="0"
                                     placeholder="Drap MRP" required value="{{ old('drap_mrp') }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="min_level">Min Level</label>
+                                <input type="text" class="form-control" name="min_level" id="min_level"
+                                    placeholder="Min Level" required value="{{ old('min_level') }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="max_level">Max Level</label>
+                                <input type="text" class="form-control" name="max_level" id="max_level"
+                                    placeholder="Max Level" required value="{{ old('max_level') }}">
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

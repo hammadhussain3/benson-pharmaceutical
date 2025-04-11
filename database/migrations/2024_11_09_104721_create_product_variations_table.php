@@ -17,12 +17,14 @@ return new class extends Migration
             $table->string('reg_no');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('dosage_form_id');
-            $table->unsignedBigInteger('pack_form_id');
+            $table->unsignedBigInteger('pack_form_id')->nullable();
             $table->unsignedBigInteger('packing_type_id');
             $table->unsignedBigInteger('pack_size_id');
             $table->decimal('trade_price', 10, 2);
             $table->decimal('our_mrp', 10, 2);
             $table->decimal('drap_mrp', 10, 2);
+            $table->string('min_level');
+            $table->string('max_level');
             $table->unsignedBigInteger('product_group_id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('company_id');

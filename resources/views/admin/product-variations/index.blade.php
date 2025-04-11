@@ -37,7 +37,7 @@
                             <th>Reg. No.</th>
                             <th>Product</th>
                             <th>Dosage Forms</th>
-                            <th>Pack Forms</th>
+                            {{-- <th>Pack Forms</th> --}}
                             <th>Packing Types</th>
                             <th>Pack Sizes</th>
                             <th>Group</th>
@@ -45,6 +45,8 @@
                             <th>Trade Price</th>
                             <th>Our MRP</th>
                             <th>Drap MRP</th>
+                            <th>Min. Level</th>
+                            <th>Max. Level</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
@@ -61,7 +63,7 @@
                                 <td>{{ $productVariation->reg_no ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->product->brand_name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->dosageForm->name ?? 'N/A' }}</td>
-                                <td>{{ $productVariation->packForm->name ?? 'N/A' }}</td>
+                                {{-- <td>{{ $productVariation->packForm->name ?? 'N/A' }}</td> --}}
                                 <td>{{ $productVariation->packSize->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packingType->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->productGroup->name ?? 'N/A' }}</td>
@@ -69,6 +71,8 @@
                                 <td>{{ $productVariation->trade_price ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->our_mrp ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->drap_mrp ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->min_level ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->max_level ?? 'N/A' }}</td>
                                 @role('Superadmin')
                                 <td>{{ $productVariation->company->name ?? 'N/A' }}</td>
                                 @endrole
