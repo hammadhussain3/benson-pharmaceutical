@@ -196,6 +196,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/companies/{companyId}/invoices', [PurchaseInvoiceController::class, 'getInvoicesByCompany']);
     Route::get('/companies/{companyId}/categories', [CategoryController::class, 'getCategoriesByCompany']);
     Route::get('/category/{categoryId}/prefix', [CategoryController::class, 'getCategoryPrefix']);
+    Route::get('/category/{categoryId}/sub-categories', [SubCategoryController::class, 'getSubCategoriesByCategory']);
+    Route::get('/sub-category/{subCategoryId}/prefix', [SubCategoryController::class, 'getSubCategoryPrefix']);
     Route::get('/getcompany/{employeeId}', [EmployeeController::class, 'getCompanyByEmployee']);
     Route::get('/getemployee/{employeeId}', [EmployeeController::class, 'getEmployeeDetails']);
     Route::get('/geteob/{employeeId}', [SalarySlipController::class, 'getEmployeeEob']);

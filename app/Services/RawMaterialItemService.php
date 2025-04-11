@@ -18,18 +18,20 @@ class RawMaterialItemService
 
     public function createRawMaterialItem(array $data)
     {
-        $data['code'] = $data['category_prefix'] . $data['code'];
+        $data['code'] = $data['category_prefix'] . $data['sub_category_prefix'] . $data['code'];
         $data['party_id'] = $data['party'];
         $data['category_id'] = $data['category'];
+        $data['sub_category_id'] = $data['sub_category'];
         $data['company_id'] = $data['company'];
         return RawMaterialItem::create($data);
     }
 
     public function updateRawMaterialItem(RawMaterialItem $rawMaterialItem, array $data)
     {
-        $data['code'] = $data['category_prefix'] . $data['code'];
+        $data['code'] = $data['category_prefix'] . $data['sub_category_prefix'] . $data['code'];
         $data['party_id'] = $data['party'];
         $data['category_id'] = $data['category'];
+        $data['sub_category_id'] = $data['sub_category'];
         $data['company_id'] = $data['company'];
         $rawMaterialItem->update($data);
         return $rawMaterialItem;

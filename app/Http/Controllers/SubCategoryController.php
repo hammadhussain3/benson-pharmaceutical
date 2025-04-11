@@ -107,7 +107,13 @@ class SubCategoryController extends Controller
 
     public function getSubCategoriesByCategory($categoryId)
     {
-        $subCategories = SubCategory::where('category_id', $categoryId)->get();
+        $subCategories = SubCategory::where('category_id', $categoryId)->orderBy('name', 'asc')->get();
         return response()->json(['subCategories' => $subCategories]);
+    }
+
+    public function getSubCategoryPrefix($subCategoryId)
+    {
+        $subCategory = $this->subCategoryService->getById($subCategoryId);
+        return response()->json(['prefix' => $subCategory->prefix]);
     }
 }

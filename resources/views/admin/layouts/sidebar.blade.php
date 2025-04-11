@@ -304,6 +304,7 @@
                 @if(
                     auth()->user()->hasPermission('Batch List') ||
                     auth()->user()->hasPermission('Category List') ||
+                    auth()->user()->hasPermission('Sub Category List') ||
                     auth()->user()->hasPermission('Chart Of Accounts List') ||
                     auth()->user()->hasPermission('Dosage Form List') ||
                     auth()->user()->hasPermission('Franchise List') ||
@@ -358,6 +359,13 @@
                             <li>
                                 <a class="{{ request()->is('categories*') ? 'active' : '' }}" href="{{ route('categories.index') }}">
                                     Categories
+                                </a>
+                            </li>
+                        @endif
+                        @if(auth()->user()->hasPermission('Sub Category List'))
+                            <li>
+                                <a class="{{ request()->is('sub-categories*') ? 'active' : '' }}" href="{{ route('sub-categories.index') }}">
+                                    Sub Categories
                                 </a>
                             </li>
                         @endif

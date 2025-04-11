@@ -39,7 +39,7 @@
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="category">Category</label>
-                                <select name="category" id="category_id" class="js-example-basic-single select2" required onchange="selectCategoryPrefix(this.value);">
+                                <select name="category" id="category_id" class="js-example-basic-single select2" required onchange="selectCategoryPrefix(this.value); selectSubCategory(this.value);">
                                     <option value="">Select Category</option>
                                     @php
                                         $seletedCompanyId = old('company', $rawMaterialItem->company_id) ?? auth()->user()->employee->company_id;
@@ -52,25 +52,43 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="sub_category">Sub Category</label>
+                                <select name="sub_category" id="sub_category" class="js-example-basic-single select2" required onchange="selectSubCategoryPrefix(this.value);">
+                                    <option value="">Select Sub Category</option>
+                                    @php
+                                        $seletedCategoryId = old('company', $rawMaterialItem->category->id) ?? auth()->user()->employee->company_id;
+                                    @endphp
+                                    @foreach ($subCategories->where('category_id', $seletedCategoryId) as $subCategory)
+                                        <option value="{{ $subCategory->id }}"
+                                            {{ old('sub_category', optional($rawMaterialItem->subCategory)->id) == $subCategory->id ? 'selected' : '' }}>
+                                            {{ $subCategory->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
                             <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <div class="input-group">
-                                    <input type="text" name="category_prefix" id="category_prefix" class="form-control" value="{{ old('category_prefix', optional($rawMaterialItem->category)->prefix) }}-" readonly>
-                                    <input type="text" class="form-control" name="code" id="code" style="width: 300px;"
+                                    <input type="text" name="category_prefix" id="category_prefix" class="form-control" value="{{ old('category_prefix', $rawMaterialItem->category ? $rawMaterialItem->category->prefix . '-' : '') }}" readonly>
+                                    <input type="text" name="sub_category_prefix" id="sub_category_prefix" class="form-control" value="{{ old('sub_category_prefix', $rawMaterialItem->SubCategory ? $rawMaterialItem->SubCategory->prefix . '-' : '') }}" readonly>
+                                    <input type="text" class="form-control" name="code" id="code" style="width: 165px;"
                                         placeholder="Code" required value="{{ old('code', collect(explode('-', $rawMaterialItem->code))->last()) }}" readonly>
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     placeholder="Name" required value="{{ old('name', $rawMaterialItem->name) }}">
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="unit">Unit</label>
                                 <input type="text" class="form-control" name="unit" id="unit"
                                     placeholder="Unit" required value="{{ old('unit', $rawMaterialItem->unit) }}">
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="supplier_id">Supplier</label>
                                 <select name="party" id="supplier_id" class="form-control" required>
                                     <option value="">Select Supplier</option>

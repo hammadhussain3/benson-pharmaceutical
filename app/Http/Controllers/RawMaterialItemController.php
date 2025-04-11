@@ -8,6 +8,7 @@ use App\Services\RawMaterialItemService;
 use App\Services\CompanyService;
 use App\Services\PartyService;
 use App\Services\CategoryService;
+use App\Services\SubCategoryService;
 
 class RawMaterialItemController extends Controller
 {
@@ -15,11 +16,13 @@ class RawMaterialItemController extends Controller
     protected $rawMaterialItemService;
     protected $partyService;
     protected $categoryService;
+    protected $subCategoryService;
 
-    public function __construct(RawMaterialItemService $rawMaterialItemService, CompanyService $companyService, PartyService $partyService, CategoryService $categoryService)
+    public function __construct(RawMaterialItemService $rawMaterialItemService, CompanyService $companyService, PartyService $partyService, CategoryService $categoryService, SubCategoryService $subCategoryService)
     {
         $this->companyService = $companyService;
         $this->categoryService = $categoryService;
+        $this->subCategoryService = $subCategoryService;
         $this->partyService = $partyService;
         $this->rawMaterialItemService = $rawMaterialItemService;
     }
@@ -46,9 +49,10 @@ class RawMaterialItemController extends Controller
             $newRawMaterialItemCode = $this->rawMaterialItemService->createRawMaterialItemCode(auth()->user()->employee->company_id);
         }
         $categories = $this->categoryService->getAllCategories();
+        $subCategories = $this->subCategoryService->getAll();
         $companies = $this->companyService->getAllcompanies();
         $parties = $this->partyService->getAllParties();
-        return view('admin.raw-material-items.create', compact('companies', 'parties', 'newRawMaterialItemCode', 'categories'));
+        return view('admin.raw-material-items.create', compact('companies', 'parties', 'newRawMaterialItemCode', 'categories', 'subCategories'));
     }
 
     /**
@@ -85,9 +89,10 @@ class RawMaterialItemController extends Controller
         }
         $rawMaterialItem = $this->rawMaterialItemService->getRawMaterialItemById($id);
         $categories = $this->categoryService->getAllCategories();
+        $subCategories = $this->subCategoryService->getAll();
         $companies = $this->companyService->getAllcompanies();
         $parties = $this->partyService->getAllParties();
-        return view('admin.raw-material-items.edit', compact('rawMaterialItem', 'companies', 'parties', 'categories'));
+        return view('admin.raw-material-items.edit', compact('rawMaterialItem', 'companies', 'parties', 'categories', 'subCategories'));
     }
 
     /**

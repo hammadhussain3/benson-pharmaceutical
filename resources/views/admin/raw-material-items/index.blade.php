@@ -35,6 +35,9 @@
                             <th>#</th>
                             <th>Code</th>
                             <th>Name</th>
+                            <th>Categories</th>
+                            <th>Min. Level</th>
+                            <th>Max. Level</th>
                             <th>Party</th>
                             @role('Superadmin')
                             <th>Company</th>
@@ -50,6 +53,14 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">{{ $rawMaterialItem->code }}</a></td>
                                 <td>{{ $rawMaterialItem->name }}</td>
+                                <td>
+                                    <span class="badge bg-primary">{{ $rawMaterialItem->category->name }}</span>
+                                    @if ($rawMaterialItem->subCategory)
+                                        <span class="badge bg-info">{{ $rawMaterialItem->subCategory->name }}</span>
+                                    @endif
+                                </td>
+                                <td>{{ $rawMaterialItem->min_level }}</td>
+                                <td>{{ $rawMaterialItem->max_level }}</td>
                                 <td>
                                     {{ $rawMaterialItem->party ? $rawMaterialItem->party->name . ' (' . 
                                         ($rawMaterialItem->party->is_supplier == 1 ? 'Supplier' : 

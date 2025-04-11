@@ -381,6 +381,50 @@ function selectBanks(branchId)
     }
 }
 
+function selectSubCategoryPrefix(subCategoryId)
+{
+    var subCategoryPrefix = document.getElementById('sub_category_prefix');
+    
+    if (subCategoryId && subCategoryPrefix) {
+        fetch(`/sub-category/${subCategoryId}/prefix`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching sub-category prefix');
+                }
+                return response.json();
+            })
+            .then(data => {
+                subCategoryPrefix.value = data.prefix + '-';
+            })
+            .catch(error => console.error('Error fetching sub-category prefix:', error));
+    }
+}
+
+function selectSubCategory(categoryId)
+{
+    var subCategorySelect = document.getElementById('sub_category');
+    
+    if (categoryId && subCategorySelect) {
+        fetch(`/category/${categoryId}/sub-categories`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching sub-category');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.subCategories);
+                data.subCategories.forEach(function (subCategory) {
+                    var option = document.createElement('option');
+                    option.value = subCategory.id;
+                    option.textContent = subCategory.name;
+                    subCategorySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching sub-category:', error));
+    }
+}
+
 function selectCategoryPrefix(categoryId)
 {
     var categoryPrefix = document.getElementById('category_prefix');

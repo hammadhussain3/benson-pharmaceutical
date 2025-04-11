@@ -8,12 +8,12 @@ class SubCategoryService
 {
     public function getAll()
     {
-        $query = SubCategory::select('sub_categories.*', 'categories.name')
-            ->join('categories', 'sub_categories.category_id', '=', 'categories.id')
-            ->orderBy('categories.name', 'asc');
+        $query = SubCategory::with('category')->orderBy('name', 'asc');
 
         if (!auth()->user()->hasRole('Superadmin')) {
-            $query->where('sub_categories.company_id', auth()->user()->employee->company_id);
+            $query->whereHas('category', function ($q) {
+                $q->where('company_id', auth()->user()->employee->company_id);
+            });
         }
 
         return $query->get();

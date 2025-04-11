@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('min_level');
             $table->string('max_level');
             $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->unsignedBigInteger('party_id')->nullable();
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('created_by')->nullable();
@@ -29,6 +30,7 @@ return new class extends Migration
             // Foreign key
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('sub_category_id')->references('id')->on('sub_categories')->onDelete('cascade');
         });
     }
 

@@ -29,6 +29,10 @@
                             <input type="text" class="form-control" value="{{ $rawMaterialItem->category->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
+                            <label>Sub-Category</label>
+                            <input type="text" class="form-control" value="{{ $rawMaterialItem->subCategory->name }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
                             <label>Code</label>
                             <input type="text" class="form-control" value="{{ $rawMaterialItem->code }}" readonly>
                         </div>
