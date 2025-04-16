@@ -8,19 +8,24 @@ use App\Models\Party;
 use App\Models\Country;
 use App\Models\City;
 use App\Models\Company;
-use App\Models\PaymentType;
 use App\Services\FranchiseService;
 use App\Services\PaymentTypeService;
+use App\Services\CategoryService;
+use App\Services\SubCategoryService;
 
 class FranchiseController extends Controller
 {
     protected $franchiseService;
     protected $paymentTypeService;
+    protected $categoryService;
+    protected $subCategoryService;
 
-    public function __construct(FranchiseService $franchiseService, PaymentTypeService $paymentTypeService)
+    public function __construct(FranchiseService $franchiseService, PaymentTypeService $paymentTypeService, CategoryService $categoryService, SubCategoryService $subCategoryService)
     {
         $this->franchiseService = $franchiseService;
         $this->paymentTypeService = $paymentTypeService;
+        $this->categoryService = $categoryService;
+        $this->subCategoryService = $subCategoryService;
     }
     /**
      * Display a listing of the resource.
@@ -42,16 +47,17 @@ class FranchiseController extends Controller
         if (!auth()->user()->hasPermission('Franchise Create')) {
             abort(403, 'Unauthorized action.');
         }
-        if (auth()->user()->hasRole('Superadmin')) {
-            $newFranchiseCode = "FRA";
-        } else {
+        $newFranchiseCode = null;
+        if (!auth()->user()->hasRole('Superadmin')) {
             $newFranchiseCode = $this->franchiseService->createFranchiseCode(auth()->user()->employee->company_id);
         }
+        $categories = $this->categoryService->getAllCategories();
+        $subCategories = $this->subCategoryService->getAll();
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
         $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
-        return view('admin.franchises.create', compact('countries', 'cities', 'companies', 'paymentTypes', 'newFranchiseCode'));
+        return view('admin.franchises.create', compact('countries', 'cities', 'companies', 'paymentTypes', 'newFranchiseCode', 'categories', 'subCategories'));
     }
 
     /**
@@ -85,11 +91,13 @@ class FranchiseController extends Controller
         if (!auth()->user()->hasPermission('Franchise Update')) {
             abort(403, 'Unauthorized action.');
         }
+        $categories = $this->categoryService->getAllCategories();
+        $subCategories = $this->subCategoryService->getAll();
         $countries = Country::orderBy('name', 'asc')->get();
         $cities = City::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
         $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
-        return view('admin.franchises.edit', compact('franchise', 'countries', 'cities', 'companies', 'paymentTypes'));
+        return view('admin.franchises.edit', compact('franchise', 'countries', 'cities', 'companies', 'paymentTypes', 'categories', 'subCategories'));
     }
 
     /**

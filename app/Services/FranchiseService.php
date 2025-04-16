@@ -23,6 +23,8 @@ class FranchiseService
     {
         $data['country_id'] = $data['country'];
         $data['city_id'] = $data['city'];
+        $data['category_id'] = $data['category'];
+        $data['sub_category_id'] = $data['sub_category'];
         $data['company_id'] = $data['company'];
         $data['payment_type_id'] = $data['payment_type'];
         $data['is_supplier'] = '0';
@@ -34,6 +36,8 @@ class FranchiseService
     {
         $data['country_id'] = $data['country'];
         $data['city_id'] = $data['city'];
+        $data['category_id'] = $data['category'];
+        $data['sub_category_id'] = $data['sub_category'];
         $data['company_id'] = $data['company'];
         $data['payment_type_id'] = $data['payment_type'];
         $franchise->update($data);
@@ -52,14 +56,15 @@ class FranchiseService
 
     public function createFranchiseCode($company_id)
     {
-        $lastFranchiseCode = Party::latest('id')->where('company_id', $company_id)->where('is_supplier', '1')->value('code');
+        $lastFranchiseCode = Party::latest('id')->where('company_id', $company_id)->where('is_distributor', '1')->value('code');
         if ($lastFranchiseCode) {
-            $numberPart = (int) substr($lastFranchiseCode, 3);
-            $newNumberPart = $numberPart + 1;
-            $newFranchiseCode = 'FRA' . str_pad($newNumberPart, 5, '0', STR_PAD_LEFT);
+            $parts = explode('-', $lastFranchiseCode);
+            $lastPart = array_pop($parts); // get last numeric part
+            $numberPart = (int) $lastPart;
+            $newNumberPart = str_pad($numberPart + 1, strlen($lastPart), '0', STR_PAD_LEFT);
+            return $newNumberPart;
         } else {
-            $newFranchiseCode = 'FRA00001';
+            return '00001';
         }
-        return $newFranchiseCode;
     }
 }

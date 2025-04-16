@@ -23,6 +23,8 @@ class Party extends Model
         'payment_type_id',
         'is_supplier',
         'is_distributor',
+        'category_id',
+        'sub_category_id',
         'company_id',
         'created_by',
         'updated_by'
@@ -74,6 +76,16 @@ class Party extends Model
     public function paymentReceipts()
     {
         return $this->hasMany(ReceiptVoucher::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
     }
 
     public function getCurrentBalanceAttribute()

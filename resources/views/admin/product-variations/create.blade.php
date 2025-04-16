@@ -67,9 +67,9 @@
                                     placeholder="Registration Number" required value="{{ old('reg_no') }}">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="product_id">Product</label>
+                                <label for="product_id">Brand</label>
                                 <select name="product" id="product_id" class="form-control" required>
-                                    <option value="">Select Product</option>
+                                    <option value="">Select Brand</option>
                                     @if(old('product') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
                                             $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;

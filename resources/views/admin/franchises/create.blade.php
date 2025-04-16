@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Add New Franchise</h3>
+                <h3 class="page-title">Add New Customer</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('franchises.index') }}">Franchises</a></li>
-                    <li class="breadcrumb-item active">Add Franchise</li>
+                    <li class="breadcrumb-item"><a href="{{ route('franchises.index') }}">Customers</a></li>
+                    <li class="breadcrumb-item active">Add Customer</li>
                 </ul>
             </div>
         </div>
@@ -20,17 +20,72 @@
                     <form action="{{ route('franchises.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-row row">
+                            @role('Superadmin')
+                                <div class="mb-3 col-md-12">
+                                    <label for="company">Company</label>
+                                    <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="createFranchiseCode(this.value); selectCategories(this.value);" @endrole>
+                                        <option value="">Select Company</option>
+                                        @foreach ($companies as $company)
+                                            <option value="{{ $company->id }}"
+                                                {{ old('company') == $company->id ? 'selected' : '' }}>
+                                                {{ $company->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback">Please select a company.</div>
+                                </div>
+                            @else
+                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
+                            @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="name">Franchise Name</label>
+                                <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    placeholder="Franchise Name" required value="{{ old('name') }}">
+                                    placeholder="Name" required value="{{ old('name') }}">
                                 <div class="invalid-feedback">Please provide a valid franchise name.</div>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="code">Franchise Code</label>
-                                <input type="text" class="form-control" name="code" id="code"
-                                    placeholder="Franchise Code" required value="{{ old('code', $newFranchiseCode) }}" readonly>
-                                <div class="invalid-feedback">Please provide a valid franchise code.</div>
+                                <label for="code">Code</label>
+                                <div class="input-group">
+                                    <input type="text" name="category_prefix" id="category_prefix" class="form-control" value="{{ old('category_prefix') }}" readonly>
+                                    <input type="text" name="sub_category_prefix" id="sub_category_prefix" class="form-control" value="{{ old('sub_category_prefix') }}" readonly>
+                                    <input type="text" class="form-control" name="code" id="code" style="width: 165px;"
+                                        placeholder="Code" required value="{{ old('code', $newFranchiseCode) }}" readonly>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="category">Category</label>
+                                <select name="category" id="category_id" class="js-example-basic-single select2" required onchange="selectCategoryPrefix(this.value); selectSubCategory(this.value);">
+                                    <option value="">Select Category</option>
+                                    @if(old('category') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($categories->where('company_id', $seletedCompanyId) as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="sub_category">Sub Category</label>
+                                <select name="sub_category" id="sub_category" class="js-example-basic-single select2" required onchange="selectSubCategoryPrefix(this.value);">
+                                    <option value="">Select Sub Category</option>
+                                    @if(old('sub_category') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($subCategories->where('company_id', $seletedCompanyId) as $subCategory)
+                                            <option value="{{ $subCategory->id }}"
+                                                {{ old('sub_category') == $subCategory->id ? 'selected' : '' }}>
+                                                {{ $subCategory->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="country_id">Country</label>
@@ -60,32 +115,10 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a city.</div>
                             </div>
-                            @role('Superadmin')
-                            <div class="mb-3 col-md-12">
-                                <label for="company">Company</label>
-                                <select name="company" id="company" class="js-example-basic-single select2" required @role('Superadmin') onchange="createFranchiseCode(this.value);" @endrole>
-                                    <option value="">Select Company</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}"
-                                            {{ old('company') == $company->id ? 'selected' : '' }}>
-                                            {{ $company->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a company.</div>
-                            </div>
-                            @else
-                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
-                            @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_name">Contact Person Name</label>
                                 <input type="text" class="form-control" name="contact_person_name"
                                     id="contact_person_name" placeholder="Contact Person Name" value="{{ old('contact_person_name') }}">
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="contact_person_phone">Contact Person Phone</label>
-                                <input type="text" class="form-control" name="contact_person_phone"
-                                    id="contact_person_phone" placeholder="+123 1234567890" value="{{ old('contact_person_phone') }}">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_email">Contact Person Email</label>
@@ -93,10 +126,9 @@
                                     id="contact_person_email" placeholder="Contact Person Email" value="{{ old('contact_person_email') }}">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="phone">Phone</label>
-                                <input type="tel" class="form-control" name="phone" id="phone" placeholder="+123 1234567890"
-                                    required value="{{ old('phone') }}">
-                                <div class="invalid-feedback">Please provide a valid phone number.</div>
+                                <label for="contact_person_phone">Contact Person Phone</label>
+                                <input type="text" class="form-control" name="contact_person_phone"
+                                    id="contact_person_phone" placeholder="+123 1234567890" value="{{ old('contact_person_phone') }}">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="email">Email</label>
@@ -105,8 +137,14 @@
                                 <div class="invalid-feedback">Please provide a valid email address.</div>
                             </div>
                             <div class="mb-3 col-md-6">
+                                <label for="phone">Phone</label>
+                                <input type="tel" class="form-control" name="phone" id="phone" placeholder="+123 1234567890"
+                                    required value="{{ old('phone') }}">
+                                <div class="invalid-feedback">Please provide a valid phone number.</div>
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="address">Address</label>
-                                <textarea class="form-control" name="address" id="address" placeholder="Address">{{ old('address') }}</textarea>
+                                <input type="text" class="form-control" name="address" id="address" value="{{ old('address') }}" placeholder="Complete Address">
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="payment_type_id">Payment Type</label>

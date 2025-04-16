@@ -23,6 +23,8 @@ class CreatePartiesTable extends Migration
             $table->unsignedBigInteger('payment_type_id');
             $table->boolean('is_supplier')->default(false);
             $table->boolean('is_distributor')->default(false);
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('sub_category_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');

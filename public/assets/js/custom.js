@@ -632,7 +632,7 @@ function selectProducts(companyId) {
     if (allSelects.length === 0) return;
 
     allSelects.forEach(select => {
-        select.innerHTML = '<option value="">Select Product</option>';
+        select.innerHTML = '<option value="">Select Brand</option>';
     });
 
     fetch(`/companies/${companyId}/products`)

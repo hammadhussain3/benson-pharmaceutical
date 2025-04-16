@@ -54,7 +54,7 @@
                                 <td><a class="link-primary" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">{{ $rawMaterialItem->code }}</a></td>
                                 <td>{{ $rawMaterialItem->name }}</td>
                                 <td>
-                                    <span class="badge bg-primary">{{ $rawMaterialItem->category->name }}</span>
+                                    <span class="badge bg-primary">{{ optional($rawMaterialItem->category)->name }}</span>
                                     @if ($rawMaterialItem->subCategory)
                                         <span class="badge bg-info">{{ $rawMaterialItem->subCategory->name }}</span>
                                     @endif

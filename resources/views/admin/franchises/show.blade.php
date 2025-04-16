@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Franchise Details</h3>
+                <h3 class="page-title">Customer Details</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('franchises.index') }}">Franchises</a></li>
-                    <li class="breadcrumb-item active">Franchise Details</li>
+                    <li class="breadcrumb-item"><a href="{{ route('franchises.index') }}">Customers</a></li>
+                    <li class="breadcrumb-item active">Customer Details</li>
                 </ul>
             </div>
         </div>
@@ -18,21 +18,25 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-row row">
+                        <div class="mb-3 col-md-12">
+                            <label>Company</label>
+                            <input type="text" class="form-control" value="{{ $franchise->company->name }}" readonly>
+                        </div>
                         <div class="mb-3 col-md-6">
                             <label>Name</label>
                             <input type="text" class="form-control" value="{{ $franchise->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Company</label>
-                            <input type="text" class="form-control" value="{{ $franchise->company->name }}" readonly>
+                            <label>Code</label>
+                            <input type="text" class="form-control" value="{{ $franchise->code }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Phone</label>
-                            <input type="text" class="form-control" value="{{ $franchise->phone }}" readonly>
+                            <label>Category</label>
+                            <input type="text" class="form-control" value="{{ $franchise->category->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Email</label>
-                            <input type="text" class="form-control" value="{{ $franchise->email }}" readonly>
+                            <label>Sub-Category</label>
+                            <input type="text" class="form-control" value="{{ optional($franchise->subCategory)->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Country</label>
@@ -43,8 +47,28 @@
                             <input type="text" class="form-control" value="{{ $franchise->city->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
+                            <label>Contact Person Name</label>
+                            <input type="text" class="form-control" value="{{ $franchise->contact_person_name ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Contact Person Email</label>
+                            <input type="text" class="form-control" value="{{ $franchise->contact_person_email ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Contact Person Phone</label>
+                            <input type="text" class="form-control" value="{{ $franchise->contact_person_phone ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Email</label>
+                            <input type="text" class="form-control" value="{{ $franchise->email }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Phone</label>
+                            <input type="text" class="form-control" value="{{ $franchise->phone }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
                             <label>Address</label>
-                            <textarea class="form-control" readonly>{{ $franchise->address }}</textarea>
+                            <input type="text" class="form-control" value="{{ $franchise->address }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Payment Type</label>

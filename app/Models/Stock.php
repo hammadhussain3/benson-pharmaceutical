@@ -90,7 +90,7 @@ class Stock extends Model
             ->whereNull('stocks.left_over_note_id');
 
         if (!auth()->user()->hasRole('Superadmin')) {
-            $query->where('company_id', auth()->user()->employee->company_id);
+            $query->where('stocks.company_id', auth()->user()->employee->company_id);
         }
 
         return $query;

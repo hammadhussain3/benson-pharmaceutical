@@ -75,6 +75,14 @@
                                         <td><input class="form-check-input" type="checkbox" value="68" name="permissions[]" id="permissions_68" {{ $role_has_permissions->pluck('permission_id')->contains(68) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="69" name="permissions[]" id="permissions_69" {{ $role_has_permissions->pluck('permission_id')->contains(69) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="70" name="permissions[]" id="permissions_70" {{ $role_has_permissions->pluck('permission_id')->contains(70) ? 'checked' : '' }}></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Brand</td>
+                                        <td><input class="form-check-input" type="checkbox" value="126" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(126) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="127" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(127) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="128" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(128) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="129" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(129) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="130" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(130) ? 'checked' : '' }}></td>
                                     </tr>                                    
                                     <tr>
                                         <td>Categories</td>
@@ -125,6 +133,14 @@
                                         <td><input class="form-check-input" type="checkbox" value="210" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(210) ? 'checked' : '' }}></td>
                                     </tr>
                                     <tr>
+                                        <td>Customers</td>
+                                        <td><input class="form-check-input" type="checkbox" value="96" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(96) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="97" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(97) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="98" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(98) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="99" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(99) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="100" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(100) ? 'checked' : '' }}></td>
+                                    </tr>
+                                    <tr>
                                         <td>Departments</td>
                                         <td><input class="form-check-input" type="checkbox" value="51" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(51) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="52" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(52) ? 'checked' : '' }}></td>
@@ -173,14 +189,6 @@
                                         <td><input class="form-check-input" type="checkbox" value="180" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(180) ? 'checked' : '' }}></td>
                                     </tr>
                                     <tr>
-                                        <td>Franchises</td>
-                                        <td><input class="form-check-input" type="checkbox" value="96" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(96) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="97" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(97) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="98" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(98) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="99" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(99) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="100" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(100) ? 'checked' : '' }}></td>
-                                    </tr>
-                                    <tr>
                                         <td>Goods Receiving</td>
                                         <td><input class="form-check-input" type="checkbox" value="171" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(171) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="172" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(172) ? 'checked' : '' }}></td>
@@ -227,6 +235,14 @@
                                         <td><input class="form-check-input" type="checkbox" value="28" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(28) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="29" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(29) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="30" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(30) ? 'checked' : '' }}></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Manual Purchase Requisition</td>
+                                        <td><input class="form-check-input" type="checkbox" value="161" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(161) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="162" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(162) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="163" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(163) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="164" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(164) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="165" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(165) ? 'checked' : '' }}></td>
                                     </tr>
                                     <tr>
                                         <td>Pack Form</td>
@@ -278,11 +294,11 @@
                                     </tr>
                                     <tr>
                                         <td>Product</td>
-                                        <td><input class="form-check-input" type="checkbox" value="126" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(126) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="127" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(127) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="128" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(128) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="129" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(129) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="130" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(130) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="141" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(141) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="142" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(142) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="143" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(143) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="144" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(144) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="145" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(145) ? 'checked' : '' }}></td>
                                     </tr>
                                     <tr>
                                         <td>Product Group</td>
@@ -293,28 +309,12 @@
                                         <td><input class="form-check-input" type="checkbox" value="135" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(135) ? 'checked' : '' }}></td>
                                     </tr>
                                     <tr>
-                                        <td>Product Variation</td>
-                                        <td><input class="form-check-input" type="checkbox" value="141" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(141) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="142" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(142) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="143" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(143) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="144" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(144) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="145" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(145) ? 'checked' : '' }}></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Purchase Invoice</td>
+                                        <td>Purchase Requisition</td>
                                         <td><input class="form-check-input" type="checkbox" value="229" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(229) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="230" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(230) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="231" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(231) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="232" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(232) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="233" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(233) ? 'checked' : '' }}></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Purchase Requisition</td>
-                                        <td><input class="form-check-input" type="checkbox" value="161" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(161) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="162" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(162) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="163" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(163) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="164" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(164) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="165" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(165) ? 'checked' : '' }}></td>
                                     </tr>
                                     <tr>
                                         <td>Raw Material Item</td>
@@ -403,6 +403,14 @@
                                         <td><input class="form-check-input" type="checkbox" value="183" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(183) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="184" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(184) ? 'checked' : '' }}></td>
                                         <td><input class="form-check-input" type="checkbox" value="185" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(185) ? 'checked' : '' }}></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sub-Categories</td>
+                                        <td><input class="form-check-input" type="checkbox" value="236" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(236) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="237" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(237) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="238" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(238) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="239" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(239) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="240" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(240) ? 'checked' : '' }}></td>
                                     </tr>
                                     <tr>
                                         <td>Suppliers</td>
