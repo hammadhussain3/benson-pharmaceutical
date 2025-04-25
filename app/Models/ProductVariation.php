@@ -9,7 +9,7 @@ class ProductVariation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'reg_no', 'product_id', 'dosage_form_id', 'pack_form_id', 'packing_type_id', 'pack_size_id', 'product_group_id', 'category_id', 'trade_price', 'our_mrp', 'drap_mrp', 'min_level', 'max_level', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'reg_no', 'product_id', 'strength', 'dosage_form_id', 'pack_form_id', 'packing_type_id', 'pack_size_id', 'product_group_id', 'category_id', 'sub_category_id', 'trade_price', 'our_mrp', 'drap_mrp', 'min_level', 'max_level', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -72,6 +72,11 @@ class ProductVariation extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
     }
 
     public function productGroup()

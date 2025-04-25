@@ -38,7 +38,7 @@
                             @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="category">Category</label>
-                                <select name="category" id="category_id" class="js-example-basic-single select2" required onchange="selectCategoryPrefix(this.value);">
+                                <select name="category" id="category_id" class="js-example-basic-single select2" required onchange="selectCategoryPrefix(this.value); selectSubCategory(this.value);">
                                     <option value="">Select Category</option>
                                     @if(old('category') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
@@ -54,10 +54,28 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
+                                <label for="sub_category">Sub Category</label>
+                                <select name="sub_category" id="sub_category" class="js-example-basic-single select2" required onchange="selectSubCategoryPrefix(this.value);">
+                                    <option value="">Select Sub Category</option>
+                                    @if(old('sub_category') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($subCategories->where('company_id', $seletedCompanyId) as $subCategory)
+                                            <option value="{{ $subCategory->id }}"
+                                                {{ old('sub_category') == $subCategory->id ? 'selected' : '' }}>
+                                                {{ $subCategory->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="code">Code</label>
                                 <div class="input-group">
-                                    <input type="text" name="category_prefix" id="category_prefix" class="form-control" value="{{ old('category_prefix') }}" placeholder="Prefix" readonly>
-                                    <input type="text" class="form-control" name="code" id="code" style="width: 300px;"
+                                    <input type="text" name="category_prefix" id="category_prefix" class="form-control" value="{{ old('category_prefix') }}" readonly>
+                                    <input type="text" name="sub_category_prefix" id="sub_category_prefix" class="form-control" value="{{ old('sub_category_prefix') }}" readonly>
+                                    <input type="text" class="form-control" name="code" id="code" style="width: 165px;"
                                         placeholder="Code" required value="{{ old('code', $newCode) }}" readonly>
                                 </div>
                             </div>
@@ -84,6 +102,11 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
+                                <label for="strength">Strength</label>
+                                <input type="text" class="form-control" name="strength" id="strength"
+                                    placeholder="Product Strength" required value="{{ old('strength') }}">
+                            </div>
+                            {{-- <div class="mb-3 col-md-6">
                                 <label for="product_group">Product Group</label>
                                 <select name="product_group" id="product_group_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Product Group</option>
@@ -99,7 +122,7 @@
                                         @endforeach
                                     @endif
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="mb-3 col-md-6">
                                 <label for="dosage_form_id">Dosage Form</label>
                                 <select name="dosage_form" id="dosage_form_id" class="form-control" required>

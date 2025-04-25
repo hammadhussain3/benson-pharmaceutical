@@ -19,7 +19,7 @@
                 <div class="card-body">
                     <div class="form-row row">
                         @role('Superadmin')
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-12">
                             <label>Company</label>
                             <input type="text" class="form-control" value="{{ $productVariation->company->name ?? 'N/A' }}" readonly>
                         </div>
@@ -31,6 +31,10 @@
                             <input type="text" class="form-control" value="{{ $productVariation->category->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
+                            <label>Sub Category</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->subCategory->name ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
                             <label>Code</label>
                             <input type="text" class="form-control" value="{{ $productVariation->code ?? 'N/A' }}" readonly>
                         </div>
@@ -39,12 +43,12 @@
                             <input type="text" class="form-control" value="{{ $productVariation->reg_no ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Product</label>
+                            <label>Brand</label>
                             <input type="text" class="form-control" value="{{ $productVariation->product->brand_name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Product</label>
-                            <input type="text" class="form-control" value="{{ $productVariation->productGroup->name ?? 'N/A' }}" readonly>
+                            <label>Strength</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->strength ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Dosage Form</label>

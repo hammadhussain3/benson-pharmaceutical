@@ -36,11 +36,12 @@
                             <th>Code</th>
                             <th>Reg. No.</th>
                             <th>Product</th>
+                            <th>Strength</th>
                             <th>Dosage Forms</th>
                             {{-- <th>Pack Forms</th> --}}
                             <th>Packing Types</th>
                             <th>Pack Sizes</th>
-                            <th>Group</th>
+                            {{-- <th>Group</th> --}}
                             <th>Category</th>
                             <th>Trade Price</th>
                             <th>Our MRP</th>
@@ -62,12 +63,18 @@
                                 <td><a class="link-primary" href="{{ route('product-variations.show', $productVariation->id) }}">{{ $productVariation->code ?? 'N/A' }}</a></td>
                                 <td>{{ $productVariation->reg_no ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->product->brand_name ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->strength ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->dosageForm->name ?? 'N/A' }}</td>
                                 {{-- <td>{{ $productVariation->packForm->name ?? 'N/A' }}</td> --}}
                                 <td>{{ $productVariation->packSize->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packingType->name ?? 'N/A' }}</td>
-                                <td>{{ $productVariation->productGroup->name ?? 'N/A' }}</td>
-                                <td>{{ $productVariation->category->name ?? 'N/A' }}</td>
+                                {{-- <td>{{ $productVariation->productGroup->name ?? 'N/A' }}</td> --}}
+                                <td>
+                                    <span class="badge bg-primary">{{ optional($productVariation->category)->name }}</span>
+                                    @if ($productVariation->subCategory)
+                                        <span class="badge bg-info">{{ $productVariation->subCategory->name }}</span>
+                                    @endif
+                                </td>
                                 <td>{{ $productVariation->trade_price ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->our_mrp ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->drap_mrp ?? 'N/A' }}</td>

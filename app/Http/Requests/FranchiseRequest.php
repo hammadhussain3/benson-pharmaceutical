@@ -18,6 +18,8 @@ class FranchiseRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:255|unique:employees,code,' . $franchiseId . ',id,company_id,' . $this->company_id,
+            'category_prefix' => 'required',
+            'sub_category_prefix' => 'nullable',
             'contact_person_name' => 'nullable|string|max:255',
             'contact_person_phone' => 'nullable|string|max:50',
             'contact_person_email' => 'nullable|email|max:255',

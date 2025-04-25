@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('reg_no');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('dosage_form_id');
-            $table->unsignedBigInteger('pack_form_id')->nullable();
+            $table->unsignedBigInteger('pack_form_id');
             $table->unsignedBigInteger('packing_type_id');
             $table->unsignedBigInteger('pack_size_id');
             $table->decimal('trade_price', 10, 2);

@@ -250,11 +250,6 @@ class PermissionSeeder extends Seeder
             ['id' => 233, 'name' => 'Purchase Invoice View', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 234, 'name' => 'Sale Warranties List', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 235, 'name' => 'Sale Warranties View', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 236, 'name' => 'Sub Category List', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 237, 'name' => 'Sub Category Create', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 238, 'name' => 'Sub Category Update', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 239, 'name' => 'Sub Category Delete', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 240, 'name' => 'Sub Category View', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }
 }

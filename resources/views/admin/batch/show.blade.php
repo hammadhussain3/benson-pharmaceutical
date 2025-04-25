@@ -24,7 +24,7 @@
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Product</label>
-                            <input type="text" class="form-control" value="{{ $batch->product->name ?? 'N/A' }}" readonly>
+                            <input type="text" class="form-control" value="{{ $batch->product->brand_name ?? 'N/A' }}" readonly>
                         </div>
 
                         <div class="mb-3 col-md-6">

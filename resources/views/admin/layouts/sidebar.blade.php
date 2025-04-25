@@ -533,13 +533,13 @@
                                 </a>
                             </li>
                         @endif
-                        @if(auth()->user()->hasPermission('Stock List'))
+                        {{-- @if(auth()->user()->hasPermission('Stock List'))
                             <li>
                                 <a class="{{ request()->is('stocks*') ? 'active' : '' }}" href="{{ route('stocks.index') }}">
                                     Stocks
                                 </a>
                             </li>
-                        @endif
+                        @endif --}}
                         @if(auth()->user()->hasPermission('Store Issue Rquisition List'))
                             <li>
                                 <a class="{{ request()->is('store-issue-requisitions*') ? 'active' : '' }}" href="{{ route('store-issue-requisitions.index') }}">

@@ -400,11 +400,19 @@ function selectSubCategoryPrefix(subCategoryId)
     }
 }
 
-function selectSubCategory(categoryId)
-{
+function selectSubCategory(categoryId) {
     var subCategorySelect = document.getElementById('sub_category');
-    
+
     if (categoryId && subCategorySelect) {
+        // Clear previous options
+        subCategorySelect.innerHTML = '';
+
+        // Add default option
+        var defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Select Sub Category';
+        subCategorySelect.appendChild(defaultOption);
+
         fetch(`/category/${categoryId}/sub-categories`)
             .then(response => {
                 if (!response.ok) {
@@ -414,6 +422,7 @@ function selectSubCategory(categoryId)
             })
             .then(data => {
                 console.log(data.subCategories);
+
                 data.subCategories.forEach(function (subCategory) {
                     var option = document.createElement('option');
                     option.value = subCategory.id;

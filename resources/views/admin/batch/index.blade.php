@@ -51,7 +51,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td> <a class="link-primary" href="{{ route('batches.show', $batch->id) }}">{{ $batch->batch_no }}</a></td>
                                 <td>{{ $batch->batch_size }}</td>
-                                <td>{{ $batch->product->name }}</td>
+                                <td>{{ $batch->product->brand_name }}</td>
                                 <td>{{ $batch->mfg_date }}</td>
                                 <td>{{ $batch->exp_date }}</td>
                                 <td>

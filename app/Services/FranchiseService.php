@@ -21,6 +21,7 @@ class FranchiseService
 
     public function createFranchise(array $data)
     {
+        $data['code'] = $data['category_prefix'] . $data['sub_category_prefix'] . $data['code'];
         $data['country_id'] = $data['country'];
         $data['city_id'] = $data['city'];
         $data['category_id'] = $data['category'];
@@ -34,6 +35,7 @@ class FranchiseService
 
     public function updateFranchise(Party $franchise, array $data)
     {
+        $data['code'] = $data['category_prefix'] . $data['sub_category_prefix'] . $data['code'];
         $data['country_id'] = $data['country'];
         $data['city_id'] = $data['city'];
         $data['category_id'] = $data['category'];

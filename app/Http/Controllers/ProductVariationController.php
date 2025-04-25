@@ -13,17 +13,20 @@ use App\Http\Requests\ProductVariationRequest;
 use App\Services\CategoryService;
 use App\Services\ProductVariationService;
 use App\Services\CompanyService;
+use App\Services\SubCategoryService;
 
 class ProductVariationController extends Controller
 {
     protected $companyService;
     protected $productVariationService;
     protected $categoryService;
+    protected $subCategoryService;
 
-    public function __construct(ProductVariationService $productVariationService, CompanyService $companyService, CategoryService $categoryService)
+    public function __construct(ProductVariationService $productVariationService, CompanyService $companyService, CategoryService $categoryService, SubCategoryService $subCategoryService)
     {
         $this->companyService = $companyService;
         $this->categoryService = $categoryService;
+        $this->subCategoryService = $subCategoryService;
         $this->productVariationService = $productVariationService;
     }
 
@@ -56,7 +59,8 @@ class ProductVariationController extends Controller
         $packing_types = PackingType::orderBy('name', 'asc')->get();
         $productGroups = ProductGroup::orderBy('name', 'asc')->get();
         $categories = $this->categoryService->getAllCategories();
-        return view('admin.product-variations.create', compact('companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories', 'newCode'));
+        $subCategories = $this->subCategoryService->getAll();
+        return view('admin.product-variations.create', compact('companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories', 'subCategories', 'newCode'));
     }
 
     /**
@@ -100,7 +104,8 @@ class ProductVariationController extends Controller
         $packing_types = PackingType::orderBy('name', 'asc')->get();
         $productGroups = ProductGroup::orderBy('name', 'asc')->get();
         $categories = $this->categoryService->getAllCategories();
-        return view('admin.product-variations.edit', compact('productVariation', 'companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories'));
+        $subCategories = $this->subCategoryService->getAll();
+        return view('admin.product-variations.edit', compact('productVariation', 'companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories', 'subCategories'));
     }
 
     /**
