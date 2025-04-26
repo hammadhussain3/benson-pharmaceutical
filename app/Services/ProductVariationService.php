@@ -18,7 +18,7 @@ class ProductVariationService
             ->orderBy('products.brand_name', 'asc')
             ->select(
                 'product_variations.*', 
-                'products.name as product_name', 
+                'products.brand_name as product_name', 
                 'companies.name as company_name',
                 'dosage_forms.name as dosage_form_name',
                 // 'pack_forms.name as pack_form_name',

@@ -830,7 +830,7 @@ function selectProductVariations(productId) {
                         data.productVariations.forEach(function(productVariation) {
                             var option = document.createElement('option');
                             option.value = productVariation.id; // Use prefix to differentiate
-                            option.textContent = `${productVariation.product.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
+                            option.textContent = `${productVariation.product.brand_name} | ${productVariation.strength} | ${productVariation.dosage_form.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
                             selectProductVariation.appendChild(option);
                         });
                     }

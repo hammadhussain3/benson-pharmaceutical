@@ -33,7 +33,7 @@
                             <th>#</th>
                             <th>Batch No</th>
                             <th>Batch Size</th>
-                            <th>Product</th>
+                            <th>Brand</th>
                             <th>MFG date</th>
                             <th>EXP date</th>
                             <th>Status</th>

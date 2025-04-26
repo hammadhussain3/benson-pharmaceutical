@@ -35,6 +35,11 @@ class Batch extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function items()
+    {
+        return $this->hasMany(BatchProduct::class, 'batch_id');
+    }
+
     // Define the relationship to User (Created By)
     public function creator()
     {

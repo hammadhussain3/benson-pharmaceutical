@@ -26,7 +26,18 @@ class BatchService
     {
         $data['product_id'] = $data['product'];
         $data['company_id'] = $data['company'];
-        return Batch::create($data);
+
+        $batch = Batch::create($data);
+
+        if ($data['items']) {
+            foreach ($data['items'] as $key => $value) {
+                $value['product_variation_id'] = $value['product_variation'];
+                $value['batch_id'] = $batch->id;
+                $batch->items()->create($value);
+            }
+        }
+
+        return $batch;
     }
 
     public function updateBatch(Batch $batch, array $data)
@@ -34,6 +45,14 @@ class BatchService
         $data['product_id'] = $data['product'];
         $data['company_id'] = $data['company'];
         $batch->update($data);
+        $batch->items()->delete();
+        if ($data['items']) {
+            foreach ($data['items'] as $key => $value) {
+                $value['product_variation_id'] = $value['product_variation'];
+                $value['batch_id'] = $batch->id;
+                $batch->items()->create($value);
+            }
+        }
         return $batch;
     }
 

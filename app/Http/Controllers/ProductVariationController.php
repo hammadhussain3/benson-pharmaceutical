@@ -131,7 +131,7 @@ class ProductVariationController extends Controller
 
     public function getProductVariationsByProduct($productId)
     {
-        $productVariations = ProductVariation::with(['product', 'packingType', 'packSize'])->where('product_id', $productId)->get();
+        $productVariations = ProductVariation::with(['product', 'packingType', 'packSize', 'dosageForm'])->where('product_id', $productId)->get();
         return response()->json(['productVariations' => $productVariations]);
     }
 

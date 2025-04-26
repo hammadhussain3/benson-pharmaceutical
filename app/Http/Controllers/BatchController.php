@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Batch;
 use App\Models\ProductVariation;
+use App\Services\ProductVariationService;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\BatchRequest;
 use App\Services\CompanyService;
@@ -15,12 +16,14 @@ class BatchController extends Controller
     protected $batchService;
     protected $companyService;
     protected $productService;
+    protected $productVariationService;
 
-    public function __construct(BatchService $batchService, CompanyService $companyService, ProductService $productService)
+    public function __construct(BatchService $batchService, CompanyService $companyService, ProductService $productService, ProductVariationService $productVariationService)
     {
         $this->batchService = $batchService;
         $this->companyService = $companyService;
         $this->productService = $productService;
+        $this->productVariationService = $productVariationService;
     }
 
     public function index()
@@ -43,7 +46,8 @@ class BatchController extends Controller
 
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
-        return view('admin.batch.create', compact('companies','products'));
+        $productVariations = $this->productVariationService->getAllProductVariations();
+        return view('admin.batch.create', compact('companies','products', 'productVariations'));
     }
 
     /**
@@ -81,7 +85,8 @@ class BatchController extends Controller
         $batch = $this->batchService->getBatchById($id);
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
-        return view('admin.batch.edit', compact('batch', 'companies', 'products'));
+        $productVariations = $this->productVariationService->getAllProductVariations();
+        return view('admin.batch.edit', compact('batch', 'companies', 'products', 'productVariations'));
     }
 
     /**

@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
 
+    <!-- JQuery Files -->
+    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
+
 </head>
 
 <body>
@@ -55,7 +58,6 @@
     </div>
 
     <!-- JS Files -->
-    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/feather.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.dataTables.min.js') }}"></script>
