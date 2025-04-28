@@ -47,7 +47,7 @@ class SaleInvoiceController extends Controller
         if (auth()->user()->hasRole('Superadmin')) {
             $newInvoiceCode = 'SI';
         } else {
-            $newSupplierCode = $this->invoiceService->createInvoiceCode(auth()->user()->employee->company_id, 'sale');
+            $newInvoiceCode = $this->invoiceService->createInvoiceCode(auth()->user()->employee->company_id, 'sale');
         }
         $parties = $this->partyService->getAllParties();
         $companies = $this->companyService->getAllCompanies();

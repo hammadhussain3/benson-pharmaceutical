@@ -36,6 +36,8 @@
                             <th>Brand</th>
                             <th>MFG date</th>
                             <th>EXP date</th>
+                            <th>Start date</th>
+                            <th>End date</th>
                             <th>Status</th>
                             @role('Superadmin')
                             <th>Company</th>
@@ -54,6 +56,8 @@
                                 <td>{{ $batch->product->brand_name }}</td>
                                 <td>{{ $batch->mfg_date }}</td>
                                 <td>{{ $batch->exp_date }}</td>
+                                <td>{{ $batch->start_date }}</td>
+                                <td>{{ $batch->end_date ?? 'N/A' }}</td>
                                 <td>
                                     <span class="badges {{ $batch->status == 'completed' ? 'bg-lightgreen' : 'bg-lightred' }}">
                                         {{ $batch->status == 'completed' ? 'Completed' : 'In-Process' }}

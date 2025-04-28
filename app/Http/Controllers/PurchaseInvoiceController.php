@@ -47,7 +47,7 @@ class PurchaseInvoiceController extends Controller
         if (auth()->user()->hasRole('Superadmin')) {
             $newInvoiceCode = 'PR';
         } else {
-            $newSupplierCode = $this->invoiceService->createInvoiceCode(auth()->user()->employee->company_id, 'purchase');
+            $newInvoiceCode = $this->invoiceService->createInvoiceCode(auth()->user()->employee->company_id, 'purchase');
         }
         $parties = $this->partyService->getAllParties();
         $companies = $this->companyService->getAllCompanies();

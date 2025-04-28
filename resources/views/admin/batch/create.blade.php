@@ -53,19 +53,16 @@
                                         @endforeach
                                     @endif
                                 </select>
-                                <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="batch_no">Batch No</label>
                                 <input type="text" class="form-control" name="batch_no" id="batch_no"
                                     placeholder="Batch No" required value="{{ old('batch_no') }}">
-                                <div class="invalid-feedback">Please provide a Batch No.</div>
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="batch_size">Batch Size</label>
                                 <input type="text" class="form-control" name="batch_size" id="batch_size"
                                     placeholder="Batch Size" required value="{{ old('batch_size') }}">
-                                <div class="invalid-feedback">Please provide a Batch Size.</div>
                             </div>
                             <div class="col-md-12">
                                 <div class="card border-0 mb-0" id="item-group">
@@ -103,7 +100,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label>Quantity</label>
+                                                        <label>Quantity (Pack)</label>
                                                         <input type="number" class="form-control product_quantity" name="items[{{ $i }}][quantity]"
                                                             placeholder="Product Quantity" required value="{{ old("items.$i.quantity") }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
@@ -122,21 +119,30 @@
                                 </div>
                             </div>
                             
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="description">Manufactured Date</label>
                                 <input type="date" class="form-control" name="mfg_date"
                                     required value="{{ old('mfg_date') }}">
-                                <div class="invalid-feedback">Please provide a Manufactured Date.</div>
                             </div>
 
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="description">Expiry Date</label>
                                 <input type="date" class="form-control" name="exp_date"
                                     required value="{{ old('exp_date') }}">
-                                <div class="invalid-feedback">Please provide a Expiry Date.</div>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="start_date">Start Date</label>
+                                <input type="date" class="form-control" name="start_date"
+                                    required value="{{ old('start_date', \Carbon\Carbon::now()->format('Y-m-d')) }}">
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="end_date">End Date</label>
+                                <input type="date" class="form-control" name="end_date" value="{{ old('end_date') }}">
                             </div>
                             
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="company_id">Status</label>
                                 <select class="js-example-basic-single select2" name="status" required>
                                         <option value="inprocess">
@@ -146,7 +152,6 @@
                                             Completed
                                         </option>
                                 </select>
-                                <div class="invalid-feedback">Please select a Status.</div>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
@@ -175,7 +180,7 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label>Quantity</label>
+                                <label>Quantity (Pack)</label>
                                 <input type="number" class="form-control product_quantity" name="items[${itemIndex}][quantity]"
                                     placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>

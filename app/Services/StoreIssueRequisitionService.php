@@ -13,7 +13,7 @@ class StoreIssueRequisitionService
         if (auth()->user()->hasRole('Superadmin')) {
             $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product', 'batch', 'company'])->orderBy('created_at', 'asc')->get();
         } else {
-            $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product', 'batch', 'company'])->where('company', auth()->user()->employee->company_id)->orderBy('created_at', 'asc')->get();
+            $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product', 'batch', 'company'])->where('company_id', auth()->user()->employee->company_id)->orderBy('created_at', 'asc')->get();
         }
         return $requisitions;
     }

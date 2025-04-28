@@ -14,11 +14,13 @@ class BatchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'batch_no' => 'required|string',
+            'batch_no' => 'required|string|unique:batches,batch_no,NULL,id,company_id,' . $this->company,
             'batch_size' => 'required|numeric|min:1',
             'product' => 'required|exists:products,id',
-            'mfg_date' => 'required|string',
-            'exp_date' => 'required|string',
+            'mfg_date' => 'required|date',
+            'exp_date' => 'required|date',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date',
             'status' => 'required|string',
             'company' => 'required|exists:companies,id',
             'items' => 'required|array|min:1',

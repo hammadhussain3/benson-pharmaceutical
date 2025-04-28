@@ -102,7 +102,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label>Quantity</label>
+                                                        <label>Quantity (Pack)</label>
                                                         <input type="number" class="form-control product_quantity" name="items[{{ $i }}][quantity]"
                                                             placeholder="Product Quantity" required value="{{ old("items.$i.quantity", $batch->items[$i]->quantity) }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
@@ -121,21 +121,33 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="description">Manufactured Date</label>
                                 <input type="date" class="form-control" name="mfg_date"
                                     required value="{{ old('mfg_date',$batch->mfg_date) }}">
                                 <div class="invalid-feedback">Please provide a Manufactured Date.</div>
                             </div>
 
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="description">Expiry Date</label>
                                 <input type="date" class="form-control" name="exp_date"
                                     required value="{{ old('exp_date',$batch->exp_date) }}">
                                 <div class="invalid-feedback">Please provide a Expiry Date.</div>
                             </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="start_date">Start Date</label>
+                                <input type="date" class="form-control" name="start_date"
+                                    required value="{{ old('start_date',$batch->start_date) }}">
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="end_date">End Date</label>
+                                <input type="date" class="form-control" name="end_date"
+                                    value="{{ old('end_date',$batch->end_date) }}">
+                            </div>
                             
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label for="company_id">Status</label>
                                 <select class="js-example-basic-single select2" name="status" required>
                                         <option value="inprocess" {{ old('status', $batch->status) == 'inprocess' ? 'selected' : '' }}>
@@ -175,7 +187,7 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label>Quantity</label>
+                                <label>Quantity (Pack)</label>
                                 <input type="number" class="form-control product_quantity" name="items[${itemIndex}][quantity]"
                                     placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>

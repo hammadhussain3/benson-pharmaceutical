@@ -51,7 +51,7 @@
                                                     <input type="text" class="form-control" value="{{ $batch->product->brand_name ?? null }} | {{ $batch->items[$i]->productVariation->strength ?? null }} | {{ $batch->items[$i]->productVariation->dosageForm->name ?? null }} | {{ $batch->items[$i]->productVariation->packingType->name ?? null }} | {{ $batch->items[$i]->productVariation->packSize->name ?? null }}" readonly>
                                                 </div>
                                                 <div class="mb-3 col-md-4">
-                                                    <label>Quantity</label>
+                                                    <label>Quantity (Pack)</label>
                                                     <input type="number" class="form-control" value="{{ $batch->items[$i]->quantity }}" readonly>
                                                 </div>
                                                 <div class="mb-3 col-md-4">
@@ -65,17 +65,27 @@
                             </div>
                         </div>
 
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-6">
                             <label>MFG date</label>
                             <input type="text" class="form-control" value="{{ $batch->mfg_date ?? 'N/A' }}" readonly>
                         </div>
 
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-6">
                             <label>EXP date</label>
                             <input type="text" class="form-control" value="{{ $batch->exp_date ?? 'N/A' }}" readonly>
                         </div>
 
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-6">
+                            <label>Start date</label>
+                            <input type="text" class="form-control" value="{{ $batch->start_date ?? 'N/A' }}" readonly>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label>End date</label>
+                            <input type="text" class="form-control" value="{{ $batch->end_date ?? 'N/A' }}" readonly>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
                             <label>Status</label>
                             <input type="text" class="form-control" value="{{ $batch->status ?? 'N/A' }}" readonly>
                         </div>

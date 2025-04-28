@@ -9,7 +9,7 @@ class Batch extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['batch_no', 'batch_size', 'product_id', 'mfg_date', 'exp_date', 'status', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['batch_no', 'batch_size', 'product_id', 'mfg_date', 'exp_date', 'start_date', 'end_date', 'status', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
