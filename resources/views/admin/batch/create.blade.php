@@ -82,10 +82,10 @@
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-12">
                                                         <label for="">Products</label>
                                                         <select name="items[{{ $i }}][product_variation]" class="js-example-basic-single select2 product_variations_dropdown" required>
-                                                            <option value="">Select Product Variation</option>
+                                                            <option value="">Select Product</option>
                                                             @if(old('items[{{ $i }}][product_variation]') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                                                 @php
                                                                     $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
@@ -99,12 +99,12 @@
                                                             @endif
                                                         </select>
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-6">
                                                         <label>Quantity (Pack)</label>
                                                         <input type="number" class="form-control product_quantity" name="items[{{ $i }}][quantity]"
                                                             placeholder="Product Quantity" required value="{{ old("items.$i.quantity") }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-6">
                                                         <label>Trade Price</label>
                                                         <input type="number" class="form-control trade_price" name="items[{{ $i }}][trade_price]"
                                                             placeholder="Total" required value="{{ old("items.$i.trade_price", 0) }}">
@@ -174,17 +174,17 @@
                     </div>
                     <div class="card-body px-0 pb-0">
                         <div class="row">
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-12">
                                 <label for="">Products</label>
                                 <select name="items[${itemIndex}][product_variation]" class="js-example-basic-single select2 product_variations_dropdown" required>
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label>Quantity (Pack)</label>
                                 <input type="number" class="form-control product_quantity" name="items[${itemIndex}][quantity]"
                                     placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label>Trade Price</label>
                                 <input type="number" class="form-control trade_price" name="items[${itemIndex}][trade_price]"
                                     placeholder="Total" required value="0">

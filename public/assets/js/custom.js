@@ -815,10 +815,43 @@ function selectProductVariations(productId) {
         // Loop through all dropdowns
         Array.from(selectProductVariations).forEach(function(selectProductVariation) {
             // Clear the existing options in each dropdown
-            selectProductVariation.innerHTML = '<option value="">Select Product Variation</option>';
+            selectProductVariation.innerHTML = '<option value="">Select Product</option>';
             
             // Fetch the products and raw materials for the selected company
             fetch(`/products/${productId}/product-variations`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error fetching data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.productVariations && data.productVariations.length > 0) {
+                        data.productVariations.forEach(function(productVariation) {
+                            var option = document.createElement('option');
+                            option.value = productVariation.id; // Use prefix to differentiate
+                            option.textContent = `${productVariation.product.brand_name} | ${productVariation.strength} | ${productVariation.dosage_form.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
+                            selectProductVariation.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+    }
+}
+
+function selectProductVariationsByBatch(bacthId) {
+    // Get all dropdowns with the class 'product_variations_dropdown'
+    var selectProductVariations = document.getElementsByClassName('product_variations_dropdown');
+    
+    if (bacthId && selectProductVariations.length > 0) {
+        // Loop through all dropdowns
+        Array.from(selectProductVariations).forEach(function(selectProductVariation) {
+            // Clear the existing options in each dropdown
+            selectProductVariation.innerHTML = '<option value="">Select Product</option>';
+            
+            // Fetch the products and raw materials for the selected company
+            fetch(`/batch/${bacthId}/product-variations`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Error fetching data');

@@ -218,6 +218,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/branches/{branchId}/departments', [DepartmentController::class, 'getDepartmentsByBranch']);
     Route::get('/branches/{branchId}/banks', [BankController::class, 'getBanksByBranch']);
     Route::get('/parties/{partyId}/supplier_code', [PartyController::class, 'getSupplierCodeByPartyId']);
+    Route::get('/batch/{batchId}/product-variations', [BatchController::class, 'getProductVariationsByBatch']);
 
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');
     Route::get('salary-sheet/generate', [SalarySheetController::class, 'showSalarySheet'])->name('salary.sheet.show');

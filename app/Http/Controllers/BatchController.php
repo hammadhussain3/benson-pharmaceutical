@@ -122,4 +122,18 @@ class BatchController extends Controller
         $batches = Batch::where('product_id', $productVariation->product_id)->get();
         return response()->json(['batches' => $batches]);
     }
+
+    public function getProductVariationsByBatch($batchId)
+    {
+        $batch = $this->batchService->getBatchById($batchId);
+        $items = $batch->items;
+
+        $variationIds = $items->pluck('product_variation_id')->unique()->toArray();
+
+        $productVariations = ProductVariation::with(['product', 'packingType', 'packSize', 'dosageForm'])
+            ->whereIn('id', $variationIds)
+            ->get();
+            
+        return response()->json(['productVariations' => $productVariations]);
+    }
 }

@@ -41,9 +41,9 @@
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $newFinishedGoodsCode) }}">
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="product_id">Product</label>
-                                <select name="product" id="product_id" class="js-example-basic-single select2" required onchange="selectBatches(this.value); selectProductVariations(this.value);">
-                                    <option value="">Select Product</option>
+                                <label for="product_id">Brand</label>
+                                <select name="product" id="product_id" class="js-example-basic-single select2" required onchange="selectBatches(this.value);">
+                                    <option value="">Select Brand</option>
                                     @if(old('product') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
                                             $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
@@ -59,7 +59,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="batch_id">Batch</label>
-                                <select name="batch" id="batch_id" class="js-example-basic-single select2" required>
+                                <select name="batch" id="batch_id" class="js-example-basic-single select2" required onchange="selectProductVariationsByBatch(this.value);">
                                     <option value="">Select Batch</option>
                                     @if(old('batch') || old('product') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
@@ -92,15 +92,16 @@
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-4">
-                                                        <label for="">Product Variation</label>
+                                                    <div class="mb-3 col-md-12">
+                                                        <label for="">Product</label>
                                                         <select name="items[{{ $i }}][product_variation]" class="js-example-basic-single select2 product_variations_dropdown" required>
-                                                            <option value="">Select Product Variation</option>
+                                                            <option value="">Select Product</option>
                                                             @if(old('items[{{ $i }}][product_variation]') || old('product'))
                                                                 @php
-                                                                    $seletedproductId = old('product');
+                                                                    $seletedBatchId = old('batch');
+                                                                    $variationIds = $batch->items->pluck('product_variation_id')->unique()->toArray();
                                                                 @endphp
-                                                                @foreach ($productVariations->where('product_id', $seletedproductId) as $productVariation)
+                                                                @foreach ($productVariations->whereIn('id', $variationIds) as $productVariation)
                                                                     <option value="{{ $productVariation->id }}"
                                                                         {{ old("items.$i.product_variation") == $productVariation->id ? 'selected' : '' }}>
                                                                         {{ $productVariation->product->name }} | {{ $productVariation->packingType->name }} | {{ $productVariation->packSize->name }}
@@ -110,20 +111,20 @@
                                                         </select>
                                                     </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label>Unit Price</label>
+                                                        <label>Price</label>
                                                         <div class="input-group">
                                                             <input type="number" class="form-control w-25 unit_price" name="items[{{ $i }}][unit_price]"
-                                                                placeholder="Unit Price" required value="{{ old("items.$i.unit_price") }}" oninput="calculateSingleProductAmount()">
+                                                                placeholder="Cost Price" required value="{{ old("items.$i.unit_price") }}" oninput="calculateSingleProductAmount()">
                                                             <input type="text" class="form-control" name="items[{{ $i }}][unit]"
-                                                                placeholder="Unit" required value="{{ old("items.$i.unit") }}">
+                                                                placeholder="Unit" required value="Pack" readonly>
                                                           </div>
                                                     </div>
-                                                    <div class="mb-3 col-md-2">
-                                                        <label>Product Quantity</label>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label>Quantity</label>
                                                         <input type="number" class="form-control quantity" name="items[{{ $i }}][quantity_received]"
                                                             placeholder="Product Quantity" required value="{{ old("items.$i.quantity_received") }}" oninput="calculateSingleProductAmount()">
                                                     </div>
-                                                    <div class="mb-3 col-md-2">
+                                                    <div class="mb-3 col-md-4">
                                                         <label>Total</label>
                                                         <input type="number" class="form-control product_total" name="items[{{ $i }}][total]"
                                                             placeholder="Total" required value="{{ old("items.$i.total", 0) }}" readonly>
@@ -171,25 +172,25 @@
                     </div>
                     <div class="card-body px-0 pb-0">
                         <div class="row">
-                            <div class="mb-3 col-md-4">
-                                <label for="">Product Variation</label>
+                            <div class="mb-3 col-md-12">
+                                <label for="">Product</label>
                                 <select name="items[${ itemIndex }][product_variation]" class="js-example-basic-single select2 product_variations_dropdown" required></select>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label>Unit Price</label>
+                                <label>Price</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control w-25 unit_price" name="items[${ itemIndex }][unit_price]"
-                                        placeholder="Unit Price" required value="{{ old("items.$i.unit_price") }}" oninput="calculateSingleProductAmount()">
+                                        placeholder="Cost Price" required value="{{ old("items.$i.unit_price") }}" oninput="calculateSingleProductAmount()">
                                     <input type="text" class="form-control" name="items[${ itemIndex }][unit]"
-                                        placeholder="Unit" required value="{{ old("items.$i.unit") }}">
+                                        placeholder="Unit" required value="Pack" readonly>
                                     </div>
                             </div>
-                            <div class="mb-3 col-md-2">
-                                <label>Product Quantity</label>
+                            <div class="mb-3 col-md-4">
+                                <label>Quantity</label>
                                 <input type="number" class="form-control quantity" name="items[${ itemIndex }][quantity_received]"
                                     placeholder="Product Quantity" required value="{{ old("items.$i.quantity_received") }}" oninput="calculateSingleProductAmount()">
                             </div>
-                            <div class="mb-3 col-md-2">
+                            <div class="mb-3 col-md-4">
                                 <label>Total</label>
                                 <input type="number" class="form-control product_total" name="items[${ itemIndex }][total]"
                                     placeholder="Total" required value="{{ old("items.$i.total", 0) }}" readonly>

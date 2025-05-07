@@ -51,7 +51,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $finishedGoodsReceiving->code }}</td>
                                 <td>{{ $finishedGoodsReceiving->batch->batch_no }}</td>
-                                <td>{{ $finishedGoodsReceiving->product->name }}</td>
+                                <td>{{ $finishedGoodsReceiving->product->brand_name }}</td>
                                 @role('Superadmin')
                                 <td>{{ $finishedGoodsReceiving->company->name }}</td>
                                 @endrole

@@ -29,18 +29,4 @@ class BatchRequest extends FormRequest
             'items.*.trade_price' => 'required|numeric|min:1',
         ];
     }
-
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            $items = $this->input('items', []);
-            $batchSize = (int) $this->input('batch_size', 0);
-
-            $totalQuantity = collect($items)->sum('quantity');
-
-            if ($batchSize !== $totalQuantity) {
-                $validator->errors()->add('batch_size', 'The batch size must be equal to the total quantity of all items.');
-            }
-        });
-    }
 }

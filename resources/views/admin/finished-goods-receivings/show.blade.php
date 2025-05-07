@@ -66,8 +66,8 @@
                     @foreach ($finishedGoodsReceiving->items as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->productVariation->product->code }}</td>
-                            <td>{{ $item->productVariation->product->name. ' | ' .$item->productVariation->packingType->name. ' | ' .$item->productVariation->packSize->name }}</td>
+                            <td>{{ $item->productVariation->code }}</td>
+                            <td>{{ $item->productVariation->product->brand_name. ' | ' .$item->productVariation->packingType->name. ' | ' .$item->productVariation->packSize->name }}</td>
                             <td>{{ $item->quantity_received }}</td>
                             <td>{{ $item->unit }}</td>
                             <td>{{ number_format($item->unit_price) }}</td>
