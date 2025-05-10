@@ -76,8 +76,8 @@
                     @foreach ($goodsReceiving->items as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->product_id ? $item->product->code : $item->rawMaterialItem->code }}</td>
-                            <td>{{ $item->product_id ? $item->product->name : $item->rawMaterialItem->name }}</td>
+                            <td>{{ $item->product_id ? $item->product->code ?? 'Removed' : $item->rawMaterialItem->code ?? 'Removed' }}</td>
+                            <td>{{ $item->product_id ? $item->product->name ?? 'Removed' : $item->rawMaterialItem->name ?? 'Removed' }}</td>
                             <td>{{ $item->quantity_ordered }}</td>
                             <td>{{ $item->quantity_ordered - ($item->quantity_received + $item->balance_receivable) }}</td>
                             <td>{{ $item->balance_receivable }}</td>
