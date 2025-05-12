@@ -83,6 +83,7 @@
                             <th>Value</th>
                             <th>Discount</th>
                             <th>Discount <br> Value</th>
+                            <th>Exclusive <br> Sales Tax</th>
                             <th>Sales Tax</th>
                             <th>Inclusive <br> Sales Tax</th>
                         </tr>
@@ -92,8 +93,8 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->batch?->batch_no }}</td>
-                                <td>{{ $item->productVariation?->product?->code }}</td>
-                                <td>{{ $item->productVariation?->product?->name }}</td>
+                                <td>{{ $item->productVariation?->code }}</td>
+                                <td>{{ $item->productVariation?->product?->brand_name }} {{ $item->productVariation?->strength }}  {{ $item->dosageForm?->name }}</td>
                                 <td>{{ $item->productVariation?->packSize?->name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item->batch?->mfg_date)->format('d M, Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item->batch?->exp_date)->format('d M, Y') }}</td>
@@ -109,6 +110,9 @@
                                         2
                                     ) }}
                                 </td>
+                                <td>{{ number_format(($item->quantity * $item->unit_price) - ($item->discount_type == 'percent' 
+                                    ? ($item->quantity * $item->unit_price * $item->discount) / 100 
+                                    : $item->discount), 2)}}</td>
                                 <td>{{ number_format((($item->quantity * $item->unit_price * $item->tax_rate) / 100), 2) }}</td>
                                 <td>{{ number_format($item->total_amount, 2) }}</td>
                             </tr>
@@ -133,6 +137,11 @@
                                     ), 2
                                 ) }}
                             </td>
+                            <td>{{ number_format(($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price) - ($invoice->items->sum(fn($item) => 
+                                        $item->discount_type == 'percent' 
+                                            ? ($item->quantity * $item->unit_price * $item->discount) / 100 
+                                            : $item->discount
+                                    ))), 2) }}</td>
                             <td>{{ number_format($invoice->items->sum(fn($item) => ($item->quantity * $item->unit_price * $item->tax_rate) / 100), 2) }}</td>
                             <td>{{ number_format($invoice->items->sum('total_amount'), 2) }}</td>
                         </tr>

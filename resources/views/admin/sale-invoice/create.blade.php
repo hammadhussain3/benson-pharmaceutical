@@ -25,7 +25,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company">Company</label>
-                                <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectProductVariationsByCompany(this.value); selectFranchisers(this.value); createSaleInvoiceCode(this.value);">
+                                <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectBatchesByCompany(this.value); selectFranchisers(this.value); createSaleInvoiceCode(this.value);">
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -43,9 +43,9 @@
                                 <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $newInvoiceCode) }}" readonly>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="franchiser_id">Franchisers</label>
+                                <label for="franchiser_id">Customers</label>
                                 <select name="party" id="franchiser_id" class="js-example-basic-single select2" required>
-                                    <option value="">Select Franchiser</option>
+                                    <option value="">Select Customer</option>
                                     @if(old('party') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
                                             $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
@@ -92,35 +92,15 @@
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-6">
-                                                        <label for="">Products</label>
-                                                        <select name="invoice_items[{{ $i }}][product]" class="js-example-basic-single select2 product_variations_dropdown" 
-                                                            onchange="selectBatchesByProductVariation(this.value, this)" required>
-                                                            <option value="">Select Products</option>
-                                                            @if(old('invoice_items[{{ $i }}][product]') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                                    <div class="mb-3 col-md-4">
+                                                        <label for="">Batches</label>
+                                                        <select name="invoice_items[{{ $i }}][batch]" class="js-example-basic-single select2 company_batches_dropdown" onchange="selectProductVariationsByBatch(this.value, this);" required>
+                                                            <option value="">Select Batch</option>
+                                                            @if(old('company') || !auth()->user()->hasRole('Superadmin'))
                                                                 @php
                                                                     $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
                                                                 @endphp
-                                                                @foreach ($productVariations->where('company_id', $seletedCompanyId) as $productVariation)
-                                                                    <option value="{{ $productVariation->id }}"
-                                                                        {{ old("invoice_items.$i.product") == $productVariation->id ? 'selected' : '' }}>
-                                                                        {{ $productVariation->product->name. ' | ' .$productVariation->packingType->name. ' | ' .$productVariation->packSize->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3 col-md-6">
-                                                        <label for="">Batches</label>
-                                                        <select name="invoice_items[{{ $i }}][batch]" class="js-example-basic-single select2 batch_dropdown" required>
-                                                            <option value="">Select Batch</option>
-                                                            @if(old('invoice_items[{{ $i }}][batch]') || old('invoice_items[{{ $i }}][product]') || old('company') || !auth()->user()->hasRole('Superadmin'))
-                                                                @php
-                                                                    $selectedProductVariationId = old("invoice_items.$i.product");
-                                                                    $productVariation = $productVariations->find($selectedProductVariationId);
-                                                                    $productId = $productVariation->product_id ?? null;
-                                                                @endphp
-                                                                @foreach ($batches->where('product_id', $productId)->where('company_id', $seletedCompanyId) as $batch)
+                                                                @foreach ($batches->where('company_id', $seletedCompanyId) as $batch)
                                                                     <option value="{{ $batch->id }}"
                                                                         {{ old("invoice_items.$i.batch") == $batch->id ? 'selected' : '' }}>
                                                                         {{ $batch->batch_no }}
@@ -129,26 +109,50 @@
                                                             @endif
                                                         </select>
                                                     </div>
+                                                    <div class="mb-3 col-md-8">
+                                                        <label for="">Products</label>
+                                                        <select name="invoice_items[{{ $i }}][product]" class="js-example-basic-single select2 product_variations_dropdown" onchange="getTradePrice(this.value, this)" required>
+                                                            <option value="">Select Product</option>
+                                                            @if(old("invoice_items.$i.batch"))
+                                                                @php
+                                                                    $seletedBatchId = old("invoice_items.$i.batch");
+                                                                    $variationIds = $batch->items->where('batch_id', $seletedBatchId)->pluck('product_variation_id')->unique()->toArray();
+                                                                @endphp
+                                                                @foreach ($productVariations->whereIn('id', $variationIds) as $productVariation)
+                                                                    <option value="{{ $productVariation->id }}"
+                                                                        {{ old("invoice_items.$i.product") == $productVariation->id ? 'selected' : '' }}>
+                                                                        {{ 
+                                                                            ($productVariation->product->brand_name ?? 'null') . ' | ' .
+                                                                            ($productVariation->product->strength ?? 'null') . ' | ' .
+                                                                            ($productVariation->dosageForm->name ?? 'null') . ' | ' .
+                                                                            ($productVariation->packingType->name ?? 'null') . ' | ' .
+                                                                            ($productVariation->packSize->name ?? 'null') 
+                                                                        }}
+                                                                    </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label>Unit Price</label>
+                                                        <label>Trade Price</label>
                                                         <div class="input-group">
-                                                            <input type="number" class="form-control w-25 unit_price" name="invoice_items[{{ $i }}][unit_price]"
-                                                                placeholder="Unit Price" required value="{{ old("invoice_items.$i.unit_price") }}" oninput="calculateSaleInvoiceAmount()">
+                                                            <input type="number" class="form-control w-25 unit_price batch_trade_price" name="invoice_items[{{ $i }}][unit_price]"
+                                                                placeholder="Unit Price" required value="{{ old("invoice_items.$i.unit_price") }}" oninput="calculateSaleInvoiceAmount()" readonly>
                                                             <input type="text" class="form-control" name="invoice_items[{{ $i }}][unit]"
-                                                                placeholder="Unit" required value="{{ old("invoice_items.$i.unit") }}">
+                                                                placeholder="Unit" required value="Pack" readonly>
                                                           </div>
                                                     </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label>Pack Quantity</label>
+                                                        <label>Quantity</label>
                                                         <input type="number" class="form-control product_quantity" name="invoice_items[{{ $i }}][quantity]"
                                                             placeholder="Pack Quantity" required value="{{ old("invoice_items.$i.quantity") }}" oninput="calculateSaleInvoiceAmount()">
                                                     </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label>Tax Rate</label>
+                                                        <label>Sales Tax</label>
                                                         <input type="number" class="form-control tax_rate" name="invoice_items[{{ $i }}][tax_rate]"
                                                             placeholder="Tax Rate" required value="{{ old("invoice_items.$i.tax_rate") }}" oninput="calculateSaleInvoiceAmount()">
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-6">
                                                         <label for="status">Discount</label>
                                                         <div class="input-group">
                                                             <select class="form-select" name="invoice_items[{{ $i }}][discount_type]" required>
@@ -159,12 +163,7 @@
                                                                 placeholder="Discount" required value="{{ old("invoice_items.$i.discount", 0) }}" oninput="calculateSaleInvoiceAmount()">
                                                           </div>
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
-                                                        <label>Trans. Code</label>
-                                                        <input type="number" class="form-control" name="invoice_items[{{ $i }}][trans_code]"
-                                                            placeholder="Trans. Code" value="{{ old("invoice_items.$i.trans_code") }}">
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-6">
                                                         <label>Total</label>
                                                         <input type="number" class="form-control total_item_amount" name="invoice_items[{{ $i }}][total_amount]"
                                                             placeholder="Total" required value="{{ old("invoice_items.$i.total_amount", 0) }}" readonly>
@@ -189,56 +188,9 @@
                                     placeholder="Shipping Cost" required value="{{ old('shipping_cost', 0) }}" oninput="calculateSaleInvoiceAmount()">
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="items_cost_without_tax">Items Cost Without Tax</label>
-                                <input type="number" class="form-control" name="items_cost_without_tax" id="items_cost_without_tax"
-                                    placeholder="Items Cost Without Tax" required value="{{ old('items_cost_without_tax', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="invoice_tax_rate">Invoice Tax Rate</label>
-                                <input type="number" class="form-control" name="invoice_tax_rate" id="invoice_tax_rate"
-                                    placeholder="Invoice Tax Rate" required value="{{ old('invoice_tax_rate') }}" oninput="calculateSaleInvoiceAmount()">
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="total_invoice_tax">Total Invoice Tax</label>
-                                <input type="number" class="form-control" name="total_invoice_tax" id="total_invoice_tax"
-                                    placeholder="Total Invoice Tax" required value="{{ old('total_invoice_tax', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="items_cost_with_tax">Items Cost With Tax</label>
-                                <input type="number" class="form-control" name="items_cost_with_tax" id="items_cost_with_tax"
-                                    placeholder="Items Cost With Tax" required value="{{ old('items_cost_with_tax', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="items_cost_with_tax">Discount Type</label>
-                                <select class="js-example-basic-single select2" name="discount_type" required id="discount_type">
-                                    <option value="flat" {{ old("discount_type") == 'flat' ? 'selected' : '' }}>Flat</option>
-                                    <option value="percent" {{ old("discount_type") == 'percent' ? 'selected' : '' }}>Percent</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="items_cost_with_tax">Discount</label>
-                                <input type="number" class="form-control" name="discount" id="discount"
-                                    placeholder="Discount" required value="{{ old('discount', 0) }}" oninput="calculateSaleInvoiceAmount()">
-                            </div>
-                            <div class="mb-3 col-md-4">
                                 <label for="returned_amount">Total Amount</label>
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"
                                     placeholder="Total Amount" required value="{{ old('total_amount', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="paid_amount">Paid Amount</label>
-                                <input type="number" class="form-control" name="paid_amount" id="paid_amount"
-                                    placeholder="Paid Amount" required value="{{ old('paid_amount', 0) }}" oninput="calculateSaleInvoiceAmount()">
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="returned_amount">Returned Amount</label>
-                                <input type="number" class="form-control" name="returned_amount" id="returned_amount"
-                                    placeholder="Returned Amount" required value="{{ old('returned_amount', 0) }}" oninput="calculateSaleInvoiceAmount()">
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="due_amount">Due Amount</label>
-                                <input type="number" class="form-control" name="due_amount" id="due_amount"
-                                    placeholder="Due Amount" required value="{{ old('due_amount', 0) }}" readonly>
                             </div>
                             <div class="mb-3 col-md-12">
                                 <label for="note">Special Note</label>
@@ -276,28 +228,28 @@
                     </div>
                     <div class="card-body px-0 pb-0">
                         <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label for="">Products</label>
-                                <select name="invoice_items[${itemIndex}][product]" class="js-example-basic-single select2 product_variations_dropdown" onchange="selectBatchesByProductVariation(this.value, this)" required>
+                            <div class="mb-3 col-md-4">
+                                <label for="">Batches</label>
+                                <select name="invoice_items[${itemIndex}][batch]" class="js-example-basic-single select2 company_batches_dropdown" onchange="selectProductVariationsByBatch(this.value, this);" required>
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="">Batches</label>
-                                <select name="invoice_items[${itemIndex}][batch]" class="js-example-basic-single select2 batch_dropdown" required>
-                                    <option value="">Select Batch</option>
+                            <div class="mb-3 col-md-8">
+                                <label for="">Products</label>
+                                <select name="invoice_items[${itemIndex}][product]" class="js-example-basic-single select2 product_variations_dropdown" onchange="getTradePrice(this.value, this)" required>
+                                    <option value="">Select Product</option>
                                 </select>
-                            </div> 
+                            </div>
                             <div class="mb-3 col-md-4">
-                                <label>Unit Price</label>
+                                <label>Trade Price</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control w-25 unit_price" name="invoice_items[${itemIndex}][unit_price]"
-                                        placeholder="Unit Price" required value="" oninput="calculateSaleInvoiceAmount()">
+                                    <input type="number" class="form-control w-25 unit_price batch_trade_price" name="invoice_items[${itemIndex}][unit_price]"
+                                        placeholder="Unit Price" required value="" oninput="calculateSaleInvoiceAmount()" readonly>
                                     <input type="text" class="form-control" name="invoice_items[${itemIndex}][unit]"
-                                        placeholder="Unit" required value="">
+                                        placeholder="Unit" required value="Pack" readonly>
                                 </div>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label>Pack Quantity</label>
+                                <label>Quantity</label>
                                 <input type="number" class="form-control product_quantity" name="invoice_items[${itemIndex}][quantity]"
                                     placeholder="Pack Quantity" required value="" oninput="calculateSaleInvoiceAmount()">
                             </div>
@@ -306,7 +258,7 @@
                                 <input type="number" class="form-control tax_rate" name="invoice_items[${itemIndex}][tax_rate]"
                                     placeholder="Tax Rate" required value="" oninput="calculateSaleInvoiceAmount()">
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label>Discount</label>
                                 <div class="input-group">
                                     <select class="form-select" name="invoice_items[${itemIndex}][discount_type]" required>
@@ -317,11 +269,7 @@
                                         placeholder="Discount" required value="0" oninput="calculateSaleInvoiceAmount()">
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-4">
-                                <label>Trans. Code</label>
-                                <input type="number" class="form-control" name="invoice_items[${itemIndex}][trans_code]" placeholder="Trans. Code">
-                            </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-6">
                                 <label>Total</label>
                                 <input type="number" class="form-control total_item_amount" name="invoice_items[${itemIndex}][total_amount]"
                                     placeholder="Total" required value="0" readonly>
@@ -333,8 +281,8 @@
 
             $("#item-group").append(html);
             // Clone the options from the first dropdown and append to the new dropdown
-            const firstDropdownOptions = $(".product_variations_dropdown:first").children().clone();
-            $(`#item-group .item-set:last .product_variations_dropdown`).append(firstDropdownOptions);
+            const firstDropdownOptions = $(".company_batches_dropdown:first").children().clone().removeAttr("selected");
+            $(`#item-group .item-set:last .company_batches_dropdown`).append(firstDropdownOptions);
             itemIndex++;
             $('.js-example-basic-single').select2({});
         }

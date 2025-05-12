@@ -33,11 +33,7 @@
                             <th>Order Date</th>
                             <th>Status</th>
                             <th>Discount</th>
-                            <th>Paid Amount</th>
-                            <th>Returned Amount</th>
-                            <th>Due Amount</th>
                             <th>Total Amount</th>
-                            <th>Payment Status</th>
                             <th>Invoice Date</th>
                             @role('Superadmin')
                                 <th>Company Id</th>
@@ -58,11 +54,7 @@
                                 <td>{{ \Carbon\Carbon::parse($invoice->order_date)->format('d M, Y') }}</td>
                                 <td>{{ $invoice->status }}</td>
                                 <td>{{ $invoice->discount_type }} - {{ $invoice->discount }}</td>
-                                <td>{{ $invoice->paid_amount }}</td>
-                                <td>{{ $invoice->returned_amount }}</td>
-                                <td>{{ $invoice->due_amount }}</td>
                                 <td>{{ $invoice->total_amount }}</td>
-                                <td>{{ $invoice->payment_status }}</td>
                                 <td>{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</td>
                                 @role('Superadmin')
                                     <td>{{ $invoice->company->name }}</td>

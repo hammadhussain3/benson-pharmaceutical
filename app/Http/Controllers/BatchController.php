@@ -10,6 +10,7 @@ use App\Http\Requests\BatchRequest;
 use App\Services\CompanyService;
 use App\Services\BatchService;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 
 class BatchController extends Controller
 {
@@ -121,6 +122,19 @@ class BatchController extends Controller
         $productVariation = ProductVariation::findOrFail($productVariationId);
         $batches = Batch::where('product_id', $productVariation->product_id)->get();
         return response()->json(['batches' => $batches]);
+    }
+
+    public function getBatchesByCompany($companyId)
+    {
+        $batches = Batch::where('company_id', $companyId)->get();
+        return response()->json(['batches' => $batches]);
+    }
+
+    public function getBatchTradePrice(Request $request, $productVariationId)
+    {
+        $batch = Batch::findOrFail($request->input('batchId'));
+        $product = $batch->items()->where('product_variation_id', $productVariationId)->first();
+        return response()->json(['batch_trade_price' => $product->trade_price]);
     }
 
     public function getProductVariationsByBatch($batchId)

@@ -840,9 +840,13 @@ function selectProductVariations(productId) {
     }
 }
 
-function selectProductVariationsByBatch(bacthId) {
+function selectProductVariationsByBatch(bacthId, target) {
+
+    const itemSet = target.closest('.item-set');
+    if (!itemSet) return;
+    
     // Get all dropdowns with the class 'product_variations_dropdown'
-    var selectProductVariations = document.getElementsByClassName('product_variations_dropdown');
+    var selectProductVariations = itemSet.getElementsByClassName('product_variations_dropdown');
     
     if (bacthId && selectProductVariations.length > 0) {
         // Loop through all dropdowns
@@ -870,6 +874,28 @@ function selectProductVariationsByBatch(bacthId) {
                 })
                 .catch(error => console.error('Error fetching data:', error));
         });
+    }
+}
+
+function getTradePrice(productVariationId, target) {
+    const itemSet = target.closest('.item-set');
+    if (!itemSet) return;
+
+    const batchTradePrice = itemSet.querySelector('.batch_trade_price');
+    const batchId = itemSet.querySelector('.company_batches_dropdown')?.value;
+
+    if (productVariationId && batchId && batchTradePrice) {
+        fetch(`/product-variation/${productVariationId}/trade-price?batchId=${batchId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching trade price');
+                }
+                return response.json();
+            })
+            .then(data => {
+                batchTradePrice.value = data.batch_trade_price;
+            })
+            .catch(error => console.error('Error fetching trade price:', error));
     }
 }
 
@@ -1077,7 +1103,7 @@ function selectFranchisers(companyId)
     var franchiserSelect = document.getElementById('franchiser_id');
     
     if (companyId && franchiserSelect) {
-        franchiserSelect.innerHTML = '<option value="">Select Franchiser</option>';
+        franchiserSelect.innerHTML = '<option value="">Select Customer</option>';
         fetch(`/companies/${companyId}/franchisers`)
             .then(response => {
                 if (!response.ok) {
@@ -1095,6 +1121,46 @@ function selectFranchisers(companyId)
             })
             .catch(error => console.error('Error fetching franchisers:', error));
     }
+}
+
+function selectBatchesByCompany(companyId)
+{
+    if (!companyId) return; // Exit if no company ID is provided
+
+    const batchSelect = document.getElementById('batch_id');
+    const batchSelectList = Array.from(document.getElementsByClassName('company_batches_dropdown'));
+
+    const allSelects = [];
+    if (batchSelect) allSelects.push(batchSelect);
+    allSelects.push(...batchSelectList);
+
+    if (allSelects.length === 0) return;
+
+    allSelects.forEach(select => {
+        select.innerHTML = '<option value="">Select Batch</option>';
+    });
+    fetch(`/companies/${companyId}/batch`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching batches');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.batches && data.batches.length > 0) {
+                allSelects.forEach(select => {
+                    data.batches.forEach(batch => {
+                        const option = document.createElement('option');
+                        option.value = batch.id;
+                        option.textContent = `${batch.batch_no}`;
+                        select.appendChild(option);
+                    });
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching batches:', error);
+        });
 }
 
 function selectBatches(productId)
@@ -2116,11 +2182,6 @@ function calculateSaleInvoiceAmount() {
     let dueAmount = 0;
 
     var shippingCost = parseFloat(document.getElementById('shipping_cost').value) || 0;
-    var invoiceTaxRate = parseFloat(document.getElementById('invoice_tax_rate').value) || 0;
-    var invdiscount = parseFloat(document.getElementById('discount').value) || 0;
-    var invdiscounttype = document.getElementById('discount_type').value || 'flat';
-    var paidAmount = parseFloat(document.getElementById('paid_amount').value) || 0;
-    var returnedAmount = parseFloat(document.getElementById('returned_amount').value) || 0;
 
     document.querySelectorAll('.item-set').forEach((itemSet, index) => {
         const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
@@ -2146,24 +2207,7 @@ function calculateSaleInvoiceAmount() {
 
     totalAmount += shippingCost;
 
-    itemsCostWithoutTax += totalAmount;
-    totalInvoiceTax = (totalAmount * invoiceTaxRate) / 100;
-    itemsCostWithTax += itemsCostWithoutTax + totalInvoiceTax;
-    totalAmount += totalInvoiceTax;
-    
-    if (invdiscounttype === 'percent') {
-        totalAmount -= (totalAmount * invdiscount) / 100;
-    } else {
-        totalAmount -= invdiscount;
-    }
-
-    dueAmount = totalAmount - paidAmount + returnedAmount;
-
-    document.getElementById('items_cost_without_tax').value = itemsCostWithoutTax.toFixed(2);
-    document.getElementById('total_invoice_tax').value = totalInvoiceTax.toFixed(2);
-    document.getElementById('items_cost_with_tax').value = itemsCostWithTax.toFixed(2);
     document.getElementById('total_amount').value = totalAmount.toFixed(2);
-    document.getElementById('due_amount').value = dueAmount.toFixed(2);
 }
 
 function calculateSalesReturnAmount() {
