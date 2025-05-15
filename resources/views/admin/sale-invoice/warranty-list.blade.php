@@ -47,7 +47,7 @@
                         @foreach ($invoices as $invoice)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><a class="link-primary" href="{{ route('sale-invoices.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
+                                <td><a class="link-primary" href="{{ route('sale-warranties.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
                                 <td>{{ ucfirst(strtolower($invoice->type)) }} ({{ $invoice->prefix }})</td>
                                 <td>{{ $invoice->party->name }}</td>
                                 <td>{{ $invoice->order_number }}</td>

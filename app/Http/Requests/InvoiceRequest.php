@@ -71,4 +71,20 @@ class InvoiceRequest extends FormRequest
 			'is_approved' => 'nullable|boolean',
 		];
     }
+
+	protected function prepareForValidation()
+	{
+		if ($this->type === 'sale') {
+			if ($this->has('invoice_items') && is_array($this->invoice_items)) {
+			$filtered = array_filter($this->invoice_items, function ($item) {
+				// Define what "empty" means. Here, we check if required fields are missing.
+				return !empty($item['product']) && !empty($item['batch']);
+			});
+
+			$this->merge([
+				'invoice_items' => array_values($filtered) // reindex the array
+			]);
+		}
+		}
+	}
 }

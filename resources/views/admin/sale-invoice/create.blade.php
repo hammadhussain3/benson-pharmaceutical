@@ -79,7 +79,7 @@
                                     @php
                                         $count = max(
                                             count(old('invoice_items', [])),
-                                            1
+                                            15
                                         );
                                     @endphp
                                     @for ($i = 0; $i < $count; $i++)

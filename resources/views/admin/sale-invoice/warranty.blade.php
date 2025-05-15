@@ -44,7 +44,7 @@
                     <div class="card mb-0">
                         <div class="p-3">
                             <p class="mb-0"><strong>Ship To:</strong> {{ $invoice->party->name }}</p>
-                            <p class="mb-0"><strong>Address:</strong> {{ $invoice->party->address }}</p>
+                            <p class="mb-0"><strong>Address:</strong> {{ $invoice->party->address }}, {{ $invoice->party->city->name }}, {{ $invoice->party->country->name }}</p>
                             <p class="mb-0"><strong>Phone:</strong> {{ $invoice->party->contact_person_phone ?? $invoice->party->phone }}
                                 <span class="float-end">
                                     <strong>Email:</strong> {{ $invoice->party->contact_person_email ?? $invoice->party->email }}
@@ -93,7 +93,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->batch?->batch_no }}</td>
                                 <td>{{ $item->productVariation?->code }}</td>
-                                <td>{{ $item->productVariation?->product?->brand_name }} {{ $item->productVariation?->strength }}  {{ $item->dosageForm?->name }}</td>
+                                <td>{{ $item->productVariation?->product?->brand_name }} {{ $item->productVariation?->strength }}  {{ $item->packingType?->name }}</td>
                                 <td>{{ $item->productVariation?->packSize?->name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item->batch?->mfg_date)->format('d M, Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item->batch?->exp_date)->format('d M, Y') }}</td>
@@ -106,7 +106,7 @@
                                     {{ number_format((($item->quantity * $item->unit_price * 10) / 100), 2) }}
                                 </td>
                                 <td>{{ number_format((($item->quantity * $item->unit_price) - (($item->quantity * $item->unit_price * 10) / 100)), 2) }}</td>
-                                <td>{{ number_format((($item->quantity * $item->unit_price * $item->tax_rate) / 100), 2) }}</td>
+                                <td>{{ number_format(((($item->quantity * $item->unit_price - (($item->quantity * $item->unit_price * 10) / 100)) * $item->tax_rate) / 100), 2) }}</td>
                                 <td>{{ number_format((($item->quantity * $item->unit_price) - (($item->quantity * $item->unit_price * 10) / 100) + ($item->quantity * $item->unit_price * $item->tax_rate) / 100), 2)  }}</td>
                             </tr>
                         @endforeach
@@ -119,43 +119,59 @@
                             </td>
                             <td>{{ number_format($invoice->items->sum('quantity')) }}</td>
                             <td>{{ number_format($invoice->items->sum('total_amount'), 2) }}</td>
-                            <td>{{ number_format($invoice->items->sum('unit_price'), 2) }}</td>
+                            <td></td>
                             <td>{{ number_format($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price), 2) }}</td>
                             <td></td>
                             <td>{{ number_format($invoice->items->sum(fn($item) => (($item->quantity * $item->unit_price * 10) / 100)), 2) }}</td>
-                            <td>{{ number_format($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price) - $invoice->items->sum(fn($item) => (($item->quantity * $item->unit_price * 10) / 100)), 2) }}</td>
-                            <td>{{ number_format((($item->quantity * $item->unit_price * $item->tax_rate) / 100), 2) }}</td>
+                            <td>{{ number_format($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price - (($item->quantity * $item->unit_price * 10) / 100)), 2) }}</td>
+                            <td>{{ number_format($invoice->items->sum(fn($item) => (($item->quantity * $item->unit_price - (($item->quantity * $item->unit_price * 10) / 100)) * $item->tax_rate) / 100), 2) }}</td>
                             <td>{{ number_format(($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price) - $invoice->items->sum(fn($item) => (($item->quantity * $item->unit_price * 10) / 100)) + (($item->quantity * $item->unit_price * $item->tax_rate) / 100)), 2) }}</td>
                         </tr>
                     </tfoot>
                 </table>                
             </div>
             <div style="margin-top: 15px; font-size: 14px;">
-                <strong>Damage Clause:</strong> Claims and replacement of the damage goods shall only be entertained if lodged with undersigned within 2 days of receipt of goods from transporter/carrier
+                <p class="mb-1"><strong>Damage Clause:</strong> Claims and replacement of the damage goods shall only be entertained if lodged with undersigned within 2 days of receipt of goods from transporter/carrier</p>
+                <p class="fw-bold text-center mb-1">WARRANTY FORM 2A (See Rules 19 & 30) <br> UnderSection 23(1)(i) of the Drugs Act 1976</p>
+                <p>I. Rahat Ali Khan, being a person resident in Pakistan carrying on business at No. 03, Main Road, National Industrial Zone (Chamber Industrial Area), Rawat, Rawalpindi, under the name of M/s. Benson Pharmaceuticals, do hereby give this warranty that the drugs herein above described as sold/manufactured by us specified and contained in the bill of sale, Invoice/delivery challan, bill of lading or other document describing the goods referred to herein do not contravene in any way the provisions of section 23 of the drugs act 1976.</p>
             </div>
-            <div style="display: flex; justify-content: space-around; align-items: end; margin-top: 45px;">
+            <div style="display: flex; justify-content: space-around; align-items: end; margin-top: 20px;">
                 <div style="width: 200px; text-align: center;">
                     <hr style="width: 100%;">
                     <span style="font-size: 14px; margin-top: 10px;">Account Officer</span>
                 </div>
                 <div style="width: 500px; text-align: center;">
-                    <p class="mb-1 fw-bold fs-6">Packing Details</p>
-                    <table class="table table-border">
+                    <table class="table table-bordered">
                         <thead>
-                            <th>Type of Carton</th>
-                            <th>No. of Carton</th>
-                            <th>Weight (KG)</th>
+                            <tr>
+                                <th class="py-1 fw-bold fs-6 text-center border-bottom" colspan="3">Packing Details</th>
+                            </tr>
+                            <tr>
+                                <th class="py-1">Type of Carton</th>
+                                <th class="py-1">No. of Carton</th>
+                                <th class="py-1">Weight (KG)</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>SC-02 <br> SC-90 <br> SC-60</td>
-                                <td></td>
-                                <td></td>
+                                <td class="py-1">SC-02</td>
+                                <td class="py-1"></td>
+                                <td class="py-1"></td>
                             </tr>
                             <tr>
-                                <td>Total</td>
-                                <td></td>
-                                <td></td>
+                                <td class="py-1">SC-90</td>
+                                <td class="py-1"></td>
+                                <td class="py-1"></td>
+                            </tr>
+                            <tr>
+                                <td class="py-1">SC-60</td>
+                                <td class="py-1"></td>
+                                <td class="py-1"></td>
+                            </tr>
+                            <tr>
+                                <td class="py-1">Total</td>
+                                <td class="py-1"></td>
+                                <td class="py-1"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -170,6 +186,10 @@
 @endsection
 
 <style>
+    .table-bordered, .table-bordered th, .table-bordered td {
+        border: 1px solid #dee2e6;
+        border-collapse: collapse;
+    }
     @media print {
         @page {
             margin: 0;
