@@ -51,7 +51,7 @@
                 </tr>
                 <tr>
                     <th>Supplier</th>
-                    <td colspan="3">{{ $purchaseRequisition->supplier->name }}</td>
+                    <td colspan="3">{{ $purchaseRequisition->supplier->name ?? 'N/A' }}</td>
                 </tr>
             </table>
 

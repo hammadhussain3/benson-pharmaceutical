@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->decimal('total_amount', 15, 2);
             $table->text('special_instructions')->nullable();
+            $table->enum('status', ['Pending', 'Complete', 'Partial'])->default('Pending');
             $table->boolean('is_approved')->default(false);
             $table->foreignId('company_id');
             $table->unsignedBigInteger('created_by')->nullable();

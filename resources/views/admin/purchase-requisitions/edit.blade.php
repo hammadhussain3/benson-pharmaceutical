@@ -70,10 +70,10 @@
                                         <thead>
                                             <tr>
                                                 <th class="col-auto">#</th>
-                                                <th class="col-md-4">Name</th>
+                                                <th class="col-md-4">Item</th>
                                                 <th class="col-auto">Quantity</th>
                                                 <th class="col-auto">Unit</th>
-                                                <th class="col-auto">Price</th>
+                                                <th class="col-auto">Price Per Unit</th>
                                                 <th class="col-auto">Amount</th>
                                                 <th class="col-auto">Actions</th>
                                             </tr>
@@ -92,10 +92,15 @@
                                             @for ($i = 0; $i < $count; $i++)
                                                 <tr class="product-row">
                                                     <td>{{ $i + 1 }}</td>
-                                                    <td><input type="text" class="form-control" name="name[]" placeholder="Name" value="{{ old('name')[$i] ?? ($purchaseRequisition->purchaseRequisitionItems[$i]->name ?? '') }}"></td>
+                                                    <td><input type="text" class="form-control" name="name[]" placeholder="Item" value="{{ old('name')[$i] ?? ($purchaseRequisition->purchaseRequisitionItems[$i]->name ?? '') }}"></td>
                                                     <td><input type="number" class="form-control" name="quantity[]" placeholder="Quantity" value="{{ old('quantity')[$i] ?? ($purchaseRequisition->purchaseRequisitionItems[$i]->quantity ?? '') }}" min="0"></td>
-                                                    <td><input type="text" class="form-control" name="unit[]" placeholder="Unit" value="{{ old('unit')[$i] ?? ($purchaseRequisition->purchaseRequisitionItems[$i]->unit ?? '') }}"></td>
-                                                    <td><input type="number" class="form-control" name="price[]" placeholder="Price" value="{{ old('price')[$i] ?? ($purchaseRequisition->purchaseRequisitionItems[$i]->price ?? '') }}" min="0"></td>
+                                                    <td>
+                                                        <select name="unit[]" id="unit" class="form-control" style="min-width: 60px;">
+                                                            <option value="Unit" {{ ((optional(old('unit'))[$i] ?? $purchaseRequisition->purchaseRequisitionItems[$i]->unit) == 'Unit') ? 'selected' : '' }}>Unit</option>
+                                                            <option value="KG" {{ ((optional(old('unit'))[$i] ?? $purchaseRequisition->purchaseRequisitionItems[$i]->unit) == 'KG') ? 'selected' : '' }}>KG</option>
+                                                            <option value="Litre" {{ ((optional(old('unit'))[$i] ?? $purchaseRequisition->purchaseRequisitionItems[$i]->unit) == 'Litre') ? 'selected' : '' }}>Litre</option>
+                                                        </select>
+                                                    <td><input type="number" class="form-control" name="price[]" placeholder="Price Per Unit" value="{{ old('price')[$i] ?? ($purchaseRequisition->purchaseRequisitionItems[$i]->price ?? '') }}" min="0"></td>
                                                     <td><input type="number" class="form-control" name="amount[]" placeholder="Amount" value="{{ old('amount')[$i] ?? ($purchaseRequisition->purchaseRequisitionItems[$i]->amount ?? '') }}" min="0" oninput="calculateTotalAmount()"></td>
                                                     <td>
                                                         @if ($i > 0)
@@ -115,7 +120,15 @@
                                 <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-primary mt-1" id="addProductButton">Add Row</button>
                                 </div>
-                            </div>                                                       
+                            </div>  
+                            <div class="mb-3 col-md-6">
+                                <label for="status">Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="Pending" {{ old('special_instructions', $purchaseRequisition->special_instructions) == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="Partial" {{ old('special_instructions', $purchaseRequisition->special_instructions) == 'Partial' ? 'selected' : '' }}>Partial</option>
+                                    <option value="Complete" {{ old('special_instructions', $purchaseRequisition->special_instructions) == 'Complete' ? 'selected' : '' }}>Complete</option>
+                                </select>
+                            </div>                                                     
                             <div class="mb-3 col-md-12">
                                 <label for="special_instructions">Special Instruction</label>
                                 <textarea class="form-control" name="special_instructions" id="special_instructions">{{ old('special_instructions', $purchaseRequisition->special_instructions) }}</textarea>

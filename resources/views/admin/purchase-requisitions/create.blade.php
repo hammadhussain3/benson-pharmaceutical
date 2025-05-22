@@ -71,10 +71,10 @@
                                         <thead>
                                             <tr>
                                                 <th class="col-auto">#</th>
-                                                <th class="col-md-4">Name</th>
+                                                <th class="col-md-4">Item</th>
                                                 <th class="col-auto">Quantity</th>
                                                 <th class="col-auto">Unit</th>
-                                                <th class="col-auto">Price</th>
+                                                <th class="col-auto">Price Per Unit</th>
                                                 <th class="col-auto">Amount</th>
                                                 <th class="col-auto">Actions</th>
                                             </tr>
@@ -93,10 +93,16 @@
                                             @for ($i = 0; $i < $count; $i++)
                                                 <tr class="product-row">
                                                     <td>{{ $i + 1 }}</td>
-                                                    <td><input type="text" class="form-control" name="name[]" placeholder="Name" value="{{ old('name')[$i] ?? '' }}"></td>
+                                                    <td><input type="text" class="form-control" name="name[]" placeholder="Item" value="{{ old('name')[$i] ?? '' }}"></td>
                                                     <td><input type="number" class="form-control" name="quantity[]" placeholder="Quantity" value="{{ old('quantity')[$i] ?? '' }}" min="0" oninput="calculateRowAmount(this)"></td>
-                                                    <td><input type="text" class="form-control" name="unit[]" placeholder="Unit" value="{{ old('unit')[$i] ?? '' }}"></td>
-                                                    <td><input type="number" class="form-control" name="price[]" placeholder="Price" value="{{ old('price')[$i] ?? '' }}" min="0" oninput="calculateRowAmount(this)"></td>
+                                                    <td>
+                                                        <select name="unit[]" id="unit" class="form-control" style="min-width: 60px;">
+                                                            <option value="Unit" {{ optional(old('unit'))[$i] == 'Unit' ? 'selected' : '' }}>Unit</option>
+                                                            <option value="KG" {{ optional(old('unit'))[$i] == 'KG' ? 'selected' : '' }}>KG</option>
+                                                            <option value="Litre" {{ optional(old('unit'))[$i] == 'Litre' ? 'selected' : '' }}>Litre</option>
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="number" class="form-control" name="price[]" placeholder="Price Per Unit" value="{{ old('price')[$i] ?? '' }}" min="0" oninput="calculateRowAmount(this)"></td>
                                                     <td><input type="number" class="form-control" name="amount[]" placeholder="Amount" value="{{ old('amount')[$i] ?? '' }}" min="0" oninput="calculateTotalAmount()" readonly></td>
                                                     <td>
                                                         @if ($i > 0)

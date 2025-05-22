@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Ref No.</th>
+                            <th>Doc. No</th>
                             <th>Required Date</th>
                             <th>Total Amount</th>
                             <th>Supplier</th>
@@ -41,6 +41,7 @@
                             <th>Company</th>
                             @endrole
                             <th>Date</th>
+                            <th>Status</th>
                             <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Purchase Requisition View') || auth()->user()->hasPermission('Purchase Requisition Update') || auth()->user()->hasPermission('Purchase Requisition Delete'))
                             <th>Action</th>
@@ -54,11 +55,12 @@
                                 <td><a class="link-primary" href="{{ route('purchase-requisitions.show', $purchaseRequisition->id) }}">{{ $purchaseRequisition->code }}</a></td>
                                 <td>{{ \Carbon\Carbon::parse($purchaseRequisition->required_date)->format('d M, Y') }}</td>
                                 <td>{{ number_format($purchaseRequisition->total_amount, 2) }}</td>
-                                <td>{{ $purchaseRequisition->supplier->name }}</td>
+                                <td>{{ optional($purchaseRequisition->supplier)->name ?? 'N/A' }}</td>
                                 @role('Superadmin')
                                 <td>{{ $purchaseRequisition->company->name ?? 'N/A' }}</td>
                                 @endrole
                                 <td>{{ $purchaseRequisition->created_at->format('d M, Y') }}</td>
+                                <td><span class="badge {{ $purchaseRequisition->status == 'Complete' ? 'bg-success' : ($purchaseRequisition->status == 'Partial' ? 'bg-info' : 'bg-danger') }}">{{ $purchaseRequisition->status }}</span></td>
                                 <td><span class="badge {{ $purchaseRequisition->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $purchaseRequisition->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Purchase Requisition View') || auth()->user()->hasPermission('Purchase Requisition Update') || auth()->user()->hasPermission('Purchase Requisition Delete'))
                                 <td>

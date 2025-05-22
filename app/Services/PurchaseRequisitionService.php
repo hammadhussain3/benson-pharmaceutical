@@ -46,6 +46,7 @@ class PurchaseRequisitionService
         $purchaseRequisitionData['supplier_id'] = $data['supplier'];
         $purchaseRequisitionData['total_amount'] = $data['total_amount'];
         $purchaseRequisitionData['special_instructions'] = $data['special_instructions'];
+        $purchaseRequisitionData['status'] = $data['status'];
         $purchaseRequisitionData['company_id'] = $data['company'];
         $purchaseRequisitionData['is_approved'] = $data['is_approved'];
         $purchaseRequisition->update($purchaseRequisitionData);

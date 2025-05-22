@@ -56,6 +56,7 @@ class PurchaseRequisitionController extends Controller
         if (!auth()->user()->hasPermission('Purchase Requisition Create')) {
             abort(403, 'Unauthorized action.');
         }
+        
         $this->purchaseRequisitionService->createPurchaseRequisition($request->validated());
         return redirect()->route('purchase-requisitions.index')->with('success', 'Purchase Requisition created successfully.');
     }
@@ -94,6 +95,7 @@ class PurchaseRequisitionController extends Controller
         if (!auth()->user()->hasPermission('Purchase Requisition Update')) {
             abort(403, 'Unauthorized action.');
         }
+        
         $this->purchaseRequisitionService->updatePurchaseRequisition($purchaseRequisition, $request->validated());
         return redirect()->route('purchase-requisitions.index')->with('success', 'Purchase Requisition updated successfully');
     }
