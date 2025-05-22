@@ -34,7 +34,7 @@
                             @role('Superadmin')
                                 <div class="mb-3 col-md-12">
                                     <label for="company">Company</label>
-                                    <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectProducts(this.value); selectRawMaterialItems(this.value); createStoreRequisitionCode(this.value);">
+                                    <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectBatchesByCompany(this.value); selectRawMaterialItems(this.value); createStoreRequisitionCode(this.value);">
                                         <option value="">Select Company</option>
                                         @foreach ($companies as $company)
                                             <option value="{{ $company->id }}"
@@ -48,35 +48,18 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="code">Code</label>
+                                <label for="code">Doc. No</label>
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $newRequisitionCode) }}">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="product_id">Product</label>
-                                <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectBatches(this.value)">
-                                    <option value="">Select Product</option>
-                                    @if(old('product') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                <label for="batch_id">Batch</label>
+                                <select class="js-example-basic-single select2" name="batch" id="batch_id" required onchange="selectSingleFieldPVByCompany(this.value);">
+                                    <option value="">Select Batch</option>
+                                    @if(old('batch') || old('company'))
                                         @php
                                             $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
                                         @endphp
-                                        @foreach ($products->where('company_id', $seletedCompanyId) as $products)
-                                            <option value="{{ $products->id }}"
-                                                {{ old('product') == $products->id ? 'selected' : '' }}>
-                                                {{ $products->name }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="batch_id">Batch</label>
-                                <select class="js-example-basic-single select2" name="batch" id="batch_id" required>
-                                    <option value="">Select Batch</option>
-                                    @if(old('batch') || old('product'))
-                                        @php
-                                            $seletedProductId = old('product') ?? auth()->user()->employee->company_id;
-                                        @endphp
-                                        @foreach ($batches->where('product_id', $seletedProductId) as $batch)
+                                        @foreach ($batches->where('company_id', $seletedCompanyId) as $batch)
                                             <option value="{{ $batch->id }}"
                                                 {{ old('batch') == $batch->id ? 'selected' : '' }}>
                                                 {{ $batch->batch_no }}
@@ -86,8 +69,35 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
+                                <label for="product_variation_id">Product</label>
+                                <select class="js-example-basic-single select2" name="product_variation" id="product_variation_id" required>
+                                    <option value="">Select Product</option>
+                                    @if(old('batch'))
+                                        @php
+                                            $batch = App\Models\Batch::findOrFail(old('batch'));
+                                            $variationIds = $batch->items->where('batch_id', $batch->id)->pluck('product_variation_id')->unique()->toArray();
+                                        @endphp
+                                        @foreach ($productVariations->whereIn('id', $variationIds) as $productVariation)
+                                            <option value="{{ $productVariation->id }}"
+                                                {{ old("product_variation") == $productVariation->id ? 'selected' : '' }}>
+                                                {{ 
+                                                    ($productVariation->product->brand_name ?? 'null') . ' | ' .
+                                                    ($productVariation->product->strength ?? 'null') . ' | ' .
+                                                    ($productVariation->dosageForm->name ?? 'null') . ' | ' .
+                                                    ($productVariation->packingType->name ?? 'null') . ' | ' .
+                                                    ($productVariation->packSize->name ?? 'null') 
+                                                }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
                                 <label for="dn_gp">DN/GP</label>
-                                <input type="text" class="form-control" name="dn_gp" id="dn_gp" value="{{ old('dn_gp') }}" placeholder="Enter DN/GP">
+                                <select name="dn_gp" id="dn_gp" class="form-select">
+                                    <option {{ old('dn_gp') == '' ? 'selected' : '' }} value="">No</option>
+                                    <option {{ old('dn_gp') == $uniqueValue ? 'selected' : '' }} value="{{ $uniqueValue }}">Yes</option>
+                                </select>
                             </div>
                             <div class="col-md-12">
                                 <div class="card border-0 mb-0" id="item-group">
@@ -151,19 +161,19 @@
                                 <div class="mb-3 text-end">
                                     <button type="button" onclick="addItem()" class="btn btn-primary">Add Item</button>
                                 </div>
-                            </div>  
-                            @if(auth()->user()->hasPermission('Document Approval Edit'))
-                                <div class="mb-3 col-md-6">
-                                    <label for="is_approved">Is Approved</label>
-                                    <select name="is_approved" id="is_approved" class="form-control" required>
-                                        <option value="1" {{ old('is_approved', 0) == '1' ? 'selected' : '' }}>Yes</option>
-                                        <option value="0" {{ old('is_approved', 0) == '0' ? 'selected' : '' }}>No</option>
-                                    </select>
-                                </div>
-                            @endif                            
+                            </div>                            
                         </div>
-                        <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('store-issue-requisitions.index') }}">Cancel</a>
+                        <input type="hidden" name="is_approved" id="is_approved" value="0">
+
+                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('is_approved').value = 0;">
+                            Save
+                        </button>
+                        @if(auth()->user()->hasPermission('Document Approval Edit'))
+                            <button type="submit" class="btn btn-success" onclick="document.getElementById('is_approved').value = 1;">
+                                Approve
+                            </button>
+                        @endif
                     </form>
                 </div>
             </div>

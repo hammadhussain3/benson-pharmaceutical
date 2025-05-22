@@ -66,8 +66,8 @@
                                 <td>{{ $productVariation->strength ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->dosageForm->name ?? 'N/A' }}</td>
                                 {{-- <td>{{ $productVariation->packForm->name ?? 'N/A' }}</td> --}}
-                                <td>{{ $productVariation->packSize->name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->packingType->name ?? 'N/A' }}</td>
+                                <td>{{ $productVariation->packSize->name ?? 'N/A' }}</td>
                                 {{-- <td>{{ $productVariation->productGroup->name ?? 'N/A' }}</td> --}}
                                 <td>
                                     <span class="badge bg-primary">{{ optional($productVariation->category)->name }}</span>

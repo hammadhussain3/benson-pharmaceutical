@@ -44,7 +44,7 @@
             <table class="table mt-3">
                 <tr>
                     <th>Name / Product</th>
-                    <td colspan="4">{{ $requisition->product->name ?? $requisition->chart_of_account->particular }}</td>
+                    <td colspan="4">{{ $requisition->chart_of_account->particular ?? $requisition->product_variation->product->brand_name  }}</td>
                 </tr>
                 <tr>
                     <th>Batch No</th>

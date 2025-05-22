@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Stock;
+use App\Models\GoodsReceivingItem;
+use App\Models\FinishedGoodsReceivingItem;
 use App\Http\Requests\StockRequest;
 use App\Services\StockService;
 use App\Services\CompanyService;
@@ -106,4 +108,66 @@ class StockController extends Controller
         $this->stockService->deleteStock($stock);
         return redirect()->route('stocks.index')->with('success', 'Stock deleted successfully');
     }
+
+    public function getPriceByProductVariationId($productVariationId)
+    {
+        $raw_material_item = null;
+        $product_variation = null;
+        $balance = 0;
+        $unit = null;
+        $average_price = 0;
+
+        if (str_starts_with($productVariationId, 'raw_')) {
+            $raw_material_item = (int) str_replace('raw_', '', $productVariationId);
+            $stock = Stock::currentBalanceForItem(null, $raw_material_item);
+            $balance = $stock['balance'] ?? 0;
+
+            $items = GoodsReceivingItem::where('raw_material_item_id', $raw_material_item)
+                ->orderByDesc('id')
+                ->get();
+
+        } elseif (str_starts_with($productVariationId, 'var_')) {
+            $product_variation = (int) str_replace('var_', '', $productVariationId);
+            $stock = Stock::currentBalanceForItem(null, null, $product_variation);
+            $balance = $stock['balance'] ?? 0;
+
+            $items = FinishedGoodsReceivingItem::where('product_variation_id', $product_variation)
+                ->orderByDesc('id')
+                ->get();
+
+        } else {
+            return response()->json([
+                'error' => 'Invalid product variation ID format.'
+            ], 400);
+        }
+
+        // Pick latest rows until balance is covered
+        $accumulatedQty = 0;
+        $totalCost = 0;
+
+        foreach ($items as $item) {
+            $qty = $item->quantity_received ?? 0;
+            $price = $item->unit_price ?? 0;
+
+            if ($accumulatedQty + $qty <= $balance) {
+                $accumulatedQty += $qty;
+                $totalCost += $qty * $price;
+            } else {
+                $needed = $balance - $accumulatedQty;
+                $accumulatedQty += $needed;
+                $totalCost += $needed * $price;
+                break;
+            }
+
+            $unit = $item->unit ?? $unit;
+        }
+
+        $average_price = $accumulatedQty > 0 ? round($totalCost / $accumulatedQty, 2) : 0;
+
+        return response()->json([
+            'unit' => $unit ?? 'Unit',
+            'price' => $average_price
+        ]);
+    }
+
 }

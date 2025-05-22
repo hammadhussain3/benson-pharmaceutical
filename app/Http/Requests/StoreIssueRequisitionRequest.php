@@ -26,17 +26,17 @@ class StoreIssueRequisitionRequest extends FormRequest
 
 		return [
             'code' => 'required|string|max:255|unique:employees,code,' . $requisitionId . ',id,company_id,' . $this->company_id,
-            'chart_of_account' => 'nullable|exists:chart_of_accounts,id|required_without:product',
-            'product' => 'nullable|exists:products,id|required_without:chart_of_account',
-            'batch' => 'nullable|exists:batches,id',
-            'dn_gp' => 'required|string',
+            'chart_of_account' => 'nullable|exists:chart_of_accounts,id|required_if:is_general,true',
+            'product_variation' => 'nullable|exists:product_variations,id|required_if:is_production,true',
+            'batch' => 'nullable|exists:batches,id|required_if:is_production,true',
+            'dn_gp' => 'nullable|string',
             'is_approved' => 'nullable|boolean',
             'company' => 'required|exists:companies,id',
             'is_general' => 'required|boolean',
             'is_production' => 'required|boolean',
             'items' => 'required|array|min:1',
             'items.*.product' => [
-                'required_with:chart_of_account',
+                'required_if:is_general,true',
                 'nullable',
                 'string', // Ensure the product field contains the prefix to differentiate
                 function ($attribute, $value, $fail) {
@@ -52,7 +52,7 @@ class StoreIssueRequisitionRequest extends FormRequest
                     }
                 }
             ],
-            'items.*.raw_material_item' => 'nullable|exists:raw_material_items,id|required_with:product',
+            'items.*.raw_material_item' => 'nullable|exists:raw_material_items,id|required_if:is_production,true',
             'items.*.batch' => 'nullable|exists:batches,id',
             'items.*.unit' => 'required|string',
             'items.*.unit_price' => 'required|numeric|min:0',

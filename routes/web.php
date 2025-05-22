@@ -213,14 +213,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoices/{invoiceId}/goods-receivings', [GoodsReceivingController::class, 'getGoodReceivingsByInvoice']);
     Route::get('/products/{productId}/product-variations', [ProductVariationController::class, 'getProductVariationsByProduct']);
     Route::get('/products/{productId}/batches', [BatchController::class, 'getBatchesByProductId']);
-    Route::get('/product-variations/{productVariationId}/batches', [BatchController::class, 'getBatchesByProductVariationId']);
     Route::get('/store-requisitions/{requisitionId}/general-details', [StoreIssueRequisitionController::class, 'getGeneralStoreRequisitionDetailsById']);
     Route::get('/store-requisitions/{requisitionId}/production-details', [StoreIssueRequisitionController::class, 'getProductionStoreRequisitionDetailsById']);
     Route::get('/branches/{branchId}/departments', [DepartmentController::class, 'getDepartmentsByBranch']);
     Route::get('/branches/{branchId}/banks', [BankController::class, 'getBanksByBranch']);
     Route::get('/parties/{partyId}/supplier_code', [PartyController::class, 'getSupplierCodeByPartyId']);
     Route::get('/batch/{batchId}/product-variations', [BatchController::class, 'getProductVariationsByBatch']);
+    Route::get('/product-variations/{productVariationId}/batches', [BatchController::class, 'getBatchesByProductVariationId']);
     Route::get('/product-variation/{productVariationId}/trade-price', [BatchController::class, 'getBatchTradePrice']);
+    Route::get('/product-variations/{productVariationId}/prices', [StockController::class, 'getPriceByProductVariationId']);
 
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');
     Route::get('salary-sheet/generate', [SalarySheetController::class, 'showSalarySheet'])->name('salary.sheet.show');

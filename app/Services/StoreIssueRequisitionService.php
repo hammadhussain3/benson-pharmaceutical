@@ -11,9 +11,9 @@ class StoreIssueRequisitionService
     public function getAll()
     {
         if (auth()->user()->hasRole('Superadmin')) {
-            $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product', 'batch', 'company'])->orderBy('created_at', 'asc')->get();
+            $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product_variation', 'batch', 'company'])->orderBy('created_at', 'asc')->get();
         } else {
-            $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product', 'batch', 'company'])->where('company_id', auth()->user()->employee->company_id)->orderBy('created_at', 'asc')->get();
+            $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product_variation', 'batch', 'company'])->where('company_id', auth()->user()->employee->company_id)->orderBy('created_at', 'asc')->get();
         }
         return $requisitions;
     }
@@ -23,7 +23,7 @@ class StoreIssueRequisitionService
         $items = $data['items'] ?? [];
 
         $data['chart_of_account_id'] = $data['chart_of_account'] ?? null;
-        $data['product_id'] = $data['product'] ?? null;
+        $data['product_variation_id'] = $data['product_variation'] ?? null;
         $data['batch_id'] = $data['batch'] ?? null;
         $data['company_id'] = $data['company'];
 
@@ -62,7 +62,7 @@ class StoreIssueRequisitionService
         $items = $data['items'] ?? [];
 
         $data['chart_of_account_id'] = $data['chart_of_account'] ?? null;
-        $data['product_id'] = $data['product'] ?? null;
+        $data['product_variation_id'] = $data['product_variation'] ?? null;
         $data['batch_id'] = $data['batch'] ?? null;
         $data['company_id'] = $data['company'];
 

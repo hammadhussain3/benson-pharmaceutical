@@ -32,7 +32,7 @@
                                     <select name="company" id="company_id" class="js-example-basic-single select2" required 
                                         onchange="createStoreRequisitionCode(this.value);
                                         @if ($requisition->is_general == '1') selectChartOfAccounts(this.value);
-                                        @elseif ($requisition->is_production == '1') selectProducts(this.value);
+                                        @elseif ($requisition->is_production == '1') selectBatchesByCompany(this.value);
                                         @endif
                                         @if ($requisition->is_general == '1') selectAllTypeOfProducts(this.value);
                                         @elseif ($requisition->is_production == '1') selectRawMaterialItems(this.value);
@@ -53,6 +53,23 @@
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $requisition->code) }}">
                             </div>
+                            @if ($requisition->is_production == '1')
+                                <div class="mb-3 col-md-6">
+                                    <label for="batch_id">Batch</label>
+                                    <select class="js-example-basic-single select2" name="batch" id="batch_id" required onchange="selectSingleFieldPVByCompany(this.value);">
+                                        <option value="">Select Batch</option>
+                                        @php
+                                            $seletedCompanyId = old('company', $requisition->company_id) ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($batches->where('company_id', $seletedCompanyId) as $batch)
+                                            <option value="{{ $batch->id }}"
+                                                {{ old('batch', $requisition->batch_id) == $batch->id ? 'selected' : '' }}>
+                                                {{ $batch->batch_no }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
                             @if ($requisition->is_general == '1')
                                 <div class="mb-3 col-md-4">
                                     <label for="type">Chart of Accounts</label>
@@ -71,33 +88,23 @@
                                 </div>
                             @elseif ($requisition->is_production == '1')
                                 <div class="mb-3 col-md-6">
-                                    <label for="product_id">Product</label>
-                                    <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectBatches(this.value)">
+                                    <label for="product_variation_id">Product</label>
+                                    <select class="js-example-basic-single select2" name="product_variation" id="product_variation_id" required onchange="selectBatches(this.value)">
                                         <option value="">Select Product</option>
                                         @php
-                                            $seletedCompanyId = old('company', $requisition->company_id) ?? auth()->user()->employee->company_id;
+                                            $batch = App\Models\Batch::findOrFail(old('batch', $requisition->batch_id));
+                                            $variationIds = $batch->items->where('batch_id', $batch->id)->pluck('product_variation_id')->unique()->toArray();
                                         @endphp
-                                        @foreach ($products->where('company_id', $seletedCompanyId) as $products)
-                                            <option value="{{ $products->id }}"
-                                                {{ old('product', $requisition->product_id) == $products->id ? 'selected' : '' }}>
-                                                {{ $products->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endif
-                            @if ($requisition->is_production == '1')
-                                <div class="mb-3 col-md-6">
-                                    <label for="batch_id">Batch</label>
-                                    <select class="js-example-basic-single select2" name="batch" id="batch_id" required>
-                                        <option value="">Select Batch</option>
-                                        @php
-                                            $seletedProductId = old('product', $requisition->product_id) ?? auth()->user()->employee->company_id;
-                                        @endphp
-                                        @foreach ($batches->where('product_id', $seletedProductId) as $batch)
-                                            <option value="{{ $batch->id }}"
-                                                {{ old('batch', $requisition->batch_id) == $batch->id ? 'selected' : '' }}>
-                                                {{ $batch->batch_no }}
+                                        @foreach ($productVariations->whereIn('id', $variationIds) as $productVariation)
+                                            <option value="{{ $productVariation->id }}"
+                                                {{ old("product_variation", $requisition->product_variation_id) == $productVariation->id ? 'selected' : '' }}>
+                                                {{ 
+                                                    ($productVariation->product->brand_name ?? 'null') . ' | ' .
+                                                    ($productVariation->product->strength ?? 'null') . ' | ' .
+                                                    ($productVariation->dosageForm->name ?? 'null') . ' | ' .
+                                                    ($productVariation->packingType->name ?? 'null') . ' | ' .
+                                                    ($productVariation->packSize->name ?? 'null') 
+                                                }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -105,7 +112,10 @@
                             @endif
                             <div class="mb-3 {{ $requisition->is_general == '1' ? 'col-md-4' : 'col-md-6'; }}">
                                 <label for="dn_gp">DN GP</label>
-                                <input type="text" class="form-control" name="dn_gp" id="dn_gp" value="{{ old('dn_gp', $requisition->dn_gp) }}">
+                                <select name="dn_gp" id="dn_gp" class="form-select">
+                                    <option {{ old('dn_gp', $requisition->dn_gp) == '' ? 'selected' : '' }} value="">No</option>
+                                    <option {{ old('dn_gp', $requisition->dn_gp) != '' ? 'selected' : '' }} value="{{ $requisition->dn_gp ?? $uniqueValue  }}">Yes</option>
+                                </select>
                             </div>
                             <div class="col-md-12">
                                 <div class="card border-0 mb-0" id="item-group">
@@ -139,7 +149,13 @@
                                                                     @foreach ($productVariations->where('company_id', $seletedCompanyId) as $productVariation)
                                                                         <option value="{{ 'var_' .$productVariation->id }}"
                                                                             {{ old("items.$i.product", 'var_' .$requisition->items[$i]->product_variation_id ?? '') == 'var_' .$productVariation->id ? 'selected' : '' }}>
-                                                                            {{ $productVariation->product->name. ' | ' .$productVariation->packingType->name. ' | ' .$productVariation->packSize->name }}
+                                                                            {{ 
+                                                                                ($productVariation->product->brand_name ?? 'null') . ' | ' .
+                                                                                ($productVariation->product->strength ?? 'null') . ' | ' .
+                                                                                ($productVariation->dosageForm->name ?? 'null') . ' | ' .
+                                                                                ($productVariation->packingType->name ?? 'null') . ' | ' .
+                                                                                ($productVariation->packSize->name ?? 'null') 
+                                                                            }}
                                                                         </option>
                                                                     @endforeach
                                                                 </optgroup>
@@ -150,13 +166,19 @@
                                                             <select name="items[{{ $i }}][batch]" class="js-example-basic-single select2 batch_dropdown" required>
                                                                 <option value="">Select Batch</option>
                                                                 @php
-                                                                    $selectedProductVariationId = old("items.$i.product", $requisition->items[$i]->product_variation_id);
-                                                                    $productVariation = $productVariations->find($selectedProductVariationId);
-                                                                    $productId = $productVariation->product_id ?? null;
-                                                                    $seletedCompanyId = old('company', $requisition->company_id) ?? auth()->user()->employee->company_id;
+                                                                    $rawValue = old("items.$i.product", 'var_' .$requisition->items[$i]->product_variation_id ?? '');
+                                                                    $batchesForProduct = collect();
                                                                 @endphp
-                                                                @if ($productId)
-                                                                    @foreach ($batches->where('product_id', $productId)->where('company_id', $seletedCompanyId) as $batch)
+
+                                                                @if(Str::startsWith($rawValue, 'var_'))
+                                                                    @php
+                                                                        $selectedId = preg_replace('/^var_/', '', $rawValue);
+                                                                        $batchesForProduct = $batches->filter(function ($batch) use ($selectedId) {
+                                                                            return $batch->items->contains('product_variation_id', $selectedId);
+                                                                        });
+                                                                    @endphp
+
+                                                                    @foreach ($batchesForProduct as $batch)
                                                                         <option value="{{ $batch->id }}"
                                                                             {{ old("items.$i.batch", $requisition->items[$i]->batch_id) == $batch->id ? 'selected' : '' }}>
                                                                             {{ $batch->batch_no }}

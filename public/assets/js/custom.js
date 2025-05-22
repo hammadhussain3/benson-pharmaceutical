@@ -143,7 +143,6 @@ function SelectLeaves(employeeId, year, month) {
                 return response.json();
             })
             .then(data => {
-                console.log(data.leaves);
                 const container = document.getElementById('formContainer');
                 const existingLeaves = container.querySelectorAll('.leaves');
                 existingLeaves.forEach(leaveDiv => leaveDiv.remove());
@@ -421,7 +420,6 @@ function selectSubCategory(categoryId) {
                 return response.json();
             })
             .then(data => {
-                console.log(data.subCategories);
 
                 data.subCategories.forEach(function (subCategory) {
                     var option = document.createElement('option');
@@ -765,7 +763,7 @@ function selectAllTypeOfProducts(companyId) {
         // Loop through all dropdowns
         Array.from(productSelectList).forEach(function(productSelect) {
             // Clear the existing options in each dropdown
-            productSelect.innerHTML = '<option value="">Select Products</option>';
+            productSelect.innerHTML = '<option value="">Select Item</option>';
             
             // Fetch the products and raw materials for the selected company
             fetch(`/companies/${companyId}/all-products`)
@@ -796,7 +794,7 @@ function selectAllTypeOfProducts(companyId) {
                         data.productVariations.forEach(function(productVariation) {
                             var option = document.createElement('option');
                             option.value = `var_${productVariation.id}`; // Use prefix to differentiate
-                            option.textContent = `${productVariation.product.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
+                            option.textContent = `${productVariation.product.brand_name} | ${productVariation.strength} | ${productVariation.dosage_form.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
                             productVariationGroup.appendChild(option);
                         });
                         productSelect.appendChild(productVariationGroup);
@@ -838,6 +836,47 @@ function selectProductVariations(productId) {
                 .catch(error => console.error('Error fetching data:', error));
         });
     }
+}
+
+function selectSingleFieldPVByCompany(batchId)
+{
+    if (!batchId) return; // Exit if no company ID is provided
+
+    const productVariationSelect = document.getElementById('product_variation_id');
+    const productVariationSelectList = Array.from(document.getElementsByClassName('product_variations_dropdown'));
+
+    const allSelects = [];
+    if (productVariationSelect) allSelects.push(productVariationSelect);
+    allSelects.push(...productVariationSelectList);
+
+    if (allSelects.length === 0) return;
+
+    allSelects.forEach(select => {
+        select.innerHTML = '<option value="">Select Product</option>';
+    });
+    fetch(`/batch/${batchId}/product-variations`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching product variations');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            if (data.productVariations && data.productVariations.length > 0) {
+                allSelects.forEach(select => {
+                    data.productVariations.forEach(productVariation => {
+                        const option = document.createElement('option');
+                        option.value = productVariation.id;
+                        option.textContent = `${productVariation.product.brand_name} | ${productVariation.strength} | ${productVariation.dosage_form.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
+                        select.appendChild(option);
+                    });
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching product variations:', error);
+        });
 }
 
 function selectProductVariationsByBatch(bacthId, target) {
@@ -1197,7 +1236,6 @@ function selectBatchesForProducts(productVariation, target) {
     if (batchDropdown) {
         if (productVariation.startsWith('var_')) {
             const productVariationId = productVariation.split('_')[1];
-            console.log(productVariationId);
             selectBatchesByProductVariation(productVariationId, target);
         } else {            
             batchDropdown.innerHTML = ''; // Clear all options
@@ -1206,6 +1244,29 @@ function selectBatchesForProducts(productVariation, target) {
             defaultOption.textContent = 'Select Batch';
             batchDropdown.appendChild(defaultOption);
         }
+    }
+}
+
+function selectPricePacks(productVariation, target) {
+    const itemSet = target.closest('.item-set');
+    if (!itemSet) return;
+
+    const unitPrice = itemSet.querySelector('.unit_price');
+    const unit = itemSet.querySelector('.unit');
+
+    if (productVariation && unitPrice && unit) {
+        fetch(`/product-variations/${productVariation}/prices`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching product prices');
+                }
+                return response.json();
+            })
+            .then(data => {
+                unitPrice.value = data.price;
+                unit.value = data.unit;
+            })
+            .catch(error => console.error('Error fetching product prices:', error));
     }
 }
 

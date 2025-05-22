@@ -89,43 +89,76 @@
                     </thead>
                     <tbody>
                         @foreach ($invoice->items as $item)
+                            @php                              
+                                $total = $item->quantity * $item->unit_price;
+                                $discountAmount = ($total * 10) / 100;
+                                $discountAmountVar = $item->discount_type == 'percent'
+                                    ? ($total * $item->discount / 100)
+                                    : $item->discount;
+                                $transCode = $total - $discountAmountVar + ((($total - $discountAmountVar) * $item->tax_rate) / 100);
+                                $amountAfterDiscount = $total - $discountAmount;
+                                $taxAmount = ($amountAfterDiscount * $item->tax_rate) / 100;
+                                $finalAmount = $amountAfterDiscount + $taxAmount;
+                            @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->batch?->batch_no }}</td>
                                 <td>{{ $item->productVariation?->code }}</td>
-                                <td>{{ $item->productVariation?->product?->brand_name }} {{ $item->productVariation?->strength }}  {{ $item->packingType?->name }}</td>
+                                <td>
+                                    {{ $item->productVariation?->product?->brand_name }}
+                                    {{ $item->productVariation?->strength }}
+                                    {{ $item->productVariation?->packingType?->name }}
+                                </td>
                                 <td>{{ $item->productVariation?->packSize?->name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item->batch?->mfg_date)->format('d M, Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item->batch?->exp_date)->format('d M, Y') }}</td>
                                 <td>{{ number_format($item->quantity) }}</td>
-                                <td>{{ number_format($item->total_amount, 2) }}</td>
+                                <td>{{ number_format($transCode, 2) }}</td>
                                 <td>{{ number_format($item->unit_price, 2) }}</td>
-                                <td>{{ number_format($item->quantity * $item->unit_price, 2) }}</td>
+                                <td>{{ number_format($total, 2) }}</td>
                                 <td>10%</td>
-                                <td>
-                                    {{ number_format((($item->quantity * $item->unit_price * 10) / 100), 2) }}
-                                </td>
-                                <td>{{ number_format((($item->quantity * $item->unit_price) - (($item->quantity * $item->unit_price * 10) / 100)), 2) }}</td>
-                                <td>{{ number_format(((($item->quantity * $item->unit_price - (($item->quantity * $item->unit_price * 10) / 100)) * $item->tax_rate) / 100), 2) }}</td>
-                                <td>{{ number_format((($item->quantity * $item->unit_price) - (($item->quantity * $item->unit_price * 10) / 100) + ($item->quantity * $item->unit_price * $item->tax_rate) / 100), 2)  }}</td>
+                                <td>{{ number_format($discountAmount, 2) }}</td>
+                                <td>{{ number_format($amountAfterDiscount, 2) }}</td>
+                                <td>{{ number_format($taxAmount, 2) }}</td>
+                                <td>{{ number_format($finalAmount, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
+                        @php
+                            $sumTotal = $invoice->items->sum(fn($item) => $item->quantity * $item->unit_price);
+
+                            $sumDiscount = $invoice->items->sum(fn($item) =>
+                                $item->discount_type == 'percent'
+                                    ? ($item->quantity * $item->unit_price * $item->discount / 100)
+                                    : $item->discount
+                            );
+
+                            $sumAfterDiscount = $sumTotal - $sumDiscount;
+
+                            $sumTax = $invoice->items->sum(fn($item) =>
+                                (($item->quantity * $item->unit_price -
+                                    ($item->discount_type == 'percent'
+                                        ? ($item->quantity * $item->unit_price * $item->discount / 100)
+                                        : $item->discount)) * $item->tax_rate) / 100
+                            );
+
+                            $grandTotal = $sumAfterDiscount + $sumTax;
+                        @endphp
                         <tr>
                             <th>Total</th>
                             <td colspan="6">
-                                <x-amount-in-words :amount="$invoice->total_amount" />
+                                <x-amount-in-words :amount="$grandTotal" />
                             </td>
                             <td>{{ number_format($invoice->items->sum('quantity')) }}</td>
-                            <td>{{ number_format($invoice->items->sum('total_amount'), 2) }}</td>
+                            <td>{{ number_format($grandTotal, 2) }}</td> {{-- Matches transCode --}}
                             <td></td>
-                            <td>{{ number_format($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price), 2) }}</td>
+                            <td>{{ number_format($sumTotal, 2) }}</td>
                             <td></td>
-                            <td>{{ number_format($invoice->items->sum(fn($item) => (($item->quantity * $item->unit_price * 10) / 100)), 2) }}</td>
-                            <td>{{ number_format($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price - (($item->quantity * $item->unit_price * 10) / 100)), 2) }}</td>
-                            <td>{{ number_format($invoice->items->sum(fn($item) => (($item->quantity * $item->unit_price - (($item->quantity * $item->unit_price * 10) / 100)) * $item->tax_rate) / 100), 2) }}</td>
-                            <td>{{ number_format(($invoice->items->sum(fn($item) => $item->quantity * $item->unit_price) - $invoice->items->sum(fn($item) => (($item->quantity * $item->unit_price * 10) / 100)) + (($item->quantity * $item->unit_price * $item->tax_rate) / 100)), 2) }}</td>
+                            <td>{{ number_format($sumDiscount, 2) }}</td>
+                            <td>{{ number_format($sumAfterDiscount, 2) }}</td>
+                            <td>{{ number_format($sumTax, 2) }}</td>
+                            <td>{{ number_format($grandTotal, 2) }}</td>
                         </tr>
                     </tfoot>
                 </table>                

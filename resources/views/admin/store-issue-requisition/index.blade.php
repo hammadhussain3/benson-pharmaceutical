@@ -33,7 +33,8 @@
                     <thead class="thead">
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>Doc. No</th>
+                            <th>Doc. Type</th>
                             <th>Chart Of Account</th>
                             <th>Product</th>
                             <th>Batch No</th>
@@ -53,8 +54,9 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $requisition->code ?? 'N/A' }}</td>
+                                <td>{{ $requisition->is_general ? 'General' : 'Production' }}</td>
                                 <td>{{ $requisition->chart_of_account->particular ?? 'N/A' }}</td>
-                                <td>{{ $requisition->product->name ?? 'N/A' }}</td>
+                                <td>{{ $requisition->product_variation->product->brand_name ?? 'N/A' }}</td>
                                 <td>{{ $requisition->batch->batch_no ?? 'N/A' }}</td>
                                 <td>{{ $requisition->batch->batch_size ?? 'N/A' }}</td>
                                 <td>{{ $requisition->dn_gp }}</td>

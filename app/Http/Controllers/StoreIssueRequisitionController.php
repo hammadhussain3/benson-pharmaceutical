@@ -13,6 +13,7 @@ use App\Services\CompanyService;
 use App\Services\ProductService;
 use App\Services\BatchService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class StoreIssueRequisitionController extends Controller
 {
@@ -57,13 +58,14 @@ class StoreIssueRequisitionController extends Controller
         } else {
             $newRequisitionCode = $this->storeIssueRequisitionService->createCode(auth()->user()->employee->company_id);
         }
+        $uniqueValue = Str::random(6);
         $companies = $this->companyService->getAllCompanies();
         $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
         $products = $this->productService->getAllProducts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
         $productVariations = $this->productVariationService->getAllProductVariations();
         $batches = $this->batchService->getAllBatches();
-        return view('admin.store-issue-requisition.create', compact('companies', 'products', 'rawMaterialItems', 'chartOfAccounts', 'productVariations', 'batches', 'newRequisitionCode'));
+        return view('admin.store-issue-requisition.create', compact('companies', 'products', 'rawMaterialItems', 'chartOfAccounts', 'productVariations', 'batches', 'newRequisitionCode', 'uniqueValue'));
     }
 
     public function productionCreate()
@@ -76,11 +78,13 @@ class StoreIssueRequisitionController extends Controller
         } else {
             $newRequisitionCode = $this->storeIssueRequisitionService->createCode(auth()->user()->employee->company_id);
         }
+        $uniqueValue = Str::random(6);
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
+        $productVariations = $this->productVariationService->getAllProductVariations();
         $batches = $this->batchService->getAllBatches();
-        return view('admin.store-issue-requisition.production-create', compact('companies','products','rawMaterialItems', 'batches', 'newRequisitionCode'));
+        return view('admin.store-issue-requisition.production-create', compact('companies','products','rawMaterialItems', 'batches', 'newRequisitionCode', 'productVariations', 'uniqueValue'));
     }
 
     /**
@@ -115,6 +119,7 @@ class StoreIssueRequisitionController extends Controller
         if (!auth()->user()->hasPermission('Store Issue Rquisition Update')) {
             abort(403, 'Unauthorized action.');
         }
+        $uniqueValue = Str::random(6);
         $requisition = $this->storeIssueRequisitionService->getById($id);
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
@@ -122,7 +127,7 @@ class StoreIssueRequisitionController extends Controller
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
         $batches = $this->batchService->getAllBatches();
         $productVariations = $this->productVariationService->getAllProductVariations();
-        return view('admin.store-issue-requisition.edit', compact('requisition', 'companies', 'products', 'chartOfAccounts', 'rawMaterialItems', 'productVariations', 'batches'));
+        return view('admin.store-issue-requisition.edit', compact('requisition', 'companies', 'products', 'chartOfAccounts', 'rawMaterialItems', 'productVariations', 'batches', 'uniqueValue'));
     }
 
     /**
