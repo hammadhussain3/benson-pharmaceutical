@@ -126,39 +126,44 @@
                     </tbody>
                     <tfoot>
                         @php
-                            $sumTotal = $invoice->items->sum(fn($item) => $item->quantity * $item->unit_price);
+                            $totals = $invoice->items->reduce(function ($carry, $item) {
+                                $total = $item->quantity * $item->unit_price;
 
-                            $sumDiscount = $invoice->items->sum(fn($item) =>
-                                $item->discount_type == 'percent'
-                                    ? ($item->quantity * $item->unit_price * $item->discount / 100)
-                                    : $item->discount
-                            );
+                                $discountAmount = ($total * 10) / 100;
+                                $discountAmountVar = $item->discount_type == 'percent'
+                                    ? ($total * $item->discount / 100)
+                                    : $item->discount;
 
-                            $sumAfterDiscount = $sumTotal - $sumDiscount;
+                                $transCode = $total - $discountAmountVar + ((($total - $discountAmountVar) * $item->tax_rate) / 100);
+                                $amountAfterDiscount = $total - $discountAmount;
+                                $taxAmount = ($amountAfterDiscount * $item->tax_rate) / 100;
+                                $finalAmount = $amountAfterDiscount + $taxAmount;
 
-                            $sumTax = $invoice->items->sum(fn($item) =>
-                                (($item->quantity * $item->unit_price -
-                                    ($item->discount_type == 'percent'
-                                        ? ($item->quantity * $item->unit_price * $item->discount / 100)
-                                        : $item->discount)) * $item->tax_rate) / 100
-                            );
-
-                            $grandTotal = $sumAfterDiscount + $sumTax;
+                                return [
+                                    'quantity' => $carry['quantity'] + $item->quantity,
+                                    'transCode' => $carry['transCode'] + $transCode,
+                                    'total' => $carry['total'] + $total,
+                                    'discount' => $carry['discount'] + $discountAmount,
+                                    'afterDiscount' => $carry['afterDiscount'] + $amountAfterDiscount,
+                                    'tax' => $carry['tax'] + $taxAmount,
+                                    'final' => $carry['final'] + $finalAmount,
+                                ];
+                            }, ['quantity' => 0, 'transCode' => 0, 'total' => 0, 'discount' => 0, 'afterDiscount' => 0, 'tax' => 0, 'final' => 0]);
                         @endphp
                         <tr>
                             <th>Total</th>
                             <td colspan="6">
-                                <x-amount-in-words :amount="$grandTotal" />
+                                <x-amount-in-words :amount="$totals['final']" />
                             </td>
-                            <td>{{ number_format($invoice->items->sum('quantity')) }}</td>
-                            <td>{{ number_format($grandTotal, 2) }}</td> {{-- Matches transCode --}}
+                            <td>{{ number_format($totals['quantity']) }}</td>
+                            <td>{{ number_format($totals['transCode'], 2) }}</td>
                             <td></td>
-                            <td>{{ number_format($sumTotal, 2) }}</td>
+                            <td>{{ number_format($totals['total'], 2) }}</td>
                             <td></td>
-                            <td>{{ number_format($sumDiscount, 2) }}</td>
-                            <td>{{ number_format($sumAfterDiscount, 2) }}</td>
-                            <td>{{ number_format($sumTax, 2) }}</td>
-                            <td>{{ number_format($grandTotal, 2) }}</td>
+                            <td>{{ number_format($totals['discount'], 2) }}</td>
+                            <td>{{ number_format($totals['afterDiscount'], 2) }}</td>
+                            <td>{{ number_format($totals['tax'], 2) }}</td>
+                            <td>{{ number_format($totals['final'], 2) }}</td>
                         </tr>
                     </tfoot>
                 </table>                
