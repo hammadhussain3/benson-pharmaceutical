@@ -39,7 +39,7 @@ class InvoiceRequest extends FormRequest
 				},
 			],
 			'order_number' => 'nullable|string|max:255',
-			'order_date' => 'nullable|date|before:today',
+			'order_date' => 'nullable|date|before_or_equal:today',
 			'is_urgent' => 'required_if:type,purchase|in:0,1',
 			'company' => 'required|exists:companies,id',
 			'invoice_tax_rate' => 'nullable|numeric|min:0',

@@ -2236,39 +2236,56 @@ function selectInvoiceprefix(value) {
 }
 
 function calculateSaleInvoiceAmount() {
-    let totalInvoiceTax = 0;
-    let itemsCostWithTax = 0;
-    let itemsCostWithoutTax = 0;
     let totalAmount = 0;
-    let dueAmount = 0;
+    let totalQuantity = 0;
+    let totalValue = 0;
+    let totalDiscountValue = 0;
+    let totalExclusiveSales = 0;
+    let totalTax = 0;
 
-    var shippingCost = parseFloat(document.getElementById('shipping_cost').value) || 0;
+    let shippingCost = parseFloat(document.getElementById('shipping_cost')?.value) || 0;
 
     document.querySelectorAll('.item-set').forEach((itemSet, index) => {
-        const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
-        const quantity = parseFloat(itemSet.querySelector('.product_quantity').value) || 0;
-        const taxRate = parseFloat(itemSet.querySelector('.tax_rate').value) || 0;
-        const discountType = itemSet.querySelector('select[name="invoice_items[' + index + '][discount_type]"]').value;
-        const discount = parseFloat(itemSet.querySelector('.discount').value) || 0;
+        const quantity = parseFloat(itemSet.querySelector('.product_quantity')?.value) || 0;
+        const unitPrice = parseFloat(itemSet.querySelector('.unit_price')?.value) || 0;
+        const discount = parseFloat(itemSet.querySelector('.discount')?.value) || 0;
+        const taxRate = parseFloat(itemSet.querySelector('.tax_rate')?.value) || 0;
+        const discountType = itemSet.querySelector(`select[name="invoice_items[${index}][discount_type]"]`)?.value;
 
-        let itemTotal = unitPrice * quantity;
+        let total = quantity * unitPrice;
 
-        itemTotal += (itemTotal * taxRate) / 100;
+        let discountAmount = discountType === 'percent'
+            ? (total * discount / 100)
+            : discount;
 
-        if (discountType === 'percent') {
-            itemTotal -= (itemTotal * discount) / 100;
-        } else {
-            itemTotal -= discount;
-        }
+        let amountAfterDiscount = total - discountAmount;
+        let taxAmount = (amountAfterDiscount * taxRate) / 100;
+        let finalAmount = amountAfterDiscount + taxAmount;
 
-        totalAmount += itemTotal;
+        // Set individual item values
+        if (itemSet.querySelector('.value')) itemSet.querySelector('.value').value = total.toFixed(2);
+        if (itemSet.querySelector('.discount_value')) itemSet.querySelector('.discount_value').value = discountAmount.toFixed(2);
+        if (itemSet.querySelector('.exclusive_sales')) itemSet.querySelector('.exclusive_sales').value = amountAfterDiscount.toFixed(2);
+        if (itemSet.querySelector('.total_item_amount')) itemSet.querySelector('.total_item_amount').value = finalAmount.toFixed(2);
 
-        itemSet.querySelector('.total_item_amount').value = itemTotal.toFixed(2);
+        // Add to totals
+        totalAmount += finalAmount;
+        totalQuantity += quantity;
+        totalValue += total;
+        totalDiscountValue += discountAmount;
+        totalExclusiveSales += amountAfterDiscount;
+        totalTax += taxAmount;
     });
 
     totalAmount += shippingCost;
 
-    document.getElementById('total_amount').value = totalAmount.toFixed(2);
+    // Set total fields (add these hidden or visible inputs in your form)
+    if (document.getElementById('total_amount')) document.getElementById('total_amount').value = totalAmount.toFixed(2);
+    if (document.getElementById('total_quantity')) document.getElementById('total_quantity').value = totalQuantity.toFixed(2);
+    if (document.getElementById('total_value')) document.getElementById('total_value').value = totalValue.toFixed(2);
+    if (document.getElementById('total_discount_value')) document.getElementById('total_discount_value').value = totalDiscountValue.toFixed(2);
+    if (document.getElementById('total_exclusive_sales')) document.getElementById('total_exclusive_sales').value = totalExclusiveSales.toFixed(2);
+    if (document.getElementById('total_tax')) document.getElementById('total_tax').value = totalTax.toFixed(2);
 }
 
 function calculateSalesReturnAmount() {
