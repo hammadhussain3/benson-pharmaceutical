@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EmployeeTypeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubChartOfAccountController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     BankController,
@@ -91,6 +92,7 @@ Route::middleware('auth')->group(function () {
     Route::get('payment_types/view/{id}', [PaymentTypeController::class, 'view'])->name('payment_types.view');
     Route::resource('chart_of_accounts', ChartOfAccountController::class);
     Route::get('chart_of_accounts/view/{id}', [ChartOfAccountController::class, 'view'])->name('chart_of_accounts.view');
+    Route::resource('sub_chart_of_accounts', SubChartOfAccountController::class);
     Route::resource('banks', BankController::class);
     Route::get('banks/view/{id}', [BankController::class, 'view'])->name('banks.view');
     Route::resource('salary_slips', SalarySlipController::class);

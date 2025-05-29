@@ -25,6 +25,7 @@
                 )
                     <li class="submenu">
                         <a class="{{ request()->is('chart_of_accounts*') ||
+                            request()->is('sub_chart_of_accounts*') ||
                             request()->is('credit-notes*') ||
                             request()->is('franchises*') ||
                             request()->is('journal-vouchers*') ||
@@ -49,6 +50,13 @@
                                 <li>
                                     <a class="{{ request()->is('chart_of_accounts*') ? 'active' : '' }}" href="{{ route('chart_of_accounts.index') }}">
                                         Chart Of Accounts
+                                    </a>
+                                </li>
+                            @endif
+                            @if(auth()->user()->hasPermission('Chart Of Accounts List'))
+                                <li>
+                                    <a class="{{ request()->is('sub_chart_of_accounts*') ? 'active' : '' }}" href="{{ route('sub_chart_of_accounts.index') }}">
+                                        Sub Chart Of Accounts
                                     </a>
                                 </li>
                             @endif
