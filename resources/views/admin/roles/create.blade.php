@@ -455,6 +455,14 @@
                                         <td>-</td>
                                         <td>-</td>
                                     </tr>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td><input class="form-check-input" type="checkbox" value="241" name="permissions[]" id="permissions"></td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

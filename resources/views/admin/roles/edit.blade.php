@@ -457,6 +457,14 @@
                                         <td>-</td>
                                         <td>-</td>
                                     </tr>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td><input class="form-check-input" type="checkbox" value="241" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(241) ? 'checked' : '' }}></td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

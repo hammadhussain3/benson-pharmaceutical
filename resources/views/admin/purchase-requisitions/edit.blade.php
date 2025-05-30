@@ -121,6 +121,7 @@
                                     <button type="button" class="btn btn-primary mt-1" id="addProductButton">Add Row</button>
                                 </div>
                             </div>  
+                            @if(auth()->user()->hasPermission('Status Update'))
                             <div class="mb-3 col-md-6">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control">
@@ -128,7 +129,8 @@
                                     <option value="Partial" {{ old('special_instructions', $purchaseRequisition->special_instructions) == 'Partial' ? 'selected' : '' }}>Partial</option>
                                     <option value="Complete" {{ old('special_instructions', $purchaseRequisition->special_instructions) == 'Complete' ? 'selected' : '' }}>Complete</option>
                                 </select>
-                            </div>                                                     
+                            </div> 
+                            @endif
                             <div class="mb-3 col-md-12">
                                 <label for="special_instructions">Special Instruction</label>
                                 <textarea class="form-control" name="special_instructions" id="special_instructions">{{ old('special_instructions', $purchaseRequisition->special_instructions) }}</textarea>
