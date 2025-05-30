@@ -13,6 +13,7 @@ class SubChartOfAccountRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:sub_chart_of_accounts,name,' . $id,
             'chart_of_account' => 'required|exists:chart_of_accounts,id',
+            'category' => 'required|exists:categories,id',
             'company' => 'required|exists:companies,id',
         ];
     }

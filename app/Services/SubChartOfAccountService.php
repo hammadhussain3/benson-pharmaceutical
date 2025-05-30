@@ -9,6 +9,7 @@ class SubChartOfAccountService
     public function create($data)
     {
         $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['category_id'] = $data['category'];
         $data['company_id'] = $data['company'];
         return SubChartOfAccount::create($data);
     }
@@ -16,6 +17,7 @@ class SubChartOfAccountService
     public function update(SubChartOfAccount $subChartOfAccount, $data)
     {
         $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['category_id'] = $data['category'];
         $data['company_id'] = $data['company'];
         return $subChartOfAccount->update($data);
     }

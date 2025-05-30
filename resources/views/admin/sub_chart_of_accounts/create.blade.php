@@ -24,7 +24,7 @@
                             @role('Superadmin')
                                 <div class="mb-3 col-md-12">
                                     <label for="company">Company</label>
-                                    <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectChartOfAccounts(this.value)">
+                                    <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectChartOfAccounts(this.value); selectCategories(this.value);">
                                         <option value="">Select Company</option>
                                         @foreach ($companies as $company)
                                             <option value="{{ $company->id }}"
@@ -59,6 +59,23 @@
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" placeholder="Name Or Description"
                                     required value="{{ old('name') }}">
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="category">Category</label>
+                                <select name="category" id="category_id" class="js-example-basic-single select2" required onchange="selectCategoryPrefix(this.value); selectSubCategory(this.value);">
+                                    <option value="">Select Category</option>
+                                    @if(old('category') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($categories->where('company_id', $seletedCompanyId) as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>

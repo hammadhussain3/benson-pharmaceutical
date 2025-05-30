@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SubChartOfAccount extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'chart_of_account_id', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'chart_of_account_id', 'category_id', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -26,6 +26,11 @@ class SubChartOfAccount extends Model
     public function chart_of_account()
     {
         return $this->belongsTo(ChartOfAccount::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function company()

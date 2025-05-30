@@ -33,6 +33,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Chart Of Accounts</th>
+                            <th>Category</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
@@ -47,6 +48,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('sub_chart_of_accounts.show', $subChartOfAccount->id) }}">{{ $subChartOfAccount->name }}</a></td>
                                 <td>{{ $subChartOfAccount->chart_of_account->particular }}</td>
+                                <td>{{ $subChartOfAccount->category->name }}</td>
                                 @role('Superadmin')
                                 <td>{{ $subChartOfAccount->company->name }}</td>
                                 @endrole

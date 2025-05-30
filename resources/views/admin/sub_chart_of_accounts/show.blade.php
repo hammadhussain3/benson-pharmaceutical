@@ -29,8 +29,12 @@
                             <input type="text" class="form-control" value="{{ $subChartOfAccount->name }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Abbreviation</label>
+                            <label>Particular</label>
                             <input type="text" class="form-control" value="{{ $subChartOfAccount->chart_of_account->particular }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Category</label>
+                            <input type="text" class="form-control" value="{{ $subChartOfAccount->category->name }}" readonly>
                         </div>
                     </div>
                     <a class="btn btn-secondary" href="{{ route('sub_chart_of_accounts.index') }}">Cancel</a>
