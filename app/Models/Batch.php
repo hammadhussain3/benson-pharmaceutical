@@ -9,7 +9,7 @@ class Batch extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['batch_no', 'batch_size', 'product_id', 'mfg_date', 'exp_date', 'start_date', 'end_date', 'status', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['batch_no', 'batch_size', 'product_id', 'mfg_date', 'exp_date', 'start_date', 'end_date', 'chart_of_account_id', 'sub_chart_of_account_id', 'status', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -40,6 +40,16 @@ class Batch extends Model
         return $this->hasMany(BatchProduct::class, 'batch_id');
     }
 
+    public function chart_of_account()
+    {
+        return $this->belongsTo(ChartOfAccount::class);
+    }
+
+    public function sub_chart_of_account()
+    {
+        return $this->belongsTo(SubChartOfAccount::class);
+    }
+
     // Define the relationship to User (Created By)
     public function creator()
     {
@@ -51,5 +61,4 @@ class Batch extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-
 }

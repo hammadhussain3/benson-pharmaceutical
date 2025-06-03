@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\RawMaterialItem;
 use App\Http\Requests\RawMaterialItemRequest;
+use App\Services\ChartOfAccountService;
 use App\Services\RawMaterialItemService;
 use App\Services\CompanyService;
 use App\Services\PartyService;
 use App\Services\CategoryService;
 use App\Services\SubCategoryService;
+use App\Services\SubChartOfAccountService;
 
 class RawMaterialItemController extends Controller
 {
@@ -17,14 +19,18 @@ class RawMaterialItemController extends Controller
     protected $partyService;
     protected $categoryService;
     protected $subCategoryService;
+    protected $subChartOfAccountService;
+    protected $chartOfAccountService;
 
-    public function __construct(RawMaterialItemService $rawMaterialItemService, CompanyService $companyService, PartyService $partyService, CategoryService $categoryService, SubCategoryService $subCategoryService)
+    public function __construct(RawMaterialItemService $rawMaterialItemService, CompanyService $companyService, PartyService $partyService, CategoryService $categoryService, SubCategoryService $subCategoryService, SubChartOfAccountService $subChartOfAccountService, ChartOfAccountService $chartOfAccountService)
     {
         $this->companyService = $companyService;
         $this->categoryService = $categoryService;
         $this->subCategoryService = $subCategoryService;
         $this->partyService = $partyService;
         $this->rawMaterialItemService = $rawMaterialItemService;
+        $this->chartOfAccountService = $chartOfAccountService;
+        $this->subChartOfAccountService = $subChartOfAccountService;
     }
 
     public function index()
@@ -52,7 +58,9 @@ class RawMaterialItemController extends Controller
         $subCategories = $this->subCategoryService->getAll();
         $companies = $this->companyService->getAllcompanies();
         $parties = $this->partyService->getAllParties();
-        return view('admin.raw-material-items.create', compact('companies', 'parties', 'newRawMaterialItemCode', 'categories', 'subCategories'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.raw-material-items.create', compact('companies', 'parties', 'newRawMaterialItemCode', 'categories', 'subCategories', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**
@@ -92,7 +100,9 @@ class RawMaterialItemController extends Controller
         $subCategories = $this->subCategoryService->getAll();
         $companies = $this->companyService->getAllcompanies();
         $parties = $this->partyService->getAllParties();
-        return view('admin.raw-material-items.edit', compact('rawMaterialItem', 'companies', 'parties', 'categories', 'subCategories'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.raw-material-items.edit', compact('rawMaterialItem', 'companies', 'parties', 'categories', 'subCategories', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**

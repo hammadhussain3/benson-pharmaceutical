@@ -92,4 +92,10 @@ class SubChartOfAccountController extends Controller
         $this->subChartOfAccountService->delete($subChartOfAccount);
         return redirect()->route('sub_chart_of_accounts.index')->with('success', 'Sub Chart of Account deleted successfully!');
     }
+
+    public function getSubcoaBycoa($chartOfAccountId)
+    {
+        $subChartOfAccounts = SubChartOfAccount::where('chart_of_account_id', $chartOfAccountId)->orderBy('name', 'asc')->get();
+        return response()->json(['subChartOfAccounts' => $subChartOfAccounts]);
+    }
 }

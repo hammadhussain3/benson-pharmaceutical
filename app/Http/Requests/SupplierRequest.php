@@ -27,6 +27,8 @@ class SupplierRequest extends FormRequest
             'city' => 'required|exists:cities,id',
             'address' => 'nullable|string|max:500',
             'payment_type' => 'required|exists:payment_types,id',
+            'chart_of_account' => 'required|exists:chart_of_accounts,id',
+            'sub_chart_of_account' => 'nullable|exists:sub_chart_of_accounts,id',
             'company' => 'required|exists:companies,id',
         ];
     }

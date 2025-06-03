@@ -21,6 +21,54 @@
                         @csrf
                         @method('PUT')
                         <div class="form-row row">
+                            @role('Superadmin')
+                            <div class="mb-3 col-md-12">
+                                <label for="company_id">Company</label>
+                                <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectChartOfAccounts(this.value);">
+                                    <option value="">Select Company</option>
+                                    @foreach ($companies as $company)
+                                        <option value="{{ $company->id }}"
+                                            {{ $company->id == old('company', $supplier->company_id) ? 'selected' : '' }}>
+                                            {{ $company->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Please select a company.</div>
+                            </div>
+                            @else
+                                <input type="hidden" name="company" value="{{ $supplier->company_id }}">
+                            @endrole
+                            <div class="mb-3 col-md-6">
+                                <label for="type">Chart of Accounts</label>
+                                <select class="js-example-basic-single select2" name="chart_of_account" id="chart_of_account_id" required onchange="selectSubChartOfAccounts(this.value);">
+                                    <option value="">Select Chart Of Account</option>
+                                    @php
+                                        $seletedCompanyId = old('company', $supplier->company_id) ?? auth()->user()->employee->company_id;
+                                    @endphp
+                                    @foreach ($chartOfAccounts->where('company_id', $seletedCompanyId) as $chartOfAccount)
+                                        <option value="{{ $chartOfAccount->id }}"
+                                            {{ old('chart_of_account', $supplier->chart_of_account_id) == $chartOfAccount->id ? 'selected' : '' }}>
+                                            {{ $chartOfAccount->particular }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="sub_chart_of_account">Sub Chart of Accounts</label>
+                                <select class="js-example-basic-single select2" name="sub_chart_of_account" id="sub_chart_of_account_id" required>
+                                    <option value="">Select Sub Chart Of Account</option>
+                                    @php
+                                        $seletedChartOfAccountId = old('chart_of_account', $supplier->chart_of_account_id);
+                                    @endphp
+                                    @foreach ($subChartOfAccounts->where('chart_of_account_id', $seletedChartOfAccountId) as $subChartOfAccount)
+                                        <option value="{{ $subChartOfAccount->id }}"
+                                            {{ old('sub_chart_of_account', $supplier->sub_chart_of_account_id) == $subChartOfAccount->id ? 'selected' : '' }}>
+                                            {{ $subChartOfAccount->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="mb-3 col-md-6">
                                 <label for="name">Supplier Name</label>
                                 <input type="text" class="form-control" name="name" id="name"
@@ -62,23 +110,7 @@
                                 </select>
                                 <div class="invalid-feedback">Please select a city.</div>
                             </div>
-                            @role('Superadmin')
-                            <div class="mb-3 col-md-12">
-                                <label for="company_id">Company</label>
-                                <select name="company" id="company_id" class="js-example-basic-single select2" required>
-                                    <option value="">Select Company</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}"
-                                            {{ $company->id == old('company', $supplier->company_id) ? 'selected' : '' }}>
-                                            {{ $company->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <div class="invalid-feedback">Please select a company.</div>
-                            </div>
-                            @else
-                                <input type="hidden" name="company" value="{{ $supplier->company_id }}">
-                            @endrole
+
                             <div class="mb-3 col-md-6">
                                 <label for="contact_person_name">Contact Person Name</label>
                                 <input type="text" class="form-control" name="contact_person_name"

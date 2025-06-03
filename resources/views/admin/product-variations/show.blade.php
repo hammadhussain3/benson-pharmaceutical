@@ -35,6 +35,14 @@
                             <input type="text" class="form-control" value="{{ $productVariation->subCategory->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
+                            <label>Chart Of Account</label>
+                            <input type="text" class="form-control" value="{{ $productVariation->chart_of_account->particular ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Sub Chart Of Account</label>
+                            <input type="text" class="form-control" value="{{ optional($productVariation->sub_chart_of_account)->name ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
                             <label>Code</label>
                             <input type="text" class="form-control" value="{{ $productVariation->code ?? 'N/A' }}" readonly>
                         </div>
@@ -80,11 +88,11 @@
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Min Level</label>
-                            <input type="text" class="form-control" value="{{ $productVariation->min_level }}" readonly>
+                            <input type="text" class="form-control" value="{{ $productVariation->min_level ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Max Level</label>
-                            <input type="text" class="form-control" value="{{ $productVariation->max_level }}" readonly>
+                            <input type="text" class="form-control" value="{{ $productVariation->max_level ?? 'N/A' }}" readonly>
                         </div>
                     </div>
                     <a class="btn btn-secondary" href="{{ route('product-variations.index') }}">Cancel</a>

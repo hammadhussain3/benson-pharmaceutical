@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RawMaterialItem extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'description', 'code', 'unit', 'min_level', 'max_level', 'category_id', 'sub_category_id', 'party_id', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['name', 'description', 'code', 'unit', 'min_level', 'max_level', 'category_id', 'sub_category_id', 'party_id', 'chart_of_account_id', 'sub_chart_of_account_id', 'company_id', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -41,6 +41,16 @@ class RawMaterialItem extends Model
     public function subCategory()
     {
         return $this->belongsTo(SubCategory::class);
+    }
+
+    public function chart_of_account()
+    {
+        return $this->belongsTo(ChartOfAccount::class);
+    }
+
+    public function sub_chart_of_account()
+    {
+        return $this->belongsTo(SubChartOfAccount::class);
     }
     
     public function orders()

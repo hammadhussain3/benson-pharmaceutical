@@ -11,9 +11,11 @@ use App\Models\ProductGroup;
 use App\Models\ProductVariation;
 use App\Http\Requests\ProductVariationRequest;
 use App\Services\CategoryService;
+use App\Services\ChartOfAccountService;
 use App\Services\ProductVariationService;
 use App\Services\CompanyService;
 use App\Services\SubCategoryService;
+use App\Services\SubChartOfAccountService;
 
 class ProductVariationController extends Controller
 {
@@ -21,13 +23,17 @@ class ProductVariationController extends Controller
     protected $productVariationService;
     protected $categoryService;
     protected $subCategoryService;
+    protected $subChartOfAccountService;
+    protected $chartOfAccountService;
 
-    public function __construct(ProductVariationService $productVariationService, CompanyService $companyService, CategoryService $categoryService, SubCategoryService $subCategoryService)
+    public function __construct(ProductVariationService $productVariationService, CompanyService $companyService, CategoryService $categoryService, SubCategoryService $subCategoryService, SubChartOfAccountService $subChartOfAccountService, ChartOfAccountService $chartOfAccountService)
     {
         $this->companyService = $companyService;
         $this->categoryService = $categoryService;
         $this->subCategoryService = $subCategoryService;
         $this->productVariationService = $productVariationService;
+        $this->chartOfAccountService = $chartOfAccountService;
+        $this->subChartOfAccountService = $subChartOfAccountService;
     }
 
     public function index()
@@ -60,7 +66,9 @@ class ProductVariationController extends Controller
         $productGroups = ProductGroup::orderBy('name', 'asc')->get();
         $categories = $this->categoryService->getAllCategories();
         $subCategories = $this->subCategoryService->getAll();
-        return view('admin.product-variations.create', compact('companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories', 'subCategories', 'newCode'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.product-variations.create', compact('companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories', 'subCategories', 'newCode', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**
@@ -105,7 +113,9 @@ class ProductVariationController extends Controller
         $productGroups = ProductGroup::orderBy('name', 'asc')->get();
         $categories = $this->categoryService->getAllCategories();
         $subCategories = $this->subCategoryService->getAll();
-        return view('admin.product-variations.edit', compact('productVariation', 'companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories', 'subCategories'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.product-variations.edit', compact('productVariation', 'companies', 'products', 'dosage_forms', 'pack_forms', 'pack_sizes', 'packing_types', 'productGroups', 'categories', 'subCategories', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**

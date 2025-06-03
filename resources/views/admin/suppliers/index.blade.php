@@ -35,6 +35,7 @@
                             <th>#</th>
                             <th>Name</th>
                             <th>Code</th>
+                            <th>Chart Of Accounts</th>
                             <th>Contact Person Name</th>
                             <th>Contact Person Phone</th>
                             <th>Contact Person Email</th>
@@ -58,6 +59,12 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('suppliers.show', $supplier->id) }}">{{ $supplier->name }}</a></td>
                                 <td>{{ $supplier->code }}</td>
+                                <td>
+                                    <span class="badge bg-primary">{{ $supplier->chart_of_account->particular ?? 'N/A' }}</span>
+                                    @if ($supplier->sub_chart_of_account)
+                                        <span class="badge bg-info">{{ $supplier->sub_chart_of_account->name }}</span>
+                                    @endif
+                                </td>
                                 <td>{{ $supplier->contact_person_name }}</td>
                                 <td>{{ $supplier->contact_person_phone }}</td>
                                 <td>{{ $supplier->contact_person_email }}</td>

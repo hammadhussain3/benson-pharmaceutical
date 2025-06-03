@@ -22,6 +22,8 @@ class RawMaterialItemService
         $data['party_id'] = $data['party'];
         $data['category_id'] = $data['category'];
         $data['sub_category_id'] = $data['sub_category'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         return RawMaterialItem::create($data);
     }
@@ -32,6 +34,8 @@ class RawMaterialItemService
         $data['party_id'] = $data['party'];
         $data['category_id'] = $data['category'];
         $data['sub_category_id'] = $data['sub_category'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         $rawMaterialItem->update($data);
         return $rawMaterialItem;

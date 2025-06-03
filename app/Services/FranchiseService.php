@@ -26,6 +26,8 @@ class FranchiseService
         $data['city_id'] = $data['city'];
         $data['category_id'] = $data['category'];
         $data['sub_category_id'] = $data['sub_category'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         $data['payment_type_id'] = $data['payment_type'];
         $data['is_supplier'] = '0';
@@ -40,6 +42,8 @@ class FranchiseService
         $data['city_id'] = $data['city'];
         $data['category_id'] = $data['category'];
         $data['sub_category_id'] = $data['sub_category'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         $data['payment_type_id'] = $data['payment_type'];
         $franchise->update($data);

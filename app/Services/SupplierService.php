@@ -23,6 +23,8 @@ class SupplierService
     {
         $data['country_id'] = $data['country'];
         $data['city_id'] = $data['city'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         $data['payment_type_id'] = $data['payment_type'];
         $data['is_supplier'] = '1';
@@ -34,6 +36,8 @@ class SupplierService
     {
         $data['country_id'] = $data['country'];
         $data['city_id'] = $data['city'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         $data['payment_type_id'] = $data['payment_type'];
         $data['is_supplier'] = '1';

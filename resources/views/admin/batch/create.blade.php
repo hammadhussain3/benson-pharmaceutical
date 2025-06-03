@@ -23,7 +23,7 @@
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
                                 <label for="company_id">Company</label>
-                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectProducts(this.value);" @endrole>
+                                <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectProducts(this.value); selectChartOfAccounts(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -37,6 +37,41 @@
                             @else
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
+                            <div class="mb-3 col-md-6">
+                                <label for="type">Chart of Accounts</label>
+                                <select class="js-example-basic-single select2" name="chart_of_account" id="chart_of_account_id" required onchange="selectSubChartOfAccounts(this.value);">
+                                    <option value="">Select Chart Of Account</option>
+                                    @if(old('chart_of_account') || old('company') || !auth()->user()->hasRole('Superadmin'))
+                                        @php
+                                            $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
+                                        @endphp
+                                        @foreach ($chartOfAccounts->where('company_id', $seletedCompanyId) as $chartOfAccount)
+                                            <option value="{{ $chartOfAccount->id }}"
+                                                {{ old('chart_of_account') == $chartOfAccount->id ? 'selected' : '' }}>
+                                                {{ $chartOfAccount->particular }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="sub_chart_of_account">Sub Chart of Accounts</label>
+                                <select class="js-example-basic-single select2" name="sub_chart_of_account" id="sub_chart_of_account_id" required>
+                                    <option value="">Select Sub Chart Of Account</option>
+                                    @if(old('sub_chart_of_account') || old('chart_of_account'))
+                                        @php
+                                            $seletedChartOfAccountId = old('chart_of_account');
+                                        @endphp
+                                        @foreach ($subChartOfAccounts->where('chart_of_account_id', $seletedChartOfAccountId) as $subChartOfAccount)
+                                            <option value="{{ $subChartOfAccount->id }}"
+                                                {{ old('sub_chart_of_account') == $subChartOfAccount->id ? 'selected' : '' }}>
+                                                {{ $subChartOfAccount->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
                             <div class="mb-3 col-md-4">
                                 <label for="product_id">Brand Name</label>
                                 <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectProductVariations(this.value);">

@@ -1341,6 +1341,31 @@ function selectChartOfAccounts(companyId)
         });
 }
 
+function selectSubChartOfAccounts(chartOfAccountId)
+{
+    var subChartOfAccountSelect = document.getElementById('sub_chart_of_account_id');
+    
+    if (chartOfAccountId && subChartOfAccountSelect) {
+        subChartOfAccountSelect.innerHTML = '<option value="">Select Sub Chart Of Account</option>';
+        fetch(`/chart_of_accounts/${chartOfAccountId}/sub_chart_of_accounts`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized or error fetching sub chart of accounts');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.subChartOfAccounts.forEach(function (subChartOfAccount) {
+                    var option = document.createElement('option');
+                    option.value = subChartOfAccount.id;
+                    option.textContent = subChartOfAccount.name;
+                    subChartOfAccountSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching sub chart of accounts:', error));
+    }
+}
+
 function selectGeneralStoreRequisitions(companyId)
 {
     var storeIssueRequisitionSelect = document.getElementById('store_issue_requisition_id');

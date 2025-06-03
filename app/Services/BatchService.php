@@ -25,6 +25,8 @@ class BatchService
     public function createBatch(array $data)
     {
         $data['product_id'] = $data['product'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
 
         $batch = Batch::create($data);
@@ -43,6 +45,8 @@ class BatchService
     public function updateBatch(Batch $batch, array $data)
     {
         $data['product_id'] = $data['product'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         $batch->update($data);
         $batch->items()->delete();

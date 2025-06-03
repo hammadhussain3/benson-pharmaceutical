@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Batch;
 use App\Models\ProductVariation;
+use App\Services\ChartOfAccountService;
 use App\Services\ProductVariationService;
+use App\Services\SubChartOfAccountService;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\BatchRequest;
 use App\Services\CompanyService;
@@ -18,13 +20,17 @@ class BatchController extends Controller
     protected $companyService;
     protected $productService;
     protected $productVariationService;
+    protected $subChartOfAccountService;
+    protected $chartOfAccountService;
 
-    public function __construct(BatchService $batchService, CompanyService $companyService, ProductService $productService, ProductVariationService $productVariationService)
+    public function __construct(BatchService $batchService, CompanyService $companyService, ProductService $productService, ProductVariationService $productVariationService, SubChartOfAccountService $subChartOfAccountService, ChartOfAccountService $chartOfAccountService)
     {
         $this->batchService = $batchService;
         $this->companyService = $companyService;
         $this->productService = $productService;
         $this->productVariationService = $productVariationService;
+        $this->chartOfAccountService = $chartOfAccountService;
+        $this->subChartOfAccountService = $subChartOfAccountService;
     }
 
     public function index()
@@ -48,7 +54,9 @@ class BatchController extends Controller
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
         $productVariations = $this->productVariationService->getAllProductVariations();
-        return view('admin.batch.create', compact('companies','products', 'productVariations'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.batch.create', compact('companies','products', 'productVariations', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**
@@ -87,7 +95,9 @@ class BatchController extends Controller
         $companies = $this->companyService->getAllCompanies();
         $products = $this->productService->getAllProducts();
         $productVariations = $this->productVariationService->getAllProductVariations();
-        return view('admin.batch.edit', compact('batch', 'companies', 'products', 'productVariations'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.batch.edit', compact('batch', 'companies', 'products', 'productVariations', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**

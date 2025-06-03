@@ -5,7 +5,8 @@
         <div class="page-title">
             <h4>Manual Purchase Requisition</h4>
             <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('purchase-requisitions.index') }}">Manual Purchase Requisitions</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('purchase-requisitions.index') }}">Manual Purchase
+                        Requisitions</a></li>
                 <li class="breadcrumb-item active">View Manual Purchase Requisition</li>
             </ul>
         </div>
@@ -20,13 +21,15 @@
     <div class="card">
         <div class="card-body">
             @if ($purchaseRequisition->is_approved == 1)
-                <span class="position-absolute top-0 end-0 ps-2 mt-2 pe-3 bg-success text-light approved-target">{{ $purchaseRequisition->is_approved == 1 ? 'Approved' : '' }}</span>
+                <span
+                    class="position-absolute top-0 end-0 ps-2 mt-2 pe-3 bg-success text-light approved-target">{{ $purchaseRequisition->is_approved == 1 ? 'Approved' : '' }}</span>
             @endif
             <div class="row justify-content-between">
                 <div class="col-auto">
                     <div class="d-flex">
                         <div class="flex-shrink-0">
-                            <img src="{{ asset($purchaseRequisition->company->logo_path ? 'images/company/' . $purchaseRequisition->company->logo_path : 'images/company/logo.png') }}" class="mb-2" style="height: 80px">
+                            <img src="{{ asset($purchaseRequisition->company->logo_path ? 'images/company/' . $purchaseRequisition->company->logo_path : 'images/company/logo.png') }}"
+                                class="mb-2" style="height: 80px">
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="fw-bold">{{ $purchaseRequisition->company->name }}</h5>
@@ -39,7 +42,7 @@
                     <h2>Manual Purchase Requisition</h2>
                 </div>
             </div>
-       
+
             <table class="table mt-3">
                 <tr>
                     <th>PR No.</th>
@@ -90,18 +93,19 @@
                     <strong>Note:</strong> {{ $purchaseRequisition->special_instructions }}
                 </div>
             @endif
-            <div style="display: flex; justify-content: space-around; margin-top: 45px;">
+            <div class="signature-section" style="display: flex; justify-content: space-around; margin-top: 45px;">
                 <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Prepared by</span>
+                    <span style="font-size: 14px; font-weight: bold;">{{ $purchaseRequisition->createdBy->name }}</span>
+                    <hr style="width: 100%; margin: 5px 0px;">
+                    <span style="font-size: 14px;">Prepared by</span>
                 </div>
                 <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Checked by</span>
+                    <hr style="width: 100%; margin: 5px 0px;">
+                    <span style="font-size: 14px;">Checked by</span>
                 </div>
                 <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Approved by</span>
+                    <hr style="width: 100%; margin: 5px 0px;">
+                    <span style="font-size: 14px;">Approved by</span>
                 </div>
             </div>
         </div>
@@ -109,51 +113,63 @@
 @endsection
 
 <style>
-    .print-header{
+    .print-header {
         margin-top: 10px !important;
     }
-    @media print {
-       @page {
-           margin: 0;
-       }
-   
-       html, body {
-           height: 100%;
-           margin: 0;
-           padding: 0;
-           overflow: hidden;
-       }
-   
-       body * {
-           visibility: hidden;
-       }
-   
-       .card-body,
-       .card-body * {
-           visibility: visible;
-       }
-   
-       .card-body {
-           position: fixed;
-           left: 0;
-           top: 0;
-           width: 100%;
-       }
-   
-       .table-primary th {
-           background-color: #e3f2fd !important;
-           -webkit-print-color-adjust: exact;
-           color-adjust: exact;
-       }
 
-       .approved-target{
+    @media print {
+
+        .signature-section {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        @page {
+            margin: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body * {
+            visibility: hidden;
+        }
+
+        .card-body,
+        .card-body * {
+            visibility: visible;
+        }
+
+        .card-body {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .table-primary th {
             background-color: #e3f2fd !important;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
-       }
-       .print-header{
+        }
+
+        .approved-target {
+            background-color: #e3f2fd !important;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+
+        .print-header {
             margin-top: 15px !important;
         }
-   }
-   
-   </style>
+    }
+</style>

@@ -34,6 +34,7 @@
                             <th>Batch No</th>
                             <th>Batch Size</th>
                             <th>Brand</th>
+                            <th>Chart Of Accounts</th>
                             <th>MFG date</th>
                             <th>EXP date</th>
                             <th>Start date</th>
@@ -54,6 +55,12 @@
                                 <td> <a class="link-primary" href="{{ route('batches.show', $batch->id) }}">{{ $batch->batch_no }}</a></td>
                                 <td>{{ $batch->batch_size }}</td>
                                 <td>{{ $batch->product->brand_name }}</td>
+                                <td>
+                                    <span class="badge bg-primary">{{ $batch->chart_of_account->particular ?? 'N/A' }}</span>
+                                    @if ($batch->sub_chart_of_account)
+                                        <span class="badge bg-info">{{ $batch->sub_chart_of_account->name }}</span>
+                                    @endif
+                                </td>
                                 <td>{{ $batch->mfg_date }}</td>
                                 <td>{{ $batch->exp_date }}</td>
                                 <td>{{ $batch->start_date }}</td>

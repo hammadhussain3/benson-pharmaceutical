@@ -46,6 +46,8 @@ class ProductVariationService
         $data['product_group_id'] = $data['product_group'] ?? null;
         $data['category_id'] = $data['category'];
         $data['sub_category_id'] = $data['sub_category'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         return ProductVariation::create($data);
     }
@@ -61,6 +63,8 @@ class ProductVariationService
         $data['product_group_id'] = $data['product_group'] ?? null;
         $data['category_id'] = $data['category'];
         $data['sub_category_id'] = $data['sub_category'];
+        $data['chart_of_account_id'] = $data['chart_of_account'];
+        $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
         $productVariation->update($data);
         return $productVariation;

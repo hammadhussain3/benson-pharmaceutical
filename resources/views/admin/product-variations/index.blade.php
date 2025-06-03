@@ -43,6 +43,7 @@
                             <th>Pack Sizes</th>
                             {{-- <th>Group</th> --}}
                             <th>Category</th>
+                            <th>Chart Of Accounts</th>
                             <th>Trade Price</th>
                             <th>Our MRP</th>
                             <th>Drap MRP</th>
@@ -73,6 +74,12 @@
                                     <span class="badge bg-primary">{{ optional($productVariation->category)->name }}</span>
                                     @if ($productVariation->subCategory)
                                         <span class="badge bg-info">{{ $productVariation->subCategory->name }}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ $productVariation->chart_of_account->particular ?? 'N/A' }}</span>
+                                    @if ($productVariation->sub_chart_of_account)
+                                        <span class="badge bg-info">{{ $productVariation->sub_chart_of_account->name }}</span>
                                     @endif
                                 </td>
                                 <td>{{ $productVariation->trade_price ?? 'N/A' }}</td>

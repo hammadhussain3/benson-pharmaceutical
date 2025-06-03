@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BatchRequest extends FormRequest
 {
@@ -13,14 +14,24 @@ class BatchRequest extends FormRequest
 
     public function rules(): array
     {
+        $id = $this->route('batch');
+
         return [
-            'batch_no' => 'required|string|unique:batches,batch_no,NULL,id,company_id,' . $this->company,
+            'batch_no' => [
+                'required',
+                'string',
+                Rule::unique('batches', 'batch_no')
+                    ->where('company_id', $this->company)
+                    ->ignore($id),
+            ],
             'batch_size' => 'required|numeric|min:1',
             'product' => 'required|exists:products,id',
             'mfg_date' => 'required|date',
             'exp_date' => 'required|date',
             'start_date' => 'required|date',
             'end_date' => 'nullable|date',
+            'chart_of_account' => 'required|exists:chart_of_accounts,id',
+            'sub_chart_of_account' => 'nullable|exists:sub_chart_of_accounts,id',
             'status' => 'required|string',
             'company' => 'required|exists:companies,id',
             'items' => 'required|array|min:1',

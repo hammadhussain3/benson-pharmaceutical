@@ -22,6 +22,14 @@
                             <label>Company</label>
                             <input type="text" class="form-control" value="{{ $batch->company->name ?? 'N/A' }}" readonly>
                         </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Chart Of Account</label>
+                            <input type="text" class="form-control" value="{{ $batch->chart_of_account->particular ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Sub Chart Of Account</label>
+                            <input type="text" class="form-control" value="{{ optional($batch->sub_chart_of_account)->name ?? 'N/A' }}" readonly>
+                        </div>
                         <div class="mb-3 col-md-4">
                             <label>Product</label>
                             <input type="text" class="form-control" value="{{ $batch->product->brand_name ?? 'N/A' }}" readonly>
@@ -52,11 +60,11 @@
                                                 </div>
                                                 <div class="mb-3 col-md-4">
                                                     <label>Quantity (Pack)</label>
-                                                    <input type="number" class="form-control" value="{{ $batch->items[$i]->quantity }}" readonly>
+                                                    <input type="number" class="form-control" value="{{ $batch->items[$i]->quantity ?? 'N/A' }}" readonly>
                                                 </div>
                                                 <div class="mb-3 col-md-4">
                                                     <label>Trade Price</label>
-                                                    <input type="number" class="form-control" value="{{ $batch->items[$i]->trade_price }}" readonly>
+                                                    <input type="number" class="form-control" value="{{ $batch->items[$i]->trade_price ?? 'N/A' }}" readonly>
                                                 </div>
                                             </div>
                                         </div>

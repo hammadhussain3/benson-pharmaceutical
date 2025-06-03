@@ -34,6 +34,8 @@ class RawMaterialItemRequest extends FormRequest
             'max_level' => 'required|string|max:10',
             'category' => 'required|exists:categories,id',
             'sub_category' => 'nullable|exists:sub_categories,id',
+            'chart_of_account' => 'required|exists:chart_of_accounts,id',
+            'sub_chart_of_account' => 'nullable|exists:sub_chart_of_accounts,id',
             'party' => 'nullable|exists:parties,id',
 			'company' => 'required|exists:companies,id',
         ];

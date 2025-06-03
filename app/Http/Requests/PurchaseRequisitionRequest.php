@@ -33,9 +33,9 @@ class PurchaseRequisitionRequest extends FormRequest
             'supplier' => 'nullable|exists:parties,id,is_supplier,1',
             'name.*' => 'required|string|max:255',
             'quantity.*' => 'required|numeric|min:0',
-            'unit.*' => 'nullable|string|max:255',
-            'price.*' => 'nullable|numeric|min:0',
-            'amount.*' => 'nullable|numeric|min:0',
+            'unit.*' => 'required|string|max:255',
+            'price.*' => 'required|numeric|min:0',
+            'amount.*' => 'required|numeric|min:0',
             'is_approved' => 'nullable|boolean',
         ];
     }

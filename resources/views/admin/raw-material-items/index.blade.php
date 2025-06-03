@@ -36,6 +36,7 @@
                             <th>Code</th>
                             <th>Name</th>
                             <th>Categories</th>
+                            <th>Chart Of Accounts</th>
                             <th>Min. Level</th>
                             <th>Max. Level</th>
                             <th>Party</th>
@@ -57,6 +58,12 @@
                                     <span class="badge bg-primary">{{ optional($rawMaterialItem->category)->name }}</span>
                                     @if ($rawMaterialItem->subCategory)
                                         <span class="badge bg-info">{{ $rawMaterialItem->subCategory->name }}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ $rawMaterialItem->chart_of_account->particular ?? 'N/A' }}</span>
+                                    @if ($rawMaterialItem->sub_chart_of_account)
+                                        <span class="badge bg-info">{{ $rawMaterialItem->sub_chart_of_account->name }}</span>
                                     @endif
                                 </td>
                                 <td>{{ $rawMaterialItem->min_level }}</td>

@@ -25,6 +25,8 @@ class Party extends Model
         'is_distributor',
         'category_id',
         'sub_category_id',
+        'chart_of_account_id',
+        'sub_chart_of_account_id',
         'company_id',
         'created_by',
         'updated_by'
@@ -86,6 +88,16 @@ class Party extends Model
     public function subCategory()
     {
         return $this->belongsTo(SubCategory::class);
+    }
+
+    public function chart_of_account()
+    {
+        return $this->belongsTo(ChartOfAccount::class);
+    }
+
+    public function sub_chart_of_account()
+    {
+        return $this->belongsTo(SubChartOfAccount::class);
     }
 
     public function getCurrentBalanceAttribute()

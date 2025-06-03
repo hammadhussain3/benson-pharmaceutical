@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SupplierRequest;
+use App\Services\ChartOfAccountService;
+use App\Services\SubChartOfAccountService;
 use Illuminate\Http\Request;
 use App\Models\Party;
 use App\Models\Country;
@@ -16,13 +18,16 @@ class SupplierController extends Controller
 {
     protected $supplierService;
     protected $paymentTypeService;
-    protected $invoiceService;
+    protected $invoiceService;protected $subChartOfAccountService;
+    protected $chartOfAccountService;
 
-    public function __construct(SupplierService $supplierService, PaymentTypeService $paymentTypeService, InvoiceService $invoiceService)
+    public function __construct(SupplierService $supplierService, PaymentTypeService $paymentTypeService, InvoiceService $invoiceService, SubChartOfAccountService $subChartOfAccountService, ChartOfAccountService $chartOfAccountService)
     {
         $this->supplierService = $supplierService;
         $this->paymentTypeService = $paymentTypeService;
         $this->invoiceService = $invoiceService;
+        $this->chartOfAccountService = $chartOfAccountService;
+        $this->subChartOfAccountService = $subChartOfAccountService;
     }
 
     /**
@@ -55,7 +60,9 @@ class SupplierController extends Controller
         $cities = City::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
         $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
-        return view('admin.suppliers.create', compact('countries', 'cities', 'companies', 'paymentTypes', 'newSupplierCode'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.suppliers.create', compact('countries', 'cities', 'companies', 'paymentTypes', 'newSupplierCode', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**
@@ -93,7 +100,9 @@ class SupplierController extends Controller
         $cities = City::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
         $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
-        return view('admin.suppliers.edit', compact('supplier', 'countries', 'cities', 'companies', 'paymentTypes'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.suppliers.edit', compact('supplier', 'countries', 'cities', 'companies', 'paymentTypes', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**

@@ -18,37 +18,45 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-row row">
-                        <div class="mb-3 col-md-6">
-                            <label>Name</label>
-                            <input type="text" class="form-control" value="{{ $supplier->name }}" readonly>
+                        <div class="mb-3 col-md-12">
+                            <label>Company</label>
+                            <input type="text" class="form-control" value="{{ $supplier->company->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
-                            <label>Company</label>
-                            <input type="text" class="form-control" value="{{ $supplier->company->name }}" readonly>
+                            <label>Chart Of Account</label>
+                            <input type="text" class="form-control" value="{{ $supplier->chart_of_account->particular ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Sub Chart Of Account</label>
+                            <input type="text" class="form-control" value="{{ optional($supplier->sub_chart_of_account)->name ?? 'N/A' }}" readonly>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label>Name</label>
+                            <input type="text" class="form-control" value="{{ $supplier->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Phone</label>
-                            <input type="text" class="form-control" value="{{ $supplier->phone }}" readonly>
+                            <input type="text" class="form-control" value="{{ $supplier->phone ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Email</label>
-                            <input type="text" class="form-control" value="{{ $supplier->email }}" readonly>
+                            <input type="text" class="form-control" value="{{ $supplier->email ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Country</label>
-                            <input type="text" class="form-control" value="{{ $supplier->country->name }}" readonly>
+                            <input type="text" class="form-control" value="{{ $supplier->country->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>City</label>
-                            <input type="text" class="form-control" value="{{ $supplier->city->name }}" readonly>
+                            <input type="text" class="form-control" value="{{ $supplier->city->name ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Address</label>
-                            <textarea class="form-control" readonly>{{ $supplier->address }}</textarea>
+                            <textarea class="form-control" readonly>{{ $supplier->address ?? 'N/A' }}</textarea>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Payment Type</label>
-                            <input type="text" class="form-control" value="{{ $supplier->paymentType->name }}" readonly>
+                            <input type="text" class="form-control" value="{{ $supplier->paymentType->name ?? 'N/A' }}" readonly>
                         </div>
                     </div>
                     <div class="row justify-content-between align-items-center">

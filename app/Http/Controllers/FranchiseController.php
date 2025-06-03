@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FranchiseRequest;
+use App\Services\ChartOfAccountService;
+use App\Services\SubChartOfAccountService;
 use Illuminate\Http\Request;
 use App\Models\Party;
 use App\Models\Country;
@@ -19,13 +21,17 @@ class FranchiseController extends Controller
     protected $paymentTypeService;
     protected $categoryService;
     protected $subCategoryService;
+    protected $subChartOfAccountService;
+    protected $chartOfAccountService;
 
-    public function __construct(FranchiseService $franchiseService, PaymentTypeService $paymentTypeService, CategoryService $categoryService, SubCategoryService $subCategoryService)
+    public function __construct(FranchiseService $franchiseService, PaymentTypeService $paymentTypeService, CategoryService $categoryService, SubCategoryService $subCategoryService, SubChartOfAccountService $subChartOfAccountService, ChartOfAccountService $chartOfAccountService)
     {
         $this->franchiseService = $franchiseService;
         $this->paymentTypeService = $paymentTypeService;
         $this->categoryService = $categoryService;
         $this->subCategoryService = $subCategoryService;
+        $this->chartOfAccountService = $chartOfAccountService;
+        $this->subChartOfAccountService = $subChartOfAccountService;
     }
     /**
      * Display a listing of the resource.
@@ -57,7 +63,9 @@ class FranchiseController extends Controller
         $cities = City::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
         $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
-        return view('admin.franchises.create', compact('countries', 'cities', 'companies', 'paymentTypes', 'newFranchiseCode', 'categories', 'subCategories'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.franchises.create', compact('countries', 'cities', 'companies', 'paymentTypes', 'newFranchiseCode', 'categories', 'subCategories', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**
@@ -97,7 +105,9 @@ class FranchiseController extends Controller
         $cities = City::orderBy('name', 'asc')->get();
         $companies = Company::orderBy('name', 'asc')->get();
         $paymentTypes = $this->paymentTypeService->getAllPaymentTypes();
-        return view('admin.franchises.edit', compact('franchise', 'countries', 'cities', 'companies', 'paymentTypes', 'categories', 'subCategories'));
+        $chartOfAccounts = $this->chartOfAccountService->getAllChartOfAccounts();
+        $subChartOfAccounts = $this->subChartOfAccountService->getAll();
+        return view('admin.franchises.edit', compact('franchise', 'countries', 'cities', 'companies', 'paymentTypes', 'categories', 'subCategories', 'chartOfAccounts', 'subChartOfAccounts'));
     }
 
     /**

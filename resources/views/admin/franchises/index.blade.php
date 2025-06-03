@@ -36,6 +36,7 @@
                             <th>Name</th>
                             <th>Code</th>
                             <th>Categories</th>
+                            <th>Chart Of Accounts</th>
                             <th>Contact Person Name</th>
                             <th>Contact Person Contact</th>
                             <th>Contact</th>
@@ -61,6 +62,12 @@
                                     <span class="badge bg-primary">{{ $franchise->category->name }}</span>
                                     @if ($franchise->subCategory)
                                         <span class="badge bg-info">{{ $franchise->subCategory->name }}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ $franchise->chart_of_account->particular ?? 'N/A' }}</span>
+                                    @if ($franchise->sub_chart_of_account)
+                                        <span class="badge bg-info">{{ $franchise->sub_chart_of_account->name }}</span>
                                     @endif
                                 </td>
                                 <td>{{ $franchise->contact_person_name }}</td>
