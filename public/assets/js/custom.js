@@ -879,13 +879,10 @@ function selectSingleFieldPVByCompany(batchId)
         });
 }
 
-function selectProductVariationsByBatch(bacthId, target) {
-
-    const itemSet = target.closest('.item-set');
-    if (!itemSet) return;
+function selectProductVariationsByBatch(bacthId) {
     
     // Get all dropdowns with the class 'product_variations_dropdown'
-    var selectProductVariations = itemSet.getElementsByClassName('product_variations_dropdown');
+    var selectProductVariations = document.getElementsByClassName('product_variations_dropdown');
     
     if (bacthId && selectProductVariations.length > 0) {
         // Loop through all dropdowns
