@@ -24,8 +24,8 @@
                         <div class="form-row row">
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
-                                <label for="company">Company</label>
-                                <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectBatchesByCompany(this.value); selectFranchisers(this.value); createSaleInvoiceCode(this.value);">
+                                <label for="company">Company<span class="text-danger">*</span></label>
+                                <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectAvailableBatchesByCompany(this.value); selectFranchisers(this.value); createSaleInvoiceCode(this.value);">
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->id }}"
@@ -39,11 +39,11 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="code">Code</label>
+                                <label for="code">Code<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $newInvoiceCode) }}" readonly>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="franchiser_id">Customers</label>
+                                <label for="franchiser_id">Customers<span class="text-danger">*</span></label>
                                 <select name="party" id="franchiser_id" class="js-example-basic-single select2" required>
                                     <option value="">Select Customer</option>
                                     @if(old('party') || old('company') || !auth()->user()->hasRole('Superadmin'))
@@ -102,8 +102,8 @@
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
                                                     <div class="mb-3 col-md-3">
-                                                        <label for="">Batch #</label>
-                                                        <select name="invoice_items[{{ $i }}][batch]" class="js-example-basic-single select2 company_batches_dropdown" onchange="selectProductVariationsByBatch(this.value, this); getBatchDetails(this.value, this);" required>
+                                                        <label for="">Batch #<span class="text-danger">*</span></label>
+                                                        <select name="invoice_items[{{ $i }}][batch]" class="js-example-basic-single select2 company_batches_dropdown" onchange="selectAvailablePVByBatch(this.value, this); getBatchDetails(this.value, this);" required>
                                                             <option value="">Select Batch</option>
                                                             @if(old('company') || !auth()->user()->hasRole('Superadmin'))
                                                                 @php
@@ -123,7 +123,7 @@
                                                         <input type="text" name="invoice_items[{{ $i }}][product_code]" value="{{ old("invoice_items.$i.product_code") }}" readonly class="form-control product_code">
                                                     </div>
                                                     <div class="mb-3 col-md-6">
-                                                        <label for="">Products</label>
+                                                        <label for="">Products<span class="text-danger">*</span></label>
                                                         <select name="invoice_items[{{ $i }}][product]" class="js-example-basic-single select2 product_variations_dropdown" onchange="getTradePrice(this.value, this); getProductVariationDetails(this.value, this);" required>
                                                             <option value="">Select Product</option>
                                                             @if(old("invoice_items.$i.batch"))
@@ -155,7 +155,7 @@
                                                         <input type="text" name="invoice_items[{{ $i }}][exp_date]" value="{{ old("invoice_items.$i.exp_date") }}" readonly class="form-control exp_date">
                                                     </div>
                                                     <div class="mb-3 col-md-2">
-                                                        <label>QTY. Pack</label>
+                                                        <label>QTY. Pack<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control product_quantity" name="invoice_items[{{ $i }}][quantity]"
                                                             placeholder="Pack Quantity" required value="{{ old("invoice_items.$i.quantity") }}" oninput="calculateSaleInvoiceAmount()">
                                                     </div>
@@ -172,7 +172,7 @@
                                                         <label for="">Value</label>
                                                         <input type="text" name="invoice_items[{{ $i }}][value]" value="{{ old("invoice_items.$i.value", 0) }}" readonly class="form-control value">
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-3">
                                                         <label for="status">Discount</label>
                                                         <div class="input-group">
                                                             <select class="form-select" name="invoice_items[{{ $i }}][discount_type]" required>
@@ -191,10 +191,13 @@
                                                         <label for="">Exclusive Sales Tax</label>
                                                         <input type="text" name="invoice_items[{{ $i }}][exclusive_sales]" value="{{ old("invoice_items.$i.exclusive_sales", 0) }}" readonly class="form-control exclusive_sales">
                                                     </div>
-                                                    <div class="mb-3 col-md-2">
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Sales Tax</label>
-                                                        <input type="number" class="form-control tax_rate" name="invoice_items[{{ $i }}][tax_rate]"
-                                                            placeholder="Tax Rate" required value="{{ old("invoice_items.$i.tax_rate") }}" oninput="calculateSaleInvoiceAmount()">
+                                                        <div class="input-group">
+                                                            <input type="number" class="form-control tax_rate" name="invoice_items[{{ $i }}][tax_rate]"
+                                                                placeholder="Tax Rate" required value="{{ old("invoice_items.$i.tax_rate") }}" oninput="calculateSaleInvoiceAmount()">
+                                                            <input type="number" class="form-control tax_amount" value="{{ old("invoice_items.$i.tax_amount") }}" name="invoice_items[{{ $i }}][tax_amount]" readonly>
+                                                        </div>
                                                     </div>
                                                     
                                                     <div class="mb-3 col-md-2">
@@ -211,35 +214,39 @@
                                     <button type="button" onclick="addItem()" class="btn btn-primary">Add Item</button>
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-2">
-                                <label for="">QTY Pack</label>
-                                <input type="text" class="form-control" id="total_quantity" name="total_quantity" value="{{ old('total_quantity', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-2">
-                                <label for="">Value</label>
-                                <input type="text" class="form-control" id="total_value" name="total_value" value="{{ old('total_value', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-2">
-                                <label for="">Discount Value</label>
-                                <input type="text" class="form-control" id="total_discount_value" name="total_discount_value" value="{{ old('total_discount_value', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-2">
-                                <label for="">Exclusive Sales Tax</label>
-                                <input type="text" class="form-control" id="total_exclusive_sales" name="total_exclusive_sales" value="{{ old('total_exclusive_sales', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-2">
-                                <label for="">Sales Tax</label>
-                                <input type="text" class="form-control" id="total_tax" name="total_tax" value="{{ old('total_tax', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-2">
-                                <label for="returned_amount">Total Amount</label>
-                                <input type="number" class="form-control" name="total_amount" id="total_amount"
-                                    placeholder="Total Amount" required value="{{ old('total_amount', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-12">
-                                <label for="note">Special Note</label>
-                                <textarea type="text" class="form-control" name="note" id="note"
-                                    placeholder="Note" required>{{ old('note') }}</textarea>
+                        </div>
+                        <div class="position-sticky bottom-0 bg-white w-100 start-0 card" style="z-index: 99">
+                            <div class="card-body row">
+                                <div class="mb-3 col-md-2">
+                                    <label for="">QTY Pack</label>
+                                    <input type="text" class="form-control" id="total_quantity" name="total_quantity" value="{{ old('total_quantity', 0) }}" readonly>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label for="">Value</label>
+                                    <input type="text" class="form-control" id="total_value" name="total_value" value="{{ old('total_value', 0) }}" readonly>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label for="">Discount Value</label>
+                                    <input type="text" class="form-control" id="total_discount_value" name="total_discount_value" value="{{ old('total_discount_value', 0) }}" readonly>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label for="">Exclusive Sales Tax</label>
+                                    <input type="text" class="form-control" id="total_exclusive_sales" name="total_exclusive_sales" value="{{ old('total_exclusive_sales', 0) }}" readonly>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label for="">Sales Tax</label>
+                                    <input type="text" class="form-control" id="total_tax" name="total_tax" value="{{ old('total_tax', 0) }}" readonly>
+                                </div>
+                                <div class="mb-3 col-md-2">
+                                    <label for="returned_amount">Inclusive Sales Tax</label>
+                                    <input type="number" class="form-control" name="total_amount" id="total_amount"
+                                        placeholder="Total Amount" required value="{{ old('total_amount', 0) }}" readonly>
+                                </div>
+                                <div class="mb-3 col-md-12">
+                                    <label for="note">Special Note</label>
+                                    <textarea type="text" class="form-control" name="note" id="note"
+                                        placeholder="Note" required>{{ old('note') }}</textarea>
+                                </div>
                             </div>
                         </div>
                         <a class="btn btn-secondary" href="{{ route('sale-invoices.index') }}">Cancel</a>
@@ -273,8 +280,8 @@
                     <div class="card-body px-0 pb-0">
                         <div class="row">
                             <div class="mb-3 col-md-3">
-                                <label for="">Batch #</label>
-                                <select name="invoice_items[${itemIndex}][batch]" class="js-example-basic-single select2 company_batches_dropdown" onchange="selectProductVariationsByBatch(this.value, this); getBatchDetails(this.value, this);" required>
+                                <label for="">Batch #<span class="text-danger">*</span></label>
+                                <select name="invoice_items[${itemIndex}][batch]" class="js-example-basic-single select2 company_batches_dropdown" onchange="selectAvailablePVByBatch(this.value, this); getBatchDetails(this.value, this);" required>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-3">
@@ -282,7 +289,7 @@
                                 <input type="text" name="invoice_items[${itemIndex}][product_code]" class="form-control product_code" readonly>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="">Products</label>
+                                <label for="">Products<span class="text-danger">*</span></label>
                                 <select name="invoice_items[${itemIndex}][product]" class="js-example-basic-single select2 product_variations_dropdown" onchange="getTradePrice(this.value, this); getProductVariationDetails(this.value, this);" required>
                                     <option value="">Select Product</option>
                                 </select>
@@ -296,7 +303,7 @@
                                 <input type="text" name="invoice_items[${itemIndex}][exp_date]" class="form-control exp_date" readonly>
                             </div>
                             <div class="mb-3 col-md-2">
-                                <label>QTY Pack</label>
+                                <label>QTY Pack<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control product_quantity" name="invoice_items[${itemIndex}][quantity]"
                                     placeholder="Pack Quantity" required value="" oninput="calculateSaleInvoiceAmount()">
                             </div>
@@ -313,7 +320,7 @@
                                 <label for="">Value</label>
                                 <input type="text" name="invoice_items[${itemIndex}][value]" class="form-control value" readonly>
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-3">
                                 <label>Discount</label>
                                 <div class="input-group">
                                     <select class="form-select" name="invoice_items[${itemIndex}][discount_type]" required>
@@ -332,10 +339,13 @@
                                 <label for="">Exclusive Sales Tax</label>
                                 <input type="text" name="invoice_items[${itemIndex}][exclusive_sales]" class="form-control exclusive_sales" readonly>
                             </div>
-                            <div class="mb-3 col-md-2">
+                            <div class="mb-3 col-md-3">
                                 <label>Sales Tax</label>
-                                <input type="number" class="form-control tax_rate" name="invoice_items[${itemIndex}][tax_rate]"
-                                    placeholder="Tax Rate" required value="" oninput="calculateSaleInvoiceAmount()">
+                                <div class="input-group">
+                                    <input type="number" class="form-control tax_rate" name="invoice_items[${itemIndex}][tax_rate]"
+                                        placeholder="Tax Rate" required value="" oninput="calculateSaleInvoiceAmount()">
+                                    <input type="number" class="form-control tax_amount" name="invoice_items[${itemIndex}][tax_amount]" readonly>
+                                </div>
                             </div>
                             <div class="mb-3 col-md-2">
                                 <label>Inclusive Sales Tax</label>

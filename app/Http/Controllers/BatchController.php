@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Batch;
 use App\Models\ProductVariation;
+use App\Models\Stock;
 use App\Services\ChartOfAccountService;
 use App\Services\ProductVariationService;
 use App\Services\SubChartOfAccountService;
@@ -140,6 +141,16 @@ class BatchController extends Controller
         return response()->json(['batches' => $batches]);
     }
 
+    public function getAvailableBatchesByCompany($companyId)
+    {
+        $availableItems = Stock::getAvailableFinishedGoodsByBatch();
+
+        $batchIds = $availableItems->pluck('batch_id')->unique()->toArray();
+
+        $batches = Batch::where('company_id', $companyId)->whereIn('id', $batchIds)->get();
+        return response()->json(['batches' => $batches]);
+    }
+
     public function getBatchTradePrice(Request $request, $productVariationId)
     {
         $batch = Batch::findOrFail($request->input('batchId'));
@@ -153,6 +164,19 @@ class BatchController extends Controller
         $items = $batch->items;
 
         $variationIds = $items->pluck('product_variation_id')->unique()->toArray();
+
+        $productVariations = ProductVariation::with(['product', 'packingType', 'packSize', 'dosageForm'])
+            ->whereIn('id', $variationIds)
+            ->get();
+            
+        return response()->json(['productVariations' => $productVariations]);
+    }
+
+    public function getAvailableProductVariationsByBatch($batchId)
+    {
+        $availableItems = Stock::getAvailableFinishedGoodsByBatch();
+
+        $variationIds = $availableItems->where('batch_id', $batchId)->pluck('product_variation_id')->unique()->toArray();
 
         $productVariations = ProductVariation::with(['product', 'packingType', 'packSize', 'dosageForm'])
             ->whereIn('id', $variationIds)

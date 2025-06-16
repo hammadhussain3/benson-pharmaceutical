@@ -240,4 +240,26 @@ class Stock extends Model
             'balance' => $balance
         ];
     }
+
+    public static function getAvailableFinishedGoodsByBatch()
+    {
+        $availableItems = DB::table('finished_goods_receiving_items as fgri')
+            ->join('finished_goods_receivings as fgr', 'fgr.id', '=', 'fgri.finished_goods_receiving_id')
+            ->leftJoin('invoice_items as ii', function($join) {
+                $join->on('ii.product_variation_id', '=', 'fgri.product_variation_id')
+                    ->on('ii.batch_id', '=', 'fgr.batch_id');
+            })
+            ->select(
+                'fgri.product_variation_id',
+                'fgr.batch_id',
+                'fgri.quantity_received',
+                DB::raw('COALESCE(SUM(ii.quantity), 0) as quantity_sold'),
+                DB::raw('(fgri.quantity_received - COALESCE(SUM(ii.quantity), 0)) as quantity_available')
+            )
+            ->groupBy('fgri.id', 'fgr.id', 'fgri.product_variation_id', 'fgr.batch_id', 'fgri.quantity_received')
+            ->having('quantity_available', '>', 0)
+            ->get();
+
+        return $availableItems;
+    }
 }

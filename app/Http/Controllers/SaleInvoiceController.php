@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Stock;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\InvoiceRequest;
 use App\Services\ProductVariationService;
 use App\Services\CompanyService;
@@ -49,10 +51,16 @@ class SaleInvoiceController extends Controller
         } else {
             $newInvoiceCode = $this->invoiceService->createInvoiceCode(auth()->user()->employee->company_id, 'sale');
         }
+
+        $availableItems = Stock::getAvailableFinishedGoodsByBatch();
+
+        $availableProductVariationIds = $availableItems->pluck('product_variation_id')->unique()->toArray();
+        $availableBatchIds = $availableItems->pluck('batch_id')->unique()->toArray();
+
+        $productVariations = $this->productVariationService->getAllProductVariations()->whereIn('id', $availableProductVariationIds);
+        $batches = $this->batchService->getAllBatches()->whereIn('id', $availableBatchIds);
         $parties = $this->partyService->getAllParties();
         $companies = $this->companyService->getAllCompanies();
-        $batches = $this->batchService->getAllBatches();
-        $productVariations = $this->productVariationService->getAllProductVariations();
         return view('admin.sale-invoice.create', compact('parties','companies', 'productVariations', 'batches', 'newInvoiceCode'));
     }
 

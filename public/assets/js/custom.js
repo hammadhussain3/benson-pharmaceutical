@@ -916,6 +916,43 @@ function selectProductVariationsByBatch(bacthId, target) {
     }
 }
 
+function selectAvailablePVByBatch(bacthId, target) {
+
+    const itemSet = target.closest('.item-set');
+    if (!itemSet) return;
+    
+    // Get all dropdowns with the class 'product_variations_dropdown'
+    var selectProductVariations = itemSet.getElementsByClassName('product_variations_dropdown');
+    
+    if (bacthId && selectProductVariations.length > 0) {
+        // Loop through all dropdowns
+        Array.from(selectProductVariations).forEach(function(selectProductVariation) {
+            // Clear the existing options in each dropdown
+            selectProductVariation.innerHTML = '<option value="">Select Product</option>';
+            
+            // Fetch the products and raw materials for the selected company
+            fetch(`/batch/${bacthId}/product-variations/available`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error fetching data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.productVariations && data.productVariations.length > 0) {
+                        data.productVariations.forEach(function(productVariation) {
+                            var option = document.createElement('option');
+                            option.value = productVariation.id; // Use prefix to differentiate
+                            option.textContent = `${productVariation.product.brand_name} | ${productVariation.strength} | ${productVariation.dosage_form.name} | ${productVariation.packing_type.name} | ${productVariation.pack_size.name}`;
+                            selectProductVariation.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+    }
+}
+
 function getTradePrice(productVariationId, target) {
     const itemSet = target.closest('.item-set');
     if (!itemSet) return;
@@ -1179,6 +1216,46 @@ function selectBatchesByCompany(companyId)
         select.innerHTML = '<option value="">Select Batch</option>';
     });
     fetch(`/companies/${companyId}/batch`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching batches');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.batches && data.batches.length > 0) {
+                allSelects.forEach(select => {
+                    data.batches.forEach(batch => {
+                        const option = document.createElement('option');
+                        option.value = batch.id;
+                        option.textContent = `${batch.batch_no}`;
+                        select.appendChild(option);
+                    });
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching batches:', error);
+        });
+}
+
+function selectAvailableBatchesByCompany(companyId)
+{
+    if (!companyId) return; // Exit if no company ID is provided
+
+    const batchSelect = document.getElementById('batch_id');
+    const batchSelectList = Array.from(document.getElementsByClassName('company_batches_dropdown'));
+
+    const allSelects = [];
+    if (batchSelect) allSelects.push(batchSelect);
+    allSelects.push(...batchSelectList);
+
+    if (allSelects.length === 0) return;
+
+    allSelects.forEach(select => {
+        select.innerHTML = '<option value="">Select Batch</option>';
+    });
+    fetch(`/companies/${companyId}/batch/available`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error fetching batches');
@@ -2291,6 +2368,7 @@ function calculateSaleInvoiceAmount() {
         if (itemSet.querySelector('.value')) itemSet.querySelector('.value').value = total.toFixed(2);
         if (itemSet.querySelector('.discount_value')) itemSet.querySelector('.discount_value').value = discountAmount.toFixed(2);
         if (itemSet.querySelector('.exclusive_sales')) itemSet.querySelector('.exclusive_sales').value = amountAfterDiscount.toFixed(2);
+        if (itemSet.querySelector('.tax_amount')) itemSet.querySelector('.tax_amount').value = taxAmount.toFixed(2);
         if (itemSet.querySelector('.total_item_amount')) itemSet.querySelector('.total_item_amount').value = finalAmount.toFixed(2);
 
         // Add to totals

@@ -156,6 +156,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/companies/{companyId}/branches', [BranchController::class, 'getBranchesByCompany']);
     Route::get('/companies/{companyId}/batch', [BatchController::class, 'getBatchesByCompany']);
+    Route::get('/companies/{companyId}/batch/available', [BatchController::class, 'getAvailableBatchesByCompany']);
     Route::get('/companies/{companyId}/departments', [DepartmentController::class, 'getDepartmentsByCompany']);
     Route::get('/companies/{companyId}/designations', [DesignationController::class, 'getDesignationsByCompany']);
     Route::get('/companies/{companyId}/employee-types', [EmployeeTypeController::class, 'getEmployeeTypesByCompany']);
@@ -221,6 +222,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/branches/{branchId}/banks', [BankController::class, 'getBanksByBranch']);
     Route::get('/parties/{partyId}/supplier_code', [PartyController::class, 'getSupplierCodeByPartyId']);
     Route::get('/batch/{batchId}/product-variations', [BatchController::class, 'getProductVariationsByBatch']);
+    Route::get('/batch/{batchId}/product-variations/available', [BatchController::class, 'getAvailableProductVariationsByBatch']);
     Route::get('/product-variations/{productVariationId}/batches', [BatchController::class, 'getBatchesByProductVariationId']);
     Route::get('/product-variation/{productVariationId}/trade-price', [BatchController::class, 'getBatchTradePrice']);
     Route::get('/product-variations/{productVariationId}/prices', [StockController::class, 'getPriceByProductVariationId']);
