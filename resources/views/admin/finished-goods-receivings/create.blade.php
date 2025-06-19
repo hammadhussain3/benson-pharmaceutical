@@ -51,7 +51,7 @@
                                         @foreach ($products->where('company_id', $seletedCompanyId) as $product)
                                             <option value="{{ $product->id }}"
                                                 {{ old('product') == $product->id ? 'selected' : '' }}>
-                                                {{ $product->name }}
+                                                {{ $product->brand_name }}
                                             </option>
                                         @endforeach
                                     @endif
