@@ -137,4 +137,9 @@ class RawMaterialItemController extends Controller
         $raw_material_item_code = $this->rawMaterialItemService->createRawMaterialItemCode($companyId);
         return response()->json(['raw_material_item_code' => $raw_material_item_code]);
     }
+
+    public function getDetails($rawMaterialId){
+        $rawMaterialItem = $this->rawMaterialItemService->getRawMaterialItemById($rawMaterialId);
+        return response()->json(['rawMaterialItem' => $rawMaterialItem]);
+    }
 }

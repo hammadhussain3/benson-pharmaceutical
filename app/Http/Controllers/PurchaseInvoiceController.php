@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\Batch;
 use App\Models\GoodsReceiving;
 use App\Http\Requests\InvoiceRequest;
+use App\Models\InvoiceItem;
 use App\Services\CompanyService;
 use App\Services\InvoiceService;
 use App\Services\PartyService;
@@ -32,6 +33,8 @@ class PurchaseInvoiceController extends Controller
         if (!auth()->user()->hasPermission('Purchase Invoice List')) {
             abort(403, 'Unauthorized action.');
         }
+        
+
         $invoices = $this->invoiceService->getAllInvoices('purchase');
         return view('admin.purchase-invoice.index', compact('invoices'));
     }
@@ -158,5 +161,10 @@ class PurchaseInvoiceController extends Controller
             return $item;
         });
         return response()->json(['invoice' => $invoice]);
+    }
+
+    public function getLastPurchase($rawMaterialId){
+        $lastPurchase = InvoiceItem::getLastPurchaseByRawMaterial($rawMaterialId);
+        return response()->json(['lastPurchase' => $lastPurchase]);
     }
 }

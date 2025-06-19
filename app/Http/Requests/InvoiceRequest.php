@@ -28,7 +28,7 @@ class InvoiceRequest extends FormRequest
 			'code' => 'required|string|max:255|unique:invoices,code,' . $id . ',id,company_id,' . $this->company_id,
 			'type' => 'required|string|in:sale,purchase,quotation',
 			'prefix' => 'required|string|size:2',
-			'party' => 'required|exists:parties,id',
+			'party' => 'nullable|required_if:type,sale|exists:parties,id',
 			'required_date' => [
 				'required_if:type,purchase',
 				'date',
@@ -55,6 +55,7 @@ class InvoiceRequest extends FormRequest
 			'returned_amount' => 'nullable|numeric|min:0',
 			'due_amount' => 'nullable|numeric|min:0',
 			'note' => 'nullable|string|max:1000',
+			'status' => 'nullable|in:pending,completed,partial',
 			'payment_deadline' => 'nullable|date|after:today',
 			'invoice_items' => 'required|array|min:1',
             'invoice_items.*.raw_material_item' => 'required_if:type,purchase|string|exists:raw_material_items,id',

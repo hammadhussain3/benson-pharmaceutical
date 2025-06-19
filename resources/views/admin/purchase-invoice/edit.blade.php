@@ -40,7 +40,7 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="code">Code</label>
+                                <label for="code">Doc. No</label>
                                 <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $invoice->code) }}" readonly>
                             </div>
                             <div class="mb-3 col-md-4">
@@ -73,7 +73,7 @@
                                                 <div class="row">
                                                     <div class="mb-3 col-md-4">
                                                         <label for="">Raw Material Items</label>
-                                                        <select name="invoice_items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required>
+                                                        <select name="invoice_items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
                                                             <option value="">Select Raw Material</option>
                                                             @php
                                                                 $seletedCompanyId = old('company', $invoice->company_id) ?? auth()->user()->employee->company_id;
@@ -86,26 +86,49 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    @php
+                                                        $invoice->items[$i]->last_purchase = App\Models\InvoiceItem::getLastPurchaseByRawMaterial($invoice->items[$i]->raw_material_item_id, $invoice->items[$i]->id);
+                                                    @endphp
+                                                    <div class="mb-3 col-md-5">
+                                                        <label>Last Purchase</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control last_purchase_number"
+                                                                name="invoice_items[{{ $i }}][last_purchase_number]"
+                                                                placeholder="Doc. No" required
+                                                                value="{{ old("invoice_items.$i.last_purchase_number", $invoice->items[$i]->last_purchase['invoice_code'] ?? '') }}"
+                                                                readonly>
+
+                                                            <input type="text" class="form-control w-25 last_purchase_supplier"
+                                                                name="invoice_items[{{ $i }}][last_purchase_supplier]"
+                                                                placeholder="Supplier" required
+                                                                value="{{ old("invoice_items.$i.last_purchase_supplier", $invoice->items[$i]->last_purchase['supplier_name'] ?? '') }}"
+                                                                readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Unit Price</label>
                                                         <div class="input-group">
                                                             <input type="number" class="form-control w-25 unit_price" name="invoice_items[{{ $i }}][unit_price]"
                                                             placeholder="Unit Price" required value="{{ old("invoice_items.$i.unit_price", $invoice->items[$i]->unit_price ?? 0) }}" oninput="calculatePurchaseInvoiceAmount()">
-                                                            <input type="text" class="form-control" name="invoice_items[{{ $i }}][unit]"
-                                                                placeholder="Unit" required value="{{ old("invoice_items.$i.unit", $invoice->items[$i]->unit ?? '') }}">
+                                                            <input type="text" class="form-control unit" name="invoice_items[{{ $i }}][unit]"
+                                                                placeholder="Unit" required value="{{ old("invoice_items.$i.unit", $invoice->items[$i]->unit ?? '') }}" readonly>
                                                           </div>
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-12">
+                                                        <label>Description</label>
+                                                        <textarea name="invoice_items[{{ $i }}][description]" class="form-control description">{{ old("invoice_items.$i.description", $invoice->items[$i]->rawMaterialItem->description ?? null) }}</textarea>
+                                                    </div>
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Product Quantity</label>
                                                         <input type="number" class="form-control product_quantity" name="invoice_items[{{ $i }}][quantity]"
                                                             placeholder="Product Quantity" required value="{{ old("invoice_items.$i.quantity", $invoice->items[$i]->quantity ?? 0) }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Tax Rate</label>
                                                         <input type="number" class="form-control tax_rate" name="invoice_items[{{ $i }}][tax_rate]"
                                                             placeholder="Tax Rate" required value="{{ old("invoice_items.$i.tax_rate", $invoice->items[$i]->tax_rate ?? '') }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-3">
                                                         <label for="status">Discount</label>
                                                         <div class="input-group">
                                                             <select class="form-select" name="invoice_items[{{ $i }}][discount_type]" required>
@@ -116,7 +139,7 @@
                                                                 placeholder="Discount" required value="{{ old("invoice_items.$i.discount", $invoice->items[$i]->discount ?? 0) }}" oninput="calculatePurchaseInvoiceAmount()">
                                                           </div>
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Total</label>
                                                         <input type="number" class="form-control total_item_amount" name="invoice_items[{{ $i }}][total_amount]"
                                                             placeholder="Total" required value="{{ old("invoice_items.$i.total_amount", $invoice->items[$i]->total_amount ?? 0) }}" readonly>
@@ -192,6 +215,14 @@
                                 <textarea type="text" class="form-control" name="note" id="note"
                                     placeholder="Note" required>{{ old('note', $invoice->note) }}</textarea>
                             </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="status">Status</label>
+                                <select name="status" id="status" class="form-select">
+                                    <option value="pending" {{ old('status', $invoice->status) == 'pending' ? 'selected' : '' }}>Pending</option>
+                                    <option value="completed" {{ old('status', $invoice->status) == 'completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="partial" {{ old('status', $invoice->status) == 'partial' ? 'selected' : '' }}>Partial</option>
+                                </select>
+                            </div>
                         </div>
                         <a class="btn btn-secondary" href="{{ route('purchase-invoices.index') }}">Cancel</a>
                         <input type="hidden" name="is_approved" id="is_approved" value="0">
@@ -225,29 +256,42 @@
                         <div class="row">
                             <div class="mb-3 col-md-4">
                                 <label for="">Raw Material Items</label>
-                                <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required>
+                                <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-5">
+                                <label>Last Purchase</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control last_purchase_number" name="invoice_items[${itemIndex}][last_purchase_number]"
+                                        placeholder="Doc. No" required value="" readonly>
+                                    <input type="text" class="form-control w-25 last_purchase_supplier" name="invoice_items[${itemIndex}][last_purchase_supplier]"
+                                        placeholder="Unit" required value="" readonly>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-3">
                                 <label>Unit Price</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control w-25 unit_price" name="invoice_items[${itemIndex}][unit_price]"
                                         placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
-                                    <input type="text" class="form-control" name="invoice_items[${itemIndex}][unit]"
-                                        placeholder="Unit" required value="">
+                                    <input type="text" class="form-control unit" name="invoice_items[${itemIndex}][unit]"
+                                        placeholder="Unit" required value="" readonly>
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-12">
+                                <label>Description</label>
+                                <textarea class="form-control description" name="invoice_items[${itemIndex}][description]" readonly></textarea>
+                            </div>
+                            <div class="mb-3 col-md-3">
                                 <label>Product Quantity</label>
                                 <input type="number" class="form-control product_quantity" name="invoice_items[${itemIndex}][quantity]"
                                     placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-3">
                                 <label>Tax Rate</label>
                                 <input type="number" class="form-control tax_rate" name="invoice_items[${itemIndex}][tax_rate]"
                                     placeholder="Tax Rate" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-3">
                                 <label>Discount</label>
                                 <div class="input-group">
                                     <select class="form-select" name="invoice_items[${itemIndex}][discount_type]" required>
@@ -258,7 +302,7 @@
                                         placeholder="Discount" required value="0" oninput="calculatePurchaseInvoiceAmount()">
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-4">
+                            <div class="mb-3 col-md-3">
                                 <label>Total</label>
                                 <input type="number" class="form-control total_item_amount" name="invoice_items[${itemIndex}][total_amount]"
                                     placeholder="Total" required value="0" readonly>

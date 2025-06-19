@@ -950,6 +950,72 @@ function selectAvailablePVByBatch(bacthId, target) {
     }
 }
 
+function selectLastPurchaseRmi(rawMaterialId, target) {
+    const itemSet = target.closest('.item-set');
+    if (!itemSet) return;
+
+    const unitPriceInput = itemSet.querySelector('.unit_price');
+    const lastPurchaseNumberInput = itemSet.querySelector('.last_purchase_number');
+    const lastPurchaseSupplierInput = itemSet.querySelector('.last_purchase_supplier');
+
+    if (rawMaterialId) {
+        fetch(`/raw-material-items/${rawMaterialId}/last-purchase`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error fetching data');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.lastPurchase) {
+                    if(unitPriceInput){
+                        unitPriceInput.value = data.lastPurchase.price ?? '';
+                        calculatePurchaseInvoiceAmount();
+                    }
+                    if(lastPurchaseNumberInput){
+                        lastPurchaseNumberInput.value = data.lastPurchase.invoice_code ?? '';
+                    }
+                    if(lastPurchaseSupplierInput){
+                        lastPurchaseSupplierInput.value = data.lastPurchase.supplier_name ?? '';
+                    }
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+}
+
+function selectRmiDetailsT(rawMaterialId, target) {
+    const itemSet = target.closest('.item-set');
+    if (!itemSet) return;
+
+    const unitInput = itemSet.querySelector('.unit');
+    const descriptionTextarea = itemSet.querySelector('.description');
+
+    if (rawMaterialId) {
+        fetch(`/raw-material-items/${rawMaterialId}/details`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error fetching data');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.rawMaterialItem) {
+                    if(unitInput){
+                        unitInput.value = data.rawMaterialItem.unit ?? '';
+                    }
+                    if(descriptionTextarea){
+                        descriptionTextarea.value = data.rawMaterialItem.description ?? '';
+                    }
+                }
+                if (data.rawMaterialItem) {
+                    unitInput.value = data.rawMaterialItem.unit ?? '';
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+}
+
 function getTradePrice(productVariationId, target) {
     const itemSet = target.closest('.item-set');
     if (!itemSet) return;

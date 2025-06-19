@@ -61,4 +61,32 @@ class InvoiceItem extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public static function getLastPurchaseByRawMaterial($rawMaterialItemId, $invoiceItemId = null)
+    {
+        $query = self::with(['invoice.party'])
+            ->whereHas('invoice', fn($q) => $q->where('type', 'purchase'))
+            ->where('raw_material_item_id', $rawMaterialItemId);
+
+        if ($invoiceItemId) {
+            $query->where('id', '<', $invoiceItemId);
+        }
+
+        $record = $query->orderByDesc('invoice_id')->first();
+
+        if ($record) {
+            return [
+                'invoice_id'            => $record->invoice_id,
+                'supplier_id'           => $record->invoice->party_id ?? null,
+                'raw_material_item_id'  => $record->raw_material_item_id,
+                'invoice_code'          => $record->invoice->code ?? null,
+                'price'                 => $record->unit_price,
+                'unit'                  => $record->unit,
+                'supplier_name'         => $record->invoice->party->name ?? null,
+                'supplier_code'         => $record->invoice->party->code ?? null,
+            ];
+        }
+
+        return null;
+    }
 }

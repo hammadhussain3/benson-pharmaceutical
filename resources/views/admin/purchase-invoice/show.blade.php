@@ -62,7 +62,7 @@
                                     <div class="col">{{ $invoice->is_urgent == '0' ? '*' : '' }}</div>
                                 </div>
                             </li>
-                            <li class="list-group-item"><strong>{{ $invoice->type == 'purchase' ? 'Supplier' : ($invoice->type == 'sale' || $invoice->type == 'quotation' ? 'Franchise' : '') }}:</strong> {{ $invoice->party->name }}</li>
+                            <li class="list-group-item"><strong>{{ $invoice->type == 'purchase' ? 'Supplier' : ($invoice->type == 'sale' || $invoice->type == 'quotation' ? 'Franchise' : '') }}:</strong> {{ optional($invoice->party)->name }}</li>
                         </ul>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     @foreach ($invoice->items as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->item->name }}</td>
+                            <td>{{ optional($item->rawMaterialItem)->name }}<br>{{ optional($item->rawMaterialItem)->description }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ $item->unit }}</td>
                             <td>{{ number_format($item->unit_price) }}</td>
@@ -110,18 +110,19 @@
                     </tr>
                 </tfoot>
             </table>
-            <div style="display: flex; justify-content: space-around; margin-top: 45px;">
+            <div class="signature-section" style="display: flex; justify-content: space-around; margin-top: 45px;">
                 <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Raised by</span>
+                    <span style="font-size: 14px; font-weight: bold;">{{ $invoice->createdBy->name }}</span>
+                    <hr style="width: 100%; margin: 5px 0px;">
+                    <span style="font-size: 14px;">Raised by</span>
                 </div>
                 <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Checked by Dept. Head</span>
+                    <hr style="width: 100%; margin: 5px 0px;">
+                    <span style="font-size: 14px;">Checked by Dept. Head</span>
                 </div>
                 <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Approved by: Cheif Executive</span>
+                    <hr style="width: 100%; margin: 5px 0px;">
+                    <span style="font-size: 14px;">Approved by: Cheif Executive</span>
                 </div>
             </div>
             <div style="margin-top: 15px; font-size: 14px;">
@@ -136,6 +137,15 @@
         margin-top: 10px !important;
     }
     @media print {
+        .signature-section {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+
        @page {
            margin: 0;
        }

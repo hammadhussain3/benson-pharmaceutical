@@ -227,6 +227,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/product-variation/{productVariationId}/trade-price', [BatchController::class, 'getBatchTradePrice']);
     Route::get('/product-variations/{productVariationId}/prices', [StockController::class, 'getPriceByProductVariationId']);
     Route::get('/chart_of_accounts/{chartOfAccountId}/sub_chart_of_accounts', [SubChartOfAccountController::class, 'getSubcoaBycoa']);
+    Route::get('/raw-material-items/{rawMaterialId}/last-purchase', [PurchaseInvoiceController::class, 'getLastPurchase']);
+    Route::get('/raw-material-items/{rawMaterialId}/details', [RawMaterialItemController::class, 'getDetails']);
 
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');
     Route::get('salary-sheet/generate', [SalarySheetController::class, 'showSalarySheet'])->name('salary.sheet.show');
