@@ -124,7 +124,7 @@
                                                     </div>
                                                     <div class="mb-3 col-md-6">
                                                         <label for="">Products<span class="text-danger">*</span></label>
-                                                        <select name="invoice_items[{{ $i }}][product]" class="js-example-basic-single select2 product_variations_dropdown" onchange="getTradePrice(this.value, this); getProductVariationDetails(this.value, this);" required>
+                                                        <select name="invoice_items[{{ $i }}][product]" class="js-example-basic-single select2 product_variations_dropdown" onchange="getTradePrice(this.value, this); getProductVariationDetails(this.value, this); getProductStockQuantity(this.value, this);" required>
                                                             <option value="">Select Product</option>
                                                             @if(old("invoice_items.$i.batch"))
                                                                 @php
@@ -158,6 +158,8 @@
                                                         <label>QTY. Pack<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control product_quantity" name="invoice_items[{{ $i }}][quantity]"
                                                             placeholder="Pack Quantity" required value="{{ old("invoice_items.$i.quantity") }}" oninput="calculateSaleInvoiceAmount()">
+                                                        <input type="hidden" name="invoice_items[{{ $i }}][available_quantity]" class="available_quantity_input" value="{{ old("invoice_items.$i.available_quantity", 0) }}">
+                                                        <div id="invoice_items_{{ $i }}_available_quantity" class="form-text text-primary available_quantity">Available quantity is {{ old("invoice_items.$i.available_quantity", 0) }}</div>
                                                     </div>
                                                     <div class="mb-3 col-md-2">
                                                         <label>Rate</label>
@@ -306,6 +308,8 @@
                                 <label>QTY Pack<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control product_quantity" name="invoice_items[${itemIndex}][quantity]"
                                     placeholder="Pack Quantity" required value="" oninput="calculateSaleInvoiceAmount()">
+                                <input type="hidden" name="invoice_items[{{ $i }}][available_quantity]" class="available_quantity_input" value="{{ old("invoice_items.$i.available_quantity", 0) }}">
+                                <div id="invoice_items_${itemIndex}_available_quantity" class="form-text text-primary available_quantity">Available quantity is 0</div>
                             </div>
                             <div class="mb-3 col-md-2">
                                 <label>Rate</label>
@@ -378,14 +382,15 @@
         }
 
         function getBatchDetails(batchId, target) {
-            var batches = @json($batches);
+            const batchArray = Object.values(@json($batches));
+            
             const itemSet = target.closest('.item-set');
             if (!itemSet) return;
 
             var selectMfgDate = itemSet.getElementsByClassName('mfg_date')[0];
             var selectExpDate = itemSet.getElementsByClassName('exp_date')[0];
             
-            var selectedBatch = batches.find(batch => batch.id == batchId);
+            var selectedBatch = batchArray.find(batch => batch.id == batchId);
 
             if (selectedBatch) {
                 const formatDate = (dateStr) => {
@@ -404,18 +409,42 @@
         }
 
         function getProductVariationDetails(productVariationId, target) {
-            var productVariations = @json($productVariations);
+            const productVariationArray = Object.values(@json($productVariations));
+            
             const itemSet = target.closest('.item-set');
             if (!itemSet) return;
 
             var selectProductCode = itemSet.getElementsByClassName('product_code')[0];
             
-            var selectedProductVariation = productVariations.find(productVariation => productVariation.id == productVariationId);
+            var selectedProductVariation = productVariationArray.find(productVariation => productVariation.id == productVariationId);
 
             if (selectedProductVariation) {
                 selectProductCode.value = selectedProductVariation.code
             } else {
-                console.warn("Batch not found for ID:", batchId);
+                console.warn("Batch not found for ID:", productVariationId);
+            }
+        }
+
+        function getProductStockQuantity(productVariationId, target) {
+            const availableItemArray = Object.values(@json($availableItems));
+
+            const itemSet = target.closest('.item-set');
+            if (!itemSet) return;
+
+            const selectAvailableQuantity = itemSet.querySelector('.available_quantity');
+            const batchId = itemSet.querySelector('.company_batches_dropdown').value;
+            const selectAvailableQuantityInput = itemSet.querySelector('.available_quantity_input');
+
+            const selectedAvailableItem = availableItemArray.find(
+                item => item.product_variation_id == productVariationId && item.batch_id == Number(batchId)
+            );
+
+            if (selectedAvailableItem) {
+                selectAvailableQuantity.innerText = 'Available quantity is ' + selectedAvailableItem.quantity_available;
+                selectAvailableQuantityInput.value = selectedAvailableItem.quantity_available;
+            } else {
+                selectAvailableQuantity.innerText = 'No stock found';
+                console.warn("Product not found for batch:", batchId, "productVariationId:", productVariationId);
             }
         }
     </script>

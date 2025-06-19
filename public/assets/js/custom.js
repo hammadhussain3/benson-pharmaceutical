@@ -2408,8 +2408,6 @@ function calculateSaleInvoiceAmount() {
     let totalExclusiveSales = 0;
     let totalTax = 0;
 
-    let shippingCost = parseFloat(document.getElementById('shipping_cost')?.value) || 0;
-
     document.querySelectorAll('.item-set').forEach((itemSet, index) => {
         const quantity = parseFloat(itemSet.querySelector('.product_quantity')?.value) || 0;
         const unitPrice = parseFloat(itemSet.querySelector('.unit_price')?.value) || 0;
@@ -2442,8 +2440,6 @@ function calculateSaleInvoiceAmount() {
         totalExclusiveSales += amountAfterDiscount;
         totalTax += taxAmount;
     });
-
-    totalAmount += shippingCost;
 
     // Set total fields (add these hidden or visible inputs in your form)
     if (document.getElementById('total_amount')) document.getElementById('total_amount').value = totalAmount.toFixed(2);

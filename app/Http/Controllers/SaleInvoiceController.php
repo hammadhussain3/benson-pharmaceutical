@@ -61,7 +61,7 @@ class SaleInvoiceController extends Controller
         $batches = $this->batchService->getAllBatches()->whereIn('id', $availableBatchIds);
         $parties = $this->partyService->getAllParties();
         $companies = $this->companyService->getAllCompanies();
-        return view('admin.sale-invoice.create', compact('parties','companies', 'productVariations', 'batches', 'newInvoiceCode'));
+        return view('admin.sale-invoice.create', compact('parties','companies', 'productVariations', 'batches', 'newInvoiceCode', 'availableItems'));
     }
 
     /**
@@ -117,9 +117,25 @@ class SaleInvoiceController extends Controller
         $invoice = $this->invoiceService->getInvoiceById($id);
         $companies = $this->companyService->getAllCompanies();
         $parties = $this->partyService->getAllParties();
-        $batches = $this->batchService->getAllBatches();
-        $productVariations = $this->productVariationService->getAllProductVariations();
-        return view('admin.sale-invoice.edit', compact('invoice', 'parties', 'companies', 'productVariations', 'batches'));
+
+        $availableItems = Stock::getAvailableFinishedGoodsByBatch();
+
+        foreach ($invoice->items as $item) {
+            $availableItem = $availableItems->firstWhere(function ($available) use ($item) {
+                return $available->product_variation_id == $item->product_variation_id &&
+                    $available->batch_id == $item->batch_id;
+            });
+
+            $item->available_quantity = $availableItem->quantity_available ?? 0;
+        }
+
+        $availableProductVariationIds = $availableItems->pluck('product_variation_id')->unique()->toArray();
+        $availableBatchIds = $availableItems->pluck('batch_id')->unique()->toArray();
+
+        $productVariations = $this->productVariationService->getAllProductVariations()->whereIn('id', $availableProductVariationIds);
+        $batches = $this->batchService->getAllBatches()->whereIn('id', $availableBatchIds);
+
+        return view('admin.sale-invoice.edit', compact('invoice', 'parties', 'companies', 'productVariations', 'batches', 'availableItems'));
     }
 
     /**
