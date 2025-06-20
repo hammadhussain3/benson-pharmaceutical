@@ -119,7 +119,7 @@
                                                 <div class="row">
                                                     <div class="mb-3 col-md-4">
                                                         <label for="">Raw Material</label>
-                                                        <select name="items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required>
+                                                        <select name="items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectPricePacks(this.value, this);">
                                                             <option value="">Select Raw Material</option>
                                                             @if(old('items[{{ $i }}][raw_material_item]') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                                                 @php
@@ -138,9 +138,9 @@
                                                         <label>Unit Price</label>
                                                         <div class="input-group">
                                                             <input type="number" class="form-control w-25 unit_price" name="items[{{ $i }}][unit_price]"
-                                                                placeholder="Unit Price" required value="{{ old("items.$i.unit_price") }}" oninput="calculateSingleProductAmount()">
+                                                                placeholder="Unit Price" required value="{{ old("items.$i.unit_price") }}" readonly oninput="calculateSingleProductAmount()">
                                                             <input type="text" class="form-control unit" name="items[{{ $i }}][unit]"
-                                                                placeholder="Unit" required value="{{ old("items.$i.unit") }}">
+                                                                placeholder="Unit" required value="{{ old("items.$i.unit") }}" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 col-md-2">
@@ -194,15 +194,15 @@
                         <div class="row">
                             <div class="mb-3 col-md-4">
                                 <label for="">Raw Material</label>
-                                <select name="items[${ itemIndex }][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required></select>
+                                <select name="items[${ itemIndex }][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectPricePacks(this.value, this);"></select>
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label>Unit Price</label>
                                 <div class="input-group">
                                     <input type="number" class="form-control w-25 unit_price" name="items[${ itemIndex }][unit_price]"
-                                        placeholder="Unit Price" required value="{{ old("items.$i.unit_price") }}" oninput="calculateSingleProductAmount()">
+                                        placeholder="Unit Price" required value="{{ old("items.$i.unit_price") }}" oninput="calculateSingleProductAmount()" readonly>
                                     <input type="text" class="form-control unit" name="items[${ itemIndex }][unit]"
-                                        placeholder="Unit" required value="{{ old("items.$i.unit") }}">
+                                        placeholder="Unit" required value="{{ old("items.$i.unit") }}" readonly>
                                 </div>
                             </div>
                             <div class="mb-3 col-md-2">

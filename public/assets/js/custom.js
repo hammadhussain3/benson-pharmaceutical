@@ -1403,6 +1403,7 @@ function selectPricePacks(productVariation, target) {
                 return response.json();
             })
             .then(data => {
+                console.log(data);
                 unitPrice.value = data.price;
                 unit.value = data.unit;
             })

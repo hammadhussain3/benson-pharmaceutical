@@ -136,28 +136,31 @@ class StockController extends Controller
                 ->get();
 
         } else {
-            return response()->json([
-                'error' => 'Invalid product variation ID format.'
-            ], 400);
+            $raw_material_item = $productVariationId;
+            $stock = Stock::currentBalanceForItem(null, $raw_material_item);
+            $balance = $stock['balance'] ?? 0;
+
+            $items = GoodsReceivingItem::where('raw_material_item_id', $raw_material_item)
+                ->orderByDesc('id')
+                ->get();
         }
 
-        // Pick latest rows until balance is covered
         $accumulatedQty = 0;
         $totalCost = 0;
 
-        foreach ($items as $item) {
-            $qty = $item->quantity_received ?? 0;
-            $price = $item->unit_price ?? 0;
+        $remainingBalance = $balance;
 
-            if ($accumulatedQty + $qty <= $balance) {
-                $accumulatedQty += $qty;
-                $totalCost += $qty * $price;
-            } else {
-                $needed = $balance - $accumulatedQty;
-                $accumulatedQty += $needed;
-                $totalCost += $needed * $price;
-                break;
-            }
+        foreach ($items as $item) {
+            $qty = (float) (($item->quantity_received != 0) ? $item->quantity_received : ($item->balance_receivable ?? 0));
+            $price = (float) ($item->unit_price ?? 0);
+
+            if ($remainingBalance <= 0) break;
+
+            $usedQty = min($qty, $remainingBalance);
+
+            $accumulatedQty += $usedQty;
+            $totalCost += $usedQty * $price;
+            $remainingBalance -= $usedQty;
 
             $unit = $item->unit ?? $unit;
         }
@@ -169,5 +172,4 @@ class StockController extends Controller
             'price' => $average_price
         ]);
     }
-
 }
