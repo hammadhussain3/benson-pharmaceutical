@@ -28,7 +28,23 @@ class InvoiceRequest extends FormRequest
 			'code' => 'required|string|max:255|unique:invoices,code,' . $id . ',id,company_id,' . $this->company_id,
 			'type' => 'required|string|in:sale,purchase,quotation',
 			'prefix' => 'required|string|size:2',
-			'party' => 'nullable|required_if:type,sale|exists:parties,id',
+			'party' => [
+				'sometimes',
+				function ($attribute, $value, $fail) {
+					$request = $this;
+
+					$isSale = $request->type === 'sale';
+					$isApprovedPurchase = $request->type === 'purchase' && $request->is_approved;
+
+					if (($isSale || $isApprovedPurchase) && empty($value)) {
+						$fail('The party field is required.');
+					}
+
+					if (!empty($value) && !\DB::table('parties')->where('id', $value)->exists()) {
+						$fail('The selected party does not exist.');
+					}
+				}
+			],
 			'required_date' => [
 				'required_if:type,purchase',
 				'date',
@@ -48,7 +64,7 @@ class InvoiceRequest extends FormRequest
 			'items_cost_without_tax' => 'nullable|numeric|min:0',
 			'shipped via' => 'nullable|string|max:255',
 			'shipping_cost' => 'required_if:type,sale|numeric|min:0',
-			'total_amount' => 'required|numeric|min:1',
+			'total_amount' => 'required|numeric|min:0',
 			'discount_type' => 'nullable|string|in:percent,flat',
 			'discount' => 'nullable|numeric|min:0',
 			'paid_amount' => 'nullable|numeric|min:0',
@@ -62,13 +78,31 @@ class InvoiceRequest extends FormRequest
             'invoice_items.*.product' => 'required_if:type,sale,quotation|string|exists:product_variations,id',
 			'invoice_items.*.batch' => 'required_if:type,sale|string|exists:batches,id',
             'invoice_items.*.unit' => 'required|string',
-			'invoice_items.*.unit_price' => 'required|numeric|min:0',
+			'invoice_items.*.unit_price' => [
+				'sometimes',
+				function ($attribute, $value, $fail) {
+					$request = $this;
+
+					$isPurchaseApproval = $request->type === 'purchase' && $request->is_approved;
+
+					if (
+						($request->type !== 'purchase' || $isPurchaseApproval) &&
+						($value === null || $value === '')
+					) {
+						$fail('The unit price is required.');
+					}
+
+					if ($value !== null && $value !== '' && (!is_numeric($value) || $value < 0)) {
+						$fail('The unit price must be a valid non-negative number.');
+					}
+				},
+			],
 			'invoice_items.*.quantity' => 'required|integer|min:1',
 			'invoice_items.*.tax_rate' => 'nullable|numeric|min:0',
 			'invoice_items.*.discount_type' => 'required|string|in:percent,flat',
 			'invoice_items.*.discount' => 'nullable|numeric|min:0',
 			'invoice_items.*.trans_code' => 'nullable|numeric|min:0',
-            'invoice_items.*.total_amount' => 'required|numeric|min:1',
+            'invoice_items.*.total_amount' => 'required|numeric|min:0',
 			'is_approved' => 'nullable|boolean',
 		];
     }

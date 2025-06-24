@@ -4,10 +4,10 @@
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
-                <h3 class="page-title">Add New Purchase Requisition</h3>
+                <h3 class="page-title">Add New Purchase Order</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('purchase-invoices.index') }}">Purchase Requisitions</a></li>
-                    <li class="breadcrumb-item active">Add Purchase Requisition</li>
+                    <li class="breadcrumb-item"><a href="{{ route('purchase-invoices.index') }}">Purchase Orders</a></li>
+                    <li class="breadcrumb-item active">Add Purchase Order</li>
                 </ul>
             </div>
         </div>
@@ -24,7 +24,7 @@
                         <div class="form-row row">
                             @role('Superadmin')
                             <div class="mb-3 col-md-6">
-                                <label for="company">Company</label>
+                                <label for="company">Company<span class="text-danger">*</span></label>
                                 <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectRawMaterialItems(this.value); selectSuppliers(this.value); createPurchaseInvoiceCode(this.value);">
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
@@ -55,17 +55,22 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="code">Doc. No</label>
+                            <div class="mb-3 col-md-3">
+                                <label for="code">Doc. No<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $newInvoiceCode) }}" readonly>
                             </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="required_date">Required Date</label>
+                            <div class="mb-3 col-md-3">
+                                <label for="required_date">Required Date<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="required_date" id="required_date"
                                     placeholder="Required Date" required value="{{ old('required_date') }}" min="{{ now()->format('Y-m-d') }}">
                             </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="is_urgent">Is Urgent</label>
+                            <div class="mb-3 col-md-3">
+                                <label for="payment_deadline">Payment Deadline</label>
+                                <input type="date" class="form-control" name="payment_deadline" id="payment_deadline"
+                                    placeholder="Payment Deadline" required value="{{ old('payment_deadline', 0) }}">
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label for="is_urgent">Is Urgent<span class="text-danger">*</span></label>
                                 <select class="form-select" name="is_urgent" required>
                                     <option value="0" {{ old('is_urgent') == '0' ? 'selected' : '' }}>No</option>
                                     <option value="1" {{ old('is_urgent') == '1' ? 'selected' : '' }}>Yes</option>
@@ -90,7 +95,7 @@
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
                                                     <div class="mb-3 col-md-4">
-                                                        <label for="">Raw Material Items</label>
+                                                        <label for="">Raw Material Items<span class="text-danger">*</span></label>
                                                         <select name="invoice_items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
                                                             <option value="">Select Raw Material</option>
                                                             @if(old('invoice_items[{{ $i }}][raw_material_item]') || old('company') || !auth()->user()->hasRole('Superadmin'))
@@ -129,7 +134,7 @@
                                                         <textarea name="invoice_items[{{ $i }}][description]" class="form-control description" readonly>{{ old("invoice_items.$i.description") }}</textarea>
                                                     </div>
                                                     <div class="mb-3 col-md-3">
-                                                        <label>Product Quantity</label>
+                                                        <label>Product Quantity<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control product_quantity" name="invoice_items[{{ $i }}][quantity]"
                                                             placeholder="Product Quantity" required value="{{ old("invoice_items.$i.quantity") }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
@@ -147,10 +152,10 @@
                                                             </select>
                                                             <input type="number" class="form-control w-25 discount" name="invoice_items[{{ $i }}][discount]"
                                                                 placeholder="Discount" required value="{{ old("invoice_items.$i.discount", 0) }}" oninput="calculatePurchaseInvoiceAmount()">
-                                                          </div>
+                                                        </div>
                                                     </div>
                                                     <div class="mb-3 col-md-3">
-                                                        <label>Total</label>
+                                                        <label>Total<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control total_item_amount" name="invoice_items[{{ $i }}][total_amount]"
                                                             placeholder="Total" required value="{{ old("invoice_items.$i.total_amount", 0) }}" readonly>
                                                     </div>
@@ -163,49 +168,42 @@
                                     <button type="button" onclick="addItem()" class="btn btn-primary">Add Item</button>
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-3">
+                            <div class="mb-3 col-md-2">
                                 <label for="items_cost_without_tax">Items Cost Without Tax</label>
                                 <input type="number" class="form-control" name="items_cost_without_tax" id="items_cost_without_tax"
                                     placeholder="Items Cost Without Tax" required value="{{ old('items_cost_without_tax', 0) }}" readonly>
                             </div>
                             <div class="mb-3 col-md-3">
                                 <label for="invoice_tax_rate">Tax Rate</label>
-                                <input type="number" class="form-control" name="invoice_tax_rate" id="invoice_tax_rate"
-                                    placeholder="Invoice Tax Rate" required value="{{ old('invoice_tax_rate') }}" oninput="calculatePurchaseInvoiceAmount()">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="invoice_tax_rate" id="invoice_tax_rate"
+                                        placeholder="Tax" required value="{{ old('invoice_tax_rate') }}" oninput="calculatePurchaseInvoiceAmount()">
+                                    <input type="number" class="form-control" name="total_invoice_tax" id="total_invoice_tax"
+                                        placeholder="Total Invoice Tax" required value="{{ old('total_invoice_tax', 0) }}" readonly>
+                                </div>
                             </div>
-                            <div class="mb-3 col-md-3">
-                                <label for="total_invoice_tax">Total Tax</label>
-                                <input type="number" class="form-control" name="total_invoice_tax" id="total_invoice_tax"
-                                    placeholder="Total Invoice Tax" required value="{{ old('total_invoice_tax', 0) }}" readonly>
-                            </div>
-                            <div class="mb-3 col-md-3">
+                            <div class="mb-3 col-md-2">
                                 <label for="items_cost_with_tax">Items Cost With Tax</label>
                                 <input type="number" class="form-control" name="items_cost_with_tax" id="items_cost_with_tax"
                                     placeholder="Items Cost With Tax" required value="{{ old('items_cost_with_tax', 0) }}" readonly>
                             </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="items_cost_with_tax">Discount Type</label>
-                                <select class="js-example-basic-single select2" name="discount_type" required id="discount_type">
-                                    <option value="flat" {{ old("discount_type") == 'flat' ? 'selected' : '' }}>Flat</option>
-                                    <option value="percent" {{ old("discount_type") == 'percent' ? 'selected' : '' }}>Percent</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="items_cost_with_tax">Discount</label>
-                                <input type="number" class="form-control" name="discount" id="discount"
+                            <div class="mb-3 col-md-3">
+                                <label for="discount">Discount</label>
+                                <div class="input-group">
+                                    <select class="form-select" name="discount_type" required id="discount_type">
+                                        <option value="flat" {{ old("discount_type") == 'flat' ? 'selected' : '' }}>Flat</option>
+                                        <option value="percent" {{ old("discount_type") == 'percent' ? 'selected' : '' }}>Percent</option>
+                                    </select>
+                                    <input type="number" class="form-control w-25" name="discount" id="discount"
                                     placeholder="Discount" required value="{{ old('discount', 0) }}" oninput="calculatePurchaseInvoiceAmount()">
+                                </div>
                             </div>
-                            <div class="mb-3 col-md-4">
-                                <label for="returned_amount">Total Amount</label>
+                            <div class="mb-3 col-md-2">
+                                <label for="returned_amount">Total Amount<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"
                                     placeholder="Total Amount" required value="{{ old('total_amount', 0) }}" readonly>
                             </div>
-                            <div class="mb-3 col-md-3">
-                                <label for="payment_deadline">Payment Deadline</label>
-                                <input type="date" class="form-control" name="payment_deadline" id="payment_deadline"
-                                    placeholder="Payment Deadline" required value="{{ old('payment_deadline', 0) }}">
-                            </div>
-                            <div class="mb-3 col-md-3">
+                            {{-- <div class="mb-3 col-md-3">
                                 <label for="paid_amount">Paid Amount</label>
                                 <input type="number" class="form-control" name="paid_amount" id="paid_amount"
                                     placeholder="Paid Amount" required value="{{ old('paid_amount', 0) }}" oninput="calculatePurchaseInvoiceAmount()">
@@ -219,7 +217,7 @@
                                 <label for="due_amount">Due Amount</label>
                                 <input type="number" class="form-control" name="due_amount" id="due_amount"
                                     placeholder="Due Amount" required value="{{ old('due_amount', 0) }}" readonly>
-                            </div>
+                            </div> --}}
                             <div class="mb-3 col-md-12">
                                 <label for="note">Special Note</label>
                                 <textarea class="form-control" name="note" id="note"
@@ -257,7 +255,7 @@
                     <div class="card-body px-0 pb-0">
                         <div class="row">
                             <div class="mb-3 col-md-4">
-                                <label for="">Raw Material Items</label>
+                                <label for="">Raw Material Items<span class="text-danger">*</span></label>
                                 <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
                                 </select>
                             </div>
@@ -284,7 +282,7 @@
                                 <textarea class="form-control description" name="invoice_items[${itemIndex}][description]" readonly></textarea>
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label>Product Quantity</label>
+                                <label>Product Quantity<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control product_quantity" name="invoice_items[${itemIndex}][quantity]"
                                     placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>
@@ -305,7 +303,7 @@
                                 </div>
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label>Total</label>
+                                <label>Total<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control total_item_amount" name="invoice_items[${itemIndex}][total_amount]"
                                     placeholder="Total" required value="0" readonly>
                             </div>

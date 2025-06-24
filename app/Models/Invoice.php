@@ -9,7 +9,7 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'type', 'prefix', 'party_id', 'order_number', 'order_date', 'required_date', 'is_urgent', 'company_id', 'status', 'discount_type', 'discount', 'invoice_tax_rate', 'total_invoice_tax', 'items_cost_with_tax', 'items_cost_without_tax', 'shipped_via', 'shipping_cost', 'paid_amount', 'returned_amount', 'due_amount', 'discount_type', 'discount', 'total_amount', 'payment_status', 'note', 'payment_deadline', 'invoice_date', 'is_approved', 'created_by', 'updated_by'];
+    protected $fillable = ['code', 'type', 'prefix', 'party_id', 'order_number', 'order_date', 'required_date', 'is_urgent', 'company_id', 'status', 'discount_type', 'discount', 'invoice_tax_rate', 'total_invoice_tax', 'items_cost_with_tax', 'items_cost_without_tax', 'shipped_via', 'shipping_cost', 'paid_amount', 'returned_amount', 'due_amount', 'discount_type', 'discount', 'total_amount', 'payment_status', 'note', 'payment_deadline', 'invoice_date', 'is_approved', 'approved_by', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -30,6 +30,12 @@ class Invoice extends Model
                 $model->payment_status = 'partial';
             } else {
                 $model->payment_status = 'unpaid';
+            }
+
+            if ($model->is_approved == 1) {
+                $model->approved_by = auth()->id();
+            } else {
+                $model->approved_by = null;
             }
         });
     }
@@ -61,5 +67,10 @@ class Invoice extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

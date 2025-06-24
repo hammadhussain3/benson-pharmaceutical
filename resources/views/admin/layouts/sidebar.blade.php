@@ -370,7 +370,7 @@
                         @if(auth()->user()->hasPermission('Purchase Invoice List'))
                             <li>
                                 <a class="{{ request()->is('purchase-invoices*') ? 'active' : '' }}" href="{{ route('purchase-invoices.index') }}">
-                                    Purchase Requisitions
+                                    Purchase Order
                                 </a>
                             </li>
                         @endif

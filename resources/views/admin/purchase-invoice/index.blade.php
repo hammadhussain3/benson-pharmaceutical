@@ -5,13 +5,13 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Purchase Requisitions List</h4>
-            <h6>Manage your Purchase Requisitions</h6>
+            <h4>Purchase Orders List</h4>
+            <h6>Manage your Purchase Orders</h6>
         </div>
         @if(auth()->user()->hasPermission('Purchase Invoice Create'))
         <div class="page-btn">
             <a href="{{ route('purchase-invoices.create') }}" class="btn btn-added">
-                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Purchase Requisitions
+                <img src="{{ asset('assets/img/icons/plus.svg') }}" alt="img" class="me-1">Add Purchase Orders
             </a>
         </div>
         @endif

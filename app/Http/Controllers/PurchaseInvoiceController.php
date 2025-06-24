@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LeftOverNoteItem;
+use App\Models\RejectionReturnNoteItem;
+use App\Models\StoreIssueRequisitionItem;
+use Carbon\Carbon;
 use App\Models\Invoice;
 use App\Models\Batch;
 use App\Models\GoodsReceiving;
@@ -79,6 +83,60 @@ class PurchaseInvoiceController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $invoice = $this->invoiceService->getInvoiceById($id);
+        $invoiceDate = Carbon::parse($invoice->created_at);
+        $startDate = $invoiceDate->copy()->subMonths(6);
+        $endDate = $invoiceDate->copy();
+
+        foreach ($invoice->items as $item) {
+            $rawMaterialId = $item->raw_material_item_id;
+
+            if ($rawMaterialId) {
+                $sirQty = StoreIssueRequisitionItem::where('raw_material_item_id', $rawMaterialId)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->sum('quantity');
+
+                $lonQty = LeftOverNoteItem::where('raw_material_item_id', $rawMaterialId)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->sum('quantity');
+
+                $rrnQty = RejectionReturnNoteItem::where('raw_material_item_id', $rawMaterialId)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->sum('quantity');
+
+                // Final Consumption
+                $item->consumption_6_months = $sirQty - $lonQty - $rrnQty;
+
+                $lastPOItem = InvoiceItem::with('invoice')
+                    ->where('raw_material_item_id', $rawMaterialId)
+                    ->whereHas('invoice', function ($q) use ($invoiceDate) {
+                        $q->where('created_at', '<', $invoiceDate);
+                    })
+                    ->latest('created_at')
+                    ->first();
+
+                $item->last_po_ref = $lastPOItem?->invoice?->code ?? null;
+                $item->last_po_price = $lastPOItem?->unit_price ?? null;
+
+                $pendingPOItems = InvoiceItem::with('invoice')
+                    ->where('raw_material_item_id', $rawMaterialId)
+                    ->whereHas('invoice', function ($q) use ($invoiceDate) {
+                        $q->where('created_at', '<', $invoiceDate);
+                    })
+                    ->get();
+
+                $item->pending_po_list = $pendingPOItems->map(function ($poItem) {
+                    return [
+                        'po_no' => $poItem->invoice?->code,
+                        'qty' => $poItem->quantity,
+                    ];
+                });
+
+                $item->pending_po_total_qty = $pendingPOItems->sum('quantity');
+
+            } else {
+                $item->consumption_6_months = null;
+            }
+        }
         return view('admin.purchase-invoice.show', compact('invoice'));
     }
 

@@ -93,9 +93,9 @@
                     <strong>Note:</strong> {{ $purchaseRequisition->special_instructions }}
                 </div>
             @endif
-            <div class="signature-section" style="display: flex; justify-content: space-around; margin-top: 45px;">
+            <div class="signature-section" style="display: flex; justify-content: space-around; align-items: end; margin-top: 45px;">
                 <div style="width: 266px; text-align: center;">
-                    <span style="font-size: 14px; font-weight: bold;">{{ $purchaseRequisition->createdBy->name }}</span>
+                    <span style="font-size: 14px; font-weight: bold;">{{ $purchaseRequisition->createdBy->name ?? null }}</span>
                     <hr style="width: 100%; margin: 5px 0px;">
                     <span style="font-size: 14px;">Prepared by</span>
                 </div>
