@@ -988,8 +988,17 @@ function selectRmiDetailsT(rawMaterialId, target) {
     const itemSet = target.closest('.item-set');
     if (!itemSet) return;
 
-    const unitInput = itemSet.querySelector('.unit');
+    const codeInput = itemSet.querySelector('.code');
+    const balanceInput = itemSet.querySelector('.balance');
+    const minLevelInput = itemSet.querySelector('.min_level');
+    const maxLevelInput = itemSet.querySelector('.max_level');
     const descriptionTextarea = itemSet.querySelector('.description');
+    const unitInput = itemSet.querySelector('.unit');
+    const lpRefInput = itemSet.querySelector('.lp_ref');
+    const lpPriceInput = itemSet.querySelector('.lp_price');
+    const ipPoListInput = itemSet.querySelector('.ip_po_list');
+    const ipQuantityInput = itemSet.querySelector('.ip_quantity');
+    const consumptionSixMonthInput = itemSet.querySelector('.consumption_6_month');
 
     if (rawMaterialId) {
         fetch(`/raw-material-items/${rawMaterialId}/details`)
@@ -1001,11 +1010,38 @@ function selectRmiDetailsT(rawMaterialId, target) {
             })
             .then(data => {
                 if (data.rawMaterialItem) {
-                    if(unitInput){
-                        unitInput.value = data.rawMaterialItem.unit ?? '';
+                    if(codeInput){
+                        codeInput.value = data.rawMaterialItem.code ?? '';
+                    }
+                    if(balanceInput){
+                        balanceInput.value = data.rawMaterialItem.balance ?? '';
+                    }
+                    if(minLevelInput){
+                        minLevelInput.value = data.rawMaterialItem.min_level ?? '';
+                    }
+                    if(maxLevelInput){
+                        maxLevelInput.value = data.rawMaterialItem.max_level ?? '';
                     }
                     if(descriptionTextarea){
                         descriptionTextarea.value = data.rawMaterialItem.description ?? '';
+                    }
+                    if(unitInput){
+                        unitInput.value = data.rawMaterialItem.unit ?? '';
+                    }
+                    if(lpRefInput){
+                        lpRefInput.value = data.rawMaterialItem.last_po_ref ?? '';
+                    }
+                    if(lpPriceInput){
+                        lpPriceInput.value = data.rawMaterialItem.last_po_price ?? '';
+                    }
+                    if(ipPoListInput){
+                        ipPoListInput.value = data.rawMaterialItem.pending_po_list ?? '';
+                    }
+                    if(ipQuantityInput){
+                        ipQuantityInput.value = data.rawMaterialItem.pending_po_total_qty ?? '';
+                    }
+                    if(consumptionSixMonthInput){
+                        consumptionSixMonthInput.value = data.rawMaterialItem.consumption_6_months ?? '';
                     }
                 }
                 if (data.rawMaterialItem) {
@@ -2507,52 +2543,53 @@ function calculatePurchaseInvoiceAmount() {
     let totalAmount = 0;
     let dueAmount = 0;
 
-    var invoiceTaxRate = parseFloat(document.getElementById('invoice_tax_rate').value) || 0;
-    var invdiscount = parseFloat(document.getElementById('discount').value) || 0;
-    var invdiscounttype = document.getElementById('discount_type').value || 'flat';
-    var paid_amount = parseFloat(document.getElementById('paid_amount').value) || 0;
-    var returned_amount = parseFloat(document.getElementById('returned_amount').value) || 0;
+    // var invoiceTaxRate = parseFloat(document.getElementById('invoice_tax_rate').value) || 0;
+    // var invdiscount = parseFloat(document.getElementById('discount').value) || 0;
+    // var invdiscounttype = document.getElementById('discount_type').value || 'flat';
+    // var paid_amount = parseFloat(document.getElementById('paid_amount').value) || 0;
+    // var returned_amount = parseFloat(document.getElementById('returned_amount').value) || 0;
 
     document.querySelectorAll('.item-set').forEach((itemSet, index) => {
         const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
         const quantity = parseFloat(itemSet.querySelector('.product_quantity').value) || 0;
-        const taxRate = parseFloat(itemSet.querySelector('.tax_rate').value) || 0;
-        const discountType = itemSet.querySelector('select[name="invoice_items[' + index + '][discount_type]"]').value;
-        const discount = parseFloat(itemSet.querySelector('.discount').value) || 0;
+        // const taxRate = parseFloat(itemSet.querySelector('.tax_rate').value) || 0;
+        // const discountType = itemSet.querySelector('select[name="invoice_items[' + index + '][discount_type]"]').value;
+        // const discount = parseFloat(itemSet.querySelector('.discount').value) || 0;
 
         let itemTotal = unitPrice * quantity;
 
-        itemTotal += (itemTotal * taxRate) / 100;
+        // itemTotal += (itemTotal * taxRate) / 100;
 
-        if (discountType === 'percent') {
-            itemTotal -= (itemTotal * discount) / 100;
-        } else {
-            itemTotal -= discount;
-        }
+        // if (discountType === 'percent') {
+        //     itemTotal -= (itemTotal * discount) / 100;
+        // } else {
+        //     itemTotal -= discount;
+        // }
 
         totalAmount += itemTotal;
 
         itemSet.querySelector('.total_item_amount').value = itemTotal.toFixed(2);
     });
 
-    itemsCostWithoutTax += totalAmount;
-    totalInvoiceTax = (totalAmount * invoiceTaxRate) / 100;
-    itemsCostWithTax += itemsCostWithoutTax + totalInvoiceTax;
-    totalAmount += totalInvoiceTax;
+    // itemsCostWithoutTax += totalAmount;
+    // totalInvoiceTax = (totalAmount * invoiceTaxRate) / 100;
+    // itemsCostWithTax += itemsCostWithoutTax + totalInvoiceTax;
+    // totalAmount += totalInvoiceTax;
+    totalAmount += totalAmount;
     
-    if (invdiscounttype === 'percent') {
-        totalAmount -= (totalAmount * invdiscount) / 100;
-    } else {
-        totalAmount -= invdiscount;
-    }
+    // if (invdiscounttype === 'percent') {
+    //     totalAmount -= (totalAmount * invdiscount) / 100;
+    // } else {
+    //     totalAmount -= invdiscount;
+    // }
 
-    dueAmount = totalAmount - paid_amount + returned_amount;
+    // dueAmount = totalAmount - paid_amount + returned_amount;
 
-    document.getElementById('items_cost_without_tax').value = itemsCostWithoutTax.toFixed(2);
-    document.getElementById('total_invoice_tax').value = totalInvoiceTax.toFixed(2);
-    document.getElementById('items_cost_with_tax').value = itemsCostWithTax.toFixed(2);
+    // document.getElementById('items_cost_without_tax').value = itemsCostWithoutTax.toFixed(2);
+    // document.getElementById('total_invoice_tax').value = totalInvoiceTax.toFixed(2);
+    // document.getElementById('items_cost_with_tax').value = itemsCostWithTax.toFixed(2);
     document.getElementById('total_amount').value = totalAmount.toFixed(2);
-    document.getElementById('due_amount').value = dueAmount.toFixed(2);
+    // document.getElementById('due_amount').value = dueAmount.toFixed(2);
 }
 
 function calculateGoodsRecievingAmount() {

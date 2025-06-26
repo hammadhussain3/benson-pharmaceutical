@@ -106,23 +106,22 @@
                         @foreach ($invoice->items as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ optional($item->rawMaterialItem)->code }}</td>
-                                <td style="white-space: pre;"><strong>{{ optional($item->rawMaterialItem)->name }}</strong><br>{{ optional($item->rawMaterialItem)->description }}
+                                <td>{{ $item->code }}</td>
+                                <td @if ($item->description) style="white-space: inherit;" @endif>
+                                    <strong class="float-start">{{ $item->title }}</strong>
+                                    @if ($item->description)
+                                        <br>{{ $item->description }}
+                                    @endif
                                 </td>
-                                <td>{{ App\Models\Stock::currentBalanceForItem(null, $item->raw_material_item_id ?? null)['balance'] ?? 0 }}
-                                </td>
-                                <td>{{ optional($item->rawMaterialItem)->min_level }}</td>
-                                <td>{{ optional($item->rawMaterialItem)->max_level }}</td>
+                                <td>{{ $item->balance }}</td>
+                                <td>{{ $item->min_level }}</td>
+                                <td>{{ $item->max_level }}</td>
                                 <td>{{ $item->quantity }}</td>
                                 <td>{{ $item->unit }}</td>
-                                <td>{{ $item->last_po_ref }}</td>
-                                <td>{{ $item->last_po_price }}</td>
-                                <td>
-                                    @foreach ($item->pending_po_list as $index => $pending_po)
-                                        {{ $pending_po['po_no'] }}@if (!$loop->last) - @endif
-                                    @endforeach
-                                </td>
-                                <td>{{ $item->pending_po_total_qty }}</td>
+                                <td>{{ $item->lp_ref }}</td>
+                                <td>{{ $item->lp_price }}</td>
+                                <td>{{ $item->ip_po_list }}</td>
+                                <td>{{ $item->ip_quantity }}</td>
                                 <td>{{ $item->consumption_6_months }}</td>
                             </tr>
                         @endforeach

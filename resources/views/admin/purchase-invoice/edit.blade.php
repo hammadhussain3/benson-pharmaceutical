@@ -76,7 +76,11 @@
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-3">
+                                                        <label for="">Code</label>
+                                                        <input type="text" name="invoice_items[{{ $i }}][code]" value="{{ old("invoice_items.$i.code", $invoice->items[$i]->code) }}" class="form-control code" placeholder="Code" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-md-3">
                                                         <label for="">Raw Material Items<span class="text-danger">*</span></label>
                                                         <select name="invoice_items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
                                                             <option value="">Select Raw Material</option>
@@ -94,21 +98,26 @@
                                                     @php
                                                         $invoice->items[$i]->last_purchase = App\Models\InvoiceItem::getLastPurchaseByRawMaterial($invoice->items[$i]->raw_material_item_id, $invoice->items[$i]->id);
                                                     @endphp
-                                                    <div class="mb-3 col-md-5">
-                                                        <label>Last Purchase</label>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control last_purchase_number"
-                                                                name="invoice_items[{{ $i }}][last_purchase_number]"
-                                                                placeholder="Doc. No" required
-                                                                value="{{ old("invoice_items.$i.last_purchase_number", $invoice->items[$i]->last_purchase['invoice_code'] ?? '') }}"
-                                                                readonly>
-
-                                                            <input type="text" class="form-control w-25 last_purchase_supplier"
-                                                                name="invoice_items[{{ $i }}][last_purchase_supplier]"
-                                                                placeholder="Supplier" required
-                                                                value="{{ old("invoice_items.$i.last_purchase_supplier", $invoice->items[$i]->last_purchase['supplier_name'] ?? '') }}"
-                                                                readonly>
-                                                        </div>
+                                                    <div class="mb-3 col-md-2">
+                                                        <label for="">Current Balance</label>
+                                                        <input type="text" name="invoice_items[{{ $i }}][balance]" value="{{ old("invoice_items.$i.balance", $invoice->items[$i]->balance) }}" class="form-control balance" placeholder="Balance" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-md-2">
+                                                        <label for="">Min. Level</label>
+                                                        <input type="text" name="invoice_items[{{ $i }}][min_level]" value="{{ old("invoice_items.$i.min_level", $invoice->items[$i]->min_level) }}" class="form-control min_level" placeholder="Min. level" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-md-2">
+                                                        <label for="">Max. Level</label>
+                                                        <input type="text" name="invoice_items[{{ $i }}][max_level]" value="{{ old("invoice_items.$i.max_level", $invoice->items[$i]->max_level) }}" class="form-control max_level" placeholder="Max. level" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-md-12">
+                                                        <label>Description</label>
+                                                        <textarea name="invoice_items[{{ $i }}][description]" class="form-control description" readonly>{{ old("invoice_items.$i.description", $invoice->items[$i]->description) }}</textarea>
+                                                    </div>
+                                                    <div class="mb-3 col-md-3">
+                                                        <label>Quantity Required<span class="text-danger">*</span></label>
+                                                        <input type="number" class="form-control product_quantity" name="invoice_items[{{ $i }}][quantity]"
+                                                            placeholder="Product Quantity" required value="{{ old("invoice_items.$i.quantity", $invoice->items[$i]->quantity ?? 0) }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
                                                     <div class="mb-3 col-md-3">
                                                         <label>Unit Price</label>
@@ -119,15 +128,29 @@
                                                                 placeholder="Unit" required value="{{ old("invoice_items.$i.unit", $invoice->items[$i]->unit ?? '') }}" readonly>
                                                           </div>
                                                     </div>
-                                                    <div class="mb-3 col-md-12">
-                                                        <label>Description</label>
-                                                        <textarea name="invoice_items[{{ $i }}][description]" class="form-control description" readonly>{{ old("invoice_items.$i.description", $invoice->items[$i]->rawMaterialItem->description ?? null) }}</textarea>
+                                                    <div class="mb-3 col-md-3">
+                                                        <label>Last Purchase</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control lp_ref" name="invoice_items[{{ $i }}][lp_ref]"
+                                                                placeholder="Ref." required value="{{ old("invoice_items.$i.lp_ref", $invoice->items[$i]->lp_ref) }}" readonly>
+                                                            <input type="text" class="form-control lp_price" name="invoice_items[{{ $i }}][lp_price]"
+                                                                placeholder="Supplier" required value="{{ old("invoice_items.$i.lp_price", $invoice->items[$i]->lp_price) }}" readonly>
+                                                          </div>
                                                     </div>
                                                     <div class="mb-3 col-md-3">
-                                                        <label>Product Quantity<span class="text-danger">*</span></label>
-                                                        <input type="number" class="form-control product_quantity" name="invoice_items[{{ $i }}][quantity]"
-                                                            placeholder="Product Quantity" required value="{{ old("invoice_items.$i.quantity", $invoice->items[$i]->quantity ?? 0) }}" oninput="calculatePurchaseInvoiceAmount()">
+                                                        <label>In Process</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control w-25 ip_po_list" name="invoice_items[{{ $i }}][ip_po_list]"
+                                                                placeholder="PO list" required value="{{ old("invoice_items.$i.ip_po_list", $invoice->items[$i]->ip_po_list) }}" readonly>
+                                                            <input type="text" class="form-control ip_quantity" name="invoice_items[{{ $i }}][ip_quantity]"
+                                                                placeholder="Qty" required value="{{ old("invoice_items.$i.ip_quantity", $invoice->items[$i]->ip_quantity) }}" readonly>
+                                                          </div>
                                                     </div>
+                                                    <div class="mb-3 col-md-3">
+                                                        <label for="">Consumption 6 Month</label>
+                                                        <input type="text" name="invoice_items[{{ $i }}][consumption_6_month]" value="{{ old("invoice_items.$i.consumption_6_month", $invoice->items[$i]->consumption_6_month) }}" class="form-control consumption_6_month" placeholder="Consumption 6 month" readonly>
+                                                    </div>
+                                                    
                                                     <div class="mb-3 col-md-3">
                                                         <label>Tax Rate</label>
                                                         <input type="number" class="form-control tax_rate" name="invoice_items[{{ $i }}][tax_rate]"
@@ -254,18 +277,38 @@
                     <div class="card-body px-0 pb-0">
                         <div class="row">
                             <div class="mb-3 col-md-4">
+                                <label>Code</label>
+                                <input type="text" class="form-control code" name="invoice_items[${itemIndex}][code]"
+                                    placeholder="Code" readonly value="">
+                            </div>
+                            <div class="mb-3 col-md-4">
                                 <label for="">Raw Material Items<span class="text-danger">*</span></label>
                                 <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
                                 </select>
                             </div>
-                            <div class="mb-3 col-md-5">
-                                <label>Last Purchase</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control last_purchase_number" name="invoice_items[${itemIndex}][last_purchase_number]"
-                                        placeholder="Doc. No" required value="" readonly>
-                                    <input type="text" class="form-control w-25 last_purchase_supplier" name="invoice_items[${itemIndex}][last_purchase_supplier]"
-                                        placeholder="Unit" required value="" readonly>
-                                </div>
+                            <div class="mb-3 col-md-4">
+                                <label>Current Balance</label>
+                                <input type="text" class="form-control balance" name="invoice_items[${itemIndex}][balance]"
+                                    placeholder="Balance" value="" readonly>
+                            </div>
+                            <div class="mb-3 col-md-12">
+                                <label>Description</label>
+                                <textarea class="form-control description" name="invoice_items[${itemIndex}][description]" readonly></textarea>
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label>Min. Level</label>
+                                <input type="text" class="form-control min_level" name="invoice_items[${itemIndex}][min_level]"
+                                    placeholder="Min. Level" value="" readonly>
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label>Max. Level</label>
+                                <input type="text" class="form-control max_level" name="invoice_items[${itemIndex}][max_level]"
+                                    placeholder="Max. Level" value="" readonly>
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label>Quantity Required<span class="text-danger">*</span></label>
+                                <input type="number" class="form-control product_quantity" name="invoice_items[${itemIndex}][quantity]"
+                                    placeholder="Quantity" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>
                             <div class="mb-3 col-md-3">
                                 <label>Unit Price</label>
@@ -276,30 +319,28 @@
                                         placeholder="Unit" required value="" readonly>
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-12">
-                                <label>Description</label>
-                                <textarea class="form-control description" name="invoice_items[${itemIndex}][description]" readonly></textarea>
-                            </div>
                             <div class="mb-3 col-md-3">
-                                <label>Product Quantity<span class="text-danger">*</span></label>
-                                <input type="number" class="form-control product_quantity" name="invoice_items[${itemIndex}][quantity]"
-                                    placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
-                            </div>
-                            <div class="mb-3 col-md-3">
-                                <label>Tax Rate</label>
-                                <input type="number" class="form-control tax_rate" name="invoice_items[${itemIndex}][tax_rate]"
-                                    placeholder="Tax Rate" required value="" oninput="calculatePurchaseInvoiceAmount()">
-                            </div>
-                            <div class="mb-3 col-md-3">
-                                <label>Discount</label>
+                                <label>Last Purchase</label>
                                 <div class="input-group">
-                                    <select class="form-select" name="invoice_items[${itemIndex}][discount_type]" required>
-                                        <option value="flat">Flat</option>
-                                        <option value="percent">Percent</option>
-                                    </select>
-                                    <input type="number" class="form-control w-25 discount" name="invoice_items[${itemIndex}][discount]"
-                                        placeholder="Discount" required value="0" oninput="calculatePurchaseInvoiceAmount()">
+                                    <input type="text" class="form-control lp_ref" name="invoice_items[${itemIndex}][lp_ref]"
+                                        placeholder="Ref." value="" readonly>
+                                    <input type="text" class="form-control lp_price" name="invoice_items[${itemIndex}][lp_price]"
+                                        placeholder="Price" value="" readonly>
                                 </div>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label>In Process</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control w-25 ip_po_list" name="invoice_items[${itemIndex}][ip_po_list]"
+                                        placeholder="PO List" value="" readonly>
+                                    <input type="text" class="form-control ip_quantity" name="invoice_items[${itemIndex}][ip_quantity]"
+                                        placeholder="Qty" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-3">
+                                <label>Consumption 6 Month</label>
+                                <input type="text" class="form-control consumption_6_month" name="invoice_items[${itemIndex}][consumption_6_month]"
+                                    placeholder="Consumption 6 Month" value="" readonly>
                             </div>
                             <div class="mb-3 col-md-3">
                                 <label>Total<span class="text-danger">*</span></label>

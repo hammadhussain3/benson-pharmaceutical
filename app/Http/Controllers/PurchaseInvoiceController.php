@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\LeftOverNoteItem;
 use App\Models\RejectionReturnNoteItem;
 use App\Models\StoreIssueRequisitionItem;
+use App\Services\PurchaseInvoiceService;
 use Carbon\Carbon;
 use App\Models\Invoice;
 use App\Models\Batch;
 use App\Models\GoodsReceiving;
-use App\Http\Requests\InvoiceRequest;
+use App\Http\Requests\PurchaseInvoiceRequest;
 use App\Models\InvoiceItem;
 use App\Services\CompanyService;
 use App\Services\InvoiceService;
@@ -20,13 +21,15 @@ use Illuminate\Http\Request;
 class PurchaseInvoiceController extends Controller
 {
     protected $invoiceService;
+    protected $purchaseInvoiceService;
     protected $companyService;
     protected $partyService;
     protected $rawMaterialItemService;
 
-    public function __construct(InvoiceService $invoiceService, CompanyService $companyService, PartyService $partyService, RawMaterialItemService $rawMaterialItemService)
+    public function __construct(PurchaseInvoiceService $purchaseInvoiceService, InvoiceService $invoiceService, CompanyService $companyService, PartyService $partyService, RawMaterialItemService $rawMaterialItemService)
     {
         $this->invoiceService = $invoiceService;
+        $this->purchaseInvoiceService = $purchaseInvoiceService;
         $this->companyService = $companyService;
         $this->partyService = $partyService;
         $this->rawMaterialItemService = $rawMaterialItemService;
@@ -39,7 +42,7 @@ class PurchaseInvoiceController extends Controller
         }
         
 
-        $invoices = $this->invoiceService->getAllInvoices('purchase');
+        $invoices = $this->purchaseInvoiceService->getAll();
         return view('admin.purchase-invoice.index', compact('invoices'));
     }
 
@@ -54,7 +57,7 @@ class PurchaseInvoiceController extends Controller
         if (auth()->user()->hasRole('Superadmin')) {
             $newInvoiceCode = 'PR';
         } else {
-            $newInvoiceCode = $this->invoiceService->createInvoiceCode(auth()->user()->employee->company_id, 'purchase');
+            $newInvoiceCode = $this->purchaseInvoiceService->generateCode(auth()->user()->employee->company_id);
         }
         $parties = $this->partyService->getAllParties();
         $companies = $this->companyService->getAllCompanies();
@@ -65,13 +68,13 @@ class PurchaseInvoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(InvoiceRequest $request)
+    public function store(PurchaseInvoiceRequest $request)
     {
         if (!auth()->user()->hasPermission('Purchase Invoice Create')) {
             abort(403, 'Unauthorized action.');
         }
-        $this->invoiceService->createInvoice($request->validated());
-        return redirect()->route('purchase-invoices.index')->with('success', 'Invoice created successfully.');
+        $invoice = $this->purchaseInvoiceService->create($request->validated());
+        return redirect()->route('purchase-invoices.show', $invoice->id)->with('success', 'Invoice created successfully.');
     }
 
     /**
@@ -82,61 +85,7 @@ class PurchaseInvoiceController extends Controller
         if (!auth()->user()->hasPermission('Purchase Invoice View')) {
             abort(403, 'Unauthorized action.');
         }
-        $invoice = $this->invoiceService->getInvoiceById($id);
-        $invoiceDate = Carbon::parse($invoice->created_at);
-        $startDate = $invoiceDate->copy()->subMonths(6);
-        $endDate = $invoiceDate->copy();
-
-        foreach ($invoice->items as $item) {
-            $rawMaterialId = $item->raw_material_item_id;
-
-            if ($rawMaterialId) {
-                $sirQty = StoreIssueRequisitionItem::where('raw_material_item_id', $rawMaterialId)
-                    ->whereBetween('created_at', [$startDate, $endDate])
-                    ->sum('quantity');
-
-                $lonQty = LeftOverNoteItem::where('raw_material_item_id', $rawMaterialId)
-                    ->whereBetween('created_at', [$startDate, $endDate])
-                    ->sum('quantity');
-
-                $rrnQty = RejectionReturnNoteItem::where('raw_material_item_id', $rawMaterialId)
-                    ->whereBetween('created_at', [$startDate, $endDate])
-                    ->sum('quantity');
-
-                // Final Consumption
-                $item->consumption_6_months = $sirQty - $lonQty - $rrnQty;
-
-                $lastPOItem = InvoiceItem::with('invoice')
-                    ->where('raw_material_item_id', $rawMaterialId)
-                    ->whereHas('invoice', function ($q) use ($invoiceDate) {
-                        $q->where('created_at', '<', $invoiceDate);
-                    })
-                    ->latest('created_at')
-                    ->first();
-
-                $item->last_po_ref = $lastPOItem?->invoice?->code ?? null;
-                $item->last_po_price = $lastPOItem?->unit_price ?? null;
-
-                $pendingPOItems = InvoiceItem::with('invoice')
-                    ->where('raw_material_item_id', $rawMaterialId)
-                    ->whereHas('invoice', function ($q) use ($invoiceDate) {
-                        $q->where('created_at', '<', $invoiceDate);
-                    })
-                    ->get();
-
-                $item->pending_po_list = $pendingPOItems->map(function ($poItem) {
-                    return [
-                        'po_no' => $poItem->invoice?->code,
-                        'qty' => $poItem->quantity,
-                    ];
-                });
-
-                $item->pending_po_total_qty = $pendingPOItems->sum('quantity');
-
-            } else {
-                $item->consumption_6_months = null;
-            }
-        }
+        $invoice = $this->purchaseInvoiceService->getById($id);
         return view('admin.purchase-invoice.show', compact('invoice'));
     }
 
@@ -148,7 +97,7 @@ class PurchaseInvoiceController extends Controller
         if (!auth()->user()->hasPermission('Purchase Invoice Update')) {
             abort(403, 'Unauthorized action.');
         }
-        $invoice = $this->invoiceService->getInvoiceById($id);
+        $invoice = $this->purchaseInvoiceService->getById($id);
         $parties = $this->partyService->getAllParties();
         $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
         return view('admin.purchase-invoice.edit', compact('invoice', 'parties', 'rawMaterialItems'));
@@ -157,14 +106,14 @@ class PurchaseInvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(InvoiceRequest $request, $id)
+    public function update(PurchaseInvoiceRequest $request, $id)
     {
         if (!auth()->user()->hasPermission('Purchase Invoice Update')) {
             abort(403, 'Unauthorized action.');
         }
-        $invoice = $this->invoiceService->getInvoiceById($id);
-        $this->invoiceService->updateInvoice($invoice, $request->validated());
-        return redirect()->route('purchase-invoices.index')->with('success', 'Invoice updated successfully');
+        $invoice = $this->purchaseInvoiceService->getById($id);
+        $this->purchaseInvoiceService->update($invoice, $request->validated());
+        return redirect()->route('purchase-invoices.show', $invoice->id)->with('success', 'Invoice updated successfully');
     }
 
     public function destroy($id)
@@ -172,14 +121,14 @@ class PurchaseInvoiceController extends Controller
         if (!auth()->user()->hasPermission('Purchase Invoice Delete')) {
             abort(403, 'Unauthorized action.');
         }
-        $invoice = $this->invoiceService->getInvoiceById($id);
-        $this->invoiceService->deleteInvoice($invoice);
+        $invoice = $this->purchaseInvoiceService->getById($id);
+        $this->purchaseInvoiceService->delete($invoice);
         return redirect()->route('purchase-invoices.index')->with('success', 'Invoice deleted successfully');
     }
 
     public function createCodeByCompany($companyId)
     {
-        $invoice_code = $this->invoiceService->createInvoiceCode($companyId, 'purchase');
+        $invoice_code = $this->purchaseInvoiceService->generateCode($companyId);
         return response()->json(['invoice_code' => $invoice_code]);
     }
 

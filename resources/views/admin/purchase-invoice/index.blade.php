@@ -39,7 +39,7 @@
                             <th>Supplier</th>
                             <th>Required Date</th>
                             <th>Is Urgent</th>
-                            <th>Discount</th>
+                            {{-- <th>Discount</th> --}}
                             {{-- <th>Paid Amount</th>
                             <th>Returned Amount</th>
                             <th>Due Amount</th> --}}
@@ -65,7 +65,7 @@
                                 <td>{{ $invoice->party->name ?? 'N/A' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}</td>
                                 <td>{{ $invoice->is_urgent == '1' ? 'Yes' : 'No' }}</td>
-                                <td>{{ $invoice->discount_type }} - {{ $invoice->discount }}</td>
+                                {{-- <td>{{ $invoice->discount_type }} - {{ $invoice->discount }}</td> --}}
                                 {{-- <td>{{ $invoice->paid_amount }}</td>
                                 <td>{{ $invoice->returned_amount }}</td>
                                 <td>{{ $invoice->due_amount }}</td> --}}

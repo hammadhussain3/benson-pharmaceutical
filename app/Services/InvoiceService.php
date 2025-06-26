@@ -11,9 +11,9 @@ class InvoiceService
     public function getAllInvoices($type)
     {
         if (auth()->user()->hasRole('Superadmin')) {
-            $invoices = Invoice::where('type', $type)->orderBy('required_date', 'asc')->get();
+            $invoices = Invoice::where('type', $type)->latest()->get();
         } else {
-            $invoices = Invoice::where('type', $type)->where('company_id', auth()->user()->employee->company_id)->orderBy('required_date', 'asc')->get();
+            $invoices = Invoice::where('type', $type)->where('company_id', auth()->user()->employee->company_id)->latest()->get();
         }
         return $invoices;
     }
