@@ -22,10 +22,6 @@
     <!-- Card Component -->
     <div class="card">
         <div class="card-body">
-            @if ($invoice->is_approved == 1)
-                <span
-                    class="position-absolute top-0 end-0 ps-2 mt-2 pe-3 bg-success text-light approved-target">{{ $invoice->is_approved == 1 ? 'Approved' : '' }}</span>
-            @endif
             <div class="row justify-content-between">
                 <div class="col-auto">
                     <div class="d-flex">
@@ -66,7 +62,7 @@
                                         {{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}
                                     </div>
                                     <div class="col border-start border-end"><strong>Urgent</strong></div>
-                                    <div class="col">{{ $invoice->is_urgent == '1' ? '*' : '' }}</div>
+                                    <div class="col d-flex align-items-center">{!! $invoice->is_urgent == '1' ? '<i class="fa fa-check"></i>' : '' !!}</div>
                                     <div class="col border-start border-end"><strong>Ordinary</strong></div>
                                     <div class="col">{{ $invoice->is_urgent == '0' ? '*' : '' }}</div>
                                 </div>
@@ -120,7 +116,7 @@
                                 <td>{{ $item->unit }}</td>
                                 <td>{{ $item->lp_ref }}</td>
                                 <td>{{ $item->lp_price }}</td>
-                                <td>{{ $item->ip_po_list }}</td>
+                                <td style="white-space: inherit;">{{ $item->ip_po_list }}</td>
                                 <td>{{ $item->ip_quantity }}</td>
                                 <td>{{ $item->consumption_6_months }}</td>
                             </tr>
@@ -148,25 +144,32 @@
                     </tfoot> --}}
                 </table>
             </div>
-            <div class="signature-section"
-                style="display: flex; justify-content: space-around; align-items: end; margin-top: 45px;">
-                <div style="width: 266px; text-align: center;">
-                    <span style="font-size: 14px; font-weight: bold;">{{ $invoice->createdBy->name ?? null }}</span>
-                    <hr style="width: 100%; margin: 5px 0px;">
-                    <span style="font-size: 14px;">Raised by</span>
+            <div class="signature-section" style="margin-top: 45px;">
+                @if ($invoice->note)
+                    <div style="width: 100%;">
+                        <div style="margin-bottom: 15px; font-size: 14px;">
+                            <strong>Note:</strong> {{ $invoice->note }}
+                        </div>
+                    </div>
+                @endif
+                <div style="display: flex; justify-content: space-around; align-items: end;">
+                    <div style="width: 266px; text-align: center;">
+                        <span style="font-size: 14px; font-weight: bold;">{{ $invoice->createdBy->name ?? null }}</span>
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px;">Raised by</span>
+                    </div>
+                    <div style="width: 266px; text-align: center;">
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px;">Checked by Dept. Head</span>
+                    </div>
+                    <div style="width: 266px; text-align: center;">
+                        <span style="font-size: 14px; font-weight: bold;">
+                            {{ $invoice->approvedBy->name ?? null }} ({{ $invoice->is_approved == 1 ? 'Approved' : 'Draft' }})
+                        </span>
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px;">Approved by: Cheif Executive</span>
+                    </div>
                 </div>
-                <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%; margin: 5px 0px;">
-                    <span style="font-size: 14px;">Checked by Dept. Head</span>
-                </div>
-                <div style="width: 266px; text-align: center;">
-                    <span style="font-size: 14px; font-weight: bold;">{{ $invoice->approvedBy->name ?? null }}</span>
-                    <hr style="width: 100%; margin: 5px 0px;">
-                    <span style="font-size: 14px;">Approved by: Cheif Executive</span>
-                </div>
-            </div>
-            <div style="margin-top: 15px; font-size: 14px;">
-                <strong>Note:</strong> {{ $invoice->note }}
             </div>
         </div>
     </div>
@@ -183,8 +186,6 @@
             bottom: 10px;
             left: 0;
             width: 100%;
-            display: flex;
-            justify-content: space-around;
         }
 
         @page {

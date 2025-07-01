@@ -1009,7 +1009,8 @@ function selectRmiDetailsT(rawMaterialId, target) {
                 return response.json();
             })
             .then(data => {
-                if (data.rawMaterialItem) {
+                console.log(data);
+                if (data) {
                     if(codeInput){
                         codeInput.value = data.rawMaterialItem.code ?? '';
                     }

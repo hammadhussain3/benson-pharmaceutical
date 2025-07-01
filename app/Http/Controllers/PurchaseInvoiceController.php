@@ -55,7 +55,7 @@ class PurchaseInvoiceController extends Controller
             abort(403, 'Unauthorized action.');
         }
         if (auth()->user()->hasRole('Superadmin')) {
-            $newInvoiceCode = 'PR';
+            $newInvoiceCode = 'PO';
         } else {
             $newInvoiceCode = $this->purchaseInvoiceService->generateCode(auth()->user()->employee->company_id);
         }

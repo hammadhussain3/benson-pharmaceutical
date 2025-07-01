@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GoodsReceiving;
+use App\Models\GoodsReceivingItem;
 use App\Models\InvoiceItem;
 use App\Models\LeftOverNoteItem;
 use App\Models\RawMaterialItem;
@@ -148,7 +150,7 @@ class RawMaterialItemController extends Controller
     {
         $rawMaterialItem = $this->rawMaterialItemService->getRawMaterialItemById($rawMaterialId);
 
-        $rawMaterialItem->balance = Stock::currentBalanceForItem(null, $item->raw_material_item_id ?? null)['balance'] ?? 0;
+        $rawMaterialItem->balance = Stock::currentBalanceForItem(null, $rawMaterialItem->id ?? null)['balance'] ?? 0;
 
         $today = Carbon::today();
         $startDate = $today->copy()->subMonths(6);
@@ -168,11 +170,17 @@ class RawMaterialItemController extends Controller
 
         $rawMaterialItem->consumption_6_months = $sirQty - $lonQty - $rrnQty;
 
+        $grnLinkedInvoiceIds = GoodsReceiving::whereHas('items', function ($q) use ($rawMaterialId) {
+                $q->where('raw_material_item_id', $rawMaterialId);
+            })
+            ->pluck('invoice_id')
+            ->filter()
+            ->unique()
+            ->toArray();
+
         $lastPOItem = InvoiceItem::with('invoice')
             ->where('raw_material_item_id', $rawMaterialId)
-            ->whereHas('invoice', function ($q) use ($today) {
-                $q->where('created_at', '<', $today);
-            })
+            ->whereIn('invoice_id', $grnLinkedInvoiceIds)
             ->latest('created_at')
             ->first();
 
@@ -181,9 +189,8 @@ class RawMaterialItemController extends Controller
 
         $pendingPOItems = InvoiceItem::with('invoice')
             ->where('raw_material_item_id', $rawMaterialId)
-            ->whereHas('invoice', function ($q) use ($today) {
-                $q->where('created_at', '<', $today);
-            })
+            ->whereNotIn('invoice_id', $grnLinkedInvoiceIds)
+            ->latest('created_at')
             ->get();
 
         $rawMaterialItem->pending_po_list = $pendingPOItems

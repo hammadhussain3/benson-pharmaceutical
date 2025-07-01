@@ -64,8 +64,8 @@ class PurchaseInvoiceService
 
     public function generateCode($company_id)
     {
-        $prefix = 'PR';
-        $lastInvoiceCode = Invoice::latest('id')->where('prefix', $prefix)->where('company_id', $company_id)->value('code');
+        $prefix = 'PO';
+        $lastInvoiceCode = Invoice::latest('id')->where('prefix', 'PR')->where('company_id', $company_id)->value('code');
         if ($lastInvoiceCode) {
             $numberPart = (int) substr($lastInvoiceCode, 2);
             $newNumberPart = $numberPart + 1;

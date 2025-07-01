@@ -41,7 +41,7 @@ class PurchaseInvoiceRequest extends FormRequest
             'invoice_items.*.max_level' => 'nullable',
             'invoice_items.*.description' => 'nullable|string',
             'invoice_items.*.quantity' => 'required|integer|min:1',
-            'invoice_items.*.unit_price' => 'nullable|required_if:is_approved,1|min:1',
+            'invoice_items.*.unit_price' => 'required_if:is_approved,1|nullable|numeric|min:1',
             'invoice_items.*.unit' => 'required|string',
             'invoice_items.*.lp_ref' => 'nullable|string|max:255',
             'invoice_items.*.lp_price' => 'nullable',
