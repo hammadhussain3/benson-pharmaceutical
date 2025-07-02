@@ -27,8 +27,6 @@ class PurchaseInvoiceService
         if ($data['invoice_items']) {
             foreach ($data['invoice_items'] as $key => $value) {
                 $value['raw_material_item_id'] = $value['raw_material_item'];
-                $raw_material = RawMaterialItem::find($value['raw_material_item_id']);
-                $value['title'] = $raw_material->name;
                 $invoice->items()->create($value);
             }
         }
@@ -44,8 +42,6 @@ class PurchaseInvoiceService
         if ($data['invoice_items']) {
             foreach ($data['invoice_items'] as $value) {
                 $value['raw_material_item_id'] = $value['raw_material_item'];
-                $raw_material = RawMaterialItem::find($value['raw_material_item_id']);
-                $value['title'] = $raw_material->name;
                 $invoice->items()->create($value);
             }
         }

@@ -100,7 +100,7 @@
                                                     </div>
                                                     <div class="mb-3 col-md-4">
                                                         <label for="">Raw Material Items<span class="text-danger">*</span></label>
-                                                        <select name="invoice_items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
+                                                        <select name="invoice_items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this);  updateRmiTitle(this);">
                                                             <option value="">Select Raw Material</option>
                                                             @if(old('invoice_items[{{ $i }}][raw_material_item]') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                                                 @php
@@ -114,6 +114,7 @@
                                                                 @endforeach
                                                             @endif
                                                         </select>
+                                                        <input type="hidden" class="rmi_title" name="invoice_items[{{ $i }}][title]" value="{{ old('invoice_items.$i.title') }}">
                                                     </div>
                                                     <div class="mb-3 col-md-4">
                                                         <label for="">Current Balance</label>
@@ -290,7 +291,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="">Raw Material Items<span class="text-danger">*</span></label>
-                                <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
+                                <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this);  updateRmiTitle(this);">
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
@@ -376,6 +377,15 @@
                 itemSets[itemSets.length - 1].remove(); // Remove the last added item set
                 calculatePurchaseInvoiceAmount();
                 itemIndex--; // Decrement the index to keep track accurately
+            }
+        }
+
+        function updateRmiTitle(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const titleInput = selectElement.closest('.row').querySelector('.rmi_title');
+
+            if (selectedOption && titleInput) {
+                titleInput.value = selectedOption.text.trim();
             }
         }
     </script>

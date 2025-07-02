@@ -190,6 +190,9 @@ class RawMaterialItemController extends Controller
         $pendingPOItems = InvoiceItem::with('invoice')
             ->where('raw_material_item_id', $rawMaterialId)
             ->whereNotIn('invoice_id', $grnLinkedInvoiceIds)
+            ->whereHas('invoice', function ($query) {
+                $query->where('is_approved', 1);
+            })
             ->latest('created_at')
             ->get();
 

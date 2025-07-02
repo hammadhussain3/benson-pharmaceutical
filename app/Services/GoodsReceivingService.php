@@ -56,12 +56,6 @@ class GoodsReceivingService
             return $item->quantity_ordered == ($item->quantity_received + $item->balance_receivable);
         });
 
-        if ($allItemsMatch) {
-            $goodsReceiving->invoice->update(['status' => 'completed']);
-        } else {
-            $goodsReceiving->invoice->update(['status' => 'pending']);
-        }
-
         return $goodsReceiving;
     }
 
@@ -105,12 +99,6 @@ class GoodsReceivingService
         $allItemsMatch = $goodsReceiving->items->every(function ($item) {
             return $item->quantity_ordered == ($item->quantity_received + $item->balance_receivable);
         });
-
-        if ($allItemsMatch) {
-            $goodsReceiving->invoice->update(['status' => 'completed']);
-        } else {
-            $goodsReceiving->invoice->update(['status' => 'pending']);
-        }
 
         return $goodsReceiving;
     }

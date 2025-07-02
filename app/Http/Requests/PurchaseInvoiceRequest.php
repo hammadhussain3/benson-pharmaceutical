@@ -39,6 +39,7 @@ class PurchaseInvoiceRequest extends FormRequest
             'invoice_items.*.balance' => 'nullable',
             'invoice_items.*.min_level' => 'nullable',
             'invoice_items.*.max_level' => 'nullable',
+            'invoice_items.*.title' => 'nullable|string',
             'invoice_items.*.description' => 'nullable|string',
             'invoice_items.*.quantity' => 'required|integer|min:1',
             'invoice_items.*.unit_price' => 'required_if:is_approved,1|nullable|numeric|min:1',
@@ -60,7 +61,7 @@ class PurchaseInvoiceRequest extends FormRequest
 			// 'discount' => 'nullable|numeric|min:0',			
 			'total_amount' => 'required|numeric|min:0',			
 			'note' => 'nullable|string|max:1000',
-			'status' => 'nullable|in:pending,completed,partial',
+			// 'status' => 'nullable|in:pending,completed,partial',
 			'is_approved' => 'nullable|boolean',
 		];
     }

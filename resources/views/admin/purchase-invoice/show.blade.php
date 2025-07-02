@@ -144,14 +144,14 @@
                     </tfoot> --}}
                 </table>
             </div>
-            <div class="signature-section" style="margin-top: 45px;">
-                @if ($invoice->note)
-                    <div style="width: 100%;">
-                        <div style="margin-bottom: 15px; font-size: 14px;">
-                            <strong>Note:</strong> {{ $invoice->note }}
-                        </div>
+            @if ($invoice->note)
+                <div style="width: 100%;">
+                    <div style="margin-bottom: 15px; margin-top: 15px; font-size: 14px;">
+                        <strong>Note:</strong> {{ $invoice->note }}
                     </div>
-                @endif
+                </div>
+            @endif
+            <div class="signature-section" style="margin-top: 45px;">
                 <div style="display: flex; justify-content: space-around; align-items: end;">
                     <div style="width: 266px; text-align: center;">
                         <span style="font-size: 14px; font-weight: bold;">{{ $invoice->createdBy->name ?? null }}</span>

@@ -76,13 +76,13 @@
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-3">
+                                                    <div class="mb-3 col-md-4">
                                                         <label for="">Code</label>
                                                         <input type="text" name="invoice_items[{{ $i }}][code]" value="{{ old("invoice_items.$i.code", $invoice->items[$i]->code) }}" class="form-control code" placeholder="Code" readonly>
                                                     </div>
-                                                    <div class="mb-3 col-md-3">
+                                                    <div class="mb-3 col-md-4">
                                                         <label for="">Raw Material Items<span class="text-danger">*</span></label>
-                                                        <select name="invoice_items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
+                                                        <select name="invoice_items[{{ $i }}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this); updateRmiTitle(this);">
                                                             <option value="">Select Raw Material</option>
                                                             @php
                                                                 $seletedCompanyId = old('company', $invoice->company_id) ?? auth()->user()->employee->company_id;
@@ -90,17 +90,22 @@
                                                             @foreach ($rawMaterialItems->where('company_id', $seletedCompanyId) as $rawMaterialItem)
                                                                 <option value="{{ $rawMaterialItem->id }}"
                                                                     {{ old("invoice_items.$i.raw_material_item", $invoice->items[$i]->raw_material_item_id ?? '') == $rawMaterialItem->id ? 'selected' : '' }}>
-                                                                    {{ $rawMaterialItem->name }}
+                                                                    {{ $invoice->items[$i]->title }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
+                                                        <input type="hidden" class="rmi_title" name="invoice_items[{{ $i }}][title]" value="{{ old('invoice_items.$i.title', $invoice->items[$i]->title) }}">
                                                     </div>
                                                     @php
                                                         $invoice->items[$i]->last_purchase = App\Models\InvoiceItem::getLastPurchaseByRawMaterial($invoice->items[$i]->raw_material_item_id, $invoice->items[$i]->id);
                                                     @endphp
-                                                    <div class="mb-3 col-md-2">
+                                                    <div class="mb-3 col-md-4">
                                                         <label for="">Current Balance</label>
                                                         <input type="text" name="invoice_items[{{ $i }}][balance]" value="{{ old("invoice_items.$i.balance", $invoice->items[$i]->balance) }}" class="form-control balance" placeholder="Balance" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-md-12">
+                                                        <label>Description</label>
+                                                        <textarea name="invoice_items[{{ $i }}][description]" class="form-control description" readonly>{{ old("invoice_items.$i.description", $invoice->items[$i]->description) }}</textarea>
                                                     </div>
                                                     <div class="mb-3 col-md-2">
                                                         <label for="">Min. Level</label>
@@ -110,11 +115,7 @@
                                                         <label for="">Max. Level</label>
                                                         <input type="text" name="invoice_items[{{ $i }}][max_level]" value="{{ old("invoice_items.$i.max_level", $invoice->items[$i]->max_level) }}" class="form-control max_level" placeholder="Max. level" readonly>
                                                     </div>
-                                                    <div class="mb-3 col-md-12">
-                                                        <label>Description</label>
-                                                        <textarea name="invoice_items[{{ $i }}][description]" class="form-control description" readonly>{{ old("invoice_items.$i.description", $invoice->items[$i]->description) }}</textarea>
-                                                    </div>
-                                                    <div class="mb-3 col-md-3">
+                                                    <div class="mb-3 col-md-2">
                                                         <label>Quantity Required<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control product_quantity" name="invoice_items[{{ $i }}][quantity]"
                                                             placeholder="Product Quantity" required value="{{ old("invoice_items.$i.quantity", $invoice->items[$i]->quantity ?? 0) }}" oninput="calculatePurchaseInvoiceAmount()">
@@ -137,7 +138,7 @@
                                                                 placeholder="Supplier" required value="{{ old("invoice_items.$i.lp_price", $invoice->items[$i]->lp_price) }}" readonly>
                                                           </div>
                                                     </div>
-                                                    <div class="mb-3 col-md-3">
+                                                    <div class="mb-3 col-md-6">
                                                         <label>In Process</label>
                                                         <div class="input-group">
                                                             <input type="text" class="form-control w-25 ip_po_list" name="invoice_items[{{ $i }}][ip_po_list]"
@@ -150,8 +151,7 @@
                                                         <label for="">Consumption 6 Month</label>
                                                         <input type="text" name="invoice_items[{{ $i }}][consumption_6_month]" value="{{ old("invoice_items.$i.consumption_6_month", $invoice->items[$i]->consumption_6_month) }}" class="form-control consumption_6_month" placeholder="Consumption 6 month" readonly>
                                                     </div>
-                                                    
-                                                    <div class="mb-3 col-md-3">
+                                                    {{-- <div class="mb-3 col-md-3">
                                                         <label>Tax Rate</label>
                                                         <input type="number" class="form-control tax_rate" name="invoice_items[{{ $i }}][tax_rate]"
                                                             placeholder="Tax Rate" required value="{{ old("invoice_items.$i.tax_rate", $invoice->items[$i]->tax_rate ?? '') }}" oninput="calculatePurchaseInvoiceAmount()">
@@ -166,7 +166,7 @@
                                                             <input type="number" class="form-control w-25 discount" name="invoice_items[{{ $i }}][discount]"
                                                                 placeholder="Discount" required value="{{ old("invoice_items.$i.discount", $invoice->items[$i]->discount ?? 0) }}" oninput="calculatePurchaseInvoiceAmount()">
                                                           </div>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="mb-3 col-md-3">
                                                         <label>Total<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control total_item_amount" name="invoice_items[{{ $i }}][total_amount]"
@@ -181,7 +181,7 @@
                                     <button type="button" onclick="addItem()" class="btn btn-primary">Add Item</button>
                                 </div>
                             </div>
-                            <div class="mb-3 col-md-2">
+                            {{-- <div class="mb-3 col-md-2">
                                 <label for="items_cost_without_tax">Items Cost Without Tax</label>
                                 <input type="number" class="form-control" name="items_cost_without_tax" id="items_cost_without_tax"
                                     placeholder="Items Cost Without Tax" required value="{{ old('items_cost_without_tax', $invoice->items_cost_without_tax) }}" readonly>
@@ -211,9 +211,9 @@
                                     <input type="number" class="form-control w-25" name="discount" id="discount"
                                         placeholder="Discount" required value="{{ old('discount', $invoice->discount) }}" oninput="calculatePurchaseInvoiceAmount()">
                                 </div>
-                            </div>
-                            <div class="mb-3 col-md-2">
-                                <label for="returned_amount">Total Amount</label>
+                            </div> --}}
+                            <div class="mb-3 col-md-3">
+                                <label for="returned_amount">Total Amount<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"
                                     placeholder="Total Amount" required value="{{ old('total_amount', $invoice->total_amount) }}" readonly>
                             </div>
@@ -237,14 +237,14 @@
                                 <textarea type="text" class="form-control" name="note" id="note"
                                     placeholder="Note" required>{{ old('note', $invoice->note) }}</textarea>
                             </div>
-                            <div class="mb-3 col-md-6">
+                            {{-- <div class="mb-3 col-md-6">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-select">
                                     <option value="pending" {{ old('status', $invoice->status) == 'pending' ? 'selected' : '' }}>Pending</option>
                                     <option value="completed" {{ old('status', $invoice->status) == 'completed' ? 'selected' : '' }}>Completed</option>
                                     <option value="partial" {{ old('status', $invoice->status) == 'partial' ? 'selected' : '' }}>Partial</option>
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
                         <a class="btn btn-secondary" href="{{ route('purchase-invoices.index') }}">Cancel</a>
                         <input type="hidden" name="is_approved" id="is_approved" value="0">
@@ -283,7 +283,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="">Raw Material Items<span class="text-danger">*</span></label>
-                                <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this)">
+                                <select name="invoice_items[${itemIndex}][raw_material_item]" class="js-example-basic-single select2 raw_material_items_dropdown" required onchange="selectLastPurchaseRmi(this.value, this); selectRmiDetailsT(this.value, this); updateRmiTitle(this);">
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
@@ -369,6 +369,15 @@
                 itemSets[itemSets.length - 1].remove(); // Remove the last added item set
                 calculatePurchaseInvoiceAmount();
                 itemIndex--; // Decrement the index to keep track accurately
+            }
+        }
+
+        function updateRmiTitle(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const titleInput = selectElement.closest('.row').querySelector('.rmi_title');
+
+            if (selectedOption && titleInput) {
+                titleInput.value = selectedOption.text.trim();
             }
         }
     </script>
