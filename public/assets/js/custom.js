@@ -1599,7 +1599,7 @@ function selectInvoices(companyId)
     var InvoiceSelect = document.getElementById('invoice_id');
     
     if (companyId && InvoiceSelect) {
-        InvoiceSelect.innerHTML = '<option value="">Select Invoice</option>';
+        InvoiceSelect.innerHTML = '<option value="">Select PO</option>';
         fetch(`/companies/${companyId}/invoices`)
             .then(response => {
                 if (!response.ok) {
@@ -2023,7 +2023,7 @@ function getInvoiceDetails(invoiceId) {
                 let itemIndex = 0;
                 supplierId.value = data.invoice.party_id;
                 supplierName.value = data.invoice.party.name;
-                supplierCode.value = data.invoice.code;
+                supplierCode.value = data.invoice.party.code;
                 itemSets.forEach(itemSet => itemSet.remove());
                 data.invoice.items.forEach(function (item) {
                     var html = `
@@ -2041,43 +2041,39 @@ function getInvoiceDetails(invoiceId) {
                                             placeholder="Product Code" required value="${item.product ? item.product.code : item.raw_material_item.code}" readonly>
                                     </div>
                                     <div class="mb-3 col-md-4">
-                                        <label for="product_name">Description</label>
-                                        <input type="text" class="form-control" name="items[${itemIndex}][name]"
-                                            placeholder="Product Names" required value="${item.product ? item.product.name : item.raw_material_item.name}" readonly>
+                                        <label for="batch_id">Batch</label>
+                                        <input type="text" name="items[${itemIndex}][batch]" placeholder="Enter Batch#" class="form-control">
+                                    </div>
+                                    <div class="mb-3 col-md-4">
+                                        <label>Unit Price</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control w-25 unit_price" name="items[${itemIndex}][unit_price]"
+                                                placeholder="Unit Price" required value="${item.unit_price}">
+                                            <input type="text" class="form-control" name="items[${itemIndex}][unit]"
+                                                placeholder="Unit" required value="${item.unit}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 col-md-12">
+                                        <label for="product_description">Description</label>
+                                        <textarea class="form-control" name="items[${itemIndex}][description]" readonly>${item.title + '\n' + (item.description ?? '')}</textarea>
                                         <input type="hidden" name="items[${itemIndex}][${item.product_id ? 'product' : 'raw_material_item'}]" value="${item.product_id ? item.product_id : item.raw_material_item_id}">
                                     </div>
-                                    <div class="mb-3 col-md-4">
-                                        <label for="batch_id">Batch</label>
-                                        <select name="items[${itemIndex}][batch]" id="batch_id_${itemIndex}" class="js-example-basic-single select2" required>
-                                            <option value="">Select Batch</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-md-4">
+                                    <div class="mb-3 col-md-3">
                                         <label>Quantity Ordered</label>
                                         <input type="number" class="form-control" name="items[${itemIndex}][quantity_ordered]"
                                             placeholder="Quantity Ordered" required value="${item.quantity}" readonly>
                                     </div>
-                                    <div class="mb-3 col-md-4">
+                                    <div class="mb-3 col-md-3">
                                         <label>Quantity Recieved</label>
                                         <input type="number" class="form-control" name="items[${itemIndex}][quantity_received]"
                                             placeholder="Quantity Recieved" required value="${item.received_quantity}" readonly>
                                     </div>
-                                    <div class="mb-3 col-md-4">
+                                    <div class="mb-3 col-md-3">
                                         <label>Balance Recievable</label>
                                         <input type="number" class="form-control balance_receivable" name="items[${itemIndex}][balance_receivable]"
                                             placeholder="Balance Recievable" required value="" max="${item.quantity - item.received_quantity}" oninput="calculateGoodsRecievingAmount()">
                                     </div>
-                                    <div class="mb-3 col-md-4">
-                                        <label>Unit</label>
-                                        <input type="text" class="form-control" name="items[${itemIndex}][unit]"
-                                            placeholder="Unit" required value="${item.unit}" readonly>
-                                    </div>
-                                    <div class="mb-3 col-md-4">
-                                        <label>Unit Price</label>
-                                        <input type="text" class="form-control unit_price" name="items[${itemIndex}][unit_price]"
-                                            placeholder="Unit Price" required value="${item.unit_price}" readonly>
-                                    </div>
-                                    <div class="mb-3 col-md-4">
+                                    <div class="mb-3 col-md-3">
                                         <label>Total</label>
                                         <input type="number" class="form-control product_total" name="items[${itemIndex}][total_amount]"
                                             placeholder="Total" required value="" readonly>

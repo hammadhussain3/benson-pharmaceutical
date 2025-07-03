@@ -134,7 +134,7 @@ class PurchaseInvoiceController extends Controller
 
     public function getInvoicesByCompany($companyId)
     {
-        $invoices = Invoice::where('company_id', $companyId)->where('status', 'pending')->where('type', 'purchase')->orderBy('code', 'asc')->get();
+        $invoices = Invoice::where('company_id', $companyId)->where('is_approved', 1)->where('status', '!=', 'completed')->where('type', 'purchase')->orderBy('code', 'asc')->get();
         return response()->json(['invoices' => $invoices]);
     }
 

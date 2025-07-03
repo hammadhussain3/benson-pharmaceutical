@@ -46,7 +46,7 @@
                     <th>Order Ref</th>
                     <td>{{ $goodsReceiving->invoice->code }}</td>
                     <th>Supplier</th>
-                    <td class="w-50">{{ $goodsReceiving->party->name }}</td>
+                    <td class="w-50">{{ $goodsReceiving->supplier_name }} ({{ $goodsReceiving->supplier_code }})</td>
                 </tr>
                 <tr>
                     <th>Date</th>
@@ -76,8 +76,8 @@
                     @foreach ($goodsReceiving->items as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->product_id ? $item->product->code ?? 'Removed' : $item->rawMaterialItem->code ?? 'Removed' }}</td>
-                            <td>{{ $item->product_id ? $item->product->name ?? 'Removed' : $item->rawMaterialItem->name ?? 'Removed' }}</td>
+                            <td>{{ $item->code }}</td>
+                            <td>Batch# {{ $item->batch }}<br>{{ $item->description }}</td>
                             <td>{{ $item->quantity_ordered }}</td>
                             <td>{{ $item->quantity_ordered - ($item->quantity_received + $item->balance_receivable) }}</td>
                             <td>{{ $item->balance_receivable }}</td>

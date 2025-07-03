@@ -34,7 +34,7 @@
                         <tr>
                             <th>#</th>
                             <th>Code</th>
-                            <th>Invocie No.</th>
+                            <th>PO#</th>
                             <th>Supplier</th>
                             <th>Supplier Bill No.</th>
                             @role('Superadmin')

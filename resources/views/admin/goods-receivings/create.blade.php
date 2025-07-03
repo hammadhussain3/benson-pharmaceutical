@@ -41,9 +41,9 @@
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $newGoodsReceivingCode) }}">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="invoice_id">Invoice</label>
+                                <label for="invoice_id">PO</label>
                                 <select name="invoice" id="invoice_id" class="js-example-basic-single select2" required  onchange="getInvoiceDetails(this.value);">
-                                    <option value="">Select Invoice</option>
+                                    <option value="">Select PO</option>
                                     @if(old('invoice') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
                                             $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
@@ -63,6 +63,7 @@
                                 <input type="text" class="form-control" name="supplier_name" id="supplier_name" placeholder="Supplier Name" value="{{ old('supplier_name') }}" readonly>
                                 <input type="hidden" name="supplier" id="supplier_id" value="{{ old('supplier') }}">
                             </div>
+
                             <div class="mb-3 col-md-6">
                                 <label for="generic_name">Supplier Code</label>
                                 <input type="text" class="form-control" name="supplier_code" id="supplier_code"
@@ -86,55 +87,42 @@
                                                             placeholder="Product Code" required value="{{ old('items.'.$i.'.code') }}" readonly>
                                                     </div>
                                                     <div class="mb-3 col-md-4">
+                                                        <label for="batch">Batch#</label>
+                                                        <input type="text" class="form-control" name="items[{{ $i }}][batch]"
+                                                            placeholder="Batch" required value="{{ old('items.'.$i.'.batch') }}">
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label>Unit Price</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control w-25 unit_price" name="items[{{ $i }}][unit_price]"
+                                                                placeholder="Unit Price" required value="{{ old('items.'.$i.'.unit_price') }}">
+                                                            <input type="text" class="form-control" name="items[{{ $i }}][unit]" placeholder="Unit" required value="{{ old('items.'.$i.'.unit') }}" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 col-md-12">
                                                         <label for="product_name">Description</label>
-                                                        <input type="text" class="form-control" name="items[{{ $i }}][name]"
-                                                            placeholder="Product Name" required value="{{ old('items.'.$i.'.name') }}" readonly>
-                                                            <input type="hidden" 
-                                                                name="items[{{ $i }}][{{ old('items.'.$i.'.types') == 'product' ? 'product' : 'raw_material_item' }}]" 
-                                                                value="{{ old('items.'.$i.'.types') == 'product' ? old('items.'.$i.'.product') : old('items.'.$i.'.raw_material_item') }}">
+                                                        <textarea name="items[{{ $i }}][description]" class="form-control" readonly>{{ old('items.'.$i.'.description') }}</textarea>
+                                                        <input type="hidden" 
+                                                            name="items[{{ $i }}][{{ old('items.'.$i.'.types') == 'product' ? 'product' : 'raw_material_item' }}]" 
+                                                            value="{{ old('items.'.$i.'.types') == 'product' ? old('items.'.$i.'.product') : old('items.'.$i.'.raw_material_item') }}">
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
-                                                        <label for="batch_id">Batch</label>
-                                                        <select name="items[{{ $i }}][batch]" id="batch_id_{{ $i }}" class="js-example-basic-single select2" required>
-                                                            <option value="">Select Batch</option>
-                                                            @if(old('batch') || old('items.'.$i.'.product') || old('company') || !auth()->user()->hasRole('Superadmin'))
-                                                                @php
-                                                                    $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
-                                                                @endphp
-                                                                @foreach ($batches->where('company_id', $seletedCompanyId)->where('product_id', old('items.'.$i.'.product')) as $batch)
-                                                                    <option value="{{ $batch->id }}"
-                                                                        {{ old('items.'.$i.'.batch') == $batch->id ? 'selected' : '' }}>
-                                                                        {{ $batch->batch_no }}
-                                                                    </option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Quantity Ordered</label>
                                                         <input type="number" class="form-control" name="items[{{ $i }}][quantity_ordered]"
                                                             placeholder="Quantity Ordered" required value="{{ old('items.'.$i.'.quantity_ordered') }}" readonly>
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Quantity Received</label>
                                                         <input type="number" class="form-control" name="items[{{ $i }}][quantity_received]"
                                                             placeholder="Quantity Received" required value="{{ old('items.'.$i.'.quantity_received') }}" readonly>
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Balance Receivable</label>
                                                         <input type="number" class="form-control balance_receivable" name="items[{{ $i }}][balance_receivable]"
                                                             placeholder="Balance Receivable" required value="{{ old('items.'.$i.'.balance_receivable') }}" oninput="calculateGoodsRecievingAmount()">
                                                     </div>
-                                                    <div class="mb-3 col-md-4">
-                                                        <label>Unit</label>
-                                                        <input type="text" class="form-control" name="items[{{ $i }}][unit]" placeholder="Unit" required value="{{ old('items.'.$i.'.unit') }}" readonly>
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
-                                                        <label>Unit Price</label>
-                                                        <input type="text" class="form-control unit_price" name="items[{{ $i }}][unit_price]"
-                                                            placeholder="Unit Price" required value="{{ old('items.'.$i.'.unit_price') }}" readonly>
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
+                                                    <div class="mb-3 col-md-3">
                                                         <label>Total</label>
                                                         <input type="number" class="form-control product_total" name="items[{{ $i }}][total_amount]"
                                                             placeholder="Total" required value="{{ old('items.'.$i.'.total_amount', 0) }}" readonly>

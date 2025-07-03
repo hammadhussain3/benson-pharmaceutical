@@ -27,6 +27,8 @@ class GoodsReceivingRequest extends FormRequest
             'code' => 'required|string|max:255|unique:goods_receivings,code,' . $goodsReceivingId . ',id,company_id,' . $this->company_id,
             'invoice' => 'required|integer|exists:invoices,id',
             'supplier' => 'required|integer|exists:parties,id',
+            'supplier_name' => 'nullable|string|max:255',
+            'supplier_code' => 'nullable|string|max:50',
             'supplier_bill_no' => 'required|string|max:255',
             'company' => 'required|integer|exists:companies,id',
             'sales_tax' => 'required|numeric|min:0',
@@ -35,9 +37,10 @@ class GoodsReceivingRequest extends FormRequest
             'is_approved' => 'nullable|boolean',
             'items' => 'required|array|min:1',
             'items.*.code' => 'required|string|max:50',
+            'items.*.description' => 'nullable|string',
             'items.*.product' => 'nullable|integer|exists:products,id|required_without:items.*.raw_material_item',
             'items.*.raw_material_item' => 'nullable|integer|exists:raw_material_items,id|required_without:items.*.product',
-            'items.*.batch' => 'nullable|integer|exists:batches,id',
+            'items.*.batch' => 'required|string|max:50',
             'items.*.quantity_ordered' => 'required|numeric|min:1',
             'items.*.quantity_received' => 'required|numeric|min:0',
             'items.*.balance_receivable' => 'required|numeric|min:1',
@@ -52,22 +55,22 @@ class GoodsReceivingRequest extends FormRequest
      *
      * @param \Illuminate\Contracts\Validation\Validator $validator
      */
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            $items = $this->input('items', []);
-            foreach ($items as $index => $item) {
-                $quantityOrdered = $item['quantity_ordered'] ?? 0;
-                $quantityReceived = $item['quantity_received'] ?? 0;
-                $balanceReceivable = $item['balance_receivable'] ?? 0;
+    // public function withValidator($validator)
+    // {
+    //     $validator->after(function ($validator) {
+    //         $items = $this->input('items', []);
+    //         foreach ($items as $index => $item) {
+    //             $quantityOrdered = $item['quantity_ordered'] ?? 0;
+    //             $quantityReceived = $item['quantity_received'] ?? 0;
+    //             $balanceReceivable = $item['balance_receivable'] ?? 0;
 
-                if (($quantityReceived + $balanceReceivable) > $quantityOrdered) {
-                    $validator->errors()->add(
-                        "items.$index.balance_receivable",
-                        "Balance receivable should not be greater than quantity ordered for item $index."
-                    );
-                }
-            }
-        });
-    }
+    //             if (($quantityReceived + $balanceReceivable) > $quantityOrdered) {
+    //                 $validator->errors()->add(
+    //                     "items.$index.balance_receivable",
+    //                     "Balance receivable should not be greater than quantity ordered for item $index."
+    //                 );
+    //             }
+    //         }
+    //     });
+    // }
 }

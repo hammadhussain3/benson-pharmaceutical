@@ -11,9 +11,9 @@ class GoodsReceivingService
     public function getAllGoodsReceivings()
     {
         if (auth()->user()->hasRole('Superadmin')) {
-            $goodsReceivings = GoodsReceiving::orderBy('created_at', 'asc')->get();
+            $goodsReceivings = GoodsReceiving::orderBy('created_at', 'desc')->get();
         } else {
-            $goodsReceivings = GoodsReceiving::where('company_id', auth()->user()->employee->company_id)->orderBy('created_at', 'asc')->get();
+            $goodsReceivings = GoodsReceiving::where('company_id', auth()->user()->employee->company_id)->orderBy('created_at', 'desc')->get();
         }
         return $goodsReceivings;
     }
@@ -31,7 +31,6 @@ class GoodsReceivingService
         foreach ($items as $item) {
             $item['product_id'] = $item['product'] ?? null;
             $item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
-            $item['batch_id'] = $item['batch'];
             
             if ($item['product_id']) {
                 $item['last_goods_receiving_id'] = GoodsReceivingItem::where('product_id', $item['product_id'])
@@ -105,8 +104,8 @@ class GoodsReceivingService
 
     public function deleteGoodsReceiving(GoodsReceiving $goodsReceiving)
     {
-        $goodsReceiving->stocks()->delete();
-        $goodsReceiving->invoice->update(['status' => 'pending']);
+        $goodsReceiving->stocks->each->delete();
+        $goodsReceiving->items->each->delete();
         return $goodsReceiving->delete();
     }
 

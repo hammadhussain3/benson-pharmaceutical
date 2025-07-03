@@ -6,28 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class GoodsReceivingItem extends Model
 {
-    protected $fillable = ['goods_receiving_id', 'product_id', 'raw_material_item_id', 'batch_id', 'quantity_ordered', 'quantity_received', 'balance_receivable', 'unit', 'unit_price', 'total_amount', 'last_goods_receiving_id', 'created_by', 'updated_by'];
+    protected $fillable = ['goods_receiving_id', 'product_id', 'raw_material_item_id', 'code', 'description', 'batch', 'quantity_ordered', 'quantity_received', 'balance_receivable', 'unit', 'unit_price', 'total_amount', 'last_goods_receiving_id', 'created_by', 'updated_by'];
 
     protected static function booted()
     {
-        static::created(function ($item) {
+        $updateInvoiceStatus = function ($item) {
             $grn = $item->goodsReceiving;
             if (! $grn || ! $grn->invoice) return;
-    
+
             $invoice = $grn->invoice;
             $invoiceItems = $invoice->items;
-    
+
             $allComplete = true;
             $anyReceived = false;
-    
+
             foreach ($invoiceItems as $invItem) {
                 $requiredQty = $invItem->quantity;
-    
+
                 $receivedQty = GoodsReceivingItem::whereHas('goodsReceiving', function ($q) use ($invoice) {
                     $q->where('invoice_id', $invoice->id);
                 })->where('raw_material_item_id', $invItem->raw_material_item_id)
-                  ->sum('balance_receivable');
-                  
+                ->sum('balance_receivable');
+
                 if ($receivedQty >= $requiredQty) {
                     $anyReceived = true;
                 } elseif ($receivedQty > 0) {
@@ -37,7 +37,7 @@ class GoodsReceivingItem extends Model
                     $allComplete = false;
                 }
             }
-    
+
             if ($allComplete) {
                 $invoice->status = 'completed';
             } elseif ($anyReceived) {
@@ -45,9 +45,13 @@ class GoodsReceivingItem extends Model
             } else {
                 $invoice->status = 'pending';
             }
-    
+
             $invoice->save();
-        });
+        };
+
+        static::created($updateInvoiceStatus);
+        static::updated($updateInvoiceStatus);
+        static::deleted($updateInvoiceStatus);
     }
 
     public function goodsReceiving()

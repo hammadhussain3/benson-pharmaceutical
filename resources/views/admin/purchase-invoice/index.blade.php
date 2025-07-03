@@ -35,6 +35,7 @@
                             <th>#</th>  
                             <th>Code</th>
                             <th>Date</th> 
+                            <th>Items</th> 
                             {{-- <th>Type</th> --}}
                             <th>Supplier</th>
                             <th>Required Date</th>
@@ -61,6 +62,15 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('purchase-invoices.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
                                 <td>{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</td>
+                                <td>
+                                    <ul>
+                                        @forelse ($invoice->items as $item)
+                                            <li>{{ $item->title }}</li>
+                                        @empty
+                                            <li>N/A</li>
+                                        @endforelse
+                                    </ul>
+                                </td>
                                 {{-- <td>{{ ucfirst(strtolower($invoice->type)) }} ({{ $invoice->prefix }})</td> --}}
                                 <td>{{ $invoice->party->name ?? 'N/A' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}</td>
