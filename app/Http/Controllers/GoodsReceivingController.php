@@ -60,8 +60,8 @@ class GoodsReceivingController extends Controller
         if (!auth()->user()->hasPermission('Goods Receiving Create')) {
             abort(403, 'Unauthorized action.');
         }
-        $this->goodsReceivingService->createGoodsReceiving($request->validated());
-        return redirect()->route('goods-receivings.index')->with('success', 'Goods Receiving Note created successfully.');
+        $goodsReceiving = $this->goodsReceivingService->createGoodsReceiving($request->validated());
+        return redirect()->route('goods-receivings.show', $goodsReceiving->id)->with('success', 'Goods Receiving Note created successfully!');
     }
 
     /**
@@ -99,8 +99,8 @@ class GoodsReceivingController extends Controller
         if (!auth()->user()->hasPermission('Goods Receiving Update')) {
             abort(403, 'Unauthorized action.');
         }
-        $this->goodsReceivingService->updateGoodsReceiving($goodsReceiving, $request->validated());
-        return redirect()->route('goods-receivings.index')->with('success', 'Goods Receiving Note updated successfully');
+        $goodsReceiving = $this->goodsReceivingService->updateGoodsReceiving($goodsReceiving, $request->validated());
+        return redirect()->route('goods-receivings.show', $goodsReceiving->id)->with('success', 'Goods Receiving Note updated successfully!');
     }
 
     public function destroy(GoodsReceiving $goodsReceiving)

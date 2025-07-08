@@ -45,4 +45,14 @@ class GoodsReceiving extends Model
     {
         return $this->hasMany(Stock::class);
     }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }

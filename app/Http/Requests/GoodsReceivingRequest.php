@@ -21,10 +21,10 @@ class GoodsReceivingRequest extends FormRequest
      */
     public function rules(): array
     {
-        $goodsReceivingId = $this->goodsReceiving ? $this->goodsReceiving->id : null;
+        $goodsReceivingId = $this->route('goods_receiving')?->id;
 
         return [
-            'code' => 'required|string|max:255|unique:goods_receivings,code,' . $goodsReceivingId . ',id,company_id,' . $this->company_id,
+            'code' => 'required|string|max:255|unique:goods_receivings,code,' . $goodsReceivingId . ',id,company_id,' . $this->company,
             'invoice' => 'required|integer|exists:invoices,id',
             'supplier' => 'required|integer|exists:parties,id',
             'supplier_name' => 'nullable|string|max:255',
@@ -35,18 +35,22 @@ class GoodsReceivingRequest extends FormRequest
             'adv_tax' => 'required|numeric|min:0',
             'total_amount' => 'required|numeric|min:1',
             'is_approved' => 'nullable|boolean',
+
             'items' => 'required|array|min:1',
             'items.*.code' => 'required|string|max:50',
             'items.*.description' => 'nullable|string',
             'items.*.product' => 'nullable|integer|exists:products,id|required_without:items.*.raw_material_item',
             'items.*.raw_material_item' => 'nullable|integer|exists:raw_material_items,id|required_without:items.*.product',
-            'items.*.batch' => 'required|string|max:50',
             'items.*.quantity_ordered' => 'required|numeric|min:1',
             'items.*.quantity_received' => 'required|numeric|min:0',
-            'items.*.balance_receivable' => 'required|numeric|min:1',
-            'items.*.unit' => 'required|string|max:50',
-            'items.*.unit_price' => 'required|numeric|min:1',
-            'items.*.total_amount' => 'required|numeric|min:1',
+
+            // Validate nested GRN rows
+            'items.*.grn_items' => 'required|array|min:1',
+            'items.*.grn_items.*.batch' => 'required|string|max:50',
+            'items.*.grn_items.*.balance_receivable' => 'required|numeric|min:1',
+            'items.*.grn_items.*.unit_price' => 'required|numeric|min:1',
+            'items.*.grn_items.*.unit' => 'required|string|max:50',
+            'items.*.grn_items.*.total_amount' => 'required|numeric|min:1',
         ];
     }
 

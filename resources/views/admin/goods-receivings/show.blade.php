@@ -111,22 +111,25 @@
                 </tfoot>
             </table>
 
-            <div style="display: flex; justify-content: space-around; margin-top: 45px;">
-                <div style="width: 200px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Raised by</span>
-                </div>
-                <div style="width: 200px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Received by</span>
-                </div>
-                <div style="width: 200px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Accepted by</span>
-                </div>
-                <div style="width: 200px; text-align: center;">
-                    <hr style="width: 100%;">
-                    <span style="font-size: 14px; margin-top: 10px;">Approved by</span>
+            <div class="signature-section" style="margin-top: 45px;">
+                <div style="display: flex; justify-content: space-around; align-items: end;">
+                    <div style="width: 200px; text-align: center;">
+                        {{ $goodsReceiving->createdBy->name ?? null }}
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px; margin-top: 10px;">Raised by</span>
+                    </div>
+                    <div style="width: 200px; text-align: center;">
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px; margin-top: 10px;">Received by</span>
+                    </div>
+                    <div style="width: 200px; text-align: center;">
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px; margin-top: 10px;">Accepted by</span>
+                    </div>
+                    <div style="width: 200px; text-align: center;">
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px; margin-top: 10px;">Approved by</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -138,6 +141,12 @@
         margin-top: 10px !important;
     }
     @media print {
+        .signature-section {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+        }
        @page {
            margin: 0;
        }

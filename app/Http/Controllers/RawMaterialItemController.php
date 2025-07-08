@@ -180,7 +180,10 @@ class RawMaterialItemController extends Controller
 
         $lastPOItem = InvoiceItem::with('invoice')
             ->where('raw_material_item_id', $rawMaterialId)
-            ->whereIn('invoice_id', $grnLinkedInvoiceIds)
+            // ->whereIn('invoice_id', $grnLinkedInvoiceIds)
+            ->whereHas('invoice', function ($query) {
+                $query->where('status', 'completed');
+            })
             ->latest('created_at')
             ->first();
 
@@ -189,19 +192,33 @@ class RawMaterialItemController extends Controller
 
         $pendingPOItems = InvoiceItem::with('invoice')
             ->where('raw_material_item_id', $rawMaterialId)
-            ->whereNotIn('invoice_id', $grnLinkedInvoiceIds)
+            // ->whereNotIn('invoice_id', $grnLinkedInvoiceIds)
             ->whereHas('invoice', function ($query) {
-                $query->where('is_approved', 1);
+                $query->where('is_approved', 1)->where('status', '!=', 'completed');
             })
             ->latest('created_at')
             ->get();
 
-        $rawMaterialItem->pending_po_list = $pendingPOItems
+        $pendingPOItemsWithRemainingQty = $pendingPOItems->map(function ($item) use ($rawMaterialId) {
+            $grns = GoodsReceiving::where('invoice_id', $item->invoice_id)->get();
+
+            $receivedQty = 0;
+            foreach ($grns as $grn) {
+                $receivedQty += $grn->items()
+                    ->where('raw_material_item_id', $rawMaterialId)
+                    ->sum('balance_receivable');
+            }
+
+            $item->remaining_quantity = max(0, $item->quantity - $receivedQty);
+            return $item;
+        });
+
+        $rawMaterialItem->pending_po_list = $pendingPOItemsWithRemainingQty
             ->pluck('invoice.code')
             ->filter()
             ->implode('-');
 
-        $rawMaterialItem->pending_po_total_qty = $pendingPOItems->sum('quantity');
+        $rawMaterialItem->pending_po_total_qty = $pendingPOItemsWithRemainingQty->sum('remaining_quantity');
 
         return response()->json(['rawMaterialItem' => $rawMaterialItem]);
     }

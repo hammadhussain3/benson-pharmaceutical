@@ -2035,48 +2035,58 @@ function getInvoiceDetails(invoiceId) {
                             <div class="card-body px-0 pb-0">
                                 <input type="hidden" name="items[${itemIndex}][types]" value="${item.product_id ? 'product' : 'raw_material_item'}">
                                 <div class="row">
+                                    <div class="mb-3 col-md-12">
+                                        <label for="product_description">Description</label>
+                                        <textarea class="form-control" name="items[${itemIndex}][description]" readonly>${item.title + '\n' + (item.description ?? '')}</textarea>
+                                        <input type="hidden" name="items[${itemIndex}][${item.product_id ? 'product' : 'raw_material_item'}]" value="${item.product_id ? item.product_id : item.raw_material_item_id}">
+                                    </div>
                                     <div class="mb-3 col-md-4">
                                         <label for="product_code">Code</label>
                                         <input type="text" class="form-control" name="items[${itemIndex}][code]"
                                             placeholder="Product Code" required value="${item.product ? item.product.code : item.raw_material_item.code}" readonly>
                                     </div>
                                     <div class="mb-3 col-md-4">
-                                        <label for="batch_id">Batch</label>
-                                        <input type="text" name="items[${itemIndex}][batch]" placeholder="Enter Batch#" class="form-control">
-                                    </div>
-                                    <div class="mb-3 col-md-4">
-                                        <label>Unit Price</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control w-25 unit_price" name="items[${itemIndex}][unit_price]"
-                                                placeholder="Unit Price" required value="${item.unit_price}">
-                                            <input type="text" class="form-control" name="items[${itemIndex}][unit]"
-                                                placeholder="Unit" required value="${item.unit}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 col-md-12">
-                                        <label for="product_description">Description</label>
-                                        <textarea class="form-control" name="items[${itemIndex}][description]" readonly>${item.title + '\n' + (item.description ?? '')}</textarea>
-                                        <input type="hidden" name="items[${itemIndex}][${item.product_id ? 'product' : 'raw_material_item'}]" value="${item.product_id ? item.product_id : item.raw_material_item_id}">
-                                    </div>
-                                    <div class="mb-3 col-md-3">
                                         <label>Quantity Ordered</label>
                                         <input type="number" class="form-control" name="items[${itemIndex}][quantity_ordered]"
                                             placeholder="Quantity Ordered" required value="${item.quantity}" readonly>
                                     </div>
-                                    <div class="mb-3 col-md-3">
-                                        <label>Quantity Recieved</label>
+                                    <div class="mb-3 col-md-4">
+                                        <label>Quantity Received</label>
                                         <input type="number" class="form-control" name="items[${itemIndex}][quantity_received]"
                                             placeholder="Quantity Recieved" required value="${item.received_quantity}" readonly>
                                     </div>
-                                    <div class="mb-3 col-md-3">
-                                        <label>Balance Recievable</label>
-                                        <input type="number" class="form-control balance_receivable" name="items[${itemIndex}][balance_receivable]"
-                                            placeholder="Balance Recievable" required value="" max="${item.quantity - item.received_quantity}" oninput="calculateGoodsRecievingAmount()">
+                                    <div class="col-12 grn-rows-container" data-index="${itemIndex}">
+                                        <div class="row grn-row align-items-end">
+                                            <div class="mb-3 col-md-auto d-none">
+                                                <button type="button" class="btn btn-danger remove-grn-row"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                            <div class="mb-3 col-md">
+                                                <label for="batch_id">Batch#<span class="text-danger">*</span></label>
+                                                <input type="text" name="items[${itemIndex}][grn_items][0][batch]" placeholder="Enter Batch#" class="form-control">
+                                            </div>                                    
+                                            <div class="mb-3 col-md">
+                                                <label>Quantity Receiving<span class="text-danger">*</span></label>
+                                                <input type="number" class="form-control balance_receivable" name="items[${itemIndex}][grn_items][0][balance_receivable]"
+                                                    placeholder="Balance Recievable" required value="" oninput="calculateGoodsRecievingAmount()">
+                                            </div>
+                                            <div class="mb-3 col-md">
+                                                <label>Unit Price</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control w-25 unit_price" name="items[${itemIndex}][grn_items][0][unit_price]"
+                                                        placeholder="Unit Price" required value="${item.unit_price}" readonly>
+                                                    <input type="text" class="form-control" name="items[${itemIndex}][grn_items][0][unit]"
+                                                        placeholder="Unit" required value="${item.unit}" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 col-md">
+                                                <label>Total</label>
+                                                <input type="number" class="form-control product_total" name="items[${itemIndex}][grn_items][0][total_amount]"
+                                                    placeholder="Total" required value="" readonly>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="mb-3 col-md-3">
-                                        <label>Total</label>
-                                        <input type="number" class="form-control product_total" name="items[${itemIndex}][total_amount]"
-                                            placeholder="Total" required value="" readonly>
+                                    <div class="mb-3 col-md-auto ms-auto d-flex align-items-end">
+                                        <button type="button" class="btn btn-secondary add-grn-row" data-index="${itemIndex}"><i class="fa fa-plus"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -2592,26 +2602,40 @@ function calculatePurchaseInvoiceAmount() {
 function calculateGoodsRecievingAmount() {
     let totalAmount = 0;
 
-    var salesTax = parseFloat(document.getElementById('sales_tax').value) || 0;
-    var advanceTax = parseFloat(document.getElementById('adv_tax').value) || 0;
+    const salesTax = parseFloat(document.getElementById('sales_tax')?.value) || 0;
+    const advanceTax = parseFloat(document.getElementById('adv_tax')?.value) || 0;
 
-    // Loop through each item set
-    document.querySelectorAll('.item-set').forEach((itemSet, index) => {
-        const unitPrice = parseFloat(itemSet.querySelector('.unit_price').value) || 0;
-        const quantity = parseFloat(itemSet.querySelector('.balance_receivable').value) || 0;
+    // Loop through each item
+    document.querySelectorAll('.item-set').forEach((itemSet) => {
+        let itemTotal = 0;
 
-        // Calculate item total without discount and tax
-        let itemTotal = unitPrice * quantity;
+        // Loop through each grn-row in item
+        itemSet.querySelectorAll('.grn-row').forEach((grnRow) => {
+            const unitPrice = parseFloat(grnRow.querySelector('.unit_price')?.value) || 0;
+            const quantity = parseFloat(grnRow.querySelector('.balance_receivable')?.value) || 0;
+            const rowTotal = unitPrice * quantity;
 
-        // Accumulate total invoice tax
+            // Set individual row total
+            const rowTotalInput = grnRow.querySelector('.product_total');
+            if (rowTotalInput) {
+                rowTotalInput.value = rowTotal.toFixed(2);
+            }
+
+            itemTotal += rowTotal;
+        });
+
+        // Add item total to global total
         totalAmount += itemTotal;
-
-        // Update the total amount field
-        itemSet.querySelector('.product_total').value = itemTotal.toFixed(2);
     });
 
+    // Add tax amounts
     totalAmount += salesTax + advanceTax;
-    document.getElementById('total_amount').value = totalAmount.toFixed(2);
+
+    // Set final total
+    const totalAmountInput = document.getElementById('total_amount');
+    if (totalAmountInput) {
+        totalAmountInput.value = totalAmount.toFixed(2);
+    }
 }
 
 function calculateSingleProductAmount() {

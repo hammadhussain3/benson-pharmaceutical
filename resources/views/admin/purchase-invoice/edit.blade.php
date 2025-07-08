@@ -31,7 +31,7 @@
                                     @php
                                         $seletedCompanyId = old('company', $invoice->company_id) ?? auth()->user()->employee->company_id;
                                     @endphp
-                                    @foreach ($parties->where('company_id', $seletedCompanyId) as $party)
+                                    @foreach ($parties->where('company_id', $seletedCompanyId)->where('is_supplier', '1') as $party)
                                         <option value="{{ $party->id }}"
                                             {{ old('party', $invoice->party_id) == $party->id ? 'selected' : '' }}>
                                             {{ $party->name }}

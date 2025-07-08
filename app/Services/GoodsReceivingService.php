@@ -19,36 +19,43 @@ class GoodsReceivingService
     }
 
     public function createGoodsReceiving(array $data)
-    {
-        $items = $data['items'] ?? [];
-        
+    {        
         $data['invoice_id'] = $data['invoice'];
         $data['party_id'] = $data['supplier'];
         $data['company_id'] = $data['company'];
 
         $goodsReceiving = GoodsReceiving::create($data);
 
+        $items = $data['items'] ?? [];
+
         foreach ($items as $item) {
-            $item['product_id'] = $item['product'] ?? null;
-            $item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
-            
-            if ($item['product_id']) {
-                $item['last_goods_receiving_id'] = GoodsReceivingItem::where('product_id', $item['product_id'])
-                    ->latest('id')
-                    ->value('goods_receiving_id');
-            } elseif ($item['raw_material_item_id']) {
-                $item['last_goods_receiving_id'] = GoodsReceivingItem::where('raw_material_item_id', $item['raw_material_item_id'])
-                    ->latest('id')
-                    ->value('goods_receiving_id');
+            $grn_items = $item['grn_items'] ?? [];
+            foreach ($grn_items as $key => $grn_item) {
+                $grn_item['product_id'] = $item['product'] ?? null;
+                $grn_item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
+                $grn_item['code'] = $item['code'] ?? null;
+                $grn_item['description'] = $item['description'] ?? null;
+                $grn_item['quantity_ordered'] = $item['quantity_ordered'] ?? null;
+                $grn_item['quantity_received'] = $item['quantity_received'] ?? null;
+                
+                if ($grn_item['product_id']) {
+                    $grn_item['last_goods_receiving_id'] = GoodsReceivingItem::where('product_id', $grn_item['product_id'])
+                        ->latest('id')
+                        ->value('goods_receiving_id');
+                } elseif ($grn_item['raw_material_item_id']) {
+                    $grn_item['last_goods_receiving_id'] = GoodsReceivingItem::where('raw_material_item_id', $grn_item['raw_material_item_id'])
+                        ->latest('id')
+                        ->value('goods_receiving_id');
+                }
+
+                $goodsReceiving->items()->create($grn_item);
+
+                $grn_item['quantity'] = $grn_item['balance_receivable'];
+                $grn_item['total'] = $grn_item['total_amount'];
+                $grn_item['company_id'] = $data['company_id'];
+
+                $goodsReceiving->stocks()->create($grn_item);
             }
-
-            $goodsReceiving->items()->create($item);
-
-            $item['quantity'] = $item['balance_receivable'];
-            $item['total'] = $item['total_amount'];
-            $item['company_id'] = $data['company_id'];
-
-            $goodsReceiving->stocks()->create($item);
         }
 
         $allItemsMatch = $goodsReceiving->items->every(function ($item) {
@@ -60,39 +67,45 @@ class GoodsReceivingService
 
     public function updateGoodsReceiving(GoodsReceiving $goodsReceiving, array $data)
     {
-        $items = $data['items'] ?? [];
-
         $data['invoice_id'] = $data['invoice'];
         $data['party_id'] = $data['supplier'];
         $data['company_id'] = $data['company'];
 
         $goodsReceiving->update($data);
 
-        $goodsReceiving->items()->delete();
-        $goodsReceiving->stocks()->delete();
+        $goodsReceiving->stocks->each->delete();
+        $goodsReceiving->items->each->delete();
+
+        $items = $data['items'] ?? [];
 
         foreach ($items as $item) {
-            $item['product_id'] = $item['product'] ?? null; // Use null if 'product' key is not set
-            $item['raw_material_item_id'] = $item['raw_material_item'] ?? null; // Use null if 'raw_material_item' key is not set
-            $item['batch_id'] = $item['batch'] ?? null; // Use null if 'batch' key is not set
+            $grn_items = $item['grn_items'] ?? [];
+            foreach ($grn_items as $key => $grn_item) {
+                $grn_item['product_id'] = $item['product'] ?? null;
+                $grn_item['raw_material_item_id'] = $item['raw_material_item'] ?? null;
+                $grn_item['code'] = $item['code'] ?? null;
+                $grn_item['description'] = $item['description'] ?? null;
+                $grn_item['quantity_ordered'] = $item['quantity_ordered'] ?? null;
+                $grn_item['quantity_received'] = $item['quantity_received'] ?? null;
+                
+                if ($grn_item['product_id']) {
+                    $grn_item['last_goods_receiving_id'] = GoodsReceivingItem::where('product_id', $grn_item['product_id'])
+                        ->latest('id')
+                        ->value('goods_receiving_id');
+                } elseif ($grn_item['raw_material_item_id']) {
+                    $grn_item['last_goods_receiving_id'] = GoodsReceivingItem::where('raw_material_item_id', $grn_item['raw_material_item_id'])
+                        ->latest('id')
+                        ->value('goods_receiving_id');
+                }
 
-            if ($item['product_id']) {
-                $item['last_goods_receiving_id'] = GoodsReceivingItem::where('product_id', $item['product_id'])
-                    ->where('goods_receiving_id', '<', $goodsReceiving->id)
-                    ->latest('id')
-                    ->value('goods_receiving_id');
-            } elseif ($item['raw_material_item_id']) {
-                $item['last_goods_receiving_id'] = GoodsReceivingItem::where('raw_material_item_id', $item['raw_material_item_id'])
-                    ->where('goods_receiving_id', '<', $goodsReceiving->id)
-                    ->latest('id')
-                    ->value('goods_receiving_id');
+                $goodsReceiving->items()->create($grn_item);
+
+                $grn_item['quantity'] = $grn_item['balance_receivable'];
+                $grn_item['total'] = $grn_item['total_amount'];
+                $grn_item['company_id'] = $data['company_id'];
+
+                $goodsReceiving->stocks()->create($grn_item);
             }
-
-            $goodsReceiving->items()->create($item);
-            $item['quantity'] = $item['balance_receivable'];
-            $item['total'] = $item['total_amount'];
-            $item['company_id'] = $data['company_id'];
-            $goodsReceiving->stocks()->create($item);
         }
 
         $allItemsMatch = $goodsReceiving->items->every(function ($item) {

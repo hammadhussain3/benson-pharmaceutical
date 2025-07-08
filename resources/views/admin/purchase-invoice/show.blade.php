@@ -86,6 +86,7 @@
                             <th rowspan="2">Min. <br>Level</th>
                             <th rowspan="2">Max. <br>Level</th>
                             <th rowspan="2">Quantity <br>Required</th>
+                            <th rowspan="2">Price</th>
                             <th rowspan="2">Unit</th>
                             <th colspan="2">Last Purchase</th>
                             <th colspan="2">In-Process</th>
@@ -113,6 +114,7 @@
                                 <td>{{ $item->min_level }}</td>
                                 <td>{{ $item->max_level }}</td>
                                 <td>{{ $item->quantity }}</td>
+                                <td>{{ $item->unit_price }}</td>
                                 <td>{{ $item->unit }}</td>
                                 <td>{{ $item->lp_ref }}</td>
                                 <td>{{ $item->lp_price }}</td>

@@ -38,11 +38,11 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="code">Code</label>
+                                <label for="code">Code<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $goodsReceiving->code) }}">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="invoice_id">PO</label>
+                                <label for="invoice_id">PO<span class="text-danger">*</span></label>
                                 <select name="invoice" id="invoice_id" class="js-example-basic-single select2" required  onchange="getInvoiceDetails(this.value);">
                                     <option value="">Select PO</option>
                                     @php
@@ -58,7 +58,7 @@
                             </div>
                             
                             <div class="mb-3 col-md-6">
-                                <label for="supplier">Supplier</label>
+                                <label for="supplier">Supplier<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="supplier_name" id="supplier_name" placeholder="Supplier Name" value="{{ old('supplier_name', $goodsReceiving->party->name) }}" readonly>
                                 <input type="hidden" name="supplier" id="supplier_id" value="{{ old('supplier', $goodsReceiving->party_id) }}">
                             </div>
@@ -69,8 +69,15 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="card border-0 mb-0" id="item-group">
+                                    {{-- @dd(count($goodsReceiving->items->unique('raw_material_item_id'))) --}}
                                     @if (count(old('items', $goodsReceiving->items)) > 0)
-                                    @for ($i = 0; $i < count(old('items', $goodsReceiving->items)); $i++)
+                                    @php
+                                        $oldItems = old('items');
+                                        $items = $oldItems ?? $goodsReceiving->items->groupBy(function($item) {
+                                            return $item->product_id ?? 'rm_' . $item->raw_material_item_id;
+                                        })->values();
+                                    @endphp
+                                    @for ($i = 0; $i < count(old('items', $items)); $i++)
                                         @php
                                             $itemType = $goodsReceiving->items[$i]->product_id ? 'product' : 'raw_material_item';
                                         @endphp
@@ -82,51 +89,59 @@
                                             <div class="card-body px-0 pb-0">
                                                 <input type="hidden" name="items[{{ $i }}][types]" value="{{ old('items.'.$i.'.types', $itemType) }}">
                                                 <div class="row">
-                                                    <div class="mb-3 col-md-4">
-                                                        <label for="product_code">Code</label>
-                                                        <input type="text" class="form-control" name="items[{{ $i }}][code]"
-                                                            placeholder="Product Code" required value="{{ old('items.'.$i.'.code', $goodsReceiving->items[$i]->item->code) }}" readonly>
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
-                                                        <label for="batch_id">Batch#</label>
-                                                        <input type="text" class="form-control" name="items[{{ $i }}][batch]"
-                                                            placeholder="Batch" required value="{{ old('items.'.$i.'.batch', $goodsReceiving->items[$i]->batch) }}">
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
-                                                        <label>Unit Price</label>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control unit_price" name="items[{{ $i }}][unit_price]"
-                                                                placeholder="Unit Price" required value="{{ old('items.'.$i.'.unit_price', $goodsReceiving->items[$i]->unit_price) }}">
-                                                            <input type="text" class="form-control" name="items[{{ $i }}][unit]" placeholder="Unit" required value="{{ old('items.'.$i.'.unit', $goodsReceiving->items[$i]->unit) }}" readonly>
-                                                        </div>
-                                                    </div>
                                                     <div class="mb-3 col-md-12">
                                                         <label for="product_name">Description</label>
-                                                        <input type="text" class="form-control" name="items[{{ $i }}][name]"
-                                                            placeholder="Product Name" required value="{{ old('items.'.$i.'.name', $goodsReceiving->items[$i]->item->name) }}" readonly>
-                                                            <input type="hidden" 
-                                                                name="items[{{ $i }}][{{ old('items.'.$i.'.types', $itemType) }}]" 
-                                                                value="{{ old('items.'.$i.'.types', $itemType) == 'product' ? old('items.'.$i.'.product', $goodsReceiving->items[$i]->product_id) : old('items.'.$i.'.raw_material_item', $goodsReceiving->items[$i]->raw_material_item_id) }}">
+                                                        <textarea name="items[{{ $i }}][description]" class="form-control" readonly>{{ old('items.'.$i.'.description', $goodsReceiving->items[$i]->description) }}</textarea>
+                                                        <input type="hidden" 
+                                                            name="items[{{ $i }}][{{ old('items.'.$i.'.types', $itemType) }}]" 
+                                                            value="{{ old('items.'.$i.'.types', $itemType) == 'product' ? old('items.'.$i.'.product', $goodsReceiving->items[$i]->product_id) : old('items.'.$i.'.raw_material_item', $goodsReceiving->items[$i]->raw_material_item_id) }}">
                                                     </div>
-                                                    <div class="mb-3 col-md-3">
+                                                    <div class="mb-3 col-md-4">
+                                                        <label for="product_code">Code<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="items[{{ $i }}][code]"
+                                                            placeholder="Product Code" required value="{{ old('items.'.$i.'.code', $goodsReceiving->items[$i]->code) }}" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
                                                         <label>Quantity Ordered</label>
                                                         <input type="number" class="form-control" name="items[{{ $i }}][quantity_ordered]"
                                                             placeholder="Quantity Ordered" required value="{{ old('items.'.$i.'.quantity_ordered', $goodsReceiving->items[$i]->quantity_ordered) }}" readonly>
                                                     </div>
-                                                    <div class="mb-3 col-md-3">
+                                                    <div class="mb-3 col-md-4">
                                                         <label>Quantity Received</label>
                                                         <input type="number" class="form-control" name="items[{{ $i }}][quantity_received]"
                                                             placeholder="Quantity Received" required value="{{ old('items.'.$i.'.quantity_received', $goodsReceiving->items[$i]->quantity_received) }}" readonly>
                                                     </div>
-                                                    <div class="mb-3 col-md-3">
-                                                        <label>Balance Receivable</label>
-                                                        <input type="number" class="form-control balance_receivable" name="items[{{ $i }}][balance_receivable]"
-                                                            placeholder="Balance Receivable" required value="{{ old('items.'.$i.'.balance_receivable', $goodsReceiving->items[$i]->balance_receivable) }}" oninput="calculateGoodsRecievingAmount()">
-                                                    </div>
-                                                    <div class="mb-3 col-md-3">
-                                                        <label>Total</label>
-                                                        <input type="number" class="form-control product_total" name="items[{{ $i }}][total_amount]"
-                                                            placeholder="Total" required value="{{ old('items.'.$i.'.total_amount', $goodsReceiving->items[$i]->total_amount) }}" readonly>
+                                                    <div class="col-12 grn-rows-container" data-index="{{ $i }}">
+                                                        @php
+                                                            $grnItems = old("items.$i.grn_items", is_object($items[$i]) ? $items[$i]->toArray() : ($items[$i]['grn_items'] ?? []));
+                                                        @endphp
+                                                        @for ($j = 0; $j < count($grnItems); $j++)
+                                                            <div class="row grn-row align-items-end">
+                                                                <div class="mb-3 col-md-auto {{ $j === 0 ? 'd-none' : ''}}">
+                                                                    <button type="button" class="btn btn-danger remove-grn-row"><i class="fa fa-trash"></i></button>
+                                                                </div>
+                                                                <div class="mb-3 col-md">
+                                                                    <label>Batch#<span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][batch]" value="{{ $grnItems[$j]['batch'] ?? '' }}" placeholder="Enter Batch#">
+                                                                </div>
+                                                                <div class="mb-3 col-md">
+                                                                    <label>Quantity Receiving<span class="text-danger">*</span></label>
+                                                                    <input type="number" class="form-control balance_receivable" name="items[{{ $i }}][grn_items][{{ $j }}][balance_receivable]" value="{{ $grnItems[$j]['balance_receivable'] ?? '' }}" placeholder="Balance Receivable" oninput="calculateGoodsRecievingAmount()">
+                                                                </div>
+                                                                <div class="mb-3 col-md">
+                                                                    <label>Unit Price</label>
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control w-50 unit_price" name="items[{{ $i }}][grn_items][{{ $j }}][unit_price]" value="{{ $grnItems[$j]['unit_price'] ?? '' }}" readonly>
+                                                                        <input type="text" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][unit]" value="{{ $grnItems[$j]['unit'] ?? '' }}" readonly>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3 col-md">
+                                                                    <label>Total</label>
+                                                                    <input type="number" class="form-control product_total" name="items[{{ $i }}][grn_items][{{ $j }}][total_amount]"
+                                                                        placeholder="Total" required value="{{ $grnItems[$j]['total_amount'] ?? '' }}" readonly>
+                                                                </div>
+                                                            </div>
+                                                        @endfor
                                                     </div>
                                                 </div>
                                             </div>
@@ -142,17 +157,17 @@
                                 </div>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="supplier_bill_no">Supplier Bill No</label>
+                                <label for="supplier_bill_no">Supplier Bill No<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="supplier_bill_no" id="supplier_bill_no"
                                     placeholder="Supplier Bill No" required value="{{ old('supplier_bill_no', $goodsReceiving->supplier_bill_no) }}">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="therapeutic_class">Sales Tax</label>
+                                <label for="therapeutic_class">Sales Tax<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="sales_tax" id="sales_tax"
                                     placeholder="Sales Tax" required value="{{ old('sales_tax', $goodsReceiving->sales_tax) }}" oninput="calculateGoodsRecievingAmount()">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="adv_tax">Adv Tax</label>
+                                <label for="adv_tax">Adv Tax<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="adv_tax" id="adv_tax"
                                     placeholder="Advance Tax" required value="{{ old('adv_tax', $goodsReceiving->adv_tax) }}" oninput="calculateGoodsRecievingAmount()">
                             </div>
@@ -191,5 +206,51 @@
                 }
             }
         }
+        document.addEventListener('click', function (e) {
+            // Handle Add GRN Row
+            if (e.target.closest('.add-grn-row')) {
+                const btn = e.target.closest('.add-grn-row');
+
+                // Find nearest grn-rows-container above the button
+                const grnContainer = btn.closest('.item-set')?.querySelector('.grn-rows-container');
+                if (!grnContainer) return;
+
+                const rows = grnContainer.querySelectorAll('.grn-row');
+                const lastIndex = rows.length;
+                const index = grnContainer.dataset.index;
+
+                const firstRow = rows[0];
+                const clone = firstRow.cloneNode(true);
+
+                // Update name attributes and reset values
+                clone.querySelectorAll('input').forEach(input => {
+                    const name = input.name;
+                    if (!name) return;
+
+                    const newName = name.replace(/\[grn_items]\[\d+]/, `[grn_items][${lastIndex}]`);
+                    input.name = newName;
+
+                    if (name.includes('[unit_price]') || name.includes('[unit]')) {
+                        // keep value
+                    } else {
+                        input.value = '';
+                    }
+                });
+
+                // Show trash icon
+                const removeCol = clone.querySelector('.remove-grn-row')?.closest('.col-md-auto');
+                if (removeCol) removeCol.classList.remove('d-none');
+
+                grnContainer.appendChild(clone);
+            }
+
+            // Handle Remove GRN Row
+            if (e.target.closest('.remove-grn-row')) {
+                e.preventDefault();
+                const row = e.target.closest('.grn-row');
+                if (row) row.remove();
+                calculateGoodsRecievingAmount();
+            }
+        });
     </script>
 @endsection
