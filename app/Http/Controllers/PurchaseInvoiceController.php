@@ -143,30 +143,35 @@ class PurchaseInvoiceController extends Controller
         $invoice = Invoice::with('items.productVariation', 'items.rawMaterialItem', 'party')->where('id', $invoiceId)->first();
         $goods_receivings = GoodsReceiving::with('items')->where('invoice_id', $invoice->id)->get();
 
-        $invoice->items->map(function ($item) use ($goods_receivings) {
-            // Determine if the item is a product or raw material
+        $filteredItems = $invoice->items->filter(function ($item) use ($goods_receivings) {
+            // Default received quantity
+            $receivedQuantity = 0;
+
             if ($item->product_id) {
-                // For product
                 $receivedQuantity = $goods_receivings->flatMap->items
-                    ->where('product_id', $item->product_id) // Match product_id
-                    ->sum('balance_receivable'); // Sum received quantities
+                    ->where('product_id', $item->product_id)
+                    ->sum('balance_receivable');
 
-                // Add received quantity as custom attribute
-                $item->received_quantity = $receivedQuantity;
-                $item->batches = Batch::where('product_id', $item->product_id)->orderBy('batch_no', 'asc')->get()->toArray() ?? null;
+                $item->batches = Batch::where('product_id', $item->product_id)
+                    ->orderBy('batch_no', 'asc')->get()->toArray() ?? null;
+
             } elseif ($item->raw_material_item_id) {
-                // For raw material
                 $receivedQuantity = $goods_receivings->flatMap->items
-                    ->where('raw_material_item_id', $item->raw_material_item_id) // Match raw_material_item_id
-                    ->sum('balance_receivable'); // Sum received quantities
+                    ->where('raw_material_item_id', $item->raw_material_item_id)
+                    ->sum('balance_receivable');
 
-                // Add received quantity as custom attribute
-                $item->received_quantity = $receivedQuantity;
                 $item->batches = null;
             }
 
-            return $item;
+            $item->received_quantity = $receivedQuantity;
+
+            // Keep item only if not fully received
+            return $receivedQuantity < $item->quantity;
         });
+
+        // Replace items relation with filtered collection
+        $invoice->setRelation('items', $filteredItems->values());
+
         return response()->json(['invoice' => $invoice]);
     }
 

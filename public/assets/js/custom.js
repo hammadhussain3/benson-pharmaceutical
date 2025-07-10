@@ -862,7 +862,6 @@ function selectSingleFieldPVByCompany(batchId)
             return response.json();
         })
         .then(data => {
-            console.log(data);
             if (data.productVariations && data.productVariations.length > 0) {
                 allSelects.forEach(select => {
                     data.productVariations.forEach(productVariation => {
@@ -1009,7 +1008,6 @@ function selectRmiDetailsT(rawMaterialId, target) {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 if (data) {
                     if(codeInput){
                         codeInput.value = data.rawMaterialItem.code ?? '';
@@ -1440,7 +1438,6 @@ function selectPricePacks(productVariation, target) {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 unitPrice.value = data.price;
                 unit.value = data.unit;
             })
