@@ -90,7 +90,7 @@
                                                             @foreach ($rawMaterialItems->where('company_id', $seletedCompanyId) as $rawMaterialItem)
                                                                 <option value="{{ $rawMaterialItem->id }}"
                                                                     {{ old("invoice_items.$i.raw_material_item", $invoice->items[$i]->raw_material_item_id ?? '') == $rawMaterialItem->id ? 'selected' : '' }}>
-                                                                    {{ $invoice->items[$i]->title }}
+                                                                    {{ old("invoice_items.$i.raw_material_item", $invoice->items[$i]->raw_material_item_id ?? '') == $rawMaterialItem->id ? $invoice->items[$i]->title : $rawMaterialItem->name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>

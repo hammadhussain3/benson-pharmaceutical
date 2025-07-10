@@ -40,8 +40,8 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            <th>Sales Tax</th>
-                            <th>Adv Tax</th>
+                            {{-- <th>Sales Tax</th>
+                            <th>Adv Tax</th> --}}
                             <th>Total amount</th>
                             <th>Date</th>
                             <th>Is Approved</th>
@@ -62,8 +62,8 @@
                                 @role('Superadmin')
                                 <td>{{ $goodsReceiving->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                <td>{{ $goodsReceiving->sales_tax }}</td>
-                                <td>{{ $goodsReceiving->adv_tax }}</td>
+                                {{-- <td>{{ $goodsReceiving->sales_tax }}</td>
+                                <td>{{ $goodsReceiving->adv_tax }}</td> --}}
                                 <td>{{ $goodsReceiving->total_amount }}</td>
                                 <td>{{ $goodsReceiving->created_at->format('d M, Y') }}</td>
                                 <td><span class="badge {{ $goodsReceiving->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $goodsReceiving->is_approved == 1 ? 'Yes' : 'No' }}</span></td>

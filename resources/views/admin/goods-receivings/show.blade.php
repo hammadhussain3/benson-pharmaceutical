@@ -88,7 +88,7 @@
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr>
+                    {{-- <tr>
                         <th colspan="5"></th>
                         <th colspan="3">Exclusive Tax</th>
                         <td>{{ number_format($goodsReceiving->total_amount - ($goodsReceiving->sales_tax + $goodsReceiving->adv_tax), 2) }}</td>
@@ -102,10 +102,10 @@
                         <th colspan="5"></th>
                         <th colspan="3">Advance Tax</th>
                         <td>{{ number_format($goodsReceiving->adv_tax, 2) }}</td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <th colspan="5"></th>
-                        <th colspan="3">Tax Inclusice Total</th>
+                        <th colspan="3">Total</th>
                         <td>{{ number_format($goodsReceiving->total_amount, 2) }}</td>
                     </tr>
                 </tfoot>

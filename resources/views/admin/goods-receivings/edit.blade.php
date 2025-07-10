@@ -47,8 +47,13 @@
                                     <option value="">Select PO</option>
                                     @php
                                         $seletedCompanyId = old('company', $goodsReceiving->company_id) ?? auth()->user()->employee->company_id;
+                                        $filteredInvoices = $invoices->where('is_approved', 1)
+                                            ->where('company_id', $seletedCompanyId)
+                                            ->filter(function ($invoice) use ($goodsReceiving) {
+                                                return $invoice->status != 'completed' || $invoice->id == $goodsReceiving->invoice_id;
+                                            });
                                     @endphp
-                                    @foreach ($invoices->where('company_id', $seletedCompanyId) as $invoice)
+                                    @foreach ($filteredInvoices as $invoice)
                                         <option value="{{ $invoice->id }}"
                                             {{ old('invoice', $goodsReceiving->invoice_id) == $invoice->id ? 'selected' : '' }}>
                                             {{ $invoice->code }}
@@ -161,7 +166,7 @@
                                 <input type="text" class="form-control" name="supplier_bill_no" id="supplier_bill_no"
                                     placeholder="Supplier Bill No" required value="{{ old('supplier_bill_no', $goodsReceiving->supplier_bill_no) }}">
                             </div>
-                            <div class="mb-3 col-md-6">
+                            {{-- <div class="mb-3 col-md-6">
                                 <label for="therapeutic_class">Sales Tax<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="sales_tax" id="sales_tax"
                                     placeholder="Sales Tax" required value="{{ old('sales_tax', $goodsReceiving->sales_tax) }}" oninput="calculateGoodsRecievingAmount()">
@@ -170,7 +175,7 @@
                                 <label for="adv_tax">Adv Tax<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="adv_tax" id="adv_tax"
                                     placeholder="Advance Tax" required value="{{ old('adv_tax', $goodsReceiving->adv_tax) }}" oninput="calculateGoodsRecievingAmount()">
-                            </div>
+                            </div> --}}
                             <div class="mb-3 col-md-6">
                                 <label for="total_amount">Total Amount</label>
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"

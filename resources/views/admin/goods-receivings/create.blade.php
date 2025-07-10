@@ -48,7 +48,7 @@
                                         @php
                                             $seletedCompanyId = old('company') ?? auth()->user()->employee->company_id;
                                         @endphp
-                                        @foreach ($invoices->where('company_id', $seletedCompanyId) as $invoice)
+                                        @foreach ($invoices->where('is_approved', 1)->where('status', '!=', 'completed')->where('company_id', $seletedCompanyId) as $invoice)
                                             <option value="{{ $invoice->id }}"
                                                 {{ old('invoice') == $invoice->id ? 'selected' : '' }}>
                                                 {{ $invoice->code }}
@@ -154,7 +154,7 @@
                                 <input type="text" class="form-control" name="supplier_bill_no" id="supplier_bill_no"
                                     placeholder="Supplier Bill No" required value="{{ old('supplier_bill_no') }}">
                             </div>
-                            <div class="mb-3 col-md-6">
+                            {{-- <div class="mb-3 col-md-6">
                                 <label for="therapeutic_class">Sales Tax<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="sales_tax" id="sales_tax"
                                     placeholder="Sales Tax" required value="{{ old('sales_tax', 0) }}" oninput="calculateGoodsRecievingAmount()">
@@ -163,7 +163,7 @@
                                 <label for="adv_tax">Adv Tax<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="adv_tax" id="adv_tax"
                                     placeholder="Advance Tax" required value="{{ old('adv_tax', 0) }}" oninput="calculateGoodsRecievingAmount()">
-                            </div>
+                            </div> --}}
                             <div class="mb-3 col-md-6">
                                 <label for="total_amount">Total Amount</label>
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"

@@ -31,8 +31,8 @@ class GoodsReceivingRequest extends FormRequest
             'supplier_code' => 'nullable|string|max:50',
             'supplier_bill_no' => 'required|string|max:255',
             'company' => 'required|integer|exists:companies,id',
-            'sales_tax' => 'required|numeric|min:0',
-            'adv_tax' => 'required|numeric|min:0',
+            // 'sales_tax' => 'required|numeric|min:0',
+            // 'adv_tax' => 'required|numeric|min:0',
             'total_amount' => 'required|numeric|min:1',
             'is_approved' => 'nullable|boolean',
 

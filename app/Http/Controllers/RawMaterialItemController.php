@@ -178,16 +178,15 @@ class RawMaterialItemController extends Controller
             ->unique()
             ->toArray();
 
-        $lastPOItem = InvoiceItem::with('invoice')
+        $lastPOItem = GoodsReceivingItem::with('goodsReceiving.invoice')
             ->where('raw_material_item_id', $rawMaterialId)
-            // ->whereIn('invoice_id', $grnLinkedInvoiceIds)
-            ->whereHas('invoice', function ($query) {
-                $query->where('status', 'completed');
+            ->whereHas('goodsReceiving', function ($query) {
+                $query->where('is_approved', 1);
             })
             ->latest('created_at')
             ->first();
 
-        $rawMaterialItem->last_po_ref = $lastPOItem?->invoice?->code ?? null;
+        $rawMaterialItem->last_po_ref = $lastPOItem?->goodsReceiving?->invoice?->code ?? null;
         $rawMaterialItem->last_po_price = $lastPOItem?->unit_price ?? null;
 
         $pendingPOItems = InvoiceItem::with('invoice')
@@ -218,7 +217,10 @@ class RawMaterialItemController extends Controller
             ->filter()
             ->implode('-');
 
-        $rawMaterialItem->pending_po_total_qty = $pendingPOItemsWithRemainingQty->sum('remaining_quantity');
+        $rawMaterialItem->pending_po_total_qty = $pendingPOItemsWithRemainingQty
+            ->pluck('remaining_quantity')
+            ->filter()
+            ->implode(', ');
 
         return response()->json(['rawMaterialItem' => $rawMaterialItem]);
     }
