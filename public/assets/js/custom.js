@@ -2026,7 +2026,7 @@ function getInvoiceDetails(invoiceId) {
                     var html = `
                         <div class="item-set">
                             <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
-                                <h4 class="card-title mb-0">Item ${itemIndex + 1}</h4>
+                                <h4 class="card-title mb-0">${item.title ?? ''}</h4>
                                 <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                             </div>
                             <div class="card-body px-0 pb-0">
@@ -2040,7 +2040,7 @@ function getInvoiceDetails(invoiceId) {
                                     <div class="mb-3 col-md-4">
                                         <label for="product_code">Code</label>
                                         <input type="text" class="form-control" name="items[${itemIndex}][code]"
-                                            placeholder="Product Code" required value="${item.product ? item.product.code : item.raw_material_item.code}" readonly>
+                                            placeholder="Product Code" required value="${item.code}" readonly>
                                     </div>
                                     <div class="mb-3 col-md-4">
                                         <label>Quantity Ordered</label>
