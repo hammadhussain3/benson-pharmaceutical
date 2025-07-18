@@ -92,13 +92,13 @@ class InvoiceService
         $invoiceItems = $invoiceItemQuery
             ->with([
                 'invoice' => function ($query) {
-                    $query->select('id', 'code', 'invoice_date', 'required_date', 'status', 'company_id');
+                    $query->select('id', 'code', 'party_id', 'invoice_date', 'required_date', 'is_urgent', 'status', 'company_id');
                 },
                 'rawMaterialItem' => function ($query) {
                     $query->select('id', 'code', 'name');
                 }
             ])
-            ->select('id', 'invoice_id', 'raw_material_item_id', 'quantity')
+            ->select('id', 'invoice_id', 'raw_material_item_id', 'title', 'quantity')
             ->get();
 
         $filteredItems = $invoiceItems->filter(function ($invoiceItem) use ($status) {

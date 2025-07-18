@@ -72,8 +72,23 @@ class ReportController extends Controller
         $from_date = $request->has('from_date') ? $request->input('from_date') : now()->subDays(30)->format('Y-m-d');
         $to_date = $request->has('to_date') ? $request->input('to_date') : now()->format('Y-m-d');
         $status = $request->has('status') ? $request->input('status') : null;
-        $purchaseItems = $this->invoiceService->getOnlyPurchaseItems($from_date, $to_date, $status)->sortBy('item_code');
-        return view('admin.reports.purchase-items',compact('purchaseItems', 'from_date', 'to_date', 'status'));
+        $type = $request->has('type') ? $request->input('type') : null;
+        $purchaseItems = $this->invoiceService->getOnlyPurchaseItems($from_date, $to_date, $status);
+        if ($type === 'purchase-order') {
+            $purchaseItems = $purchaseItems->sortBy(fn($item) => $item->invoice->code);
+        } elseif ($type === 'items-name') {
+            $purchaseItems = $purchaseItems->sortBy('title');
+        } elseif ($type === 'vendor') {
+            $purchaseItems = $purchaseItems->sortBy(fn($item) => $item->invoice->party->name);
+        } elseif ($type === 'req-date') {
+            $purchaseItems = $purchaseItems->sortBy(fn($item) => $item->invoice->required_date);
+        } elseif ($type === 'days-remaining') {
+            $purchaseItems = $purchaseItems->sortBy(fn($item) => now()->diffInDays(\Carbon\Carbon::parse($item->invoice->required_date), false));
+        } elseif ($type === 'pending-qty') {
+            $purchaseItems = $purchaseItems->sortByDesc(fn($item) => $item->quantity - $item->received_quantity);
+        }
+        // dd($purchaseItems->toArray());
+        return view('admin.reports.purchase-items',compact('purchaseItems', 'from_date', 'to_date', 'status', 'type'));
     }
 
     public function purchaseRequisitions(Request $request)

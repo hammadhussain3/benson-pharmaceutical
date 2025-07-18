@@ -382,7 +382,7 @@
                         </li>
                         <li>
                             <a class="{{ request()->is('*purchase-items') ? 'active' : '' }}" href="{{ route('reports.purchase-items') }}">
-                                Purchase Items
+                                Purchase Order
                             </a>
                         </li>
                         <li>
