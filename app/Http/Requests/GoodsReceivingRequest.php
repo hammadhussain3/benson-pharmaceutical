@@ -33,7 +33,7 @@ class GoodsReceivingRequest extends FormRequest
             'company' => 'required|integer|exists:companies,id',
             // 'sales_tax' => 'required|numeric|min:0',
             // 'adv_tax' => 'required|numeric|min:0',
-            'total_amount' => 'required|numeric|min:1',
+            'total_amount' => 'required|numeric|min:0',
             'is_approved' => 'nullable|boolean',
 
             'items' => 'required|array|min:1',
@@ -45,12 +45,12 @@ class GoodsReceivingRequest extends FormRequest
             'items.*.quantity_received' => 'required|numeric|min:0',
 
             // Validate nested GRN rows
-            'items.*.grn_items' => 'required|array|min:1',
+            'items.*.grn_items' => 'required|array|min:0',
             'items.*.grn_items.*.batch' => 'required|string|max:50',
-            'items.*.grn_items.*.balance_receivable' => 'required|numeric|min:1',
+            'items.*.grn_items.*.balance_receivable' => 'required|numeric|min:0',
             'items.*.grn_items.*.unit_price' => 'required|numeric|min:1',
             'items.*.grn_items.*.unit' => 'required|string|max:50',
-            'items.*.grn_items.*.total_amount' => 'required|numeric|min:1',
+            'items.*.grn_items.*.total_amount' => 'required|numeric|min:0',
         ];
     }
 
