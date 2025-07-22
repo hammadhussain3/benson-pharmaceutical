@@ -8,10 +8,20 @@
             "email": "asargodha@gmail.com"
         }
     ],
-    "keywords": ["laravel", "crud", "crud generator", "laravel crud generator", "laravel package", "bootstrap css", "tailwind css", "alpine js"],
+    "keywords": [
+        "laravel",
+        "crud",
+        "crud generator",
+        "laravel crud generator",
+        "laravel package",
+        "bootstrap css",
+        "tailwind css",
+        "alpine js",
+        "livewire"
+    ],
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^10.30|^11.0"
+        "laravel/framework": "^10.30|^11.44|^12.2"
     },
     "autoload": {
         "psr-4": {
