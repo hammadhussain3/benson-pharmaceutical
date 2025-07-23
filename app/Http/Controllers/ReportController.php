@@ -69,11 +69,13 @@ class ReportController extends Controller
 
     public function purchaseItems(Request $request)
     {
-        $from_date = $request->has('from_date') ? $request->input('from_date') : now()->subDays(30)->format('Y-m-d');
-        $to_date = $request->has('to_date') ? $request->input('to_date') : now()->format('Y-m-d');
+        // $from_date = $request->has('from_date') ? $request->input('from_date') : now()->subDays(30)->format('Y-m-d');
+        // $to_date = $request->has('to_date') ? $request->input('to_date') : now()->format('Y-m-d');
         $status = $request->has('status') ? $request->input('status') : null;
+        $days_filter = $request->has('days_filter') ? $request->input('days_filter') : null;
+        $urgent = $request->has('urgent') ? $request->input('urgent') : null;
         $type = $request->has('type') ? $request->input('type') : null;
-        $purchaseItems = $this->invoiceService->getOnlyPurchaseItems($from_date, $to_date, $status);
+        $purchaseItems = $this->invoiceService->getOnlyPurchaseItems($status);
         if ($type === 'purchase-order') {
             $purchaseItems = $purchaseItems->sortBy(fn($item) => $item->invoice->code);
         } elseif ($type === 'items-name') {
@@ -87,8 +89,33 @@ class ReportController extends Controller
         } elseif ($type === 'pending-qty') {
             $purchaseItems = $purchaseItems->sortByDesc(fn($item) => $item->quantity - $item->received_quantity);
         }
+
+        if ($days_filter === 'overdue') {
+            $purchaseItems = $purchaseItems->filter(function ($item) {
+                $requiredDate = Carbon::parse($item->invoice->required_date)->startOfDay();
+                $remainingDays = now()->startOfDay()->diffInDays($requiredDate, false);
+                return $remainingDays < 0;
+            });
+        } elseif ($days_filter === 'left') {
+            $purchaseItems = $purchaseItems->filter(function ($item) {
+                $requiredDate = Carbon::parse($item->invoice->required_date)->startOfDay();
+                $remainingDays = now()->startOfDay()->diffInDays($requiredDate, false);
+                return $remainingDays >= 0;
+            });
+        }
+
+        if ($urgent === '1') {
+            $purchaseItems = $purchaseItems->filter(function ($item) {
+                return $item->invoice->is_urgent == 1;
+            });
+        } elseif ($urgent === '0') {
+            $purchaseItems = $purchaseItems->filter(function ($item) {
+                return $item->invoice->is_urgent == 0;
+            });
+        }
+
         // dd($purchaseItems->toArray());
-        return view('admin.reports.purchase-items',compact('purchaseItems', 'from_date', 'to_date', 'status', 'type'));
+        return view('admin.reports.purchase-items',compact('purchaseItems','status', 'days_filter', 'type', 'urgent'));
     }
 
     public function purchaseRequisitions(Request $request)

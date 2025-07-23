@@ -15,20 +15,36 @@
 
     <div class="mb-3">
         <form action="{{ route('reports.purchase-items') }}" class="row gy-2 gx-3 align-items-end" method="get">
-            <div class="col-sm-6 col-md-3">
+            {{-- <div class="col-sm-6 col-md-3">
                 <label class="form-label" for="from_date">From</label>
                 <input type="date" class="form-control" name="from_date" id="from_date" value="{{ $from_date }}">
             </div>
             <div class="col-sm-6 col-md-3">
                 <label class="form-label" for="to_date">To</label>
                 <input type="date" class="form-control" name="to_date" id="to_date" value="{{ $to_date }}">
-            </div>
+            </div> --}}
             <div class="col-sm-6 col-md-3">
                 <label class="form-label" for="status">Status</label>
                 <select name="status" id="status" class="form-select">
                     <option value="">Select Status</option>
                     <option value="Pending" {{ $status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="Completed" {{ $status == 'Completed' ? 'selected' : '' }}>Completed</option>
+                    <option value="Partial" {{ $status == 'Partial' ? 'selected' : '' }}>Partial</option>
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <label for="days_filter">Days</label>
+                <select name="days_filter" id="days_filter" class="form-select">
+                    <option value="">Select</option>
+                    <option value="overdue" {{ $days_filter == 'overdue' ? 'selected' : '' }}>Overdue</option>
+                    <option value="left" {{ $days_filter == 'left' ? 'selected' : '' }}>Left</option>
+                </select>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <label for="urgent">Urgent</label>
+                <select name="urgent" id="urgent" class="form-select">
+                    <option value="">Select</option>
+                    <option value="1" {{ $urgent == '1' ? 'selected' : '' }}>Yes</option>
+                    <option value="0" {{ $urgent == '0' ? 'selected' : '' }}>No</option>
                 </select>
             </div>
             <div class="col-sm-6 col-md-3">
@@ -55,7 +71,7 @@
             <p class="text-center text-muted mb-0">
                 {{ $type ? ucwords(str_replace('-', ' ', $type)) : ucwords(str_replace('-', ' ', 'purchase-order')) }} Wise
             </p>
-            <p class="text-center text-muted">From {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }} to {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</p>
+            {{-- <p class="text-center text-muted">From {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }} to {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</p> --}}
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead class="table-primary">

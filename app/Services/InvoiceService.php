@@ -76,11 +76,11 @@ class InvoiceService
         return $newInvoiceCode;
     }
 
-    public function getOnlyPurchaseItems($from_date, $to_date, $status)
+    public function getOnlyPurchaseItems($status)
     {
-        $invoiceItemQuery = InvoiceItem::whereHas('invoice', function ($query) use ($from_date, $to_date) {
+        $invoiceItemQuery = InvoiceItem::whereHas('invoice', function ($query) {
             $query->where('type', 'purchase')
-                ->whereBetween('invoice_date', [$from_date, $to_date]);
+                ->where('status', '!=', 'completed');
         });
 
         if (!auth()->user()->hasRole('Superadmin')) {
@@ -116,8 +116,12 @@ class InvoiceService
             }
 
             $invoiceItem->received_quantity = $receivedQuantity;
-            $invoiceItem->status = $invoiceItem->quantity != $receivedQuantity ? 'Pending' : 'Completed';
+            $invoiceItem->status = $receivedQuantity == 0 ? 'Pending' : ($invoiceItem->quantity == $receivedQuantity ? 'Completed' : 'Partial');
             $invoiceItem->item_code = $invoiceItem->product->code ?? $invoiceItem->rawMaterialItem->code;
+
+            if ($invoiceItem->status === 'Completed') {
+                return false;
+            }
 
             return $status === null || $invoiceItem->status === $status;
         });
