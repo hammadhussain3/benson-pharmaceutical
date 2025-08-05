@@ -24,13 +24,22 @@ class PurchaseInvoiceRequest extends FormRequest
 		$id = $this->route('purchase_invoice') ? $this->route('purchase_invoice') : null;
 		$isEdit = !is_null($id);
 
+        $requiredDateRule = 'required|date|after_or_equal:today';
+
+        if ($isEdit) {
+            $invoice = \App\Models\Invoice::find($id);
+            if ($invoice) {
+                $requiredDateRule = 'required|date|after_or_equal:' . $invoice->created_at->format('Y-m-d');
+            }
+        }
+
 		return [
             'type' => 'required|string|in:purchase',
             'prefix' => 'required|string|size:2',
             'company' => 'required|exists:companies,id',
             'party' => 'nullable|required_if:is_approved,1|exists:parties,id',
 			'code' => 'required|string|max:255|unique:invoices,code,' . $id . ',id,company_id,' . $this->company,			
-			'required_date' => 'required|date|after_or_equal:today',
+			'required_date' => $requiredDateRule,
             'payment_deadline' => 'nullable|date|after:today',
 			'is_urgent' => 'required|in:0,1',
             'invoice_items' => 'required|array|min:1',
@@ -61,7 +70,7 @@ class PurchaseInvoiceRequest extends FormRequest
 			// 'discount' => 'nullable|numeric|min:0',			
 			'total_amount' => 'required|numeric|min:0',			
 			'note' => 'nullable|string|max:1000',
-			// 'status' => 'nullable|in:pending,completed,partial',
+			'status' => 'nullable|in:pending,completed,partial',
 			'is_approved' => 'nullable|boolean',
 		];
     }

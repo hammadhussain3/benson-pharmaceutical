@@ -40,7 +40,7 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="code">Doc. No<span class="text-danger">*</span></label>
+                                <label for="code">Doc. No</label>
                                 <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $invoice->code) }}" readonly>
                             </div>
                             <div class="mb-3 col-md-3">
@@ -168,7 +168,7 @@
                                                           </div>
                                                     </div> --}}
                                                     <div class="mb-3 col-md-3">
-                                                        <label>Total<span class="text-danger">*</span></label>
+                                                        <label>Total</label>
                                                         <input type="number" class="form-control total_item_amount" name="invoice_items[{{ $i }}][total_amount]"
                                                             placeholder="Total" required value="{{ old("invoice_items.$i.total_amount", $invoice->items[$i]->total_amount ?? 0) }}" readonly>
                                                     </div>
@@ -212,7 +212,7 @@
                                         placeholder="Discount" required value="{{ old('discount', $invoice->discount) }}" oninput="calculatePurchaseInvoiceAmount()">
                                 </div>
                             </div> --}}
-                            <div class="mb-3 col-md-3">
+                            <div class="mb-3 col-md-3 d-none">
                                 <label for="returned_amount">Total Amount<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"
                                     placeholder="Total Amount" required value="{{ old('total_amount', $invoice->total_amount) }}" readonly>
@@ -248,6 +248,7 @@
                         </div>
                         <a class="btn btn-secondary" href="{{ route('purchase-invoices.index') }}">Cancel</a>
                         <input type="hidden" name="is_approved" id="is_approved" value="0">
+                        <input type="hidden" name="status" id="status" value="{{ $invoice->status }}">
 
                         <button type="submit" class="btn btn-primary" onclick="document.getElementById('is_approved').value = 0;">
                             Save
@@ -258,7 +259,13 @@
                                 Approve
                             </button>
                         @endif
-                        
+
+                        @if ($invoice->status === 'pending' && $invoice->is_approved !== 1)
+                            <button type="submit" class="btn btn-info" 
+                                    onclick="document.getElementById('status').value = 'completed';">
+                                Mark as Completed
+                            </button>
+                        @endif                        
                     </form>
                 </div>
             </div>
@@ -344,7 +351,7 @@
                                     placeholder="Consumption 6 Month" value="" readonly>
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label>Total<span class="text-danger">*</span></label>
+                                <label>Total</label>
                                 <input type="number" class="form-control total_item_amount" name="invoice_items[${itemIndex}][total_amount]"
                                     placeholder="Total" required value="0" readonly>
                             </div>

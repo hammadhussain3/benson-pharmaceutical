@@ -29,31 +29,31 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table datanew dataTable no-footer table-striped">
+                <table class="table datanew dataTable no-footer table-striped" style="font-size: 12px;">
                     <thead>
                         <tr>
                             <th>#</th>  
                             <th>Code</th>
+                            @if(auth()->user()->hasPermission('Purchase Invoice View') || auth()->user()->hasPermission('Purchase Invoice Update') || auth()->user()->hasPermission('Purchase Invoice Delete'))
+                                <th>Action</th>
+                            @endif
                             <th>Date</th> 
                             <th>Items</th> 
                             {{-- <th>Type</th> --}}
                             <th>Supplier</th>
                             <th>Required Date</th>
                             <th>Is Urgent</th>
-                            {{-- <th>Discount</th> --}}
-                            {{-- <th>Paid Amount</th>
+                            {{-- <th>Discount</th>
+                            <th>Paid Amount</th>
                             <th>Returned Amount</th>
-                            <th>Due Amount</th> --}}
+                            <th>Due Amount</th>
                             <th>Total Amount</th>
-                            {{-- <th>Payment Status</th> --}}
+                            <th>Payment Status</th> --}}
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
                             <th>Status</th>
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Purchase Invoice View') || auth()->user()->hasPermission('Purchase Invoice Update') || auth()->user()->hasPermission('Purchase Invoice Delete'))
-                                <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -61,33 +61,8 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('purchase-invoices.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
-                                <td>{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</td>
-                                <td>
-                                    <ul>
-                                        @forelse ($invoice->items as $item)
-                                            <li>{{ $item->title }}</li>
-                                        @empty
-                                            <li>N/A</li>
-                                        @endforelse
-                                    </ul>
-                                </td>
-                                {{-- <td>{{ ucfirst(strtolower($invoice->type)) }} ({{ $invoice->prefix }})</td> --}}
-                                <td>{{ $invoice->party->name ?? 'N/A' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}</td>
-                                <td>{{ $invoice->is_urgent == '1' ? 'Yes' : 'No' }}</td>
-                                {{-- <td>{{ $invoice->discount_type }} - {{ $invoice->discount }}</td> --}}
-                                {{-- <td>{{ $invoice->paid_amount }}</td>
-                                <td>{{ $invoice->returned_amount }}</td>
-                                <td>{{ $invoice->due_amount }}</td> --}}
-                                <td>{{ $invoice->total_amount }}</td>
-                                {{-- <td>{{ $invoice->payment_status }}</td> --}}
-                                @role('Superadmin')
-                                    <td>{{ $invoice->company->name }}</td>
-                                @endrole
-                                <td>{{ $invoice->status }}</td>
-                                <td><span class="badge {{ $invoice->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $invoice->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Purchase Invoice View') || auth()->user()->hasPermission('Purchase Invoice Update') || auth()->user()->hasPermission('Purchase Invoice Delete'))
-                                    <td>
+                                    <td style="min-width: 105px;">
                                         @if(auth()->user()->hasPermission('Purchase Invoice View'))
                                             <a class="me-3" href="{{ route('purchase-invoices.show', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
@@ -116,6 +91,31 @@
                                         @endif
                                     </td>
                                 @endif
+                                <td>{{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</td>
+                                <td>
+                                    <ul>
+                                        @forelse ($invoice->items as $item)
+                                            <li>{{ $item->title }}</li>
+                                        @empty
+                                            <li>N/A</li>
+                                        @endforelse
+                                    </ul>
+                                </td>
+                                {{-- <td>{{ ucfirst(strtolower($invoice->type)) }} ({{ $invoice->prefix }})</td> --}}
+                                <td>{{ $invoice->party->name ?? 'N/A' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}</td>
+                                <td>{{ $invoice->is_urgent == '1' ? 'Yes' : 'No' }}</td>
+                                {{-- <td>{{ $invoice->discount_type }} - {{ $invoice->discount }}</td>
+                                <td>{{ $invoice->paid_amount }}</td>
+                                <td>{{ $invoice->returned_amount }}</td>
+                                <td>{{ $invoice->due_amount }}</td>
+                                <td>{{ $invoice->total_amount }}</td>
+                                <td>{{ $invoice->payment_status }}</td> --}}
+                                @role('Superadmin')
+                                    <td>{{ $invoice->company->name }}</td>
+                                @endrole
+                                <td>{{ $invoice->status }}</td>
+                                <td><span class="badge {{ $invoice->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $invoice->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                             </tr>
                         @endforeach
                     </tbody>

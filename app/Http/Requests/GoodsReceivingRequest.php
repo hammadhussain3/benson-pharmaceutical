@@ -48,7 +48,7 @@ class GoodsReceivingRequest extends FormRequest
             'items.*.grn_items' => 'required|array|min:0',
             'items.*.grn_items.*.batch' => 'required|string|max:50',
             'items.*.grn_items.*.balance_receivable' => 'required|numeric|min:0',
-            'items.*.grn_items.*.unit_price' => 'required|numeric|min:1',
+            'items.*.grn_items.*.unit_price' => 'required|numeric|min:0',
             'items.*.grn_items.*.unit' => 'required|string|max:50',
             'items.*.grn_items.*.total_amount' => 'required|numeric|min:0',
         ];

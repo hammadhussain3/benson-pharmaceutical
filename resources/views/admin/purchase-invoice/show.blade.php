@@ -1,6 +1,18 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    <style>
+        table.table-bordered th,
+        table.table-bordered td {
+            border: 1px solid #e9ecef !important;
+        }
+
+        table.table-bordered {
+            border: 1px solid #e9ecef !important;
+            border-collapse: collapse !important;
+        }
+    </style>
+
     <div class="page-header">
         <div class="page-title">
             <h4>{{ $invoice->type == 'purchase' ? 'Purchase Order' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}
@@ -12,9 +24,34 @@
                 </li>
             </ul>
         </div>
-        <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print
-                {{ $invoice->type == 'purchase' ? 'Purchase Order' : ($invoice->type == 'sale' ? 'Sale Invoice' : ($invoice->type == 'quotation' ? 'Quotation' : '')) }}</button>
+        <div class="d-flex align-items-center gap-2">
+            {{-- Previous Button --}}
+            @if($previous)
+                <a href="{{ route('purchase-invoices.show', $previous->id) }}" class="btn btn-outline-secondary">
+                    &laquo; Previous
+                </a>
+            @else
+                <button class="btn btn-outline-secondary" disabled>&laquo; Previous</button>
+            @endif
+
+            {{-- Next Button --}}
+            @if($next)
+                <a href="{{ route('purchase-invoices.show', $next->id) }}" class="btn btn-outline-secondary">
+                    Next &raquo;
+                </a>
+            @else
+                <button class="btn btn-outline-secondary" disabled>Next &raquo;</button>
+            @endif
+
+            {{-- Edit Button --}}
+            <a href="{{ route('purchase-invoices.edit', $invoice->id) }}" class="btn btn-light">
+                <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+            </a>
+
+            {{-- Print Button --}}
+            <button class="btn btn-light" onclick="window.print()">
+                <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Edit">
+            </button>
         </div>
     </div>
     <!-- Print Button -->
@@ -62,22 +99,25 @@
                                         {{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}
                                     </div>
                                     <div class="col border-start border-end"><strong>Urgent</strong></div>
-                                    <div class="col d-flex align-items-center">{!! $invoice->is_urgent == '1' ? '<i class="fa fa-check"></i>' : '' !!}</div>
+                                    <div class="col d-flex align-items-center">
+                                        {!! $invoice->is_urgent == '1' ? '<i class="fa fa-check"></i>' : '' !!}
+                                    </div>
                                     <div class="col border-start border-end"><strong>Ordinary</strong></div>
                                     <div class="col">{{ $invoice->is_urgent == '0' ? '*' : '' }}</div>
                                 </div>
                             </li>
                             <li class="list-group-item">
                                 <strong>{{ $invoice->type == 'purchase' ? 'Supplier' : ($invoice->type == 'sale' || $invoice->type == 'quotation' ? 'Franchise' : '') }}:</strong>
-                                {{ optional($invoice->party)->name }}</li>
+                                {{ optional($invoice->party)->name }}
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div class="table-responsive">
-                <table class="table table-striped mt-3">
-                    <thead class="table-primary">
+                <table class="table table-bordered mt-3">
+                    <thead>
                         <tr>
                             <th rowspan="2">#</th>
                             <th rowspan="2">Item Code</th>
@@ -166,7 +206,8 @@
                     </div>
                     <div style="width: 266px; text-align: center;">
                         <span style="font-size: 14px; font-weight: bold;">
-                            {{ $invoice->approvedBy->name ?? null }} ({{ $invoice->is_approved == 1 ? 'Approved' : 'Draft' }})
+                            {{ $invoice->approvedBy->name ?? null }}
+                            ({{ $invoice->is_approved == 1 ? 'Approved' : 'Draft' }})
                         </span>
                         <hr style="width: 100%; margin: 5px 0px;">
                         <span style="font-size: 14px;">Approved by: Cheif Executive</span>
@@ -223,6 +264,10 @@
             background-color: #e3f2fd !important;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
+        }
+
+        table.table-bordered {
+            font-size: 10px !important;
         }
 
         .approved-target {

@@ -56,7 +56,7 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="code">Doc. No<span class="text-danger">*</span></label>
+                                <label for="code">Doc. No</label>
                                 <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $newInvoiceCode) }}" readonly>
                             </div>
                             <div class="mb-3 col-md-3">
@@ -185,7 +185,7 @@
                                                         </div>
                                                     </div> --}}
                                                     <div class="mb-3 col-md-3">
-                                                        <label>Total<span class="text-danger">*</span></label>
+                                                        <label>Total</label>
                                                         <input type="number" class="form-control total_item_amount" name="invoice_items[{{ $i }}][total_amount]"
                                                             placeholder="Total" required value="{{ old("invoice_items.$i.total_amount", 0) }}" readonly>
                                                     </div>
@@ -228,7 +228,7 @@
                                     placeholder="Discount" required value="{{ old('discount', 0) }}" oninput="calculatePurchaseInvoiceAmount()">
                                 </div>
                             </div> --}}
-                            <div class="mb-3 col-md-3">
+                            <div class="mb-3 col-md-3 d-none">
                                 <label for="returned_amount">Total Amount<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="total_amount" id="total_amount"
                                     placeholder="Total Amount" required value="{{ old('total_amount', 0) }}" readonly>
@@ -352,7 +352,7 @@
                                     placeholder="Consumption 6 Month" value="" readonly>
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label>Total<span class="text-danger">*</span></label>
+                                <label>Total</label>
                                 <input type="number" class="form-control total_item_amount" name="invoice_items[${itemIndex}][total_amount]"
                                     placeholder="Total" required value="0" readonly>
                             </div>

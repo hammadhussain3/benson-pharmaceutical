@@ -86,7 +86,18 @@ class PurchaseInvoiceController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $invoice = $this->purchaseInvoiceService->getById($id);
-        return view('admin.purchase-invoice.show', compact('invoice'));
+
+        $previous = Invoice::where('type', $invoice->type)
+            ->where('id', '<', $invoice->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $next = Invoice::where('type', $invoice->type)
+            ->where('id', '>', $invoice->id)
+            ->orderBy('id', 'asc')
+            ->first();
+
+        return view('admin.purchase-invoice.show', compact('invoice', 'previous', 'next'));
     }
 
     /**
