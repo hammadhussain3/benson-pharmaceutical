@@ -78,10 +78,10 @@
                                         @if(auth()->user()->hasPermission('Purchase Invoice Delete') && 
                                             ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
                                         )
-                                            <a class="confirm-text" href="javascript:void(0);"
+                                            <!-- <a class="confirm-text" href="javascript:void(0);"
                                                 onclick="confirmDelete('{{ $invoice->id }}')">
                                                 <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                            </a>
+                                            </a> -->
                                             <form id="delete-form-{{ $invoice->id }}"
                                                 action="{{ route('purchase-invoices.destroy', $invoice->id) }}" method="POST"
                                                 style="display:none;">

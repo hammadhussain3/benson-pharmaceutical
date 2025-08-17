@@ -69,7 +69,7 @@ class IPinfo
         $this->countries_flags = $settings['countries_flags'] ?? self::COUNTRIES_FLAGS_DEFAULT;
         $this->countries_currencies = $settings['countries_currencies'] ?? self::COUNTRIES_CURRENCIES_DEFAULT;
         $this->eu_countries = $settings['eu_countries'] ?? self::EU_COUNTRIES_DEFAULT;
-        $this-> continents = $settings['continents'] ?? self::CONTINENTS_DEFAULT;
+        $this->continents = $settings['continents'] ?? self::CONTINENTS_DEFAULT;
 
         if (!array_key_exists('cache_disabled', $this->settings) || $this->settings['cache_disabled'] == false) {
             if (array_key_exists('cache', $settings)) {
@@ -289,7 +289,7 @@ class IPinfo
     private function buildHeaders()
     {
         $headers = [
-            'user-agent' => 'IPinfoClient/PHP/3.1.4',
+            'user-agent' => 'IPinfoClient/PHP/3.2.0',
             'accept' => 'application/json',
             'content-type' => 'application/json',
         ];

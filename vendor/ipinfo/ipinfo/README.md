@@ -14,6 +14,8 @@ You'll need an IPinfo API access token, which you can get by signing up for a fr
 
 The free plan is limited to 50,000 requests per month, and doesn't include some of the data fields such as IP type and company data. To enable all the data fields and additional request volumes see [https://ipinfo.io/pricing](https://ipinfo.io/pricing?ref=lib-PHP).
 
+The library also supports the Lite API, see the [Lite API section](#lite-api) for more info.
+
 #### Installation
 
 The package works with PHP 8 and is available using [Composer](https://getcomposer.org).
@@ -231,6 +233,21 @@ $details->all;
 */
 ```
 
+### Lite API
+
+The library gives the possibility to use the [Lite API](https://ipinfo.io/developers/lite-api) too, authentication with your token is still required.
+
+The returned details are slightly different from the Core API.
+
+```php
+$access_token = '123456789abc';
+$client = new IPinfoLite($access_token);
+
+$res = $client->getDetails("8.8.8.8")
+$res->country_code // US
+$res->country // United States
+```
+
 ### Caching
 
 In-memory caching of `Details` data is provided by default via the [symfony/cache](https://github.com/symfony/cache/) library. LRU (least recently used) cache-invalidation functionality has been added to the default TTL (time to live). This means that values will be cached for the specified duration; if the cache's max size is reached, cache values will be invalidated as necessary, starting with the oldest cached value.
@@ -250,7 +267,7 @@ $client = new IPinfo($access_token, $settings);
 
 #### Using a different cache
 
-It's possible to use a custom cache by creating a child class of the [CacheInterface](https://github.com/ipinfo/php/blob/master/src/cache/Interface.php) class and passing this into the handler object with the `cache` keyword argument. FYI this is known as [the Strategy Pattern](https://sourcemaking.com/design_patterns/strategy).
+It's possible to use a custom cache by creating a child class of the [CacheInterface](https://github.com/ipinfo/php/blob/master/src/cache/CacheInterface.php) class and passing this into the handler object with the `cache` keyword argument. FYI this is known as [the Strategy Pattern](https://sourcemaking.com/design_patterns/strategy).
 
 ```php
 $access_token = '123456789abc';

@@ -49,9 +49,14 @@
             </a>
 
             {{-- Print Button --}}
-            <button class="btn btn-light" onclick="window.print()">
+            <!-- <button class="btn btn-light" onclick="window.print()" data-approved ="{{ $invoice->is_approved }}" id="print-button">
                 <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Edit">
+            </button> -->
+            <button class="btn btn-light" onclick="checkApprovalAndPrint(this)" data-approved="{{ $invoice->is_approved }}" id="print-button">
+                <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Print">
             </button>
+
+
         </div>
     </div>
     <!-- Print Button -->
@@ -281,3 +286,22 @@
         }
     }
 </style>
+
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function checkApprovalAndPrint(button) {
+        var isApproved = button.getAttribute('data-approved');
+        if(isApproved == '1' || isApproved.toLowerCase() == 'yes' || isApproved.toLowerCase() == 'true') {
+            window.print();
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Not Approved!',
+                text: 'This purchase order is not approved yet.',
+                confirmButtonText: 'OK'
+            });
+        }
+    }
+</script>
