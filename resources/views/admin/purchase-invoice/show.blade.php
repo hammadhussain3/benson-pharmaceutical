@@ -131,7 +131,7 @@
                             <th rowspan="2">Min. <br>Level</th>
                             <th rowspan="2">Max. <br>Level</th>
                             <th rowspan="2">Quantity <br>Required</th>
-                            <th rowspan="2">Price (Including Tax)</th>
+                            <th rowspan="2">Price</th>
                             <th rowspan="2">Unit</th>
                             <th colspan="2">Last Purchase</th>
                             <th colspan="2">In-Process</th>
@@ -206,16 +206,16 @@
                         <span style="font-size: 14px;">Raised by</span>
                     </div>
                     <div style="width: 266px; text-align: center;">
+                        <!-- <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px;">Checked by Dept. Head</span> -->
+                    </div>
+                    <div style="width: 266px; text-align: center;">
                         <span style="font-size: 14px; font-weight: bold;">
                             {{ $invoice->approvedBy->name ?? null }}
                             ({{ $invoice->is_approved == 1 ? 'Approved' : 'Draft' }})
                         </span>
                         <hr style="width: 100%; margin: 5px 0px;">
                         <span style="font-size: 14px;">Approved by: Cheif Executive</span>
-                    </div>
-                    <div style="width: 266px; text-align: center;">
-                        <!-- <span style="font-size: 14px;">Checked by Dept. Head</span> -->
-                        <img src="{{ asset('images/company/stamp.jpeg') }}" style="width:100px; height:auto;" class="mb-2">
                     </div>
                 </div>
             </div>
