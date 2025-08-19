@@ -247,20 +247,20 @@
                             </div> --}}
                         </div>
                         <a class="btn btn-secondary" href="{{ route('purchase-invoices.index') }}">Cancel</a>
-                        <input type="hidden" name="is_approved" id="is_approved" value="0">
+                        <input type="hidden" name="is_approved" id="is_approved" value="{{ $invoice->is_approved ?? 0 }}">
                         <input type="hidden" name="status" id="status" value="{{ $invoice->status }}">
 
-                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('is_approved').value = 0;">
+                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('is_approved').value = {{ $invoice->is_approved ?? 0 }};">
                             Save
                         </button>
 
-                        @if(auth()->user()->hasPermission('Document Approval Edit'))
+                        @if(auth()->user()->hasPermission('Document Approval Edit') && $invoice->is_approved == 0)
                             <button type="submit" class="btn btn-success" onclick="document.getElementById('is_approved').value = 1;">
                                 Approve
                             </button>
                         @endif
 
-                        @if ($invoice->status === 'pending' && $invoice->is_approved !== 1)
+                        @if ($invoice->status === 'pending')
                             <button type="submit" class="btn btn-info" 
                                     onclick="document.getElementById('status').value = 'completed';">
                                 Mark as Completed

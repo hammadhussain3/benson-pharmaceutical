@@ -1,6 +1,13 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    @php
+        // Calculate grand total for vendor export
+        $grandTotal = 0;
+        foreach ($invoice->items as $item) {
+            $grandTotal += $item->quantity * $item->unit_price;
+        }
+    @endphp
     <style>
         table.table-bordered th,
         table.table-bordered td {
@@ -55,6 +62,19 @@
             <button class="btn btn-light" onclick="checkApprovalAndPrint(this)" data-approved="{{ $invoice->is_approved }}" id="print-button">
                 <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Print">
             </button>
+
+            {{-- Export Button for Vendors --}}
+            @if($invoice->is_approved == 1)
+                <button class="btn btn-outline-primary" onclick="exportToPDF()" id="export-button" title="Export to PDF for Vendors">
+                    <img src="{{ asset('assets/img/icons/download.svg') }}" alt="Export PDF" class="me-1">
+                    <span>Export for Vendor</span>
+                </button>
+            @else
+                <button class="btn btn-outline-secondary" disabled id="export-button" title="Export to PDF for Vendors - Document not approved">
+                    <img src="{{ asset('assets/img/icons/download.svg') }}" alt="Export PDF" class="me-1">
+                    <span>Export for Vendor</span>
+                </button>
+            @endif
 
 
         </div>
@@ -206,8 +226,8 @@
                         <span style="font-size: 14px;">Raised by</span>
                     </div>
                     <div style="width: 266px; text-align: center;">
-                        <!-- <hr style="width: 100%; margin: 5px 0px;">
-                        <span style="font-size: 14px;">Checked by Dept. Head</span> -->
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px;">Checked by Dept. Head</span>
                     </div>
                     <div style="width: 266px; text-align: center;">
                         <span style="font-size: 14px; font-weight: bold;">
@@ -284,24 +304,344 @@
         .print-header {
             margin-top: 15px !important;
         }
-    }
-</style>
 
+        /* Export button styles */
+        #export-button {
+            transition: all 0.3s ease;
+            border-width: 2px;
+        }
+
+        #export-button:hover {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+        }
+
+        #export-button:active {
+            transform: translateY(0);
+        }
+
+        #export-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Responsive button layout */
+        @media (max-width: 768px) {
+            .page-header .d-flex {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .page-header .d-flex .btn {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+        }
+
+        @media print {
+            #export-button {
+                display: none !important;
+            }
+        }
+    </style>
+<!-- html2pdf CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    function checkApprovalAndPrint(button) {
-        var isApproved = button.getAttribute('data-approved');
-        if(isApproved == '1' || isApproved.toLowerCase() == 'yes' || isApproved.toLowerCase() == 'true') {
-            window.print();
-        } else {
+
+
+    async function exportToPDF() {
+        // Check if html2pdf is available
+        if (typeof html2pdf === 'undefined') {
             Swal.fire({
                 icon: 'error',
-                title: 'Not Approved!',
-                text: 'This purchase order is not approved yet.',
+                title: 'Library Not Loaded!',
+                text: 'PDF export library is not available. Please refresh the page and try again.',
                 confirmButtonText: 'OK'
             });
+            return;
         }
+
+        // Disable export button and show loading state
+        const exportButton = document.getElementById('export-button');
+        const originalContent = exportButton.innerHTML;
+        exportButton.disabled = true;
+        exportButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Generating Vendor PDF...';
+
+        // Show loading message
+        Swal.fire({
+            title: 'Generating Vendor PDF...',
+            text: 'Please wait while we prepare your vendor-specific document.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Create vendor-specific content
+        const vendorContent = createVendorContent();
+        
+        // Convert images to base64 to ensure they're embedded in the PDF
+        await convertImagesToBase64(vendorContent);
+        
+        // Debug: Check if images were converted
+        const images = vendorContent.querySelectorAll('img');
+        console.log('Images found:', images.length);
+        images.forEach((img, index) => {
+            console.log(`Image ${index + 1}:`, img.src.substring(0, 100) + '...');
+        });
+
+        // Use html2pdf library to generate PDF
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: 'purchase-order-{{ $invoice->code }}-{{ optional($invoice->party)->name ?? 'vendor' }}.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2,
+                useCORS: true,
+                letterRendering: true,
+                allowTaint: true,
+                imageTimeout: 15000,
+                logging: true,
+                removeContainer: true
+            },
+            jsPDF: { 
+                unit: 'mm', 
+                format: 'a4', 
+                orientation: 'portrait' 
+            }
+        };
+
+        // Generate PDF
+        html2pdf().set(opt).from(vendorContent).save().then(() => {
+            // Re-enable button
+            exportButton.disabled = false;
+            exportButton.innerHTML = originalContent;
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Vendor PDF Generated!',
+                text: 'Your vendor-specific purchase order has been exported successfully.',
+                confirmButtonText: 'OK'
+            });
+        }).catch((error) => {
+            // Re-enable button
+            exportButton.disabled = false;
+            exportButton.innerHTML = originalContent;
+            
+            console.error('PDF generation error:', error);
+            // Offer fallback to print
+            Swal.fire({
+                icon: 'warning',
+                title: 'PDF Export Failed!',
+                text: 'Would you like to use print instead? You can then save as PDF from your browser.',
+                showCancelButton: true,
+                confirmButtonText: 'Use Print',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.print();
+                }
+            });
+        });
     }
+
+    function createVendorContent() {
+        // Create a temporary container for vendor export
+        const vendorContainer = document.createElement('div');
+        vendorContainer.style.padding = '20px';
+        vendorContainer.style.fontFamily = 'Arial, sans-serif';
+        vendorContainer.style.fontSize = '12px';
+        vendorContainer.style.lineHeight = '1.4';
+
+        // Company logo and header - exactly as shown in image
+        const header = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <img src="{{ request()->getSchemeAndHttpHost() }}/{{ $invoice->company->logo_path ? 'images/company/' . $invoice->company->logo_path : 'images/company/logo.png' }}" 
+                             style="height: 60px; margin-right: 15px;" onerror="this.style.display='none';">
+                        <div>
+                            <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">{{ $invoice->company->name }}</div>
+                            <div style="font-size: 11px; margin-bottom: 2px;">{{ $invoice->company->address }}</div>
+                            @if($invoice->company->phone)
+                            <div style="font-size: 11px;">{{ $invoice->company->phone }}</div>
+                            @endif
+                            <div style="font-size: 11px; margin-top: 5px;">
+                                <strong>Email:</strong> purchase@bensonpharmaceuticals.com
+                            </div>
+                            <div style="font-size: 11px;">
+                                <strong>WhatsApp:</strong> 03361536294
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 20px; font-weight: bold;">Purchase Order</div>
+                </div>
+            </div>
+        `;
+
+        // Order details - exactly as shown in image
+        const orderDetails = `
+            <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <div>
+                        <div style="margin-bottom: 5px;"><strong>Ref No:</strong> {{ $invoice->code }}</div>
+                        <div style="margin-bottom: 5px;"><strong>Date:</strong> {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d M, Y') }}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="margin-bottom: 5px;"><strong>Required Date:</strong> {{ \Carbon\Carbon::parse($invoice->required_date)->format('d M, Y') }}</div>
+                        <div style="margin-bottom: 5px;"><strong>Supplier:</strong> {{ optional($invoice->party)->name ?? 'N/A' }}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Items table - exactly as shown in image with only required columns
+        let itemsTable = `
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px;">
+                <thead>
+                    <tr style="background-color: #f5f5f5;">
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center; font-weight: bold;">#</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: left; font-weight: bold;">Item Code</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: left; font-weight: bold;">Description</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center; font-weight: bold;">Quantity</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center; font-weight: bold;">Price (inclusive of tax)</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center; font-weight: bold;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        @foreach ($invoice->items as $item)
+            @php
+                $itemTotal = $item->quantity * $item->unit_price;
+            @endphp
+            itemsTable += `
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">{{ $loop->iteration }}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px;">{{ $item->code }}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px;">
+                        {{ $item->title }}
+                        @if ($item->description)
+                            <br>{{ $item->description }}
+                        @endif
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">{{ $item->quantity }}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">{{ number_format($item->unit_price, 2) }}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">{{ number_format($itemTotal, 2) }}</td>
+                </tr>
+            `;
+        @endforeach
+
+        itemsTable += `
+                </tbody>
+            </table>
+        `;
+
+        // Total section - exactly as shown in image
+        const totalSection = `
+            <div style="text-align: right; margin-bottom: 20px;">
+                <div style="font-size: 14px; font-weight: bold;">
+                    Grand Total: {{ number_format($grandTotal, 2) }}
+                </div>
+            </div>
+        `;
+
+        // Signature section - exactly as shown in image
+        const signatureSection = `
+            <div style="margin-top: 45px;">
+                <div style="display: flex; justify-content: space-around; align-items: end;">
+                    <div style="width: 266px; text-align: center;">
+                        <span style="font-size: 14px; font-weight: bold;">{{ $invoice->createdBy->name ?? 'N/A' }}</span>
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px;">Raised by</span>
+                    </div>
+                    <div style="width: 266px; text-align: center;">
+                        <span style="font-size: 14px; font-weight: bold;">
+                            {{ $invoice->approvedBy->name ?? 'N/A' }}
+                            @if($invoice->is_approved == 1)
+                                (Approved)
+                            @else
+                                (Draft)
+                            @endif
+                        </span>
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px;">Approved by: Chief Executive</span>
+                    </div>
+                    <div style="width: 266px; text-align: center;">
+                        <img src="{{ asset('images/company/stamp.jpeg') }}"
+                    class="mb-2" style="height: 80px">
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Combine all sections
+        vendorContainer.innerHTML = header + orderDetails + itemsTable + totalSection + signatureSection;
+
+        return vendorContainer;
+    }
+
+    // Function to convert images to base64 for PDF generation
+    function convertImagesToBase64(container) {
+        return new Promise((resolve) => {
+            const images = container.querySelectorAll('img');
+            if (images.length === 0) {
+                resolve();
+                return;
+            }
+
+            let convertedCount = 0;
+            const totalImages = images.length;
+
+            images.forEach((img) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const newImg = new Image();
+                
+                newImg.crossOrigin = 'anonymous';
+                newImg.onload = () => {
+                    try {
+                        canvas.width = newImg.width;
+                        canvas.height = newImg.height;
+                        ctx.drawImage(newImg, 0, 0);
+                        
+                        // Convert to base64
+                        const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+                        img.src = dataURL;
+                        
+                        convertedCount++;
+                        if (convertedCount === totalImages) {
+                            resolve();
+                        }
+                    } catch (error) {
+                        console.error('Error converting image to base64:', error);
+                        convertedCount++;
+                        if (convertedCount === totalImages) {
+                            resolve();
+                        }
+                    }
+                };
+                
+                newImg.onerror = () => {
+                    console.error('Error loading image:', img.src);
+                    convertedCount++;
+                    if (convertedCount === totalImages) {
+                        resolve();
+                    }
+                };
+                
+                newImg.src = img.src;
+            });
+        });
+    }
+
+
 </script>
