@@ -56,12 +56,12 @@
             </a>
 
             {{-- Print Button --}}
-            <!-- <button class="btn btn-light" onclick="window.print()" data-approved ="{{ $invoice->is_approved }}" id="print-button">
+            <button class="btn btn-light" onclick="window.print()" data-approved ="{{ $invoice->is_approved }}" id="print-button">
                 <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Edit">
-            </button> -->
-            <button class="btn btn-light" onclick="checkApprovalAndPrint(this)" data-approved="{{ $invoice->is_approved }}" id="print-button">
-                <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Print">
             </button>
+            <!-- <button class="btn btn-light" onclick="checkApprovalAndPrint(this)" data-approved="{{ $invoice->is_approved }}" id="print-button">
+                <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Print">
+            </button> -->
 
             {{-- Export Button for Vendors --}}
             @if($invoice->is_approved == 1)
