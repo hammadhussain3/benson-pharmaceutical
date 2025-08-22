@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>#</th>  
-                            <th>Code</th>   
+                            <th>DOC NO</th>   
                             <th>Type</th>
                             <th>Party</th>
                             <th>Order Number</th>

@@ -34,7 +34,7 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Categories</th>
                             <th>Chart Of Accounts</th>
                             <th>Contact Person Name</th>

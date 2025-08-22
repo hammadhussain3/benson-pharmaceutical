@@ -119,6 +119,7 @@ class PurchaseInvoiceController extends Controller
      */
     public function update(PurchaseInvoiceRequest $request, $id)
     {
+        // dd($request->all());
         if (!auth()->user()->hasPermission('Purchase Invoice Update')) {
             abort(403, 'Unauthorized action.');
         }

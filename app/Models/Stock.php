@@ -98,80 +98,59 @@ class Stock extends Model
 
     public static function currentBalance()
     {
-        $addQuantityWhenAllNull = self::whereNull('goods_receiving_id')
-            ->whereNull('finished_goods_receiving_id')
-            ->whereNull('store_issue_requisition_id')
-            ->whereNull('left_over_note_id')
-            ->whereNull('sales_return_id')
-            ->groupBy('product_id', 'raw_material_item_id', 'product_variation_id')
-            ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
-            ->get();
-
-        if (!auth()->user()->hasRole('Superadmin')) {
-            $addQuantityWhenAllNull->where('company_id', auth()->user()->employee->company_id);
-        }
-
-        $addQuantityWhenNotNull = self::where(function ($query) {
-                $query->whereNotNull('goods_receiving_id')
-                    ->orWhereNotNull('finished_goods_receiving_id')
-                    ->orWhereNotNull('left_over_note_id')
-                    ->orWhereNotNull('sales_return_id');
+        // Get ALL raw material items from master table
+        $allRawMaterialItems = \App\Models\RawMaterialItem::select('id as raw_material_item_id', 'name', 'code', 'unit as item_unit', 'min_level', 'max_level')
+            ->when(!auth()->user()->hasRole('Superadmin'), function ($query) {
+                $query->where('company_id', auth()->user()->employee->company_id);
             })
-            ->groupBy('product_id', 'raw_material_item_id', 'product_variation_id')
-            ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
             ->get();
-
-        if (!auth()->user()->hasRole('Superadmin')) {
-            $addQuantityWhenNotNull->where('company_id', auth()->user()->employee->company_id);
-        }
-
-        $subtractQuantityWhenNotNull = self::where(function ($query) {
-                $query->whereNotNull('store_issue_requisition_id');
-            })
-            ->groupBy('product_id', 'raw_material_item_id', 'product_variation_id')
-            ->select('product_id', 'raw_material_item_id', 'product_variation_id', DB::raw('SUM(quantity) as total_quantity'))
-            ->get();
-
-        if (!auth()->user()->hasRole('Superadmin')) {
-            $subtractQuantityWhenNotNull->where('company_id', auth()->user()->employee->company_id);
-        }
 
         $balances = [];
 
-        // Process rows and update balances
-        $processRows = function ($rows, $operation) use (&$balances) {
-            foreach ($rows as $row) {
-                $exists = false;
+        foreach ($allRawMaterialItems as $rawMaterialItem) {
+            // Get stock balance for this raw material item
+            $stockBalance = self::where('raw_material_item_id', $rawMaterialItem->raw_material_item_id)
+                ->select(
+                    DB::raw('SUM(CASE 
+                        WHEN goods_receiving_id IS NOT NULL OR finished_goods_receiving_id IS NOT NULL OR left_over_note_id IS NOT NULL OR sales_return_id IS NOT NULL THEN quantity
+                        WHEN store_issue_requisition_id IS NOT NULL THEN -quantity
+                        WHEN goods_receiving_id IS NULL AND finished_goods_receiving_id IS NULL AND store_issue_requisition_id IS NULL AND left_over_note_id IS NULL AND sales_return_id IS NULL THEN quantity
+                        ELSE 0
+                    END) as total_quantity')
+                )
+                ->groupBy('raw_material_item_id')
+                ->first();
 
-                foreach ($balances as $key => $balance) {
-                    if (
-                        $balance['product_id'] === $row->product_id &&
-                        $balance['raw_material_item_id'] === $row->raw_material_item_id &&
-                        $balance['product_variation_id'] === $row->product_variation_id
-                    ) {
-                        $balances[$key]['balance'] += ($operation === '+') ? $row->total_quantity : -$row->total_quantity;
-                        $exists = true;
-                        break;
-                    }
-                }
-
-                if (!$exists) {
-                    $balances[] = [
-                        'product_id' => $row->product_id,
-                        'raw_material_item_id' => $row->raw_material_item_id,
-                        'product_variation_id' => $row->product_variation_id,
-                        'balance' => ($operation === '+') ? $row->total_quantity : -$row->total_quantity
-                    ];
-                }
+            // If no stock record exists, set default values
+            if (!$stockBalance) {
+                $balances[] = [
+                    'product_id' => null,
+                    'raw_material_item_id' => $rawMaterialItem->raw_material_item_id,
+                    'product_variation_id' => null,
+                    'balance' => 0,
+                    'unit' => $rawMaterialItem->unit,
+                    'unit_price' => 0,
+                    'name' => $rawMaterialItem->name,
+                    'code' => $rawMaterialItem->code,
+                    'item_unit' => $rawMaterialItem->item_unit,
+                ];
+            } else {
+                $balances[] = [
+                    'product_id' => null,
+                    'raw_material_item_id' => $rawMaterialItem->raw_material_item_id,
+                    'product_variation_id' => null,
+                    'balance' => $stockBalance->total_quantity ?? 0,
+                    'unit' => $rawMaterialItem->unit,
+                    'unit_price' => 0, // Set unit_price to 0 as it's not in the stock query
+                    'name' => $rawMaterialItem->name,
+                    'code' => $rawMaterialItem->code,
+                    'item_unit' => $rawMaterialItem->item_unit,
+                ];
             }
-        };
+        }
 
-        // Update balances
-        $processRows($addQuantityWhenAllNull, '+');
-        $processRows($addQuantityWhenNotNull, '+');
-        $processRows($subtractQuantityWhenNotNull, '-');
+        return $balances;
 
-        return array_values($balances);
     }
 
     public static function currentBalanceForItem($productId = null, $rawMaterialItemId = null, $productVariationId = null)

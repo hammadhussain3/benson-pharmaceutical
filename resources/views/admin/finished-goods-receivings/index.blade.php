@@ -33,7 +33,7 @@
                     <thead class="thead">
                         <tr>
                             <th>#</th> 
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th >Batch No</th>
                             <th >Product</th>
                             @role('Superadmin')

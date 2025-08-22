@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Reg. No.</th>
                             <th>Product</th>
                             <th>Strength</th>

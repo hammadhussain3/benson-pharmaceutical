@@ -137,7 +137,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('journal-vouchers', JournalVoucherController::class);
     Route::resource('credit-notes', CreditNoteController::class);
     Route::resource('employee-types', EmployeeTypeController::class);
-    Route::get('report/balance-report', [ReportController::class, 'balanceReport'])->name('reports.balance-report');
+    Route::get('report/current-balance-report', [ReportController::class, 'balanceReport'])->name('reports.current-balance-report');
     Route::get('report/purchase-items', [ReportController::class, 'purchaseItems'])->name('reports.purchase-items');
     Route::get('report/purchase-requisition', [ReportController::class, 'purchaseRequisitions'])->name('reports.purchase-requisitions');
     Route::get('report/requirement-report', [ReportController::class, 'requirementReport'])->name('reports.requirement-report');

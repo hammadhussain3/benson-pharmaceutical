@@ -33,7 +33,7 @@
                     <thead class="thead">
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Supplier</th>
                             <th>Invoice</th>
                             <th>Supplier Bill No.</th>

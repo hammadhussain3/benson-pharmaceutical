@@ -34,7 +34,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Year</th>
                             <th>Debit</th>
                             <th>Credit</th>

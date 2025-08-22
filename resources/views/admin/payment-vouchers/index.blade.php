@@ -34,7 +34,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Supplier</th>
                             <th>Address</th>
                             <th>Contact Person</th>

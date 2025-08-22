@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>#</th>  
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             @if(auth()->user()->hasPermission('Purchase Invoice View') || auth()->user()->hasPermission('Purchase Invoice Update') || auth()->user()->hasPermission('Purchase Invoice Delete'))
                                 <th>Action</th>
                             @endif
@@ -64,9 +64,9 @@
                                 @if(auth()->user()->hasPermission('Purchase Invoice View') || auth()->user()->hasPermission('Purchase Invoice Update') || auth()->user()->hasPermission('Purchase Invoice Delete'))
                                     <td style="min-width: 105px;">
                                         @if(auth()->user()->hasPermission('Purchase Invoice View'))
-                                            <a class="me-3" href="{{ route('purchase-invoices.show', $invoice->id) }}">
+                                            <!-- <a class="me-3" href="{{ route('purchase-invoices.show', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                            </a>
+                                            </a> -->
                                         @endif
                                         @if(auth()->user()->hasPermission('Purchase Invoice Update') && 
                                             ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))

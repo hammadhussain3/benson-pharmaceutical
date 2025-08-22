@@ -34,7 +34,7 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Contact Person Name</th>
                             <th>Contact Person Phone</th>
                             <th>Contact Person Email</th>

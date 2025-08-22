@@ -39,12 +39,12 @@
                     <tbody>
                         @foreach ($stocks as $stock)
                             <tr>
-                                <td>{{ $stock['product_code'] ?? $stock['raw_material_item_code'] ?? $stock['product_variation_code'] }}</td>
-                                <td>{{ $stock['product_name'] ?? $stock['raw_material_item_name'] ?? $stock['product_variation_name']. ' | ' .$stock['packing_type_name']. ' | ' .$stock['pack_size_name'] }}</td>
-                                <td>{{ $stock['balance'] }}</td>
-                                <td>{{ $stock['unit'] }}</td>
-                                <td>{{ $stock['unit_price'] }}</td>
-                                <td>{{ $stock['total'] }}</td>
+                                <td>{{ $stock['code'] ?? 'N/A' }}</td>
+                                <td>{{ $stock['name'] ?? 'N/A' }}</td>
+                                <td>{{ $stock['balance'] ?? 0 }}</td>
+                                <td>{{ $stock['item_unit'] ?? 'N/A' }}</td>
+                                <td>{{ number_format($stock['unit_price'] ?? 0, 2) }}</td>
+                                <td>{{ number_format(($stock['balance'] ?? 0) * ($stock['unit_price'] ?? 0), 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>

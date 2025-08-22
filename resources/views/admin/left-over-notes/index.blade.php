@@ -33,7 +33,7 @@
                     <thead class="thead">
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Product</th>
                             <th>Batch #</th>
                             <th>Department</th>

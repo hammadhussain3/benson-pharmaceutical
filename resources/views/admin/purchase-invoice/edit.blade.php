@@ -260,7 +260,7 @@
                             </button>
                         @endif
 
-                        @if ($invoice->status === 'pending')
+                        @if ($invoice->status === 'pending' || $invoice->status === 'partial')
                             <button type="submit" class="btn btn-info" 
                                     onclick="document.getElementById('status').value = 'completed';">
                                 Mark as Completed

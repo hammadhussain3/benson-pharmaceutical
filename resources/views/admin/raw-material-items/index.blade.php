@@ -33,7 +33,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Name</th>
                             <th>Categories</th>
                             <th>Chart Of Accounts</th>

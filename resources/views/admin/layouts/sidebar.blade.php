@@ -431,7 +431,7 @@
                         request()->is('stocks*') ||
                         request()->is('store-issue-requisitions*') ||
                         request()->is('sub-categories*') ||
-                        request()->is('*balance-report') ||
+                        request()->is('*current-balance-report') ||
                         request()->is('*batch-balance') ||
                         request()->is('*batch-report') ||
                         request()->is('*consumption-report') ||
@@ -569,8 +569,8 @@
                             </div>
                         </li>
                         <li>
-                            <a class="{{ request()->is('*balance-report') ? 'active' : '' }}" href="{{ route('reports.balance-report') }}">
-                                Balance Report
+                            <a class="{{ request()->is('*current-balance-report') ? 'active' : '' }}" href="{{ route('reports.current-balance-report') }}">
+                                Current Balance Report
                             </a>
                         </li>
                         <li>
