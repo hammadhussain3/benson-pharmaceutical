@@ -31,7 +31,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Code</th>
+                            <th>DOC NO</th>
                             <th>Particular</th>
                             <th>Abbreviation</th>
                             @role('Superadmin')

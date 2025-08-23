@@ -38,7 +38,7 @@
                             <th>Generic Name</th>
                             <th>Brand Name</th>
                             <th>Therapeutic Class</th>
-                            {{-- <th>Code</th>
+                            {{-- <th>DOC NO</th>
                             <th>Group</th> --}}
                             @role('Superadmin')
                             <th>Company</th>
