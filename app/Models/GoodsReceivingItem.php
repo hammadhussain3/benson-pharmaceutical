@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GoodsReceivingItem extends Model
 {
-    protected $fillable = ['goods_receiving_id', 'product_id', 'raw_material_item_id', 'code', 'description', 'batch', 'quantity_ordered', 'quantity_received', 'balance_receivable', 'unit', 'unit_price', 'total_amount', 'last_goods_receiving_id', 'created_by', 'updated_by'];
+    protected $fillable = ['goods_receiving_id', 'product_id', 'raw_material_item_id', 'code', 'description', 'batch', 'mfg_date', 'exp_date', 'quantity_ordered', 'quantity_received', 'balance_receivable', 'unit', 'unit_price', 'total_amount', 'last_goods_receiving_id', 'created_by', 'updated_by'];
 
     protected static function booted()
     {

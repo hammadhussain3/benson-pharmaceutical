@@ -9,7 +9,7 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Requirement Report</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Requirement Report</button>
         </div>
     </div>
 
@@ -60,6 +60,10 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
 @endsection

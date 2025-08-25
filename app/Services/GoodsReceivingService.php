@@ -19,7 +19,7 @@ class GoodsReceivingService
     }
 
     public function createGoodsReceiving(array $data)
-    {        
+    {
         $data['invoice_id'] = $data['invoice'];
         $data['party_id'] = $data['supplier'];
         $data['company_id'] = $data['company'];
@@ -61,6 +61,18 @@ class GoodsReceivingService
         $allItemsMatch = $goodsReceiving->items->every(function ($item) {
             return $item->quantity_ordered == ($item->quantity_received + $item->balance_receivable);
         });
+
+        // Handle vendor bills
+        if (isset($data['vendor_bills']) && is_array($data['vendor_bills'])) {
+            foreach ($data['vendor_bills'] as $vendorBill) {
+                $goodsReceiving->vendor_bills()->create([
+                    'item_index' => $vendorBill['item_index'],
+                    'bill_no' => $vendorBill['bill_no'],
+                    'bill_date' => $vendorBill['bill_date'] ?? null,
+                    'amount' => $vendorBill['amount'] ?? 0,
+                ]);
+            }
+        }
 
         return $goodsReceiving;
     }
@@ -112,6 +124,19 @@ class GoodsReceivingService
             return $item->quantity_ordered == ($item->quantity_received + $item->balance_receivable);
         });
 
+        // Handle vendor bills
+        $goodsReceiving->vendor_bills()->delete(); // Remove existing vendor bills
+        if (isset($data['vendor_bills']) && is_array($data['vendor_bills'])) {
+            foreach ($data['vendor_bills'] as $vendorBill) {
+                $goodsReceiving->vendor_bills()->create([
+                    'item_index' => $vendorBill['item_index'],
+                    'bill_no' => $vendorBill['bill_no'],
+                    'bill_date' => $vendorBill['bill_date'] ?? null,
+                    'amount' => $vendorBill['amount'] ?? 0,
+                ]);
+            }
+        }
+
         return $goodsReceiving;
     }
 
@@ -119,12 +144,13 @@ class GoodsReceivingService
     {
         $goodsReceiving->stocks->each->delete();
         $goodsReceiving->items->each->delete();
+        $goodsReceiving->vendor_bills()->delete();
         return $goodsReceiving->delete();
     }
 
     public function getGoodsReceivingById($id)
     {
-        return GoodsReceiving::findOrFail($id);
+        return GoodsReceiving::with(['vendor_bills', 'items', 'company', 'party', 'invoice', 'createdBy'])->findOrFail($id);
     }
 
     public function createGoodsReceivingCode($company_id)

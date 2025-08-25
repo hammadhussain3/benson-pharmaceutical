@@ -73,7 +73,17 @@ class GoodsReceivingController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $goodsReceiving = $this->goodsReceivingService->getGoodsReceivingById($id);
-        return view('admin.goods-receivings.show', compact('goodsReceiving'));
+        
+        // Get previous and next GRNs for navigation
+        $previous = GoodsReceiving::where('id', '<', $goodsReceiving->id)
+            ->orderBy('id', 'desc')
+            ->first();
+            
+        $next = GoodsReceiving::where('id', '>', $goodsReceiving->id)
+            ->orderBy('id', 'asc')
+            ->first();
+        
+        return view('admin.goods-receivings.show', compact('goodsReceiving', 'previous', 'next'));
     }
 
     /**

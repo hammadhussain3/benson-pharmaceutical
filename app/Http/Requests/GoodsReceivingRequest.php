@@ -24,9 +24,9 @@ class GoodsReceivingRequest extends FormRequest
         $goodsReceivingId = $this->route('goods_receiving')?->id;
 
         return [
-            'code' => 'required|string|max:255|unique:goods_receivings,code,' . $goodsReceivingId . ',id,company_id,' . $this->company,
+            'code' => 'nullable|string|max:255|unique:goods_receivings,code,' . $goodsReceivingId . ',id,company_id,' . $this->company,
             'invoice' => 'required|integer|exists:invoices,id',
-            'supplier' => 'required|integer|exists:parties,id',
+            'supplier' => 'nullable|integer|exists:parties,id',
             'supplier_name' => 'nullable|string|max:255',
             'supplier_code' => 'nullable|string|max:50',
             'supplier_bill_no' => 'required|string|max:255',
@@ -37,7 +37,7 @@ class GoodsReceivingRequest extends FormRequest
             'is_approved' => 'nullable|boolean',
 
             'items' => 'required|array|min:1',
-            'items.*.code' => 'required|string|max:50',
+            'items.*.code' => 'nullable|string|max:50',
             'items.*.description' => 'nullable|string',
             'items.*.product' => 'nullable|integer|exists:products,id|required_without:items.*.raw_material_item',
             'items.*.raw_material_item' => 'nullable|integer|exists:raw_material_items,id|required_without:items.*.product',
@@ -45,8 +45,10 @@ class GoodsReceivingRequest extends FormRequest
             'items.*.quantity_received' => 'required|numeric|min:0',
 
             // Validate nested GRN rows
-            'items.*.grn_items' => 'required|array|min:0',
+            'items.*.grn_items' => 'required|array|min:1',
             'items.*.grn_items.*.batch' => 'required|string|max:50',
+            'items.*.grn_items.*.mfg_date' => 'required|date',
+            'items.*.grn_items.*.exp_date' => 'required|date|after:items.*.grn_items.*.mfg_date',
             'items.*.grn_items.*.balance_receivable' => 'required|numeric|min:0',
             'items.*.grn_items.*.unit_price' => 'required|numeric|min:0',
             'items.*.grn_items.*.unit' => 'required|string|max:50',

@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
@@ -37,7 +38,7 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="code">Code<span class="text-danger">*</span></label>
+                                <label for="code">DOC NO</label>
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $newGoodsReceivingCode) }}">
                             </div>
                             <div class="mb-3 col-md-6">
@@ -59,7 +60,7 @@
                             </div>
                             
                             <div class="mb-3 col-md-6">
-                                <label for="supplier">Supplier<span class="text-danger">*</span></label>
+                                <label for="supplier">Supplier</label>
                                 <input type="text" class="form-control" name="supplier_name" id="supplier_name" placeholder="Supplier Name" value="{{ old('supplier_name') }}" readonly>
                                 <input type="hidden" name="supplier" id="supplier_id" value="{{ old('supplier') }}">
                             </div>
@@ -89,7 +90,7 @@
                                                             value="{{ old('items.'.$i.'.types') == 'product' ? old('items.'.$i.'.product') : old('items.'.$i.'.raw_material_item') }}">
                                                     </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label for="product_code">Code<span class="text-danger">*</span></label>
+                                                        <label for="product_code">Item Code</label>
                                                         <input type="text" class="form-control" name="items[{{ $i }}][code]"
                                                             placeholder="Product Code" required value="{{ old('items.'.$i.'.code') }}" readonly>
                                                     </div>
@@ -115,13 +116,21 @@
                                                                     <input type="text" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][batch]" value="{{ old('items.'.$i.'.grn_items.'.$j.'.batch') }}" placeholder="Enter Batch#">
                                                                 </div>
                                                                 <div class="mb-3 col-md">
+                                                                    <label>MFG Date<span class="text-danger">*</span></label>
+                                                                    <input type="date" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][mfg_date]" value="{{ old('items.'.$i.'.grn_items.'.$j.'.mfg_date') }}" required placeholder="Select Manufacturing Date">
+                                                                </div>
+                                                                <div class="mb-3 col-md">
+                                                                    <label>EXP Date<span class="text-danger">*</span></label>
+                                                                    <input type="date" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][exp_date]" value="{{ old('items.'.$i.'.grn_items.'.$j.'.exp_date') }}" required placeholder="Select Expiry Date">
+                                                                </div>
+                                                                <div class="mb-3 col-md">
                                                                     <label>Quantity Receiving<span class="text-danger">*</span></label>
                                                                     <input type="number" class="form-control balance_receivable" name="items[{{ $i }}][grn_items][{{ $j }}][balance_receivable]" value="{{ old('items.'.$i.'.grn_items.'.$j.'.balance_receivable') }}" placeholder="Balance Receivable" oninput="calculateGoodsRecievingAmount()">
                                                                 </div>
                                                                 <div class="mb-3 col-md">
                                                                     <label>Unit Price</label>
                                                                     <div class="input-group">
-                                                                        <input type="text" class="form-control w-50 unit_price" name="items[{{ $i }}][grn_items][{{ $j }}][unit_price]" value="{{ old('items.'.$i.'.grn_items.'.$j.'.unit_price') }}" readonly>
+                                                                        <input type="number" step="0.01" class="form-control w-50 unit_price" name="items[{{ $i }}][grn_items][{{ $j }}][unit_price]" value="{{ old('items.'.$i.'.grn_items.'.$j.'.unit_price') }}" readonly>
                                                                         <input type="text" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][unit]" value="{{ old('items.'.$i.'.grn_items.'.$j.'.unit') }}" readonly>
                                                                     </div>
                                                                 </div>
@@ -142,8 +151,65 @@
                                     @endfor
                                     @else
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2">
-                                                <p class="mb-0 text-center">No data is showing.</p>
+                                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                                <h4 class="card-title mb-0">Item 1</h4>
+                                                <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                            <div class="card-body px-0 pb-0">
+                                                <input type="hidden" name="items[0][types]" value="product">
+                                                <div class="row">
+                                                    <div class="mb-3 col-md-12">
+                                                        <label for="product_name">Description</label>
+                                                        <textarea name="items[0][description]" class="form-control" readonly placeholder="Select PO to load item details"></textarea>
+                                                        <input type="hidden" name="items[0][product]" value="">
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label for="product_code">Item Code</label>
+                                                        <input type="text" class="form-control" name="items[0][code]" placeholder="Product Code" required value="" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label>Quantity Ordered</label>
+                                                        <input type="number" class="form-control" name="items[0][quantity_ordered]" placeholder="Quantity Ordered" required value="" readonly>
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label>Quantity Received</label>
+                                                        <input type="number" class="form-control" name="items[0][quantity_received]" placeholder="Quantity Received" required value="" readonly>
+                                                    </div>
+                                                    <div class="col-12 grn-rows-container" data-index="0">
+                                                        <div class="row grn-row align-items-end">
+                                                            <div class="mb-3 col-md">
+                                                                <label>Batch#<span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" name="items[0][grn_items][0][batch]" placeholder="Enter Batch#">
+                                                            </div>
+                                                            <div class="mb-3 col-md">
+                                                                <label>MFG Date<span class="text-danger">*</span></label>
+                                                                <input type="date" class="form-control" name="items[0][grn_items][0][mfg_date]" required placeholder="Select Manufacturing Date">
+                                                            </div>
+                                                            <div class="mb-3 col-md">
+                                                                <label>EXP Date<span class="text-danger">*</span></label>
+                                                                <input type="date" class="form-control" name="items[0][grn_items][0][exp_date]" required placeholder="Select Expiry Date">
+                                                            </div>
+                                                            <div class="mb-3 col-md">
+                                                                <label>Quantity Receiving<span class="text-danger">*</span></label>
+                                                                <input type="number" class="form-control balance_receivable" name="items[0][grn_items][0][balance_receivable]" placeholder="Balance Receivable" oninput="calculateGoodsRecievingAmount()">
+                                                            </div>
+                                                            <div class="mb-3 col-md">
+                                                                <label>Unit Price</label>
+                                                                <div class="input-group">
+                                                                    <input type="number" step="0.01" class="form-control w-50 unit_price" name="items[0][grn_items][0][unit_price]" value="" readonly>
+                                                                    <input type="text" class="form-control" name="items[0][grn_items][0][unit]" value="" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3 col-md">
+                                                                <label>Total</label>
+                                                                <input type="number" class="form-control product_total" name="items[0][grn_items][0][total_amount]" placeholder="Total" required value="0" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 col-md-auto ms-auto d-flex align-items-end">
+                                                        <button type="button" class="btn btn-secondary add-grn-row" data-index="0"><i class="fa fa-plus"></i></button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     @endif
@@ -154,6 +220,27 @@
                                 <input type="text" class="form-control" name="supplier_bill_no" id="supplier_bill_no"
                                     placeholder="Supplier Bill No" required value="{{ old('supplier_bill_no') }}">
                             </div>
+                            
+                            <!-- Vendor Bill Section -->
+                            <div class="col-md-12">
+                                <div class="card border-0 mb-3">
+                                    <div class="card-header bg-light py-2">
+                                        <h5 class="card-title mb-0">Vendor Bills</h5>
+                                        <small class="text-muted">Add vendor bill details for each item</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="vendor-bills-container">
+                                            <!-- Vendor bill rows will be added here dynamically -->
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addVendorBillRow()">
+                                                <i class="fa fa-plus"></i> Add Vendor Bill
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             {{-- <div class="mb-3 col-md-6">
                                 <label for="therapeutic_class">Sales Tax<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" name="sales_tax" id="sales_tax"
@@ -231,12 +318,15 @@
                     }
                 });
 
+                
+
                 // Show trash icon
                 const removeCol = clone.querySelector('.remove-grn-row')?.closest('.col-md-auto');
                 if (removeCol) removeCol.classList.remove('d-none');
 
                 grnContainer.appendChild(clone);
             }
+
 
             // Handle Remove GRN Row
             if (e.target.closest('.remove-grn-row')) {
@@ -245,6 +335,80 @@
                 if (row) row.remove();
                 calculateGoodsRecievingAmount();
             }
+        });
+        
+        // Vendor Bill Management
+        let vendorBillIndex = 0;
+        
+        function addVendorBillRow() {
+            const container = document.getElementById('vendor-bills-container');
+            const row = document.createElement('div');
+            row.className = 'row vendor-bill-row mb-3 align-items-end';
+            row.innerHTML = `
+                <div class="col-md-3">
+                    <label>Item<span class="text-danger">*</span></label>
+                    <select name="vendor_bills[${vendorBillIndex}][item_index]" class="form-control" required onchange="updateVendorBillItemDetails(this)">
+                        <option value="">Select Item</option>
+                        ${generateItemOptions()}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Vendor Bill No<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="vendor_bills[${vendorBillIndex}][bill_no]" placeholder="Vendor Bill No" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Bill Date</label>
+                    <input type="date" class="form-control" name="vendor_bills[${vendorBillIndex}][bill_date]" placeholder="Bill Date">
+                </div>
+                <div class="col-md-2">
+                    <label>Amount</label>
+                    <input type="number" step="0.01" class="form-control" name="vendor_bills[${vendorBillIndex}][amount]" placeholder="Amount" oninput="calculateVendorBillTotal()">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeVendorBillRow(this)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(row);
+            vendorBillIndex++;
+        }
+        
+        function generateItemOptions() {
+            const itemSets = document.querySelectorAll('#item-group .item-set');
+            let options = '';
+            itemSets.forEach((itemSet, index) => {
+                const description = itemSet.querySelector('textarea[name*="[description]"]')?.value || `Item ${index + 1}`;
+                options += `<option value="${index}">${description.substring(0, 50)}${description.length > 50 ? '...' : ''}</option>`;
+            });
+            return options;
+        }
+        
+        function updateVendorBillItemDetails(select) {
+            const itemIndex = select.value;
+            if (itemIndex === '') return;
+            
+            const itemSet = document.querySelectorAll('#item-group .item-set')[itemIndex];
+            const description = itemSet.querySelector('textarea[name*="[description]"]')?.value || `Item ${parseInt(itemIndex) + 1}`;
+            
+            // You can add more logic here to auto-fill other fields based on the selected item
+        }
+        
+        function removeVendorBillRow(button) {
+            button.closest('.vendor-bill-row').remove();
+        }
+        
+        function calculateVendorBillTotal() {
+            let total = 0;
+            document.querySelectorAll('input[name*="[amount]"]').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            // You can update a total field here if needed
+        }
+        
+        // Initialize with one vendor bill row if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            // addVendorBillRow(); // Uncomment if you want to start with one row
         });
 </script>
 @endsection

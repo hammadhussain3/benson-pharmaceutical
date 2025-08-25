@@ -56,7 +56,7 @@
             </a>
 
             {{-- Print Button --}}
-            <button class="btn btn-light" onclick="window.print()" data-approved ="{{ $invoice->is_approved }}" id="print-button">
+            <button class="btn btn-light" onclick="printWithTimestamp()" data-approved ="{{ $invoice->is_approved }}" id="print-button">
                 <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Edit">
             </button>
             <!-- <button class="btn btn-light" onclick="checkApprovalAndPrint(this)" data-approved="{{ $invoice->is_approved }}" id="print-button">
@@ -239,6 +239,9 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
 @endsection

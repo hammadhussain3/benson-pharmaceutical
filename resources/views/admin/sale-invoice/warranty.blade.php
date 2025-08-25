@@ -10,7 +10,7 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Sale Warranty</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Sale Warranty</button>
         </div>
     </div>
     <!-- Print Button -->
@@ -219,6 +219,9 @@
                     <span style="font-size: 14px; margin-top: 10px;">Authorised Signature <br> Warranter</span>
                 </div>
             </div>
+            
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
 @endsection

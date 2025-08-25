@@ -2060,7 +2060,15 @@ function getInvoiceDetails(invoiceId) {
                                             <div class="mb-3 col-md">
                                                 <label for="batch_id">Batch#<span class="text-danger">*</span></label>
                                                 <input type="text" name="items[${itemIndex}][grn_items][0][batch]" placeholder="Enter Batch#" class="form-control">
-                                            </div>                                    
+                                            </div>
+                                            <div class="mb-3 col-md">
+                                                <label>MFG Date<span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" name="items[${itemIndex}][grn_items][0][mfg_date]" required placeholder="Select Manufacturing Date">
+                                            </div>
+                                            <div class="mb-3 col-md">
+                                                <label>EXP Date<span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" name="items[${itemIndex}][grn_items][0][exp_date]" required placeholder="Select Expiry Date">
+                                            </div>
                                             <div class="mb-3 col-md">
                                                 <label>Quantity Receiving<span class="text-danger">*</span></label>
                                                 <input type="number" class="form-control balance_receivable" name="items[${itemIndex}][grn_items][0][balance_receivable]"
@@ -2069,7 +2077,7 @@ function getInvoiceDetails(invoiceId) {
                                             <div class="mb-3 col-md">
                                                 <label>Unit Price</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control w-25 unit_price" name="items[${itemIndex}][grn_items][0][unit_price]"
+                                                    <input type="number" step="0.01" class="form-control w-50 unit_price" name="items[${itemIndex}][grn_items][0][unit_price]"
                                                         placeholder="Unit Price" required value="${item.unit_price}" readonly>
                                                     <input type="text" class="form-control" name="items[${itemIndex}][grn_items][0][unit]"
                                                         placeholder="Unit" required value="${item.unit}" readonly>

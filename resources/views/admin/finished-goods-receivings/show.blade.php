@@ -10,7 +10,7 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Finished Goods Receiving Note</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Finished Goods Receiving Note</button>
         </div>
     </div>
     <!-- Print Button -->
@@ -123,6 +123,9 @@
                     </li>
                 </ol>
             </div>
+            
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
 @endsection

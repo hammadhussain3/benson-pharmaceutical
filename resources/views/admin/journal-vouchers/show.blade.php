@@ -10,7 +10,7 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Journal Voucher</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Journal Voucher</button>
         </div>
     </div>
     <!-- Print Button -->
@@ -111,6 +111,9 @@
                     <span style="font-size: 14px; margin-top: 10px;">Approved by</span>
                 </div>
             </div>
+            
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
 @endsection

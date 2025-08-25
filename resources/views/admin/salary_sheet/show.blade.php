@@ -10,7 +10,7 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Salary Sheet</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Salary Sheet</button>
         </div>
     </div>
     <!-- Print Button -->
@@ -200,6 +200,9 @@
                 <strong>Note:</strong> Claims (if any) must be lodged with the departmental head within seven (7) days
                 from the receipt of the above amount.
             </div>
+            
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
 @endsection

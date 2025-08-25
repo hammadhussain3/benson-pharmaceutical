@@ -72,6 +72,8 @@
     <!-- Custom Script -->
     <script src="{{ asset('assets/js/script.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <!-- Print Utilities -->
+    <script src="{{ asset('assets/js/print-utils.js') }}"></script>
 
 
     <script>

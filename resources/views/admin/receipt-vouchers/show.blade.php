@@ -10,7 +10,7 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Receipt Voucher</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Receipt Voucher</button>
         </div>
     </div>
     <!-- Print Button -->
@@ -123,6 +123,9 @@
                     <span style="font-size: 14px; margin-top: 10px;">Received by</span>
                 </div>
             </div>
+            
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
 @endsection

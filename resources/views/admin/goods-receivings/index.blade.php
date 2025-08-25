@@ -53,9 +53,8 @@
                     <tbody>
                         @foreach ($goodsReceivings as $goodsReceiving)
                             <tr>
-                                
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $goodsReceiving->code }}</td>
+                                <td><a class="link-primary" href="{{ route('goods-receivings.show', $goodsReceiving->id) }}">{{ $goodsReceiving->code }}</a></td>
                                 <td>{{ $goodsReceiving->invoice->code }}</td>
                                 <td>{{ $goodsReceiving->party->name }}</td>
                                 <td>{{ $goodsReceiving->supplier_bill_no }}</td>
@@ -68,33 +67,14 @@
                                 <td>{{ $goodsReceiving->created_at->format('d M, Y') }}</td>
                                 <td><span class="badge {{ $goodsReceiving->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $goodsReceiving->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                                 @if(auth()->user()->hasPermission('Goods Receiving View') || auth()->user()->hasPermission('Goods Receiving Update') || auth()->user()->hasPermission('Goods Receiving Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Goods Receiving View'))
-                                    <a class="me-3" href="{{ route('goods-receivings.show', $goodsReceiving->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
+                                <td>  
                                     @if(auth()->user()->hasPermission('Goods Receiving Update') && 
                                         ($goodsReceiving->is_approved == 0 || ($goodsReceiving->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
                                     )
                                     <a class="me-3" href="{{ route('goods-receivings.edit', $goodsReceiving->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Goods Receiving Delete') && 
-                                        ($goodsReceiving->is_approved == 0 || ($goodsReceiving->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $goodsReceiving->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $goodsReceiving->id }}"
-                                        action="{{ route('goods-receivings.destroy', $goodsReceiving->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
+                                    @endif                                 
                                 </td>
                                 @endif
                             </tr>

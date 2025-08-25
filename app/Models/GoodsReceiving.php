@@ -41,6 +41,11 @@ class GoodsReceiving extends Model
         return $this->hasMany(GoodsReceivingItem::class);
     }
 
+    public function vendor_bills()
+    {
+        return $this->hasMany(GoodsReceivingVendorBill::class);
+    }
+
     public function stocks()
     {
         return $this->hasMany(Stock::class);
@@ -55,4 +60,6 @@ class GoodsReceiving extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+
 }

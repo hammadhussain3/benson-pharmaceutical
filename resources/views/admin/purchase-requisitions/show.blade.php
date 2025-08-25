@@ -11,11 +11,9 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Manual Purchase Requisition</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Manual Purchase Requisition</button>
         </div>
     </div>
-    <!-- Print Button -->
-
 
     <!-- Card Component -->
     <div class="card">
@@ -43,7 +41,7 @@
                 </div>
             </div>
 
-            <table class="table mt-3">
+            <table class="table mt-2">
                 <tr>
                     <th>PR No.</th>
                     <td>{{ $purchaseRequisition->code }}</td>
@@ -58,7 +56,7 @@
                 </tr>
             </table>
 
-            <table class="table table-striped mt-3">
+            <table class="table table-striped mt-2">
                 <thead class="table-primary">
                     <tr>
                         <th>#</th>
@@ -89,39 +87,41 @@
                 </tfoot>
             </table>
             @if ($purchaseRequisition->special_instructions)
-                <div style="margin-top: 15px; font-size: 14px;">
+                <div style="margin-top: 10px; font-size: 14px;">
                     <strong>Note:</strong> {{ $purchaseRequisition->special_instructions }}
                 </div>
             @endif
-            <div class="signature-section" style="display: flex; justify-content: space-around; align-items: end; margin-top: 45px;">
-                <div style="width: 266px; text-align: center;">
+            <div class="signature-section" style="display: flex; justify-content: space-around; align-items: end; margin-top: 25px;">
+                <div style="width: 200px; text-align: center;">
                     <span style="font-size: 14px; font-weight: bold;">{{ $purchaseRequisition->createdBy->name ?? null }}</span>
-                    <hr style="width: 100%; margin: 5px 0px;">
+                    <hr style="width: 100%; margin: 3px 0px;">
                     <span style="font-size: 14px;">Prepared by</span>
                 </div>
-                <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%; margin: 5px 0px;">
+                <div style="width: 200px; text-align: center;">
+                    <hr style="width: 100%; margin: 3px 0px;">
                     <span style="font-size: 14px;">Checked by</span>
                 </div>
-                <div style="width: 266px; text-align: center;">
-                    <hr style="width: 100%; margin: 5px 0px;">
+                <div style="width: 200px; text-align: center;">
+                    <hr style="width: 100%; margin: 3px 0px;">
                     <span style="font-size: 14px;">Approved by</span>
                 </div>
             </div>
+            
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
 @endsection
 
 <style>
     .print-header {
-        margin-top: 10px !important;
+        margin-top: 5px !important;
     }
 
     @media print {
-
         .signature-section {
             position: fixed;
-            bottom: 10px;
+            bottom: 5px;
             left: 0;
             width: 100%;
             display: flex;
@@ -129,7 +129,7 @@
         }
 
         @page {
-            margin: 0;
+            margin: 5mm;
         }
 
         html,
@@ -169,7 +169,7 @@
         }
 
         .print-header {
-            margin-top: 15px !important;
+            margin-top: 10px !important;
         }
     }
 </style>

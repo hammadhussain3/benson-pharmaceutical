@@ -9,18 +9,35 @@
                 <li class="breadcrumb-item active">View Goods Receiving Note</li>
             </ul>
         </div>
-        <div class="text-right">
-            <button class="btn btn-primary" onclick="window.print()">Print Goods Receiving Note</button>
+        <div class="d-flex align-items-center gap-2">
+            {{-- Previous Button --}}
+            @if($previous)
+                <a href="{{ route('goods-receivings.show', $previous->id) }}" class="btn btn-outline-secondary">
+                    &laquo; Previous
+                </a>
+            @else
+                <button class="btn btn-outline-secondary" disabled>&laquo; Previous</button>
+            @endif
+
+            {{-- Next Button --}}
+            @if($next)
+                <a href="{{ route('goods-receivings.show', $next->id) }}" class="btn btn-outline-secondary">
+                    Next &raquo;
+                </a>
+            @else
+                <button class="btn btn-outline-secondary" disabled>Next &raquo;</button>
+            @endif
+
+            {{-- Print Button --}}
+            <button class="btn btn-light" onclick="printGRN()">
+                <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Print">
+            </button>
         </div>
     </div>
-    <!-- Print Button -->
 
     <!-- Card Component -->
     <div class="card">
         <div class="card-body">
-            @if ($goodsReceiving->is_approved == 1)
-                <span class="position-absolute top-0 end-0 ps-2 mt-2 pe-3 bg-success text-light approved-target">{{ $goodsReceiving->is_approved == 1 ? 'Approved' : '' }}</span>
-            @endif
             <div class="row justify-content-between">
                 <div class="col-auto">
                     <div class="d-flex">
@@ -41,7 +58,7 @@
                 </div>
             </div>
 
-            <table class="table mt-3">
+            <table class="table mt-2">
                 <tr>
                     <th>Order Ref</th>
                     <td>{{ $goodsReceiving->invoice->code }}</td>
@@ -54,15 +71,16 @@
                 </tr>
             </table>
 
-            <table class="table table-striped mt-3">
+            <table class="table table-striped table-bordered mt-2">
                 <thead class="table-primary">
                     <tr class="border-bottom">
                         <th class="border-end align-middle text-center" rowspan="2">#</th>
                         <th class="border-end align-middle text-center" rowspan="2">Code</th>
-                        <th class="border-end align-middle text-center" rowspan="2">Description</th>
+                        <th class="border-end align-middle text-center" rowspan="2" style="width: 40%">Description</th>
                         <th class="border-end text-center" colspan="3">Quantity</th>
                         <th class="border-end align-middle text-center" rowspan="2">Unit</th>
                         <th class="border-end text-center" colspan="2">Price (Rs.)</th>
+                        <th class="border-end align-middle text-center" rowspan="2">Vendor Bill</th>
                     </tr>
                     <tr class="border-bottom">
                         <th class="border-end text-center">Ordered</th>
@@ -77,32 +95,32 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->code }}</td>
-                            <td>Batch# {{ $item->batch }}<br>{{ $item->description }}</td>
+                            <td class="description-cell">
+                                Batch# {{ $item->batch }}<br>
+                                MFG: {{ $item->mfg_date ? \Carbon\Carbon::parse($item->mfg_date)->format('d/m/Y') : 'N/A' }}<br>
+                                EXP: {{ $item->exp_date ? \Carbon\Carbon::parse($item->exp_date)->format('d/m/Y') : 'N/A' }}<br>
+                                {{ $item->description }}
+                            </td>
                             <td>{{ $item->quantity_ordered }}</td>
                             <td>{{ $item->quantity_ordered - ($item->quantity_received + $item->balance_receivable) }}</td>
                             <td>{{ $item->balance_receivable }}</td>
                             <td>{{ $item->unit }}</td>
                             <td>{{ number_format($item->unit_price) }}</td>
                             <td>{{ number_format($item->total_amount, 2) }}</td>
+                            <td>
+                                @if(isset($item->vendor_bill_no))
+                                    <strong>{{ $item->vendor_bill_no }}</strong>
+                                    @if($item->bill_date)
+                                        <br><small>{{ \Carbon\Carbon::parse($item->bill_date)->format('d/m/Y') }}</small>
+                                    @endif
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
-                    {{-- <tr>
-                        <th colspan="5"></th>
-                        <th colspan="3">Exclusive Tax</th>
-                        <td>{{ number_format($goodsReceiving->total_amount - ($goodsReceiving->sales_tax + $goodsReceiving->adv_tax), 2) }}</td>
-                    </tr>
-                    <tr>
-                        <th colspan="5"></th>
-                        <th colspan="3">Sales Tax</th>
-                        <td>{{ number_format($goodsReceiving->sales_tax, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <th colspan="5"></th>
-                        <th colspan="3">Advance Tax</th>
-                        <td>{{ number_format($goodsReceiving->adv_tax, 2) }}</td>
-                    </tr> --}}
                     <tr>
                         <th colspan="5"></th>
                         <th colspan="3">Total</th>
@@ -111,44 +129,131 @@
                 </tfoot>
             </table>
 
-            <div class="signature-section" style="margin-top: 45px;">
+            <!-- Vendor Bills Summary -->
+            @if(isset($goodsReceiving->vendor_bills) && count($goodsReceiving->vendor_bills) > 0)
+                <div class="mt-4">
+                    <h6 class="fw-bold">Vendor Bills Summary</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Vendor Bill No</th>
+                                    <th>Bill Date</th>
+                                    <th>Amount (Rs.)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($goodsReceiving->vendor_bills as $vendorBill)
+                                    <tr>
+                                        <td>
+                                            @if(isset($goodsReceiving->items[$vendorBill->item_index]))
+                                                {{ Str::limit($goodsReceiving->items[$vendorBill->item_index]->description, 50) }}
+                                            @else
+                                                Item {{ $vendorBill->item_index + 1 }}
+                                            @endif
+                                        </td>
+                                        <td>{{ $vendorBill->bill_no }}</td>
+                                        <td>{{ $vendorBill->bill_date ? \Carbon\Carbon::parse($vendorBill->bill_date)->format('d/m/Y') : 'N/A' }}</td>
+                                        <td>{{ number_format($vendorBill->amount, 2) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-light">
+                                    <th colspan="3" class="text-end">Total Vendor Bills Amount:</th>
+                                    <th>{{ number_format($goodsReceiving->vendor_bills->sum('amount'), 2) }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            @endif
+
+            <div class="signature-section" style="margin-top: 25px;">
                 <div style="display: flex; justify-content: space-around; align-items: end;">
-                    <div style="width: 200px; text-align: center;">
+                    <div style="width: 180px; text-align: center;">
                         {{ $goodsReceiving->createdBy->name ?? null }}
-                        <hr style="width: 100%; margin: 5px 0px;">
-                        <span style="font-size: 14px; margin-top: 10px;">Raised by</span>
+                        <hr style="width: 100%; margin: 3px 0px;">
+                        <span style="font-size: 14px;">Raised by</span>
                     </div>
-                    <div style="width: 200px; text-align: center;">
-                        <hr style="width: 100%; margin: 5px 0px;">
-                        <span style="font-size: 14px; margin-top: 10px;">Received by</span>
+                    <div style="width: 180px; text-align: center;">
+                        <hr style="width: 100%; margin: 3px 0px;">
+                        <span style="font-size: 14px;">Received by</span>
                     </div>
-                    <div style="width: 200px; text-align: center;">
-                        <hr style="width: 100%; margin: 5px 0px;">
-                        <span style="font-size: 14px; margin-top: 10px;">Accepted by</span>
+                    <div style="width: 180px; text-align: center;">
+                        <hr style="width: 100%; margin: 3px 0px;">
+                        <span style="font-size: 14px;">Accepted by</span>
                     </div>
-                    <div style="width: 200px; text-align: center;">
-                        <hr style="width: 100%; margin: 5px 0px;">
-                        <span style="font-size: 14px; margin-top: 10px;">Approved by</span>
+                    <div style="width: 180px; text-align: center;">
+                        <span style="font-size: 14px; font-weight: bold;">
+                            @if($goodsReceiving->is_approved == 1)
+                                Approved
+                            @else
+                                Draft
+                            @endif
+                        </span>
+                        <hr style="width: 100%; margin: 3px 0px;">
+                        <span style="font-size: 14px;">Status</span>
                     </div>
                 </div>
             </div>
+            
+            <!-- Print timestamp will be added here -->
+            <div id="printTimestampContainer"></div>
         </div>
     </div>
+
+    <script>
+        function printGRN() {
+            // Add timestamp to footer before printing
+            const timestampContainer = document.getElementById('printTimestampContainer');
+            const timestampDiv = document.createElement('div');
+            timestampDiv.style.cssText = 'text-align: center; margin-top: 20px; font-size: 14px; color: #666;';
+            timestampDiv.innerHTML = '<strong>Printed on:</strong> ' + new Date().toLocaleString('en-GB');
+            
+            // Clear any existing timestamp and add new one
+            timestampContainer.innerHTML = '';
+            timestampContainer.appendChild(timestampDiv);
+            
+            // Print
+            window.print();
+            
+            // Remove timestamp after printing
+            setTimeout(() => {
+                timestampContainer.innerHTML = '';
+            }, 1000);
+        }
+    </script>
 @endsection
 
 <style>
     .print-header{
-        margin-top: 10px !important;
+        margin-top: 5px !important;
+    }
+    /* Ensure long descriptions wrap inside the cell */
+    .table.table-striped td.description-cell{
+        white-space: normal !important;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+    /* Stronger borders for the items grid */
+    .table.table-striped.table-bordered{
+        border-collapse: collapse;
+    }
+    .table.table-striped.table-bordered th,
+    .table.table-striped.table-bordered td{
+        border: 1px solid #dee2e6 !important;
     }
     @media print {
         .signature-section {
             position: fixed;
-            bottom: 10px;
+            bottom: 5px;
             left: 0;
             width: 100%;
         }
        @page {
-           margin: 0;
+           margin: 5mm;
        }
    
        html, body {
@@ -186,8 +291,13 @@
             color-adjust: exact;
        }
        .print-header{
-            margin-top: 15px !important;
+            margin-top: 10px !important;
         }
+       /* Darker borders on print for clarity */
+       .table.table-striped.table-bordered th,
+       .table.table-striped.table-bordered td{
+           border: 1px solid #000 !important;
+       }
    }
    
 </style>

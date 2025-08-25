@@ -250,7 +250,7 @@
                         <input type="hidden" name="is_approved" id="is_approved" value="{{ $invoice->is_approved ?? 0 }}">
                         <input type="hidden" name="status" id="status" value="{{ $invoice->status }}">
 
-                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('is_approved').value = {{ $invoice->is_approved ?? 0 }};">
+                        <button type="submit" class="btn btn-primary" onclick="document.getElementById('is_approved').value='{{ $invoice->is_approved ?? 0 }}';">
                             Save
                         </button>
 
@@ -261,8 +261,7 @@
                         @endif
 
                         @if ($invoice->status === 'pending' || $invoice->status === 'partial')
-                            <button type="submit" class="btn btn-info" 
-                                    onclick="document.getElementById('status').value = 'completed';">
+                            <button type="button" class="btn btn-info" onclick="confirmMarkCompleted(this)">
                                 Mark as Completed
                             </button>
                         @endif                        
@@ -387,6 +386,33 @@
             if (selectedOption && titleInput) {
                 titleInput.value = selectedOption.text.trim();
             }
+        }
+
+        function confirmMarkCompleted(button) {
+            if (typeof Swal === 'undefined') {
+                // Fallback in case SweetAlert is not loaded
+                if (confirm('Are you sure you want to mark this as completed?')) {
+                    document.getElementById('status').value = 'completed';
+                    button.closest('form').submit();
+                }
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will mark the purchase order as completed.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, mark completed',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('status').value = 'completed';
+                    button.closest('form').submit();
+                }
+            });
         }
     </script>
 @endsection

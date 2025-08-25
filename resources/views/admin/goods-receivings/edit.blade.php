@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+
     <div class="page-header">
         <div class="row">
             <div class="col-sm-12">
@@ -38,7 +39,7 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="code">Code<span class="text-danger">*</span></label>
+                                <label for="code">DOC NO.</label>
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $goodsReceiving->code) }}">
                             </div>
                             <div class="mb-3 col-md-6">
@@ -63,7 +64,7 @@
                             </div>
                             
                             <div class="mb-3 col-md-6">
-                                <label for="supplier">Supplier<span class="text-danger">*</span></label>
+                                <label for="supplier">Supplier</label>
                                 <input type="text" class="form-control" name="supplier_name" id="supplier_name" placeholder="Supplier Name" value="{{ old('supplier_name', $goodsReceiving->party->name) }}" readonly>
                                 <input type="hidden" name="supplier" id="supplier_id" value="{{ old('supplier', $goodsReceiving->party_id) }}">
                             </div>
@@ -102,7 +103,7 @@
                                                             value="{{ old('items.'.$i.'.types', $itemType) == 'product' ? old('items.'.$i.'.product', $goodsReceiving->items[$i]->product_id) : old('items.'.$i.'.raw_material_item', $goodsReceiving->items[$i]->raw_material_item_id) }}">
                                                     </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label for="product_code">Code<span class="text-danger">*</span></label>
+                                                        <label for="product_code">Item Code<span class="text-danger">*</span></label>
                                                         <input type="text" class="form-control" name="items[{{ $i }}][code]"
                                                             placeholder="Product Code" required value="{{ old('items.'.$i.'.code', $goodsReceiving->items[$i]->code) }}" readonly>
                                                     </div>
@@ -130,13 +131,21 @@
                                                                     <input type="text" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][batch]" value="{{ $grnItems[$j]['batch'] ?? '' }}" placeholder="Enter Batch#">
                                                                 </div>
                                                                 <div class="mb-3 col-md">
+                                                                    <label>MFG Date<span class="text-danger">*</span></label>
+                                                                    <input type="date" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][mfg_date]" value="{{ $grnItems[$j]['mfg_date'] ?? '' }}" required placeholder="Select Manufacturing Date">
+                                                                </div>
+                                                                <div class="mb-3 col-md">
+                                                                    <label>EXP Date<span class="text-danger">*</span></label>
+                                                                    <input type="date" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][exp_date]" value="{{ $grnItems[$j]['exp_date'] ?? '' }}" required placeholder="Select Expiry Date">
+                                                                </div>
+                                                                <div class="mb-3 col-md">
                                                                     <label>Quantity Receiving<span class="text-danger">*</span></label>
                                                                     <input type="number" class="form-control balance_receivable" name="items[{{ $i }}][grn_items][{{ $j }}][balance_receivable]" value="{{ $grnItems[$j]['balance_receivable'] ?? '' }}" placeholder="Balance Receivable" oninput="calculateGoodsRecievingAmount()">
                                                                 </div>
                                                                 <div class="mb-3 col-md">
                                                                     <label>Unit Price</label>
                                                                     <div class="input-group">
-                                                                        <input type="text" class="form-control w-50 unit_price" name="items[{{ $i }}][grn_items][{{ $j }}][unit_price]" value="{{ $grnItems[$j]['unit_price'] ?? '' }}" readonly>
+                                                                        <input type="number" step="0.01" class="form-control w-50 unit_price" name="items[{{ $i }}][grn_items][{{ $j }}][unit_price]" value="{{ $grnItems[$j]['unit_price'] ?? '' }}" readonly>
                                                                         <input type="text" class="form-control" name="items[{{ $i }}][grn_items][{{ $j }}][unit]" value="{{ $grnItems[$j]['unit'] ?? '' }}" readonly>
                                                                     </div>
                                                                 </div>
@@ -165,6 +174,64 @@
                                 <label for="supplier_bill_no">Supplier Bill No<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="supplier_bill_no" id="supplier_bill_no"
                                     placeholder="Supplier Bill No" required value="{{ old('supplier_bill_no', $goodsReceiving->supplier_bill_no) }}">
+                            </div>
+                            
+                            <!-- Vendor Bill Section -->
+                            <div class="col-md-12">
+                                <div class="card border-0 mb-3">
+                                    <div class="card-header bg-light py-2">
+                                        <h5 class="card-title mb-0">Vendor Bills</h5>
+                                        <small class="text-muted">Add vendor bill details for each item</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="vendor-bills-container" data-initial-count="{{ isset($goodsReceiving->vendor_bills) ? count($goodsReceiving->vendor_bills) : 0 }}">
+                                            @if(isset($goodsReceiving->vendor_bills) && count($goodsReceiving->vendor_bills) > 0)
+                                                @foreach($goodsReceiving->vendor_bills as $index => $vendorBill)
+                                                    <div class="row vendor-bill-row mb-3 align-items-end">
+                                                        <div class="col-md-3">
+                                                            <label>Item<span class="text-danger">*</span></label>
+                                                            <select name="vendor_bills[{{ $index }}][item_index]" class="form-control" required onchange="updateVendorBillItemDetails(this)">
+                                                                <option value="">Select Item</option>
+                                                                @php
+                                                                    $items = $goodsReceiving->items->groupBy(function($item) {
+                                                                        return $item->product_id ?? 'rm_' . $item->raw_material_item_id;
+                                                                    })->values();
+                                                                @endphp
+                                                                @foreach($items as $itemIndex => $item)
+                                                                    <option value="{{ $itemIndex }}" {{ $vendorBill->item_index == $itemIndex ? 'selected' : '' }}>
+                                                                        {{ Str::limit($item->description, 50) }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label>Vendor Bill No<span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="vendor_bills[{{ $index }}][bill_no]" placeholder="Vendor Bill No" required value="{{ $vendorBill->bill_no ?? '' }}">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Bill Date</label>
+                                                            <input type="date" class="form-control" name="vendor_bills[{{ $index }}][bill_date]" placeholder="Bill Date" value="{{ $vendorBill->bill_date ?? '' }}">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label>Amount</label>
+                                                            <input type="number" step="0.01" class="form-control" name="vendor_bills[{{ $index }}][amount]" placeholder="Amount" value="{{ $vendorBill->amount ?? '' }}" oninput="calculateVendorBillTotal()">
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="button" class="btn btn-danger btn-sm" onclick="removeVendorBillRow(this)">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addVendorBillRow()">
+                                                <i class="fa fa-plus"></i> Add Vendor Bill
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             {{-- <div class="mb-3 col-md-6">
                                 <label for="therapeutic_class">Sales Tax<span class="text-danger">*</span></label>
@@ -257,5 +324,74 @@
                 calculateGoodsRecievingAmount();
             }
         });
+        
+        // Vendor Bill Management
+        let vendorBillIndex = parseInt(document.getElementById('vendor-bills-container').dataset.initialCount || '0');
+        
+        function addVendorBillRow() {
+            const container = document.getElementById('vendor-bills-container');
+            const row = document.createElement('div');
+            row.className = 'row vendor-bill-row mb-3 align-items-end';
+            row.innerHTML = `
+                <div class="col-md-3">
+                    <label>Item<span class="text-danger">*</span></label>
+                    <select name="vendor_bills[${vendorBillIndex}][item_index]" class="form-control" required onchange="updateVendorBillItemDetails(this)">
+                        <option value="">Select Item</option>
+                        ${generateItemOptions()}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Vendor Bill No<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="vendor_bills[${vendorBillIndex}][bill_no]" placeholder="Vendor Bill No" required>
+                </div>
+                <div class="col-md-2">
+                    <label>Bill Date</label>
+                    <input type="date" class="form-control" name="vendor_bills[${vendorBillIndex}][bill_date]" placeholder="Bill Date">
+                </div>
+                <div class="col-md-2">
+                    <label>Amount</label>
+                    <input type="number" step="0.01" class="form-control" name="vendor_bills[${vendorBillIndex}][amount]" placeholder="Amount" oninput="calculateVendorBillTotal()">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeVendorBillRow(this)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(row);
+            vendorBillIndex++;
+        }
+        
+        function generateItemOptions() {
+            const itemSets = document.querySelectorAll('#item-group .item-set');
+            let options = '';
+            itemSets.forEach((itemSet, index) => {
+                const description = itemSet.querySelector('textarea[name*="[description]"]')?.value || `Item ${index + 1}`;
+                options += `<option value="${index}">${description.substring(0, 50)}${description.length > 50 ? '...' : ''}</option>`;
+            });
+            return options;
+        }
+        
+        function updateVendorBillItemDetails(select) {
+            const itemIndex = select.value;
+            if (itemIndex === '') return;
+            
+            const itemSet = document.querySelectorAll('#item-group .item-set')[itemIndex];
+            const description = itemSet.querySelector('textarea[name*="[description]"]')?.value || `Item ${parseInt(itemIndex) + 1}`;
+            
+            // You can add more logic here to auto-fill other fields based on the selected item
+        }
+        
+        function removeVendorBillRow(button) {
+            button.closest('.vendor-bill-row').remove();
+        }
+        
+        function calculateVendorBillTotal() {
+            let total = 0;
+            document.querySelectorAll('input[name*="[amount]"]').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            // You can update a total field here if needed
+        }
     </script>
 @endsection
