@@ -19,6 +19,29 @@
                 <button class="btn btn-outline-secondary" disabled>&laquo; Previous</button>
             @endif
 
+            {{-- Jump to Specific GRN Dropdown --}}
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="jumpToGRNDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Jump to GRN
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="jumpToGRNDropdown" style="max-height: 300px; overflow-y: auto; min-width: 300px;">
+                    <li class="px-3 py-2">
+                        <input type="text" class="form-control form-control-sm" id="grnSearchInput" placeholder="Search GRN code or date..." onkeyup="filterGRNs()" oninput="filterGRNs()">
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    @foreach($allGRNs as $grn)
+                        <li>
+                            <a class="dropdown-item grn-item {{ $grn->id == $goodsReceiving->id ? 'active fw-bold' : '' }}" 
+                               href="{{ route('goods-receivings.show', $grn->id) }}"
+                               data-grn-code="{{ strtolower($grn->code) }}"
+                               data-grn-date="{{ $grn->created_at->format('d/m/Y') }}">
+                                <span>{{ $grn->code }}</span>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
             {{-- Next Button --}}
             @if($next)
                 <a href="{{ route('goods-receivings.show', $next->id) }}" class="btn btn-outline-secondary">
@@ -72,7 +95,7 @@
             </table>
 
             <table class="table table-striped table-bordered mt-2">
-                <thead class="table-primary">
+                <thead class="table-header-custom">
                     <tr class="border-bottom">
                         <th class="border-end align-middle text-center" rowspan="2">#</th>
                         <th class="border-end align-middle text-center" rowspan="2">Code</th>
@@ -213,6 +236,76 @@
                 timestampContainer.innerHTML = '';
             }, 1000);
         }
+
+        // Clear search when dropdown is closed
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdown = document.getElementById('jumpToGRNDropdown');
+            const searchInput = document.getElementById('grnSearchInput');
+            
+            dropdown.addEventListener('hidden.bs.dropdown', function() {
+                searchInput.value = '';
+                filterGRNs(); // Reset the filter
+            });
+        });
+
+        function filterGRNs() {
+            console.log('filterGRNs function called');
+            const searchInput = document.getElementById('grnSearchInput');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const grnItems = document.querySelectorAll('.grn-item');
+            
+            console.log('Search term:', searchTerm);
+            console.log('Found GRN items:', grnItems.length);
+            
+            if (searchTerm === '') {
+                // Show all items if search is empty
+                grnItems.forEach(item => {
+                    item.style.display = '';
+                });
+                console.log('Showing all items');
+                return;
+            }
+
+            let hasResults = false;
+            
+            grnItems.forEach((item, index) => {
+                const grnCode = item.dataset.grnCode || '';
+                const grnDate = item.dataset.grnDate || '';
+                const itemText = item.textContent.toLowerCase();
+                
+                console.log(`Item ${index}:`, { grnCode, grnDate, itemText });
+                
+                const isMatch = grnCode.includes(searchTerm) || 
+                               grnDate.includes(searchTerm) || 
+                               itemText.includes(searchTerm);
+                
+                if (isMatch) {
+                    item.style.display = '';
+                    hasResults = true;
+                    console.log(`Item ${index} matches, showing`);
+                } else {
+                    item.style.display = 'none';
+                    console.log(`Item ${index} doesn't match, hiding`);
+                }
+            });
+
+            console.log('Has results:', hasResults);
+
+            // Show/hide no results message
+            let noResultsMsg = document.querySelector('.no-results-msg');
+            if (!hasResults && searchTerm.length > 0) {
+                if (!noResultsMsg) {
+                    noResultsMsg = document.createElement('li');
+                    noResultsMsg.className = 'dropdown-item text-muted text-center no-results-msg';
+                    noResultsMsg.textContent = 'No GRNs found matching your search';
+                    document.querySelector('.dropdown-menu').appendChild(noResultsMsg);
+                    console.log('Added no results message');
+                }
+            } else if (noResultsMsg) {
+                noResultsMsg.remove();
+                console.log('Removed no results message');
+            }
+        }
     </script>
 @endsection
 
@@ -233,6 +326,72 @@
     .table.table-striped.table-bordered th,
     .table.table-striped.table-bordered td{
         border: 1px solid #dee2e6 !important;
+    }
+    
+    /* Custom table header styling */
+    .table-header-custom th {
+        background-color: #f8f9fa !important;
+        color: #495057 !important;
+        font-weight: 600;
+        border-bottom: 2px solid #dee2e6 !important;
+    }
+    
+    .table-header-custom th:hover {
+        background-color: #e9ecef !important;
+    }
+    
+    /* Dropdown styling */
+    .dropdown-menu {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid #f8f9fa;
+        background-color: transparent !important;
+    }
+    
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+    
+    .dropdown-item:hover {
+        background-color: #f8f9fa !important;
+    }
+    
+    .dropdown-item.active {
+        background-color: #ff9f43 !important;
+        color: #ffffff !important;
+        font-weight: bold;
+        border: 1px solid #ff9f43;
+    }
+    
+    .dropdown-item small {
+        font-size: 0.75rem;
+    }
+    
+    /* Search input styling */
+    #grnSearchInput {
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+    }
+    
+    #grnSearchInput:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .dropdown-divider {
+        margin: 0.5rem 0;
+    }
+    
+    /* Hide search input in print */
+    @media print {
+        .dropdown {
+            display: none !important;
+        }
     }
     @media print {
         .signature-section {
@@ -268,8 +427,8 @@
            width: 100%;
        }
    
-       .table-primary th {
-           background-color: #e3f2fd !important;
+       .table-header-custom th {
+           background-color: #f8f9fa !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
        }

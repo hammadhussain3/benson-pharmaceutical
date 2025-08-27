@@ -83,7 +83,12 @@ class GoodsReceivingController extends Controller
             ->orderBy('id', 'asc')
             ->first();
         
-        return view('admin.goods-receivings.show', compact('goodsReceiving', 'previous', 'next'));
+        // Get all GRNs for the dropdown (ordered by creation date, newest first)
+        $allGRNs = GoodsReceiving::orderBy('created_at', 'desc')
+            ->select('id', 'code', 'created_at')
+            ->get();
+        
+        return view('admin.goods-receivings.show', compact('goodsReceiving', 'previous', 'next', 'allGRNs'));
     }
 
     /**

@@ -33,8 +33,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>DOC NO</th>
-                            <th>PO#</th>
+                            <th>GRN NO.</th>
+                            <th>DOC NO.</th>
                             <th>Supplier</th>
                             <th>Supplier Bill No.</th>
                             @role('Superadmin')
