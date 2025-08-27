@@ -80,7 +80,6 @@
                         <th class="border-end text-center" colspan="3">Quantity</th>
                         <th class="border-end align-middle text-center" rowspan="2">Unit</th>
                         <th class="border-end text-center" colspan="2">Price (Rs.)</th>
-                        <th class="border-end align-middle text-center" rowspan="2">Vendor Bill</th>
                     </tr>
                     <tr class="border-bottom">
                         <th class="border-end text-center">Ordered</th>
@@ -107,23 +106,13 @@
                             <td>{{ $item->unit }}</td>
                             <td>{{ number_format($item->unit_price) }}</td>
                             <td>{{ number_format($item->total_amount, 2) }}</td>
-                            <td>
-                                @if(isset($item->vendor_bill_no))
-                                    <strong>{{ $item->vendor_bill_no }}</strong>
-                                    @if($item->bill_date)
-                                        <br><small>{{ \Carbon\Carbon::parse($item->bill_date)->format('d/m/Y') }}</small>
-                                    @endif
-                                @else
-                                    <span class="text-muted">N/A</span>
-                                @endif
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="5"></th>
-                        <th colspan="3">Total</th>
+                        <th colspan="6"></th>
+                        <th colspan="2">Total</th>
                         <td>{{ number_format($goodsReceiving->total_amount, 2) }}</td>
                     </tr>
                 </tfoot>

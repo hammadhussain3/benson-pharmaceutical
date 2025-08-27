@@ -51,7 +51,7 @@
                             <div class="mb-3 col-md-3">
                                 <label for="payment_deadline">Payment Deadline</label>
                                 <input type="date" class="form-control" name="payment_deadline" id="payment_deadline"
-                                    placeholder="Payment Deadline" required value="{{ old('payment_deadline', 0) }}">
+                                    placeholder="Payment Deadline" required value="{{ old('payment_deadline', \Carbon\Carbon::parse($invoice->payment_deadline)->format('Y-m-d')) }}">
                             </div>
                             <div class="mb-3 col-md-3">
                                 <label for="is_urgent">Is Urgent<span class="text-danger">*</span></label>

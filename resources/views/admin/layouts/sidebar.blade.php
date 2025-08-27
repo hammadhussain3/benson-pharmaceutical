@@ -347,7 +347,7 @@
                         request()->is('payment_types*') ||
                         request()->is('invoices*') || // change to Purchase Requisitions
                         request()->is('*purchase-items') ||
-                        request()->is('*purchase-requisition') ? 'active' : '' }}" href="javascript:void(0);">
+                        request()->is('*purchase-order-appraisal') ? 'active' : '' }}" href="javascript:void(0);">
                         <i class="fa fa-truck"></i>
                         <span>Procurement</span>
                         <span class="menu-arrow"></span>
@@ -386,8 +386,8 @@
                             </a>
                         </li>
                         <li>
-                            <a class="{{ request()->is('*purchase-requisition') ? 'active' : '' }}" href="{{ route('reports.purchase-requisitions') }}">
-                                Purchase Requisition
+                            <a class="{{ request()->is('*purchase-order-appraisal') ? 'active' : '' }}" href="{{ route('reports.purchase-order-appraisal') }}">
+                                Purchase Order Appraisal
                             </a>
                         </li>
                     </ul>

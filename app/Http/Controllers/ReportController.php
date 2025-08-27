@@ -86,8 +86,6 @@ class ReportController extends Controller
             $purchaseItems = $purchaseItems->sortBy(fn($item) => $item->invoice->required_date);
         } elseif ($type === 'days-remaining') {
             $purchaseItems = $purchaseItems->sortBy(fn($item) => now()->diffInDays(\Carbon\Carbon::parse($item->invoice->required_date), false));
-        } elseif ($type === 'pending-qty') {
-            $purchaseItems = $purchaseItems->sortByDesc(fn($item) => $item->quantity - $item->received_quantity);
         }
 
         if ($days_filter === 'overdue') {
@@ -96,7 +94,7 @@ class ReportController extends Controller
                 $remainingDays = now()->startOfDay()->diffInDays($requiredDate, false);
                 return $remainingDays < 0;
             });
-        } elseif ($days_filter === 'left') {
+        } elseif ($days_filter === 'remaining') {
             $purchaseItems = $purchaseItems->filter(function ($item) {
                 $requiredDate = Carbon::parse($item->invoice->required_date)->startOfDay();
                 $remainingDays = now()->startOfDay()->diffInDays($requiredDate, false);
@@ -118,7 +116,7 @@ class ReportController extends Controller
         return view('admin.reports.purchase-items',compact('purchaseItems','status', 'days_filter', 'type', 'urgent'));
     }
 
-    public function purchaseRequisitions(Request $request)
+    public function purchaseOrderAppraisal(Request $request)
     {
         $from_date = $request->has('from_date') ? $request->input('from_date') : now()->subDays(30)->format('Y-m-d');
         $to_date = $request->has('to_date') ? $request->input('to_date') : now()->format('Y-m-d');

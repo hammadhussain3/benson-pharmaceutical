@@ -14,7 +14,7 @@
     </div>
 
     <div class="mb-3">
-        <form action="{{ route('reports.purchase-requisitions') }}" class="row gy-2 gx-3 align-items-end" method="get">
+        <form action="{{ route('reports.purchase-order-appraisal') }}" class="row gy-2 gx-3 align-items-end" method="get">
             <div class="col-sm-6 col-md-3">
                 <label class="form-label" for="from_date">From</label>
                 <input type="date" class="form-control" name="from_date" id="from_date" value="{{ $from_date }}">
@@ -45,7 +45,7 @@
                 <table class="table table-striped">
                     <thead class="table-primary">
                         <tr>
-                            <th>PO#</th>
+                            <th>DOC NO.</th>
                             <th>Date</th>
                             <th>Req Del Date</th>
                             <th>Status</th>

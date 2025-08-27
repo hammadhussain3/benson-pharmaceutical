@@ -139,7 +139,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('employee-types', EmployeeTypeController::class);
     Route::get('report/current-balance-report', [ReportController::class, 'balanceReport'])->name('reports.current-balance-report');
     Route::get('report/purchase-items', [ReportController::class, 'purchaseItems'])->name('reports.purchase-items');
-    Route::get('report/purchase-requisition', [ReportController::class, 'purchaseRequisitions'])->name('reports.purchase-requisitions');
+    Route::get('report/purchase-order-appraisal', [ReportController::class, 'purchaseOrderAppraisal'])->name('reports.purchase-order-appraisal');
     Route::get('report/requirement-report', [ReportController::class, 'requirementReport'])->name('reports.requirement-report');
     Route::get('report/production-report', [ReportController::class, 'productionReport'])->name('reports.production-report');
     Route::get('report/consumption-report', [ReportController::class, 'consumptionReport'])->name('reports.consumption-report');

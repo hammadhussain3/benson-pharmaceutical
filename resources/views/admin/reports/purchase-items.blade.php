@@ -36,7 +36,7 @@
                 <select name="days_filter" id="days_filter" class="form-select">
                     <option value="">Select</option>
                     <option value="overdue" {{ $days_filter == 'overdue' ? 'selected' : '' }}>Overdue</option>
-                    <option value="left" {{ $days_filter == 'left' ? 'selected' : '' }}>Left</option>
+                    <option value="remaining" {{ $days_filter == 'remaining' ? 'selected' : '' }}>Remaining</option>
                 </select>
             </div>
             <div class="col-sm-6 col-md-3">
@@ -56,7 +56,6 @@
                     <option value="vendor" {{ $type == 'vendor' ? 'selected' : '' }}>Vendor</option>
                     <option value="req-date" {{ $type == 'req-date' ? 'selected' : '' }}>Req. Date</option>
                     <option value="days-remaining" {{ $type == 'days-remaining' ? 'selected' : '' }}>Days Remaining</option>
-                    <option value="pending-qty" {{ $type == 'pending-qty' ? 'selected' : '' }}>Pending Qty</option>
                 </select>
             </div>
             <div class="col-auto">
@@ -71,19 +70,43 @@
             <p class="text-center text-muted mb-0">
                 {{ $type ? ucwords(str_replace('-', ' ', $type)) : ucwords(str_replace('-', ' ', 'purchase-order')) }} Wise
             </p>
+            
+            <!-- Filters Information for Print -->
+            <div class="filters-info text-center mb-3" style="font-size: 12px; color: #666;">
+                <strong>Filters Applied:</strong>
+                @if($status || $days_filter || $urgent !== null || $type)
+                    <span class="filter-tags">
+                        @if($status)
+                            <span class="badge bg-primary me-1">Status: {{ $status }}</span>
+                        @endif
+                        @if($days_filter)
+                            <span class="badge bg-info me-1">Days: {{ ucfirst($days_filter) }}</span>
+                        @endif
+                        @if($urgent !== null)
+                            <span class="badge bg-warning me-1">Urgent: {{ $urgent == '1' ? 'Yes' : 'No' }}</span>
+                        @endif
+                        @if($type)
+                            <span class="badge bg-secondary me-1">Type: {{ ucwords(str_replace('-', ' ', $type)) }}</span>
+                        @endif
+                    </span>
+                @else
+                    <span class="text-muted">No filters applied</span>
+                @endif
+            </div>
             {{-- <p class="text-center text-muted">From {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }} to {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</p> --}}
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead class="table-primary">
                         <tr>
-                            <th>PO#</th>
+                            <th>DOC NO.</th>
                             <th>Items Name</th>
                             <th>Vendor</th>
+                            <th>PO Date</th>
                             <th>Req Date</th>
                             <th>Days Remaining</th>
                             <th>Status</th>
                             <th>PO Qty</th>
-                            <th>Pedning Qty</th>
+                            <th>Pending Qty</th>
                             <th>Urgent</th>
                             {{-- <th>Date</th>
                             <th>Code</th> --}}
@@ -93,9 +116,10 @@
                     <tbody>
                         @foreach ($purchaseItems as $purchaseItem)
                             <tr>
-                                <td>{{ $purchaseItem->invoice->code }}</td>
+                                <td><a class="link-primary" href="{{ route('purchase-invoices.show', $purchaseItem->invoice->id) }}">{{ $purchaseItem->invoice->code }}</a></td>
                                 <td>{{ $purchaseItem->title }}</td>
                                 <td>{{ $purchaseItem->invoice->party->name ?? 'N/A' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($purchaseItem->invoice->invoice_date)->format('d M, Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($purchaseItem->invoice->required_date)->format('d M, Y') }}</td>
                                 <td>
                                     @php
@@ -157,6 +181,43 @@
    
        .table-primary th {
            background-color: #e3f2fd !important;
+           -webkit-print-color-adjust: exact;
+           color-adjust: exact;
+       }
+       
+       /* Apply the same working table styles from show.blade.php */
+       table.table {
+           font-size: 10px !important;
+       }
+       
+       /* Ensure all columns are visible with proper sizing */
+       .table {
+           width: 100% !important;
+           table-layout: auto;
+       }
+       
+       .table th, .table td {
+           white-space: normal !important;
+           word-wrap: break-word !important;
+           padding: 4px 6px;
+       }
+       
+       /* Force table-responsive to show all content */
+       .table-responsive {
+           overflow: visible !important;
+           width: 100% !important;
+       }
+       
+       /* Ensure filters information is visible in print */
+       .filters-info {
+           visibility: visible !important;
+           display: block !important;
+       }
+       
+       .filter-tags .badge {
+           background-color: #e3f2fd !important;
+           color: #1976d2 !important;
+           border: 1px solid #bbdefb !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
        }
