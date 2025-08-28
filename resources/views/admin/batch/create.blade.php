@@ -22,7 +22,7 @@
                         <div class="form-row row">
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
-                                <label for="company_id">Company</label>
+                                <label for="company_id">Company<span class="text-danger">*</span></label>
                                 <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectProducts(this.value); selectChartOfAccounts(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
@@ -38,7 +38,7 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="type">Chart of Accounts</label>
+                                <label for="type">Chart of Accounts<span class="text-danger">*</span></label>
                                 <select class="js-example-basic-single select2" name="chart_of_account" id="chart_of_account_id" required onchange="selectSubChartOfAccounts(this.value);">
                                     <option value="">Select Chart Of Account</option>
                                     @if(old('chart_of_account') || old('company') || !auth()->user()->hasRole('Superadmin'))
@@ -56,7 +56,7 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="sub_chart_of_account">Sub Chart of Accounts</label>
+                                <label for="sub_chart_of_account">Sub Chart of Accounts<span class="text-danger">*</span></label>
                                 <select class="js-example-basic-single select2" name="sub_chart_of_account" id="sub_chart_of_account_id" required>
                                     <option value="">Select Sub Chart Of Account</option>
                                     @if(old('sub_chart_of_account') || old('chart_of_account'))
@@ -73,7 +73,7 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="product_id">Brand Name</label>
+                                <label for="product_id">Brand Name<span class="text-danger">*</span></label>
                                 <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectProductVariations(this.value);">
                                     <option value="">Select Brand</option>
                                     @if(old('product') || old('company') || !auth()->user()->hasRole('Superadmin'))
@@ -90,12 +90,12 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="batch_no">Batch No</label>
+                                <label for="batch_no">Batch No<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="batch_no" id="batch_no"
                                     placeholder="Batch No" required value="{{ old('batch_no') }}">
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="batch_size">Batch Size</label>
+                                <label for="batch_size">Batch Size<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="batch_size" id="batch_size"
                                     placeholder="Batch Size" required value="{{ old('batch_size') }}">
                             </div>
@@ -118,7 +118,7 @@
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
                                                     <div class="mb-3 col-md-12">
-                                                        <label for="">Products</label>
+                                                        <label for="">Products<span class="text-danger">*</span></label>
                                                         <select name="items[{{ $i }}][product_variation]" class="js-example-basic-single select2 product_variations_dropdown" required>
                                                             <option value="">Select Product</option>
                                                             @if(old('items[{{ $i }}][product_variation]') || old('company') || !auth()->user()->hasRole('Superadmin'))
@@ -135,12 +135,12 @@
                                                         </select>
                                                     </div>
                                                     <div class="mb-3 col-md-6">
-                                                        <label>Quantity (Pack)</label>
+                                                        <label>Quantity (Pack)<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control product_quantity" name="items[{{ $i }}][quantity]"
                                                             placeholder="Product Quantity" required value="{{ old("items.$i.quantity") }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
                                                     <div class="mb-3 col-md-6">
-                                                        <label>Trade Price</label>
+                                                        <label>Trade Price<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control trade_price" name="items[{{ $i }}][trade_price]"
                                                             placeholder="Total" required value="{{ old("items.$i.trade_price", 0) }}">
                                                     </div>
@@ -155,19 +155,19 @@
                             </div>
                             
                             <div class="mb-3 col-md-6">
-                                <label for="description">Manufactured Date</label>
+                                <label for="description"><span class="text-danger">*</span>Manufactured Date</label>
                                 <input type="date" class="form-control" name="mfg_date"
                                     required value="{{ old('mfg_date') }}">
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="description">Expiry Date</label>
+                                <label for="description"><span class="text-danger">*</span>Expiry Date</label>
                                 <input type="date" class="form-control" name="exp_date"
                                     required value="{{ old('exp_date') }}">
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="start_date">Start Date</label>
+                                <label for="start_date">Start Date<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="start_date"
                                     required value="{{ old('start_date', \Carbon\Carbon::now()->format('Y-m-d')) }}">
                             </div>
@@ -178,7 +178,7 @@
                             </div>
                             
                             <div class="mb-3 col-md-6">
-                                <label for="company_id">Status</label>
+                                <label for="company_id">Status<span class="text-danger">*</span></label>
                                 <select class="js-example-basic-single select2" name="status" required>
                                         <option value="inprocess">
                                             In-Process
@@ -210,17 +210,17 @@
                     <div class="card-body px-0 pb-0">
                         <div class="row">
                             <div class="mb-3 col-md-12">
-                                <label for="">Products</label>
+                                <label for="">Products<span class="text-danger">*</span></label>
                                 <select name="items[${itemIndex}][product_variation]" class="js-example-basic-single select2 product_variations_dropdown" required>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label>Quantity (Pack)</label>
+                                <label>Quantity (Pack)<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control product_quantity" name="items[${itemIndex}][quantity]"
                                     placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label>Trade Price</label>
+                                <label>Trade Price<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control trade_price" name="items[${itemIndex}][trade_price]"
                                     placeholder="Total" required value="0">
                             </div>

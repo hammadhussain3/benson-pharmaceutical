@@ -11,6 +11,13 @@ class Batch extends Model
 
     protected $fillable = ['batch_no', 'batch_size', 'product_id', 'mfg_date', 'exp_date', 'start_date', 'end_date', 'chart_of_account_id', 'sub_chart_of_account_id', 'status', 'company_id', 'created_by', 'updated_by'];
 
+    protected $casts = [
+        'mfg_date' => 'date',
+        'exp_date' => 'date',
+        'start_date' => 'date',
+        'end_date' => 'date',
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -60,5 +67,22 @@ class Batch extends Model
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    /**
+     * Safely format a date field
+     */
+    public function formatDate($field, $format = 'd/m/Y')
+    {
+        $date = $this->getAttribute($field);
+        if (!$date) {
+            return 'N/A';
+        }
+        
+        if (is_string($date)) {
+            return $date;
+        }
+        
+        return $date->format($format);
     }
 }

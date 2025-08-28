@@ -31,7 +31,7 @@ class BatchRequest extends FormRequest
             'start_date' => 'required|date',
             'end_date' => 'nullable|date',
             'chart_of_account' => 'required|exists:chart_of_accounts,id',
-            'sub_chart_of_account' => 'nullable|exists:sub_chart_of_accounts,id',
+            'sub_chart_of_account' => 'required|exists:sub_chart_of_accounts,id',
             'status' => 'required|string',
             'company' => 'required|exists:companies,id',
             'items' => 'required|array|min:1',

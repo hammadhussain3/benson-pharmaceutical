@@ -1,4 +1,5 @@
 @extends('admin.layouts.app')
+
 @section('title', 'Batches List')
 @section('content')
     <div class="page-header">
@@ -32,6 +33,9 @@
                         <tr>
                             <th>#</th>
                             <th>Batch No</th>
+                            @if(auth()->user()->hasPermission('Batch View') || auth()->user()->hasPermission('Batch Update') || auth()->user()->hasPermission('Batch Delete'))
+                            <th>Action</th>
+                            @endif
                             <th>Batch Size</th>
                             <th>Brand</th>
                             <th>Chart Of Accounts</th>
@@ -43,16 +47,28 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Batch View') || auth()->user()->hasPermission('Batch Update') || auth()->user()->hasPermission('Batch Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($batches as $batch)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td> <a class="link-primary" href="{{ route('batches.show', $batch->id) }}">{{ $batch->batch_no }}</a></td>
+                                <td> 
+                                    @if(auth()->user()->hasPermission('Batch View'))
+                                    <a class="link-primary" href="{{ route('batches.show', $batch->id) }}">{{ $batch->batch_no }}</a>
+                                    @else
+                                    {{ $batch->batch_no }}
+                                    @endif
+                                </td>
+                                @if(auth()->user()->hasPermission('Batch View') || auth()->user()->hasPermission('Batch Update') || auth()->user()->hasPermission('Batch Delete'))
+                                <td>
+                                    @if(auth()->user()->hasPermission('Batch Update'))
+                                    <a class="me-3" href="{{ route('batches.edit', $batch->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                    @endif
+                                </td>
+                                @endif
                                 <td>{{ $batch->batch_size }}</td>
                                 <td>{{ $batch->product->brand_name }}</td>
                                 <td>
@@ -61,10 +77,10 @@
                                         <span class="badge bg-info">{{ $batch->sub_chart_of_account->name }}</span>
                                     @endif
                                 </td>
-                                <td>{{ $batch->mfg_date }}</td>
-                                <td>{{ $batch->exp_date }}</td>
-                                <td>{{ $batch->start_date }}</td>
-                                <td>{{ $batch->end_date ?? 'N/A' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($batch->mfg_date)->format('d M, Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($batch->exp_date)->format('d M, Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($batch->start_date)->format('d M, Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($batch->end_date)->format('d M, Y') }}</td>
                                 <td>
                                     <span class="badges {{ $batch->status == 'completed' ? 'bg-lightgreen' : 'bg-lightred' }}">
                                         {{ $batch->status == 'completed' ? 'Completed' : 'In-Process' }}
@@ -73,32 +89,6 @@
                                 @role('Superadmin')
                                 <td>{{ $batch->company->name }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Batch View') || auth()->user()->hasPermission('Batch Update') || auth()->user()->hasPermission('Batch Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Batch View'))
-                                    <a class="me-3" href="{{ route('batches.show', $batch->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Batch Update'))
-                                    <a class="me-3" href="{{ route('batches.edit', $batch->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Batch Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $batch->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $batch->id }}"
-                                        action="{{ route('batches.destroy', $batch->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

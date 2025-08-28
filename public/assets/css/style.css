@@ -591,7 +591,7 @@ body {
   font-size: 14px;
   color: #212b36;
   line-height: 1.5;
-  background-color: #fafbfe;
+  background-color: #ffffff;
 }
 .container {
   width: 100%;
@@ -1542,10 +1542,10 @@ div#global-loader,
   font-size: 16px;
 }
 .fc-state-hover {
-  background: #f3f3f3;
+  background: #ffffff;
 }
 .fc-state-highlight {
-  background: #f0f0f0;
+  background: #ffffff;
 }
 .fc-state-down,
 .fc-state-active,
@@ -1555,7 +1555,7 @@ div#global-loader,
   text-shadow: none !important;
 }
 .fc-cell-overlay {
-  background: #f0f0f0;
+  background: #ffffff;
 }
 .fc-unthemed .fc-today {
   background: #fff;
@@ -1716,7 +1716,7 @@ div#global-loader,
   height: 20px;
   width: 20px;
   border: 1px solid #e9ecef;
-  background: #f8f8f8;
+  background: #ffffff;
   border-radius: 5px;
 }
 .inputcheck .checkmark:after {
@@ -1748,7 +1748,7 @@ div#global-loader,
   border-radius: 50px !important;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #ffffff;
 }
 ::-webkit-scrollbar-thumb {
   background: #ff9f43;
@@ -1953,7 +1953,7 @@ a:hover {
   margin-left: -1.35rem;
 }
 .comp-section .nav-tabs.nav-tabs-solid {
-  background-color: #fafafa;
+  background-color: #ffffff;
   border: 0;
 }
 .comp-section .nav-tabs.nav-tabs-solid.nav-tabs-rounded a {
@@ -2014,7 +2014,7 @@ body[data-theme="dark"] .header-left.active #toggle_btn:after {
   border: 2px solid #fff;
 }
 body[data-theme="dark"] .sidebar .sidebar-menu > ul > li.submenu ul {
-  background: #fafbfe;
+  background: #ffffff;
   border-radius: 5px;
   padding: 10px 0;
 }
@@ -2865,7 +2865,7 @@ body[data-layout-mode="dark"] .alertify .ajs-content .ajs-input {
   font-size: 15px;
   padding: 8px 10px;
   letter-spacing: 1px;
-  background-color: #f3f2f7;
+  background-color: #ffffff;
   position: absolute;
   top: 0;
   right: 0;

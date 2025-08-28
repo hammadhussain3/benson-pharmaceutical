@@ -24,7 +24,7 @@
                         <div class="form-row row">
                             @role('Superadmin')
                             <div class="mb-3 col-md-12">
-                                <label for="company_id">Company</label>
+                                <label for="company_id">Company<span class="text-danger">*</span></label>
                                 <select name="company" id="company_id" class="form-control" required value="{{ old('company') }}" @role('Superadmin') onchange="selectProducts(this.value); selectChartOfAccounts(this.value);" @endrole>
                                     <option value="">Select Company</option>
                                     @foreach ($companies as $company)
@@ -40,7 +40,7 @@
                                 <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
                             @endrole
                             <div class="mb-3 col-md-6">
-                                <label for="type">Chart of Accounts</label>
+                                <label for="type">Chart of Accounts<span class="text-danger">*</span></label>
                                 <select class="js-example-basic-single select2" name="chart_of_account" id="chart_of_account_id" required onchange="selectSubChartOfAccounts(this.value);">
                                     <option value="">Select Chart Of Account</option>
                                     @php
@@ -56,7 +56,7 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="sub_chart_of_account">Sub Chart of Accounts</label>
+                                <label for="sub_chart_of_account">Sub Chart of Accounts<span class="text-danger">*</span></label>
                                 <select class="js-example-basic-single select2" name="sub_chart_of_account" id="sub_chart_of_account_id" required>
                                     <option value="">Select Sub Chart Of Account</option>
                                     @php
@@ -71,7 +71,7 @@
                                 </select>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="product_id">Brand</label>
+                                <label for="product_id">Brand<span class="text-danger">*</span></label>
                                 <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectProductVariations(this.value);">
                                     <option value="">Select Product</option>
                                     @php
@@ -87,13 +87,13 @@
                                 <div class="invalid-feedback">Please select a company.</div>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="batch_no">Batch No</label>
+                                <label for="batch_no">Batch No<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="batch_no" id="batch_no"
                                     placeholder="Batch No" value="{{ old('batch_no', $batch->batch_no) }}" required>
                                 <div class="invalid-feedback">Please provide a Batch No.</div>
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label for="batch_size">Batch Size</label>
+                                <label for="batch_size">Batch Size<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="batch_size" placeholder="Batch Size"
                                     value="{{ old('batch_size', $batch->batch_size) }}" required>
                                 <div class="invalid-feedback">Please provide an Batch Size.</div>
@@ -118,7 +118,7 @@
                                             <div class="card-body px-0 pb-0">
                                                 <div class="row">
                                                     <div class="mb-3 col-md-12">
-                                                        <label for="">Products</label>
+                                                        <label for="">Products<span class="text-danger">*</span></label>
                                                         <select name="items[{{ $i }}][product_variation]" class="js-example-basic-single select2 product_variations_dropdown" required>
                                                             <option value="">Select Product</option>
                                                             @php
@@ -133,12 +133,12 @@
                                                         </select>
                                                     </div>
                                                     <div class="mb-3 col-md-6">
-                                                        <label>Quantity (Pack)</label>
+                                                        <label>Quantity (Pack)<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control product_quantity" name="items[{{ $i }}][quantity]"
                                                             placeholder="Product Quantity" required value="{{ old("items.$i.quantity", $batch->items[$i]->quantity) }}" oninput="calculatePurchaseInvoiceAmount()">
                                                     </div>
                                                     <div class="mb-3 col-md-6">
-                                                        <label>Trade Price</label>
+                                                        <label>Trade Price<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control trade_price" name="items[{{ $i }}][trade_price]"
                                                             placeholder="Total" required value="{{ old("items.$i.trade_price", $batch->items[$i]->trade_price) }}">
                                                     </div>
@@ -153,33 +153,33 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="description">Manufactured Date</label>
+                                <label for="description">Manufactured Date<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="mfg_date"
-                                    required value="{{ old('mfg_date',$batch->mfg_date) }}">
+                                    required value="{{ old('mfg_date', $batch->mfg_date ? \Carbon\Carbon::parse($batch->mfg_date)->format('Y-m-d') : '') }}">
                                 <div class="invalid-feedback">Please provide a Manufactured Date.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="description">Expiry Date</label>
+                                <label for="description">Expiry Date<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="exp_date"
-                                    required value="{{ old('exp_date',$batch->exp_date) }}">
+                                    required value="{{ old('exp_date', $batch->exp_date ? \Carbon\Carbon::parse($batch->exp_date)->format('Y-m-d') : '') }}">
                                 <div class="invalid-feedback">Please provide a Expiry Date.</div>
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label for="start_date">Start Date</label>
+                                <label for="start_date">Start Date<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="start_date"
-                                    required value="{{ old('start_date',$batch->start_date) }}">
+                                    required value="{{ old('start_date', $batch->start_date ? \Carbon\Carbon::parse($batch->start_date)->format('Y-m-d') : '') }}">
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="end_date">End Date</label>
                                 <input type="date" class="form-control" name="end_date"
-                                    value="{{ old('end_date',$batch->end_date) }}">
+                                    value="{{ old('end_date', $batch->end_date ? \Carbon\Carbon::parse($batch->end_date)->format('Y-m-d') : '') }}">
                             </div>
                             
                             <div class="mb-3 col-md-6">
-                                <label for="company_id">Status</label>
+                                <label for="company_id">Status<span class="text-danger">*</span></label>
                                 <select class="js-example-basic-single select2" name="status" required>
                                         <option value="inprocess" {{ old('status', $batch->status) == 'inprocess' ? 'selected' : '' }}>
                                             In-Process
@@ -213,17 +213,17 @@
                     <div class="card-body px-0 pb-0">
                         <div class="row">
                             <div class="mb-3 col-md-12">
-                                <label for="">Products</label>
+                                <label for="">Products<span class="text-danger">*</span></label>
                                 <select name="items[${itemIndex}][product_variation]" class="js-example-basic-single select2 product_variations_dropdown" required>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label>Quantity (Pack)</label>
+                                <label>Quantity (Pack)<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control product_quantity" name="items[${itemIndex}][quantity]"
                                     placeholder="Unit Price" required value="" oninput="calculatePurchaseInvoiceAmount()">
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label>Trade Price</label>
+                                <label>Trade Price<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control trade_price" name="items[${itemIndex}][trade_price]"
                                     placeholder="Total" required value="0">
                             </div>

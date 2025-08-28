@@ -96,12 +96,12 @@
                                                     </div>
                                                     <div class="mb-3 col-md-4">
                                                         <label>Quantity Ordered</label>
-                                                        <input type="number" class="form-control" name="items[{{ $i }}][quantity_ordered]"
+                                                        <input type="number" class="form-control quantity_ordered" name="items[{{ $i }}][quantity_ordered]"
                                                             placeholder="Quantity Ordered" required value="{{ old('items.'.$i.'.quantity_ordered') }}" readonly>
                                                     </div>
                                                     <div class="mb-3 col-md-4">
                                                         <label>Quantity Received</label>
-                                                        <input type="number" class="form-control" name="items[{{ $i }}][quantity_received]"
+                                                        <input type="number" class="form-control quantity_received" name="items[{{ $i }}][quantity_received]"
                                                             placeholder="Quantity Received" required value="{{ old('items.'.$i.'.quantity_received') }}" readonly>
                                                     </div>
                                                     <div class="col-12 grn-rows-container" data-index="{{ $i }}">
