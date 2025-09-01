@@ -35,12 +35,13 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('ProductGroup Update'))
+                            <th>Action</th>
+                            @endif
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('ProductGroup View') || auth()->user()->hasPermission('ProductGroup Update') || auth()->user()->hasPermission('ProductGroup Delete'))
-                            <th>Action</th>
-                            @endif
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -48,35 +49,17 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td> <a class="link-primary" href="{{ route('product-groups.show', $productGroup->id) }}">{{ $productGroup->name }}</a></td>
+                                @if(auth()->user()->hasPermission('ProductGroup Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('product-groups.edit', $productGroup->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>   
+                                </td>
+                                @endif
                                 @role('Superadmin')
                                 <td>{{ $productGroup->company->name }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('ProductGroup View') || auth()->user()->hasPermission('ProductGroup Update') || auth()->user()->hasPermission('ProductGroup Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('ProductGroup View'))
-                                    <a class="me-3" href="{{ route('product-groups.show', $productGroup->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('ProductGroup Update'))
-                                    <a class="me-3" href="{{ route('product-groups.edit', $productGroup->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('ProductGroup Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $productGroup->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $productGroup->id }}"
-                                        action="{{ route('product-groups.destroy', $productGroup->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
+                                
                             </tr>
                         @endforeach
                     </tbody>

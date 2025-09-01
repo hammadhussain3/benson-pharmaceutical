@@ -61,33 +61,12 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('purchase-invoices.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
-                                @if(auth()->user()->hasPermission('Purchase Invoice View') || auth()->user()->hasPermission('Purchase Invoice Update') || auth()->user()->hasPermission('Purchase Invoice Delete'))
+                                @if(auth()->user()->hasPermission('Purchase Invoice Update'))
                                     <td style="min-width: 105px;">
-                                        @if(auth()->user()->hasPermission('Purchase Invoice View'))
-                                            <!-- <a class="me-3" href="{{ route('purchase-invoices.show', $invoice->id) }}">
-                                                <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                            </a> -->
-                                        @endif
-                                        @if(auth()->user()->hasPermission('Purchase Invoice Update') && 
-                                            ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                        )
+                                        @if($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
                                             <a class="me-3" href="{{ route('purchase-invoices.edit', $invoice->id) }}">
                                                 <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                             </a>
-                                        @endif
-                                        @if(auth()->user()->hasPermission('Purchase Invoice Delete') && 
-                                            ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                        )
-                                            <!-- <a class="confirm-text" href="javascript:void(0);"
-                                                onclick="confirmDelete('{{ $invoice->id }}')">
-                                                <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                            </a> -->
-                                            <form id="delete-form-{{ $invoice->id }}"
-                                                action="{{ route('purchase-invoices.destroy', $invoice->id) }}" method="POST"
-                                                style="display:none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
                                         @endif
                                     </td>
                                 @endif
@@ -114,7 +93,7 @@
                                 @role('Superadmin')
                                     <td>{{ $invoice->company->name }}</td>
                                 @endrole
-                                <td>{{ $invoice->status }}</td>
+                                <td>{{ $invoice->status == 'PENDING' || ($invoice->status == 'pending' && $invoice->payment_deadline < date('Y-m-d')) ? 'DELAY' : $invoice->status }}</td>
                                 <td><span class="badge {{ $invoice->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $invoice->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                             </tr>
                         @endforeach

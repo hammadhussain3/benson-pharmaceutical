@@ -35,10 +35,10 @@
                         <tr>
                             <th>#</th>
                             <th>City Name</th>
-                            <th>Country Name</th>
-                            @if(auth()->user()->hasPermission('Cities View') || auth()->user()->hasPermission('Cities Update') || auth()->user()->hasPermission('Cities Delete'))
+                            @if(auth()->user()->hasPermission('Cities Update'))
                             <th>Action</th>
                             @endif
+                            <th>Country Name</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,33 +46,16 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('cities.view', $city->id) }}">{{ $city->name }}</a></td>
-                                <td>{{ $city->country->name }}</td> <!-- Assuming there is a relationship -->
-                                @if(auth()->user()->hasPermission('Cities View') || auth()->user()->hasPermission('Cities Update') || auth()->user()->hasPermission('Cities Delete'))
+                                @if(auth()->user()->hasPermission('Cities Update'))
                                 <td>
-                                    @if(auth()->user()->hasPermission('Cities View'))
-                                    <a class="me-3" href="{{ route('cities.view', $city->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
                                     @if(auth()->user()->hasPermission('Cities Update'))
                                     <a class="me-3" href="{{ route('cities.edit', $city->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Cities Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $city->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $city->id }}"
-                                        action="{{ route('cities.destroy', $city->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
                                 </td>
                                 @endif
+                                <td>{{ $city->country->name }}</td> <!-- Assuming there is a relationship -->
                             </tr>
                         @endforeach
                     </tbody>

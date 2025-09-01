@@ -34,13 +34,13 @@
                         <tr>
                             <th>#</th>
                             <th>Leave Type</th>
+                            @if(auth()->user()->hasPermission('Leave Type Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Deduction</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Leave Type View') || auth()->user()->hasPermission('Leave Type Update') || auth()->user()->hasPermission('Leave Type Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -48,36 +48,17 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="me-3" href="{{ route('leave_types.view', $leaveType->id) }}">{{ $leaveType->name }}</a></td>
+                                @if(auth()->user()->hasPermission('Leave Type Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('leave_types.edit', $leaveType->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ $leaveType->deduction }}%</td>
                                 @role('Superadmin')
                                 <td>{{ $leaveType->company->name }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Leave Type View') || auth()->user()->hasPermission('Leave Type Update') || auth()->user()->hasPermission('Leave Type Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Leave Type View'))
-                                    <a class="me-3" href="{{ route('leave_types.view', $leaveType->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Leave Type Update'))
-                                    <a class="me-3" href="{{ route('leave_types.edit', $leaveType->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Leave Type Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $leaveType->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $leaveType->id }}"
-                                        action="{{ route('leave_types.destroy', $leaveType->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

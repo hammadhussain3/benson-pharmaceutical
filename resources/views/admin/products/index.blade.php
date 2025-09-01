@@ -36,6 +36,9 @@
                             {{-- <th>Name</th>
                             <th>Registration No.</th> --}}
                             <th>Generic Name</th>
+                            @if(auth()->user()->hasPermission('Product Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Brand Name</th>
                             <th>Therapeutic Class</th>
                             {{-- <th>DOC NO</th>
@@ -43,9 +46,6 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Product View') || auth()->user()->hasPermission('Product Update') || auth()->user()->hasPermission('Product Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -55,6 +55,13 @@
                                 {{-- <td><a class="link-primary" href="{{ route('products.show', $product->id) }}">{{ $product->name }}</a></td>
                                 <td>{{ $product->reg_no }}</td> --}}
                                 <td><a class="link-primary" href="{{ route('products.show', $product->id) }}">{{ $product->generic_name }}</a></td>
+                                @if(auth()->user()->hasPermission('Product Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('products.edit', $product->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ $product->brand_name }}</td>
                                 <td>{{ $product->therapeutic_class }}</td>
                                 {{-- <td>{{ $product->code }}</td>
@@ -62,32 +69,6 @@
                                 @role('Superadmin')
                                 <td>{{ $product->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Product View') || auth()->user()->hasPermission('Product Update') || auth()->user()->hasPermission('Product Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Product View'))
-                                    <a class="me-3" href="{{ route('products.show', $product->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Product Update'))
-                                    <a class="me-3" href="{{ route('products.edit', $product->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Product Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $product->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $product->id }}"
-                                        action="{{ route('products.destroy', $product->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

@@ -34,6 +34,7 @@
                         <tr>
                             <th>#</th>
                             <th>Doc. No</th>
+                            <th>Action</th>
                             <th>Required Date</th>
                             <th>Total Amount</th>
                             <th>Supplier</th>
@@ -44,7 +45,6 @@
                             <th>Status</th>
                             <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Purchase Requisition View') || auth()->user()->hasPermission('Purchase Requisition Update') || auth()->user()->hasPermission('Purchase Requisition Delete'))
-                            <th>Action</th>
                             @endif
                         </tr>
                     </thead>
@@ -53,6 +53,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('purchase-requisitions.show', $purchaseRequisition->id) }}">{{ $purchaseRequisition->code }}</a></td>
+                                @if(auth()->user()->hasPermission('Purchase Requisition Update'))
+                                <td>
+                                    @if($purchaseRequisition->is_approved == 0 || ($purchaseRequisition->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    <a class="me-3" href="{{ route('purchase-requisitions.edit', $purchaseRequisition->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                    @endif
+                                </td>
+                                @endif
                                 <td>{{ \Carbon\Carbon::parse($purchaseRequisition->required_date)->format('d M, Y') }}</td>
                                 <td>{{ number_format($purchaseRequisition->total_amount, 2) }}</td>
                                 <td>{{ optional($purchaseRequisition->supplier)->name ?? 'N/A' }}</td>
@@ -62,36 +71,6 @@
                                 <td>{{ $purchaseRequisition->created_at->format('d M, Y') }}</td>
                                 <td><span class="badge {{ $purchaseRequisition->status == 'Complete' ? 'bg-success' : ($purchaseRequisition->status == 'Partial' ? 'bg-info' : 'bg-danger') }}">{{ $purchaseRequisition->status }}</span></td>
                                 <td><span class="badge {{ $purchaseRequisition->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $purchaseRequisition->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Purchase Requisition View') || auth()->user()->hasPermission('Purchase Requisition Update') || auth()->user()->hasPermission('Purchase Requisition Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Purchase Requisition View'))
-                                    <a class="me-3" href="{{ route('purchase-requisitions.show', $purchaseRequisition->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Purchase Requisition Update') && 
-                                        ($purchaseRequisition->is_approved == 0 || ($purchaseRequisition->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="me-3" href="{{ route('purchase-requisitions.edit', $purchaseRequisition->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Purchase Requisition Delete') && 
-                                        ($purchaseRequisition->is_approved == 0 || ($purchaseRequisition->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $purchaseRequisition->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $purchaseRequisition->id }}"
-                                        action="{{ route('purchase-requisitions.destroy', $purchaseRequisition->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

@@ -34,13 +34,14 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('PackingType Update'))
+                            <th>Action</th>
+                            @endif
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
                             <th>Description</th>
-                            @if(auth()->user()->hasPermission('PackingType View') || auth()->user()->hasPermission('PackingType Update') || auth()->user()->hasPermission('PackingType Delete'))
-                            <th>Action</th>
-                            @endif
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -48,36 +49,17 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td> <a class="link-primary" href="{{ route('packingtypes.view', $packing_type->id) }}">{{ $packing_type->name }}</a></td>
+                                @if(auth()->user()->hasPermission('PackingType Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('packingtypes.edit', $packing_type->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 @role('Superadmin')
                                 <td>{{ $packing_type->company->name }}</td>
                                 @endrole
                                 <td>{{ $packing_type->description }}</td>
-                                @if(auth()->user()->hasPermission('PackingType View') || auth()->user()->hasPermission('PackingType Update') || auth()->user()->hasPermission('PackingType Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('PackingType View'))
-                                    <a class="me-3" href="{{ route('packingtypes.view', $packing_type->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('PackingType Update'))
-                                    <a class="me-3" href="{{ route('packingtypes.edit', $packing_type->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('PackingType Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $packing_type->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $packing_type->id }}"
-                                        action="{{ route('packingtypes.destroy', $packing_type->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

@@ -2025,9 +2025,8 @@ function getInvoiceDetails(invoiceId) {
                 data.invoice.items.forEach(function (item) {
                     var html = `
                         <div class="item-set">
-                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                            <div class="card-header bg-light py-2">
                                 <h4 class="card-title mb-0">${item.title ?? ''}</h4>
-                                <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                             </div>
                             <div class="card-body px-0 pb-0">
                                 <input type="hidden" name="items[${itemIndex}][types]" value="${item.product_id ? 'product' : 'raw_material_item'}">
@@ -2144,9 +2143,8 @@ function getGeneralStoreRequisitionDetails(requisitionId) {
                         // Generate HTML for each item
                         var html = `
                             <div class="item-set">
-                                <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                <div class="card-header bg-light py-2">
                                     <h4 class="card-title mb-0">Item ${index + 1}</h4>
-                                    <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                 </div>
                                 <div class="card-body px-0 pb-0">
                                     <input type="hidden" name="items[${index}][types]" value="${item.product_id ? 'product' : 'raw_material_item'}">
@@ -2230,9 +2228,8 @@ function getProductionStoreRequisitionDetails(requisitionId) {
                         // Generate HTML for each item
                         var html = `
                             <div class="item-set">
-                                <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                <div class="card-header bg-light py-2">
                                     <h4 class="card-title mb-0">Item ${index + 1}</h4>
-                                    <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                 </div>
                                 <div class="card-body px-0 pb-0">
                                     <div class="row">

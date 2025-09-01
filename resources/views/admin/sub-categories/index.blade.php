@@ -32,11 +32,12 @@
                         <tr>
                             <th>#</th>
                             <th>Prefix</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            @if(auth()->user()->hasPermission('Sub Category View') || auth()->user()->hasPermission('Sub Category Update') || auth()->user()->hasPermission('Sub Category Delete'))
+                            @if(auth()->user()->hasPermission('Sub Category Update'))
                             <th>Action</th>
                             @endif
+                            <th>Name</th>
+                            <th>Category</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -44,34 +45,16 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('sub-categories.show', $subCategory->id) }}">{{ $subCategory->prefix }}</a></td>
-                                <td>{{ $subCategory->name }}</td>
-                                <td>{{ $subCategory->category->name }}</td>
-                                @if(auth()->user()->hasPermission('Sub Category View') || auth()->user()->hasPermission('Sub Category Update') || auth()->user()->hasPermission('Sub Category Delete'))
+                                @if(auth()->user()->hasPermission('Sub Category Update'))
                                 <td>
-                                    @if(auth()->user()->hasPermission('Sub Category View'))
-                                    <a class="me-3" href="{{ route('sub-categories.show', $subCategory->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Sub Category Update'))
                                     <a class="me-3" href="{{ route('sub-categories.edit', $subCategory->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Sub Category Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $subCategory->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $subCategory->id }}"
-                                        action="{{ route('sub-categories.destroy', $subCategory->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
                                 </td>
                                 @endif
+                                <td>{{ $subCategory->name }}</td>
+                                <td>{{ $subCategory->category->name }}</td>
+                                
                             </tr>
                         @endforeach
                     </tbody>

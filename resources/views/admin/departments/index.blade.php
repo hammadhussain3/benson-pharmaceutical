@@ -34,14 +34,14 @@
                         <tr>
                             <th>#</th>
                             <th>Department Name</th>
+                            @if(auth()->user()->hasPermission('Departments View') || auth()->user()->hasPermission('Departments Update') || auth()->user()->hasPermission('Departments Delete'))
+                            <th>Action</th>
+                            @endif
                             <th>Description</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
                             <th>Branch</th>
-                            @if(auth()->user()->hasPermission('Departments View') || auth()->user()->hasPermission('Departments Update') || auth()->user()->hasPermission('Departments Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -49,37 +49,18 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('departments.view', $department->id) }}">{{ $department->name }}</a></td>
+                                @if(auth()->user()->hasPermission('Departments Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('departments.edit', $department->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ \Illuminate\Support\Str::words($department->description, 10) }}</td>
                                 @role('Superadmin')
                                 <td>{{ $department->company->name }}</td>
                                 @endrole
                                 <td>{{ $department->branch ? $department->branch->name : 'N/A' }}</td>
-                                @if(auth()->user()->hasPermission('Departments View') || auth()->user()->hasPermission('Departments Update') || auth()->user()->hasPermission('Departments Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Departments View'))
-                                    <a class="me-3" href="{{ route('departments.view', $department->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Departments Update'))
-                                    <a class="me-3" href="{{ route('departments.edit', $department->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Departments Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $department->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $department->id }}"
-                                        action="{{ route('departments.destroy', $department->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

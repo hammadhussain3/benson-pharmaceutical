@@ -34,6 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>DOC NO</th>
+                            @if(auth()->user()->hasPermission('Raw Material Item Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Name</th>
                             <th>Categories</th>
                             <th>Chart Of Accounts</th>
@@ -43,9 +46,7 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Raw Material Item View') || auth()->user()->hasPermission('Raw Material Item Update') || auth()->user()->hasPermission('Raw Material Item Delete'))
-                            <th>Action</th>
-                            @endif
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -53,6 +54,13 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">{{ $rawMaterialItem->code }}</a></td>
+                                @if(auth()->user()->hasPermission('Raw Material Item Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('raw-material-items.edit', $rawMaterialItem->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ $rawMaterialItem->name }}</td>
                                 <td>
                                     <span class="badge bg-primary">{{ optional($rawMaterialItem->category)->name }}</span>
@@ -77,32 +85,7 @@
                                 @role('Superadmin')
                                 <td>{{ $rawMaterialItem->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Raw Material Item View') || auth()->user()->hasPermission('Raw Material Item Update') || auth()->user()->hasPermission('Raw Material Item Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Raw Material Item View'))
-                                    <a class="me-3" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Raw Material Item Update'))
-                                    <a class="me-3" href="{{ route('raw-material-items.edit', $rawMaterialItem->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Raw Material Item Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $rawMaterialItem->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $rawMaterialItem->id }}"
-                                        action="{{ route('raw-material-items.destroy', $rawMaterialItem->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
+                                
                             </tr>
                         @endforeach
                     </tbody>

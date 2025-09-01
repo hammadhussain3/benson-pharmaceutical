@@ -54,7 +54,7 @@
                                     @endphp
                                     @for ($i = 0; $i < $count; $i++)
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                            <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
                                                 <h4 class="card-title mb-0">Item {{ $i + 1 }}</h4>
                                                 @if ($i > 0)
                                                     <button type="button" onclick="removeLastItem()" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -140,7 +140,7 @@
         function addItem() {
             var html = `
                 <div class="item-set">
-                    <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0">Item ${itemIndex + 1}</h4><button type="button" onclick="removeLastItem()" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                     </div>
                     <div class="card-body px-0 pb-0">

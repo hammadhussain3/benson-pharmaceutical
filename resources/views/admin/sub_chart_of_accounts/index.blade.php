@@ -32,14 +32,14 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('Chart Of Accounts Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Chart Of Accounts</th>
                             <th>Category</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Chart Of Accounts View') || auth()->user()->hasPermission('Chart Of Accounts Update') || auth()->user()->hasPermission('Chart Of Accounts Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -47,37 +47,20 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('sub_chart_of_accounts.show', $subChartOfAccount->id) }}">{{ $subChartOfAccount->name }}</a></td>
-                                <td>{{ $subChartOfAccount->chart_of_account->particular }}</td>
-                                <td>{{ $subChartOfAccount->category->name }}</td>
-                                @role('Superadmin')
-                                <td>{{ $subChartOfAccount->company->name }}</td>
-                                @endrole
-                                @if(auth()->user()->hasPermission('Chart Of Accounts View') || auth()->user()->hasPermission('Chart Of Accounts Update') || auth()->user()->hasPermission('Chart Of Accounts Delete'))
+                                @if(auth()->user()->hasPermission('Chart Of Accounts Update'))
                                 <td>
-                                    @if(auth()->user()->hasPermission('Chart Of Accounts View'))
-                                    <a class="me-3" href="{{ route('sub_chart_of_accounts.show', $subChartOfAccount->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
                                     @if(auth()->user()->hasPermission('Chart Of Accounts Update'))
                                     <a class="me-3" href="{{ route('sub_chart_of_accounts.edit', $subChartOfAccount->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Chart Of Accounts Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $subChartOfAccount->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $subChartOfAccount->id }}"
-                                        action="{{ route('sub_chart_of_accounts.destroy', $subChartOfAccount->id) }}"
-                                        method="POST" style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
                                 </td>
                                 @endif
+                                <td>{{ $subChartOfAccount->chart_of_account->particular }}</td>
+                                <td>{{ $subChartOfAccount->category->name }}</td>
+                                @role('Superadmin')
+                                <td>{{ $subChartOfAccount->company->name }}</td>
+                                @endrole
                             </tr>
                         @endforeach
                     </tbody>

@@ -34,19 +34,19 @@
                         <tr>
                             <th>#</th>
                             <th>GRN NO.</th>
+                            <th>Action</th>
                             <th>DOC NO.</th>
                             <th>Supplier</th>
-                            <th>Supplier Bill No.</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
+                            <th>Item Name</th>
                             {{-- <th>Sales Tax</th>
                             <th>Adv Tax</th> --}}
                             <th>Total amount</th>
                             <th>Date</th>
                             <th>Is Approved</th>
                             @if(auth()->user()->hasPermission('Goods Receiving View') || auth()->user()->hasPermission('Goods Receiving Update') || auth()->user()->hasPermission('Goods Receiving Delete'))
-                            <th>Action</th>
                             @endif
                         </tr>
                     </thead>
@@ -55,28 +55,26 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('goods-receivings.show', $goodsReceiving->id) }}">{{ $goodsReceiving->code }}</a></td>
-                                <td>{{ $goodsReceiving->invoice->code }}</td>
-                                <td>{{ $goodsReceiving->party->name }}</td>
-                                <td>{{ $goodsReceiving->supplier_bill_no }}</td>
-                                @role('Superadmin')
-                                <td>{{ $goodsReceiving->company->name ?? 'N/A' }}</td>
-                                @endrole
-                                {{-- <td>{{ $goodsReceiving->sales_tax }}</td>
-                                <td>{{ $goodsReceiving->adv_tax }}</td> --}}
-                                <td>{{ $goodsReceiving->total_amount }}</td>
-                                <td>{{ $goodsReceiving->created_at->format('d M, Y') }}</td>
-                                <td><span class="badge {{ $goodsReceiving->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $goodsReceiving->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Goods Receiving View') || auth()->user()->hasPermission('Goods Receiving Update') || auth()->user()->hasPermission('Goods Receiving Delete'))
+                                @if(auth()->user()->hasPermission('Goods Receiving Update'))
                                 <td>  
-                                    @if(auth()->user()->hasPermission('Goods Receiving Update') && 
-                                        ($goodsReceiving->is_approved == 0 || ($goodsReceiving->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
+                                    @if($goodsReceiving->is_approved == 0 || ($goodsReceiving->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
                                     <a class="me-3" href="{{ route('goods-receivings.edit', $goodsReceiving->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     @endif                                 
                                 </td>
                                 @endif
+                                <td>{{ $goodsReceiving->invoice->code }}</td>
+                                <td>{{ $goodsReceiving->party->name }}</td>
+                                @role('Superadmin')
+                                <td>{{ $goodsReceiving->company->name ?? 'N/A' }}</td>
+                                @endrole
+                                <td>{{ $goodsReceiving->items->first()->item->name }}</td>
+                                {{-- <td>{{ $goodsReceiving->sales_tax }}</td>
+                                <td>{{ $goodsReceiving->adv_tax }}</td> --}}
+                                <td>{{ $goodsReceiving->total_amount }}</td>
+                                <td>{{ $goodsReceiving->created_at->format('d M, Y') }}</td>
+                                <td><span class="badge {{ $goodsReceiving->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $goodsReceiving->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
                             </tr>
                         @endforeach
                     </tbody>

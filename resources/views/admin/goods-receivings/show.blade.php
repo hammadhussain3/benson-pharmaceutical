@@ -52,7 +52,7 @@
             @endif
 
             {{-- Print Button --}}
-            <button class="btn btn-light" onclick="printGRN()">
+            <button class="btn btn-light" onclick="printWithTimestamp()" data-approved="{{ $goodsReceiving->is_approved }}" id="print-button">
                 <img src="{{ asset('assets/img/icons/printer.svg') }}" alt="Print">
             </button>
         </div>
@@ -71,83 +71,135 @@
                             <h5 class="fw-bold">{{ $goodsReceiving->company->name }}</h5>
                             <p class="fs-6 mb-0">{{ $goodsReceiving->company->address }}</p>
                             <p class="fs-6 mb-0">{{ $goodsReceiving->company->phone }}</p>
+                            @if($goodsReceiving->company->email)
+                                <p class="fs-6 mb-0">{{ $goodsReceiving->company->email }}</p>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="col-auto text-end print-header">
-                    <h2 class="fs-5 fw-bold">Goods Receiving Note</h2>
-                    <p class="fs-6 mb-0">{{ $goodsReceiving->code }}</p>
-                    <p class="fs-6 mb-0">Month: {{ $goodsReceiving->created_at->format('d M, Y') }}</p>
+                    <h2>Goods Receiving Note</h2>
                 </div>
             </div>
 
-            <table class="table mt-2">
-                <tr>
-                    <th>Order Ref</th>
-                    <td>{{ $goodsReceiving->invoice->code }}</td>
-                    <th>Supplier</th>
-                    <td class="w-50">{{ $goodsReceiving->supplier_name }} ({{ $goodsReceiving->supplier_code }})</td>
-                </tr>
-                <tr>
-                    <th>Date</th>
-                    <td>{{ $goodsReceiving->invoice->created_at->format('d M, Y') }}</td>
-                </tr>
-            </table>
+            <div style="display: flex; justify-content: space-between;">
+                <div style="width: 233px;">
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Ref No:</strong> {{ $goodsReceiving->code }}</li>
+                            <li class="list-group-item"><strong>PO Date:</strong> {{ $goodsReceiving->created_at->format('d M, Y') }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="width: 766px;">
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <div class="d-flex">
+                                    <div style="width: 333px;">
+                                        <strong>PO Ref:</strong> {{ $goodsReceiving->invoice->code }}
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex">
+                                    <div style="width: 333px;">
+                                        <strong>Supplier:</strong> {{ $goodsReceiving->supplier_name }}
+                                    </div>
+                                    <div class="col border-start border-end"><strong>Supplier Code</strong></div>
+                                    <div class="col d-flex align-items-center">
+                                        {{ $goodsReceiving->supplier_code }}
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="d-flex">
+                                    <div style="width: 333px;">
+                                        <strong>Required Date:</strong> {{ $goodsReceiving->invoice->required_date ? \Carbon\Carbon::parse($goodsReceiving->invoice->required_date)->format('d M, Y') : 'N/A' }}
+                                    </div>
+                                    <div class="col border-start border-end"><strong>Urgent</strong></div>
+                                    <div class="col d-flex align-items-center">
+                                        {!! $goodsReceiving->invoice->is_urgent == '1' ? '<i class="fa fa-check"></i>' : '' !!}
+                                    </div>
+                                    <div class="col border-start border-end"><strong>Ordinary</strong></div>
+                                    <div class="col">{{ $goodsReceiving->invoice->is_urgent == '0' ? '*' : '' }}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-            <table class="table table-striped table-bordered mt-2">
-                <thead class="table-header-custom">
-                    <tr class="border-bottom">
-                        <th class="border-end align-middle text-center" rowspan="2">#</th>
-                        <th class="border-end align-middle text-center" rowspan="2">Code</th>
-                        <th class="border-end align-middle text-center" rowspan="2" style="width: 40%">Description</th>
-                        <th class="border-end text-center" colspan="3">Quantity</th>
-                        <th class="border-end align-middle text-center" rowspan="2">Unit</th>
-                        <th class="border-end text-center" colspan="2">Price (Rs.)</th>
-                    </tr>
-                    <tr class="border-bottom">
-                        <th class="border-end text-center">Ordered</th>
-                        <th class="border-end text-center">Pending</th>
-                        <th class="border-end text-center">Received</th>
-                        <th class="border-end text-center">Per Unit</th>
-                        <th class="text-center">Total</th>
-                    </tr>
-                </thead>                
-                <tbody>
-                    @foreach ($goodsReceiving->items as $item)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->code }}</td>
-                            <td class="description-cell">
-                                Batch# {{ $item->batch }}<br>
-                                MFG: {{ $item->mfg_date ? \Carbon\Carbon::parse($item->mfg_date)->format('d/m/Y') : 'N/A' }}<br>
-                                EXP: {{ $item->exp_date ? \Carbon\Carbon::parse($item->exp_date)->format('d/m/Y') : 'N/A' }}<br>
-                                {{ $item->description }}
-                            </td>
-                            <td>{{ $item->quantity_ordered }}</td>
-                            <td>{{ $item->quantity_ordered - ($item->quantity_received + $item->balance_receivable) }}</td>
-                            <td>{{ $item->balance_receivable }}</td>
-                            <td>{{ $item->unit }}</td>
-                            <td>{{ number_format($item->unit_price) }}</td>
-                            <td>{{ number_format($item->total_amount, 2) }}</td>
+            <div class="table-responsive">
+                <table class="table table-bordered mt-3">
+                    <thead class="table-header-custom">
+                        <tr class="border-bottom">
+                            <th class="border-end align-middle text-center" rowspan="2">#</th>
+                            <th class="border-end align-middle text-center" rowspan="2">Code</th>
+                            <th class="border-end align-middle text-center" rowspan="2" style="width: 30%">Description</th>
+                            <th class="border-end text-center" colspan="3">Quantity</th>
+                            <th class="border-end align-middle text-center" rowspan="2">Unit</th>
+                            <th class="border-end text-center" colspan="2">Price (Rs.)</th>
+                            <th class="border-end text-center" colspan="2">Last Purchase</th>
                         </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="6"></th>
-                        <th colspan="2">Total</th>
-                        <td>{{ number_format($goodsReceiving->total_amount, 2) }}</td>
-                    </tr>
-                </tfoot>
-            </table>
+                        <tr class="border-bottom">
+                            <th class="border-end text-center">Ordered</th>
+                            <th class="border-end text-center">Pending</th>
+                            <th class="border-end text-center">Received</th>
+                            <th class="border-end text-center">Per Unit</th>
+                            <th class="text-center">Total</th>
+                            <th class="border-end text-center">Ref.</th>
+                            <th class="text-center">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($goodsReceiving->items as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->code }}</td>
+                                <td class="description-cell">
+                                    Batch# {{ $item->batch }}<br>
+                                    MFG: {{ $item->mfg_date ? \Carbon\Carbon::parse($item->mfg_date)->format('d/m/Y') : 'N/A' }}<br>
+                                    EXP: {{ $item->exp_date ? \Carbon\Carbon::parse($item->exp_date)->format('d/m/Y') : 'N/A' }}<br>
+                                    {{ $item->description }}
+                                </td>
+                                <td>{{ $item->quantity_ordered }}</td>
+                                <td>{{ max(0, $item->quantity_ordered - ($item->quantity_received + $item->balance_receivable)) }}</td>
+                                <td>{{ $item->quantity_received + $item->balance_receivable }}</td>
+                                <td>{{ $item->unit }}</td>
+                                <td>{{ number_format($item->unit_price, 2) }}</td>
+                                <td>{{ number_format($item->total_amount, 2) }}</td>
+                                <td>{{ $item->last_goods_receiving ? $item->last_goods_receiving->goodsReceiving->code : 'N/A' }}</td>
+                                <td>{{ $item->last_goods_receiving ? number_format($item->last_goods_receiving->unit_price, 2) : 'N/A' }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="10" class="text-end"><strong>Total</strong></th>
+                            <td>{{ number_format($goodsReceiving->total_amount, 2) }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            @if ($goodsReceiving->note)
+                <div style="width: 100%;">
+                    <div style="margin-bottom: 15px; margin-top: 15px; font-size: 14px;">
+                        <strong>Note:</strong> {{ $goodsReceiving->note }}
+                    </div>
+                </div>
+            @endif
 
             <!-- Vendor Bills Summary -->
             @if(isset($goodsReceiving->vendor_bills) && count($goodsReceiving->vendor_bills) > 0)
-                <div class="mt-4">
-                    <h6 class="fw-bold">Vendor Bills Summary</h6>
+                <div style="width: 100%; margin-top: 15px;">
+                    <div style="margin-bottom: 15px; margin-top: 15px; font-size: 14px;">
+                        <strong>Vendor Bills Summary:</strong>
+                    </div>
                     <div class="table-responsive">
-                        <table class="table table-sm table-bordered">
-                            <thead class="table-light">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
                                     <th>Item</th>
                                     <th>Vendor Bill No</th>
@@ -172,8 +224,8 @@
                                 @endforeach
                             </tbody>
                             <tfoot>
-                                <tr class="table-light">
-                                    <th colspan="3" class="text-end">Total Vendor Bills Amount:</th>
+                                <tr>
+                                    <th colspan="3" class="text-end"><strong>Total Vendor Bills Amount:</strong></th>
                                     <th>{{ number_format($goodsReceiving->vendor_bills->sum('amount'), 2) }}</th>
                                 </tr>
                             </tfoot>
@@ -182,22 +234,22 @@
                 </div>
             @endif
 
-            <div class="signature-section" style="margin-top: 25px;">
+            <div class="signature-section" style="margin-top: 45px;">
                 <div style="display: flex; justify-content: space-around; align-items: end;">
-                    <div style="width: 180px; text-align: center;">
-                        {{ $goodsReceiving->createdBy->name ?? null }}
-                        <hr style="width: 100%; margin: 3px 0px;">
+                    <div style="width: 200px; text-align: center;">
+                        <span style="font-size: 14px; font-weight: bold;">{{ $goodsReceiving->createdBy->name ?? null }}</span>
+                        <hr style="width: 100%; margin: 5px 0px;">
                         <span style="font-size: 14px;">Raised by</span>
                     </div>
-                    <div style="width: 180px; text-align: center;">
-                        <hr style="width: 100%; margin: 3px 0px;">
+                    <div style="width: 200px; text-align: center;">
+                        <hr style="width: 100%; margin: 5px 0px;">
                         <span style="font-size: 14px;">Received by</span>
                     </div>
-                    <div style="width: 180px; text-align: center;">
-                        <hr style="width: 100%; margin: 3px 0px;">
+                    <div style="width: 200px; text-align: center;">
+                        <hr style="width: 100%; margin: 5px 0px;">
                         <span style="font-size: 14px;">Accepted by</span>
                     </div>
-                    <div style="width: 180px; text-align: center;">
+                    <div style="width: 200px; text-align: center;">
                         <span style="font-size: 14px; font-weight: bold;">
                             @if($goodsReceiving->is_approved == 1)
                                 Approved
@@ -205,8 +257,8 @@
                                 Draft
                             @endif
                         </span>
-                        <hr style="width: 100%; margin: 3px 0px;">
-                        <span style="font-size: 14px;">Status</span>
+                        <hr style="width: 100%; margin: 5px 0px;">
+                        <span style="font-size: 14px;">Approved by</span>
                     </div>
                 </div>
             </div>
@@ -215,120 +267,14 @@
             <div id="printTimestampContainer"></div>
         </div>
     </div>
-
-    <script>
-        function printGRN() {
-            // Add timestamp to footer before printing
-            const timestampContainer = document.getElementById('printTimestampContainer');
-            const timestampDiv = document.createElement('div');
-            timestampDiv.style.cssText = 'text-align: center; margin-top: 20px; font-size: 14px; color: #666;';
-            timestampDiv.innerHTML = '<strong>Printed on:</strong> ' + new Date().toLocaleString('en-GB');
-            
-            // Clear any existing timestamp and add new one
-            timestampContainer.innerHTML = '';
-            timestampContainer.appendChild(timestampDiv);
-            
-            // Print
-            window.print();
-            
-            // Remove timestamp after printing
-            setTimeout(() => {
-                timestampContainer.innerHTML = '';
-            }, 1000);
-        }
-
-        // Clear search when dropdown is closed
-        document.addEventListener('DOMContentLoaded', function() {
-            const dropdown = document.getElementById('jumpToGRNDropdown');
-            const searchInput = document.getElementById('grnSearchInput');
-            
-            dropdown.addEventListener('hidden.bs.dropdown', function() {
-                searchInput.value = '';
-                filterGRNs(); // Reset the filter
-            });
-        });
-
-        function filterGRNs() {
-            console.log('filterGRNs function called');
-            const searchInput = document.getElementById('grnSearchInput');
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const grnItems = document.querySelectorAll('.grn-item');
-            
-            console.log('Search term:', searchTerm);
-            console.log('Found GRN items:', grnItems.length);
-            
-            if (searchTerm === '') {
-                // Show all items if search is empty
-                grnItems.forEach(item => {
-                    item.style.display = '';
-                });
-                console.log('Showing all items');
-                return;
-            }
-
-            let hasResults = false;
-            
-            grnItems.forEach((item, index) => {
-                const grnCode = item.dataset.grnCode || '';
-                const grnDate = item.dataset.grnDate || '';
-                const itemText = item.textContent.toLowerCase();
-                
-                console.log(`Item ${index}:`, { grnCode, grnDate, itemText });
-                
-                const isMatch = grnCode.includes(searchTerm) || 
-                               grnDate.includes(searchTerm) || 
-                               itemText.includes(searchTerm);
-                
-                if (isMatch) {
-                    item.style.display = '';
-                    hasResults = true;
-                    console.log(`Item ${index} matches, showing`);
-                } else {
-                    item.style.display = 'none';
-                    console.log(`Item ${index} doesn't match, hiding`);
-                }
-            });
-
-            console.log('Has results:', hasResults);
-
-            // Show/hide no results message
-            let noResultsMsg = document.querySelector('.no-results-msg');
-            if (!hasResults && searchTerm.length > 0) {
-                if (!noResultsMsg) {
-                    noResultsMsg = document.createElement('li');
-                    noResultsMsg.className = 'dropdown-item text-muted text-center no-results-msg';
-                    noResultsMsg.textContent = 'No GRNs found matching your search';
-                    document.querySelector('.dropdown-menu').appendChild(noResultsMsg);
-                    console.log('Added no results message');
-                }
-            } else if (noResultsMsg) {
-                noResultsMsg.remove();
-                console.log('Removed no results message');
-            }
-        }
-    </script>
 @endsection
 
 <style>
-    .print-header{
-        margin-top: 5px !important;
+    .print-header {
+        margin-top: 10px !important;
     }
-    /* Ensure long descriptions wrap inside the cell */
-    .table.table-striped td.description-cell{
-        white-space: normal !important;
-        word-break: break-word;
-        overflow-wrap: anywhere;
-    }
-    /* Stronger borders for the items grid */
-    .table.table-striped.table-bordered{
-        border-collapse: collapse;
-    }
-    .table.table-striped.table-bordered th,
-    .table.table-striped.table-bordered td{
-        border: 1px solid #dee2e6 !important;
-    }
-    
-    /* Custom table header styling */
+
+    /* Custom table header styling to match the image */
     .table-header-custom th {
         background-color: #f8f9fa !important;
         color: #495057 !important;
@@ -339,113 +285,182 @@
     .table-header-custom th:hover {
         background-color: #e9ecef !important;
     }
-    
-    /* Dropdown styling */
-    .dropdown-menu {
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        border: 1px solid rgba(0, 0, 0, 0.1);
+
+    /* Ensure long descriptions wrap inside the cell */
+    .table.table-bordered td.description-cell {
+        white-space: normal !important;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    /* Stronger borders for the items grid */
+    .table.table-bordered {
+        border-collapse: collapse;
     }
     
-    .dropdown-item {
-        padding: 0.5rem 1rem;
-        border-bottom: 1px solid #f8f9fa;
-        background-color: transparent !important;
+    .table.table-bordered th,
+    .table.table-bordered td {
+        border: 1px solid #dee2e6 !important;
     }
-    
-    .dropdown-item:last-child {
-        border-bottom: none;
-    }
-    
-    .dropdown-item:hover {
-        background-color: #f8f9fa !important;
-    }
-    
-    .dropdown-item.active {
-        background-color: #ff9f43 !important;
-        color: #ffffff !important;
-        font-weight: bold;
-        border: 1px solid #ff9f43;
-    }
-    
-    .dropdown-item small {
-        font-size: 0.75rem;
-    }
-    
-    /* Search input styling */
-    #grnSearchInput {
-        border: 1px solid #dee2e6;
-        border-radius: 0.375rem;
-        font-size: 0.875rem;
-    }
-    
-    #grnSearchInput:focus {
-        border-color: #86b7fe;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-    
-    .dropdown-divider {
-        margin: 0.5rem 0;
-    }
-    
-    /* Hide search input in print */
-    @media print {
-        .dropdown {
-            display: none !important;
-        }
-    }
+
     @media print {
         .signature-section {
             position: fixed;
-            bottom: 5px;
+            bottom: 10px;
             left: 0;
             width: 100%;
         }
-       @page {
-           margin: 5mm;
-       }
-   
-       html, body {
-           height: 100%;
-           margin: 0;
-           padding: 0;
-           overflow: hidden;
-       }
-   
-       body * {
-           visibility: hidden;
-       }
-   
-       .card-body,
-       .card-body * {
-           visibility: visible;
-       }
-   
-       .card-body {
-           position: fixed;
-           left: 0;
-           top: 0;
-           width: 100%;
-       }
-   
-       .table-header-custom th {
-           background-color: #f8f9fa !important;
-           -webkit-print-color-adjust: exact;
-           color-adjust: exact;
-       }
 
-       .approved-target{
-            background-color: #e3f2fd !important;
+        @page {
+            margin: 0;
+            size: landscape;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body * {
+            visibility: hidden;
+        }
+
+        .card-body,
+        .card-body * {
+            visibility: visible;
+        }
+
+        .card-body {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+
+        .table-primary th {
+            background-color: transparent !important;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
-       }
-       .print-header{
-            margin-top: 10px !important;
         }
-       /* Darker borders on print for clarity */
-       .table.table-striped.table-bordered th,
-       .table.table-striped.table-bordered td{
-           border: 1px solid #000 !important;
-       }
-   }
-   
+
+        table.table-bordered {
+            font-size: 10px !important;
+        }
+
+        .approved-target {
+            background-color: transparent !important;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+
+        .print-header {
+            margin-top: 15px !important;
+        }
+
+        /* Hide dropdown in print */
+        .dropdown {
+            display: none !important;
+        }
+
+        /* Darker borders on print for clarity */
+        .table.table-bordered th,
+        .table.table-bordered td {
+            border: 1px solid #000 !important;
+        }
+    }
 </style>
+
+<script>
+    function printWithTimestamp() {
+        // Add timestamp to footer before printing
+        const timestampContainer = document.getElementById('printTimestampContainer');
+        const timestampDiv = document.createElement('div');
+        timestampDiv.style.cssText = 'text-align: center; margin-top: 20px; font-size: 14px; color: #666;';
+        timestampDiv.innerHTML = '<strong>Printed on:</strong> ' + new Date().toLocaleString('en-GB');
+        
+        // Clear any existing timestamp and add new one
+        timestampContainer.innerHTML = '';
+        timestampContainer.appendChild(timestampDiv);
+        
+        // Print
+        window.print();
+        
+        // Remove timestamp after printing
+        setTimeout(() => {
+            timestampContainer.innerHTML = '';
+        }, 1000);
+    }
+
+    // Clear search when dropdown is closed
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdown = document.getElementById('jumpToGRNDropdown');
+        const searchInput = document.getElementById('grnSearchInput');
+        
+        dropdown.addEventListener('hidden.bs.dropdown', function() {
+            searchInput.value = '';
+            filterGRNs(); // Reset the filter
+        });
+    });
+
+    function filterGRNs() {
+        console.log('filterGRNs function called');
+        const searchInput = document.getElementById('grnSearchInput');
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const grnItems = document.querySelectorAll('.grn-item');
+        
+        console.log('Search term:', searchTerm);
+        console.log('Found GRN items:', grnItems.length);
+        
+        if (searchTerm === '') {
+            // Show all items if search is empty
+            grnItems.forEach(item => {
+                item.style.display = '';
+            });
+            console.log('Showing all items');
+            return;
+        }
+
+        let hasResults = false;
+        
+        grnItems.forEach((item, index) => {
+            const grnCode = item.dataset.grnCode || '';
+            const grnDate = item.dataset.grnDate || '';
+            const itemText = item.textContent.toLowerCase();
+            
+            console.log(`Item ${index}:`, { grnCode, grnDate, itemText });
+            
+            const isMatch = grnCode.includes(searchTerm) || 
+                           grnDate.includes(searchTerm) || 
+                           itemText.includes(searchTerm);
+            
+            if (isMatch) {
+                item.style.display = '';
+                hasResults = true;
+                console.log(`Item ${index} matches, showing`);
+            } else {
+                item.style.display = 'none';
+                console.log(`Item ${index} doesn't match, hiding`);
+            }
+        });
+
+        console.log('Has results:', hasResults);
+
+        // Show/hide no results message
+        let noResultsMsg = document.querySelector('.no-results-msg');
+        if (!hasResults && searchTerm.length > 0) {
+            if (!noResultsMsg) {
+                noResultsMsg = document.createElement('li');
+                noResultsMsg.className = 'dropdown-item text-muted text-center no-results-msg';
+                noResultsMsg.textContent = 'No GRNs found matching your search';
+                document.querySelector('.dropdown-menu').appendChild(noResultsMsg);
+                console.log('Added no results message');
+            }
+        } else if (noResultsMsg) {
+            noResultsMsg.remove();
+            console.log('Removed no results message');
+        }
+    }
+</script>

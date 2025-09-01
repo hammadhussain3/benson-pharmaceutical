@@ -4897,10 +4897,10 @@ span.select2-container.select2-container--default.select2-container--open {
   transition: all 0.2s;
 }
 .chat-cont-left .chat-scroll .media.active {
-  background-color: #f5f5f5;
+  background-color: #ffffff;
 }
 .chat-cont-left .chat-scroll .media:hover {
-  background-color: #f5f5f5;
+  background-color: #ffffff;
 }
 .chat-cont-left .chat-scroll .media .media-img-wrap {
   margin: 0 15px 0 0;
@@ -6326,6 +6326,12 @@ span.select2-container.select2-container--default.select2-container--open {
 }
 .badges.bg-lightgrey {
   background: #637381;
+}
+.badges.bg-whitegreen {
+  background: #28c76f;
+}
+.badges.bg-whitered {
+  background: #ea5455;
 }
 .add-icon span,
 .add-icon a {

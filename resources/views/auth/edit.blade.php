@@ -76,12 +76,10 @@
                             <div class="col-md-6 mb-3">
                                 <label for="password">Password</label>
                                 <div class="input-group">
-                                    <input type="password" id="password" name="password" class="form-control pass-input" placeholder="Change Password">
-                                    <span class="input-group-text" id="password_addon">
-                                        <span class="fas toggle-password fa-eye-slash"></span>
-                                    </span>
+                                    <input type="password" id="password" name="password" class="form-control pass-input"
+                                        placeholder="Change Password (Leave blank to keep current)">
+                                    <span class="input-group-text" id="password_addon"><span class="fas toggle-password fa-eye-slash"></span></span>
                                 </div>
-                                <small>Leave blank to keep current password.</small>
                                 @error('password')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

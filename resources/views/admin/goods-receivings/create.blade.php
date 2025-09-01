@@ -75,9 +75,8 @@
                                     @if (count(old('items', [])) > 0)
                                     @for ($i = 0; $i < count(old('items', [])); $i++)
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                            <div class="card-header bg-white py-2">
                                                 <h4 class="card-title mb-0">Item {{ $i + 1 }}</h4>
-                                                <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <input type="hidden" name="items[{{ $i }}][types]" value="{{ old('items.'.$i.'.types') }}">
@@ -151,9 +150,8 @@
                                     @endfor
                                     @else
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                            <div class="card-header bg-white py-2">
                                                 <h4 class="card-title mb-0">Item 1</h4>
-                                                <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <input type="hidden" name="items[0][types]" value="product">
@@ -177,6 +175,9 @@
                                                     </div>
                                                     <div class="col-12 grn-rows-container" data-index="0">
                                                         <div class="row grn-row align-items-end">
+                                                            <div class="mb-3 col-md-auto d-none">
+                                                                <button type="button" class="btn btn-danger remove-grn-row"><i class="fa fa-trash"></i></button>
+                                                            </div>
                                                             <div class="mb-3 col-md">
                                                                 <label>Batch#<span class="text-danger">*</span></label>
                                                                 <input type="text" class="form-control" name="items[0][grn_items][0][batch]" placeholder="Enter Batch#">
@@ -224,7 +225,7 @@
                             <!-- Vendor Bill Section -->
                             <div class="col-md-12">
                                 <div class="card border-0 mb-3">
-                                    <div class="card-header bg-light py-2">
+                                    <div class="card-header bg-white py-2">
                                         <h5 class="card-title mb-0">Vendor Bills</h5>
                                         <small class="text-muted">Add vendor bill details for each item</small>
                                     </div>
@@ -276,17 +277,6 @@
         </div>
     </div>
     <script>
-        function removeItem(button) {
-            const itemSets = document.querySelectorAll('#item-group .item-set');
-            // Find the closest parent .item-set of the clicked button and remove it
-            if (itemSets && itemSets.length > 1) {
-                const item = button.closest('.item-set');
-                if (item) {
-                    item.remove();
-                    itemIndex--; // Decrement itemIndex to ensure consistency
-                }
-            }
-        }
         document.addEventListener('click', function (e) {
             // Handle Add GRN Row
             if (e.target.closest('.add-grn-row')) {
@@ -410,5 +400,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             // addVendorBillRow(); // Uncomment if you want to start with one row
         });
+        
+        // Calculate total amount for goods receiving
+        function calculateGoodsRecievingAmount() {
+            let total = 0;
+            document.querySelectorAll('.product_total').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('total_amount').value = total.toFixed(2);
+        }
 </script>
 @endsection

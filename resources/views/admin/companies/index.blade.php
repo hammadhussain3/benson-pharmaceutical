@@ -32,6 +32,9 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('Companies Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Address</th>
                             <th>Country</th>
                             <th>City</th>
@@ -41,9 +44,6 @@
                             <th>NTN</th>
                             <th>STRN</th>
                             <th>Status</th>
-                            @if(auth()->user()->hasPermission('Companies View') || auth()->user()->hasPermission('Companies Update') || auth()->user()->hasPermission('Companies Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -51,6 +51,13 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('companies.view', $company->id) }}">{{ $company->name }}</a></td>
+                                @if(auth()->user()->hasPermission('Companies Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('companies.edit', $company->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ $company->address }}</td>
                                 <td>{{ optional($company->country)->name }}</td>
                                 <td>{{ optional($company->city)->name }}</td>
@@ -60,36 +67,10 @@
                                 <td>{{ $company->ntn }}</td>
                                 <td>{{ $company->strn }}</td>
                                 <td>
-                                    <span class="badges {{ $company->is_active ? 'bg-lightgreen' : 'bg-lightred' }}">
+                                    <span class="badges {{ $company->is_active ? 'bg-whitegreen' : 'bg-whitered' }}">
                                         {{ $company->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-                                @if(auth()->user()->hasPermission('Companies View') || auth()->user()->hasPermission('Companies Update') || auth()->user()->hasPermission('Companies Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Companies View'))
-                                    <a class="me-3" href="{{ route('companies.view', $company->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Companies Update'))
-                                    <a class="me-3" href="{{ route('companies.edit', $company->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Companies Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $company->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $company->id }}"
-                                        action="{{ route('companies.destroy', $company->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

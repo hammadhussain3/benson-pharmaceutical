@@ -182,7 +182,7 @@
         }
 
         .table-primary th {
-            background-color: #e3f2fd !important;
+            background-color: transparent !important;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
             
@@ -205,7 +205,7 @@
        }
    
        .table-primary th {
-           background-color: #e3f2fd !important;
+           background-color: transparent !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
            font-size: 11px;
@@ -224,7 +224,7 @@
         }
 
         .approved-target{
-            background-color: #e3f2fd !important;
+            background-color: transparent !important;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
        }

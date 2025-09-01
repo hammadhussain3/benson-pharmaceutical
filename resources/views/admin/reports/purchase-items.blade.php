@@ -9,7 +9,7 @@
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="printWithTimestamp()">Print PO List</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()" id="print-button">Print PO List</button>
         </div>
     </div>
 
@@ -141,8 +141,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+            
             <!-- Print timestamp will be added here -->
             <div id="printTimestampContainer"></div>
         </div>
@@ -168,7 +167,9 @@
        }
    
        .card-body,
-       .card-body * {
+       .card-body *,
+       #printTimestampContainer,
+       #printTimestamp {
            visibility: visible;
        }
    
@@ -180,7 +181,7 @@
        }
    
        .table-primary th {
-           background-color: #e3f2fd !important;
+           background-color: transparent !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
        }
@@ -220,6 +221,23 @@
            border: 1px solid #bbdefb !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
+       }
+       
+       /* Ensure timestamp container is visible in print */
+       #printTimestampContainer {
+           visibility: visible !important;
+           display: block !important;
+           page-break-inside: avoid !important;
+       }
+       
+       #printTimestamp {
+           visibility: visible !important;
+           display: block !important;
+           text-align: center !important;
+           margin-top: 20px !important;
+           font-size: 14px !important;
+           color: #666 !important;
+           page-break-inside: avoid !important;
        }
    }   
 </style>

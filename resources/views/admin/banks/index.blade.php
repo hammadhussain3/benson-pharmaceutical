@@ -32,11 +32,11 @@
                         <tr>
                             <th>#</th>
                             <th>Bank Name</th>
-                            <th>Acronym</th>
-                            <th>Country</th>
-                            @if(auth()->user()->hasPermission('Bank View') || auth()->user()->hasPermission('Bank Update') || auth()->user()->hasPermission('Bank Delete'))
+                            @if(auth()->user()->hasPermission('Bank Update'))
                             <th>Action</th>
                             @endif
+                            <th>Acronym</th>
+                            <th>Country</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,34 +44,17 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-info" href="{{ route('banks.view', $bank->id) }}">{{ $bank->name }}</a></td>
-                                <td>{{ $bank->acronym }}</td>
-                                <td>{{ $bank->country->name }}</td>
-                                @if(auth()->user()->hasPermission('Bank View') || auth()->user()->hasPermission('Bank Update') || auth()->user()->hasPermission('Bank Delete'))
+                                @if(auth()->user()->hasPermission('Bank Update'))
                                 <td>
-                                    @if(auth()->user()->hasPermission('Bank View'))
-                                    <a class="me-3" href="{{ route('banks.view', $bank->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
                                     @if(auth()->user()->hasPermission('Bank Update'))
                                     <a class="me-3" href="{{ route('banks.edit', $bank->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Bank Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $bank->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $bank->id }}"
-                                        action="{{ route('banks.destroy', $bank->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
                                 </td>
                                 @endif
+                                <td>{{ $bank->acronym }}</td>
+                                <td>{{ $bank->country->name }}</td>
                             </tr>
                         @endforeach
                     </tbody>

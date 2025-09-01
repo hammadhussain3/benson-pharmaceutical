@@ -16,6 +16,7 @@ function printWithTimestamp(containerId = 'printTimestampContainer') {
     }
     
     const timestampDiv = document.createElement('div');
+    timestampDiv.id = 'printTimestamp';
     timestampDiv.style.cssText = 'text-align: center; margin-top: 20px; font-size: 14px; color: #666;';
     timestampDiv.innerHTML = '<strong>Printed on:</strong> ' + new Date().toLocaleString('en-GB');
     
@@ -24,13 +25,44 @@ function printWithTimestamp(containerId = 'printTimestampContainer') {
     container.innerHTML = '';
     container.appendChild(timestampDiv);
     
-    // Print
-    window.print();
+    // Add print-specific styles for the timestamp
+    const printStyle = document.createElement('style');
+    printStyle.id = 'printTimestampStyle';
+    printStyle.textContent = `
+        @media print {
+            #printTimestamp {
+                visibility: visible !important;
+                display: block !important;
+                text-align: center !important;
+                margin-top: 20px !important;
+                font-size: 14px !important;
+                color: #666 !important;
+                page-break-inside: avoid !important;
+            }
+            #printTimestampContainer {
+                visibility: visible !important;
+                display: block !important;
+            }
+        }
+    `;
+    document.head.appendChild(printStyle);
     
-    // Remove timestamp after printing
+    // Small delay to ensure DOM is updated before printing
     setTimeout(() => {
-        container.innerHTML = '';
-    }, 1000);
+        // Print
+        window.print();
+        
+        // Remove timestamp and styles after printing (with longer delay)
+        setTimeout(() => {
+            if (container) {
+                container.innerHTML = '';
+            }
+            const styleElement = document.getElementById('printTimestampStyle');
+            if (styleElement) {
+                styleElement.remove();
+            }
+        }, 2000); // Increased delay to 2 seconds
+    }, 100);
 }
 
 // Legacy function for backward compatibility

@@ -105,7 +105,7 @@
                                     @if (count(old('items', [])) > 0)
                                         @foreach (old('items', []) as $i => $item)
                                             <div class="item-set">
-                                                <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                                <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
                                                     <h4 class="card-title mb-0">Item {{ $i + 1 }}</h4>
                                                     <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                                 </div>
@@ -153,7 +153,7 @@
                                         @endforeach
                                     @else
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2 mb-3">
+                                            <div class="card-header bg-white py-2 mb-3">
                                                 <p class="mb-0 text-center">No data is showing.</p>
                                             </div>
                                         </div>

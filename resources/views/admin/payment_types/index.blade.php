@@ -34,13 +34,13 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('Payment Types Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Description</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Payment Types View') || auth()->user()->hasPermission('Payment Types Update') || auth()->user()->hasPermission('Payment Types Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -48,36 +48,18 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('payment_types.view', $paymentType->id) }}">{{ $paymentType->name }}</a></td>
+                                @if(auth()->user()->hasPermission('Payment Types Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('payment_types.edit', $paymentType->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ $paymentType->description }}</td>
                                 @role('Superadmin')
                                 <td>{{ $paymentType->company->name }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Payment Types View') || auth()->user()->hasPermission('Payment Types Update') || auth()->user()->hasPermission('Payment Types Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Payment Types View'))
-                                    <a class="me-3" href="{{ route('payment_types.view', $paymentType->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Payment Types Update'))
-                                    <a class="me-3" href="{{ route('payment_types.edit', $paymentType->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Payment Types Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $paymentType->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $paymentType->id }}"
-                                        action="{{ route('payment_types.destroy', $paymentType->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
+                                
                             </tr>
                         @endforeach
                     </tbody>

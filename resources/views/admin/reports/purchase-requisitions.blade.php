@@ -3,13 +3,13 @@
 @section('content')
     <div class="page-header">
         <div class="page-title">
-            <h4>Purchase Requisition List</h4>
+            <h4>Purchase Order Appraisal</h4>
             <ul class="breadcrumb">
-                <li class="breadcrumb-item active">Purchase Requisition List</li>
+                <li class="breadcrumb-item active">Purchase Order Appraisal</li>
             </ul>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Purchase Requisition List</button>
+            <button class="btn btn-primary" onclick="printWithTimestamp()">Print Purchase Order Appraisal</button>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
 
     <div class="card">
         <div class="card-body px-0 pb-0">
-            <h5 class="text-center card-title mb-0">List of {{ $status == null ? 'All' : $status }} Purchase Requisitions</h5>
+            <h5 class="text-center card-title mb-0">List of {{ $status == null ? 'All' : $status }} Purchase Order Appraisal</h5>
             <p class="text-center text-muted">From {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }} to {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</p>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -55,7 +55,7 @@
                     <tbody>
                         @foreach ($purchaseRequisitions as $purchaseRequisitions)
                             <tr>
-                                <td>{{ $purchaseRequisitions->code }}</td>
+                                <td><a class="link-primary" href="{{ route('purchase-invoices.show', $purchaseRequisitions->id) }}">{{ $purchaseRequisitions->code }}</a></td>
                                 <td>{{ \Carbon\Carbon::parse($purchaseRequisitions->invoice_date)->format('d M, Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($purchaseRequisitions->required_date)->format('d M, Y') }}</td>
                                 <td>{{ $purchaseRequisitions->status }}</td>
@@ -106,9 +106,26 @@
        }
    
        .table-primary th {
-           background-color: #e3f2fd !important;
+           background-color: transparent !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
+       }
+       
+       /* Ensure timestamp container is visible in print */
+       #printTimestampContainer {
+           visibility: visible !important;
+           display: block !important;
+           page-break-inside: avoid !important;
+       }
+       
+       #printTimestamp {
+           visibility: visible !important;
+           display: block !important;
+           text-align: center !important;
+           margin-top: 20px !important;
+           font-size: 14px !important;
+           color: #666 !important;
+           page-break-inside: avoid !important;
        }
    }   
 </style>

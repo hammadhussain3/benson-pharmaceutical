@@ -35,6 +35,9 @@
                         <tr>
                             <th>#</th>
                             <th>DOC NO</th>
+                            @if(auth()->user()->hasPermission('Receipt Voucher Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Franchisers</th>
                             <th>Address</th>
                             <th>Contact Person</th>
@@ -47,9 +50,6 @@
                                 <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Receipt Voucher View') || auth()->user()->hasPermission('Receipt Voucher Update') || auth()->user()->hasPermission('Receipt Voucher Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +57,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td> <a class="link-primary" href="{{ route('receipt-vouchers.show', $receiptVoucher->id) }}">{{ $receiptVoucher->code }}</a></td>
+                                @if(auth()->user()->hasPermission('Receipt Voucher Update'))
+                                <td>
+                                    @if($receiptVoucher->is_approved == 0 || ($receiptVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    <a class="me-3" href="{{ route('receipt-vouchers.edit', $receiptVoucher->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                    @endif
+                                </td>
+                                @endif
                                 <td>{{ $receiptVoucher->party->name }}</td>
                                 <td>{{ $receiptVoucher->party->address }}</td>
                                 <td>{{ $receiptVoucher->party->contact_person_name }}</td>
@@ -69,36 +78,6 @@
                                     <td>{{ $receiptVoucher->company->name }}</td>
                                 @endrole
                                 <td><span class="badge {{ $receiptVoucher->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $receiptVoucher->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Receipt Voucher View') || auth()->user()->hasPermission('Receipt Voucher Update') || auth()->user()->hasPermission('Receipt Voucher Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Receipt Voucher View'))
-                                    <a class="me-3" href="{{ route('receipt-vouchers.show', $receiptVoucher->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Receipt Voucher Update') && 
-                                        ($receiptVoucher->is_approved == 0 || ($receiptVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="me-3" href="{{ route('receipt-vouchers.edit', $receiptVoucher->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Receipt Voucher Delete') && 
-                                        ($receiptVoucher->is_approved == 0 || ($receiptVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $receiptVoucher->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $receiptVoucher->id }}"
-                                        action="{{ route('receipt-vouchers.destroy', $receiptVoucher->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

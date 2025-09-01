@@ -88,9 +88,8 @@
                                             $itemType = $goodsReceiving->items[$i]->product_id ? 'product' : 'raw_material_item';
                                         @endphp
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                            <div class="card-header bg-white py-2">
                                                 <h4 class="card-title mb-0">Item {{ $i + 1 }}</h4>
-                                                <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                             </div>
                                             <div class="card-body px-0 pb-0">
                                                 <input type="hidden" name="items[{{ $i }}][types]" value="{{ old('items.'.$i.'.types', $itemType) }}">
@@ -103,7 +102,7 @@
                                                             value="{{ old('items.'.$i.'.types', $itemType) == 'product' ? old('items.'.$i.'.product', $goodsReceiving->items[$i]->product_id) : old('items.'.$i.'.raw_material_item', $goodsReceiving->items[$i]->raw_material_item_id) }}">
                                                     </div>
                                                     <div class="mb-3 col-md-4">
-                                                        <label for="product_code">Item Code<span class="text-danger">*</span></label>
+                                                        <label for="product_code">Item Code</label>
                                                         <input type="text" class="form-control" name="items[{{ $i }}][code]"
                                                             placeholder="Product Code" required value="{{ old('items.'.$i.'.code', $goodsReceiving->items[$i]->code) }}" readonly>
                                                     </div>
@@ -163,7 +162,7 @@
                                     @endfor
                                     @else
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2">
+                                            <div class="card-header bg-white py-2">
                                                 <p class="mb-0 text-center">No data is showing.</p>
                                             </div>
                                         </div>
@@ -179,7 +178,7 @@
                             <!-- Vendor Bill Section -->
                             <div class="col-md-12">
                                 <div class="card border-0 mb-3">
-                                    <div class="card-header bg-light py-2">
+                                    <div class="card-header bg-white py-2">
                                         <h5 class="card-title mb-0">Vendor Bills</h5>
                                         <small class="text-muted">Add vendor bill details for each item</small>
                                     </div>
@@ -267,17 +266,6 @@
         </div>
     </div>
     <script>
-        function removeItem(button) {
-            const itemSets = document.querySelectorAll('#item-group .item-set');
-            // Find the closest parent .item-set of the clicked button and remove it
-            if (itemSets && itemSets.length > 1) {
-                const item = button.closest('.item-set');
-                if (item) {
-                    item.remove();
-                    itemIndex--; // Decrement itemIndex to ensure consistency
-                }
-            }
-        }
         document.addEventListener('click', function (e) {
             // Handle Add GRN Row
             if (e.target.closest('.add-grn-row')) {
@@ -392,6 +380,15 @@
                 total += parseFloat(input.value) || 0;
             });
             // You can update a total field here if needed
+        }
+        
+        // Calculate total amount for goods receiving
+        function calculateGoodsRecievingAmount() {
+            let total = 0;
+            document.querySelectorAll('.product_total').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('total_amount').value = total.toFixed(2);
         }
     </script>
 @endsection

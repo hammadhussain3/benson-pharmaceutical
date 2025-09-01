@@ -156,14 +156,14 @@
             width: 100%;
         }
 
-        .table-primary th {
-            background-color: #e3f2fd !important;
-            -webkit-print-color-adjust: exact;
-            color-adjust: exact;
-        }
+               .table-primary th {
+           background-color: transparent !important;
+           -webkit-print-color-adjust: exact;
+           color-adjust: exact;
+       }
 
         .approved-target {
-            background-color: #e3f2fd !important;
+            background-color: transparent !important;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
         }

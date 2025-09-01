@@ -33,53 +33,38 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            @role('Superadmin')
+                            <th>Company</th>
+                            @endrole    
+                            @if(auth()->user()->hasPermission('Salary Tax Slabs Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Slab Start</th>
                             <th>Slab End</th>
                             <th>Tax Value</th>
-                            @role('Superadmin')
-                            <th>Company</th>
-                            @endrole
-                            @if(auth()->user()->hasPermission('Salary Tax Slabs View') || auth()->user()->hasPermission('Salary Tax Slabs Update') || auth()->user()->hasPermission('Salary Tax Slabs Delete'))
-                            <th>Action</th>
-                            @endif
+                            @                       
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($taxSlabs as $slab)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ number_format($slab->slab_start, 2) }}</td>
-                                <td>{{ number_format($slab->slab_end, 2) }}</td>
-                                <td>{{ $slab->tax_value }}%</td>
                                 @role('Superadmin')
-                                <td>{{ $slab->company->name }}</td>
+                                    <td>{{ $slab->company->name }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Salary Tax Slabs View') || auth()->user()->hasPermission('Salary Tax Slabs Update') || auth()->user()->hasPermission('Salary Tax Slabs Delete'))
+                                @if(auth()->user()->hasPermission('Salary Tax Slabs Update') || auth()->user()->hasPermission('Salary Tax Slabs View'))
                                 <td>
-                                    @if(auth()->user()->hasPermission('Salary Tax Slabs View'))
                                     <a class="me-3" href="{{ route('tax-slabs.view', $slab->id) }}">
                                         <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="Edit">
                                     </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Salary Tax Slabs Update'))
                                     <a class="me-3" href="{{ route('tax-slabs.edit', $slab->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Salary Tax Slabs Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $slab->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $slab->id }}"
-                                        action="{{ route('tax-slabs.destroy', $slab->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
                                 </td>
                                 @endif
+                                <td>{{ number_format($slab->slab_start, 2) }}</td>
+                                <td>{{ number_format($slab->slab_end, 2) }}</td>
+                                <td>{{ $slab->tax_value }}%</td>         
                             </tr>
                         @endforeach
                     </tbody>

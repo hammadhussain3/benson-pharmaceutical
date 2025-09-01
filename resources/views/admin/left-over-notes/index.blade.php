@@ -34,6 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>DOC NO</th>
+                            @if(auth()->user()->hasPermission('Left Over Note Update'))
+                                <th>Action</th>
+                            @endif
                             <th>Product</th>
                             <th>Batch #</th>
                             <th>Department</th>
@@ -42,16 +45,26 @@
                                 <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Left Over Note View') || auth()->user()->hasPermission('Left Over Note Update') || auth()->user()->hasPermission('Left Over Note Delete'))
-                                <th>Action</th>
-                            @endif
+                            
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($leftOverNotes as $leftOverNote)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $leftOverNote->code ?? 'N/A' }}</td>
+                                <td><a class="me-3" href="{{ route('left-over-notes.show', $leftOverNote->id) }}">
+                                {{ $leftOverNote->code ?? 'N/A' }}</a></td>
+                                @if(auth()->user()->hasPermission('Left Over Note Update'))
+                                    <td>
+                                        @if(
+                                            ($leftOverNote->is_approved == 0 || ($leftOverNote->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                        )
+                                            <a class="me-3" href="{{ route('left-over-notes.edit', $leftOverNote->id) }}">
+                                                <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                            </a>
+                                        @endif
+                                    </td>
+                                @endif
                                 <td>{{ $leftOverNote->product->name ?? 'N/A' }}</td>
                                 <td>{{ $leftOverNote->batch->batch_no ?? 'N/A' }}</td>
                                 <td>{{ $leftOverNote->department->name ?? 'N/A' }}</td>                                
@@ -60,36 +73,7 @@
                                     <td>{{ $leftOverNote->company->name ?? 'N/A' }}</td>
                                 @endrole
                                 <td><span class="badge {{ $leftOverNote->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $leftOverNote->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Left Over Note View') || auth()->user()->hasPermission('Left Over Note Update') || auth()->user()->hasPermission('Left Over Note Delete'))
-                                    <td>
-                                        @if(auth()->user()->hasPermission('Left Over Note View'))
-                                            <a class="me-3" href="{{ route('left-over-notes.show', $leftOverNote->id) }}">
-                                                <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                            </a>
-                                        @endif
-                                        @if(auth()->user()->hasPermission('Left Over Note Update') && 
-                                            ($leftOverNote->is_approved == 0 || ($leftOverNote->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                        )
-                                            <a class="me-3" href="{{ route('left-over-notes.edit', $leftOverNote->id) }}">
-                                                <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                            </a>
-                                        @endif
-                                        @if(auth()->user()->hasPermission('Left Over Note Delete') && 
-                                            ($leftOverNote->is_approved == 0 || ($leftOverNote->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                        )
-                                            <a class="confirm-text" href="javascript:void(0);"
-                                                onclick="confirmDelete('{{ $leftOverNote->id }}')">
-                                                <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                            </a>
-                                            <form id="delete-form-{{ $leftOverNote->id }}"
-                                                action="{{ route('left-over-notes.destroy', $leftOverNote->id) }}" method="POST"
-                                                style="display:none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-                                        @endif
-                                    </td>
-                                @endif
+                                
                             </tr>
                         @endforeach
                     </tbody>

@@ -24,7 +24,7 @@
                         </div>
                         <div class="mb-3 col-12">
                             @foreach ($role->permissions as $permission)
-                                <span class="badges bg-lightgreen mb-1">
+                                <span class="badges bg-whitegreen mb-1">
                                     {{ $permission->name }}
                                 </span>
                             @endforeach

@@ -34,6 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('Franchise Update'))
+                            <th>Action</th>
+                            @endif
                             <th>DOC NO</th>
                             <th>Categories</th>
                             <th>Chart Of Accounts</th>
@@ -47,9 +50,6 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Franchise View') || auth()->user()->hasPermission('Franchise Update') || auth()->user()->hasPermission('Franchise Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +57,13 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('franchises.show', $franchise->id) }}">{{ $franchise->name }}</a></td>
+                                @if(auth()->user()->hasPermission('Franchise Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('franchises.edit', $franchise->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ $franchise->code }}</td>
                                 <td>
                                     <span class="badge bg-primary">{{ $franchise->category->name }}</span>
@@ -80,32 +87,6 @@
                                 @role('Superadmin')
                                 <td>{{ $franchise->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Franchise View') || auth()->user()->hasPermission('Franchise Update') || auth()->user()->hasPermission('Franchise Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Franchise View'))
-                                    <a class="me-3" href="{{ route('franchises.show', $franchise->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Franchise Update'))
-                                    <a class="me-3" href="{{ route('franchises.edit', $franchise->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Franchise Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $franchise->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $franchise->id }}"
-                                        action="{{ route('franchises.destroy', $franchise->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

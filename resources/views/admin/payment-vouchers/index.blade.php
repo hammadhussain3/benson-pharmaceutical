@@ -35,6 +35,9 @@
                         <tr>
                             <th>#</th>
                             <th>DOC NO</th>
+                            @if(auth()->user()->hasPermission('Payment Voucher Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Supplier</th>
                             <th>Address</th>
                             <th>Contact Person</th>
@@ -47,9 +50,6 @@
                                 <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Payment Voucher View') || auth()->user()->hasPermission('Payment Voucher Update') || auth()->user()->hasPermission('Payment Voucher Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +57,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td> <a class="link-primary" href="{{ route('payment-vouchers.show', $paymentVoucher->id) }}">{{ $paymentVoucher->code }}</a></td>
+                                @if(auth()->user()->hasPermission('Payment Voucher Update'))
+                                <td>
+                                    @if($paymentVoucher->is_approved == 0 || ($paymentVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    <a class="me-3" href="{{ route('payment-vouchers.edit', $paymentVoucher->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                    @endif
+                                </td>
+                                @endif
                                 <td>{{ $paymentVoucher->party->name }}</td>
                                 <td>{{ $paymentVoucher->party->address }}</td>
                                 <td>{{ $paymentVoucher->party->contact_person_name }}</td>
@@ -69,36 +78,6 @@
                                     <td>{{ $paymentVoucher->company->name }}</td>
                                 @endrole
                                 <td><span class="badge {{ $paymentVoucher->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $paymentVoucher->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Payment Voucher View') || auth()->user()->hasPermission('Payment Voucher Update') || auth()->user()->hasPermission('Payment Voucher Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Payment Voucher View'))
-                                    <a class="me-3" href="{{ route('payment-vouchers.show', $paymentVoucher->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Payment Voucher Update') && 
-                                        ($paymentVoucher->is_approved == 0 || ($paymentVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="me-3" href="{{ route('payment-vouchers.edit', $paymentVoucher->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Payment Voucher Delete') && 
-                                        ($paymentVoucher->is_approved == 0 || ($paymentVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $paymentVoucher->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $paymentVoucher->id }}"
-                                        action="{{ route('payment-vouchers.destroy', $paymentVoucher->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

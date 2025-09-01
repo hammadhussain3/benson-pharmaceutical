@@ -34,6 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>DOC NO</th>
+                            @if(auth()->user()->hasPermission('Product Variation Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Reg. No.</th>
                             <th>Product</th>
                             <th>Strength</th>
@@ -52,9 +55,6 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Product Variation View') || auth()->user()->hasPermission('Product Variation Update') || auth()->user()->hasPermission('Product Variation Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -62,6 +62,13 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('product-variations.show', $productVariation->id) }}">{{ $productVariation->code ?? 'N/A' }}</a></td>
+                                @if(auth()->user()->hasPermission('Product Variation Update'))
+                                <td>            
+                                    <a class="me-3" href="{{ route('product-variations.edit', $productVariation->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ $productVariation->reg_no ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->product->brand_name ?? 'N/A' }}</td>
                                 <td>{{ $productVariation->strength ?? 'N/A' }}</td>
@@ -90,32 +97,7 @@
                                 @role('Superadmin')
                                 <td>{{ $productVariation->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Product Variation View') || auth()->user()->hasPermission('Product Variation Update') || auth()->user()->hasPermission('Product Variation Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Product Variation View'))
-                                    <a class="me-3" href="{{ route('product-variations.show', $productVariation->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Product Variation Update'))
-                                    <a class="me-3" href="{{ route('product-variations.edit', $productVariation->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Product Variation Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $productVariation->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $productVariation->id }}"
-                                        action="{{ route('product-variations.destroy', $productVariation->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
+                               
                             </tr>
                         @endforeach
                     </tbody>

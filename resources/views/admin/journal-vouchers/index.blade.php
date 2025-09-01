@@ -35,6 +35,9 @@
                         <tr>
                             <th>#</th>
                             <th>DOC NO</th>
+                            @if(auth()->user()->hasPermission('Journal Voucher Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Year</th>
                             <th>Debit</th>
                             <th>Credit</th>
@@ -43,9 +46,6 @@
                                 <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Journal Voucher View') || auth()->user()->hasPermission('Journal Voucher Update') || auth()->user()->hasPermission('Journal Voucher Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -53,6 +53,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('journal-vouchers.show', $journalVoucher->id) }}">{{ $journalVoucher->code }}</a></td>
+                                @if(auth()->user()->hasPermission('Journal Voucher Update'))
+                                    <td>
+                                        @if($journalVoucher->is_approved == 0 || ($journalVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                        <a class="me-3" href="{{ route('journal-vouchers.edit', $journalVoucher->id) }}">
+                                            <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                        </a>
+                                        @endif
+                                    </td>
+                                @endif
                                 <td>{{ $journalVoucher->year }}</td>
                                 <td>{{ $journalVoucher->total_debit . $journalVoucher->currency }}</td>
                                 <td>{{ $journalVoucher->total_credit . $journalVoucher->currency }}</td>
@@ -61,36 +70,6 @@
                                     <td>{{ $journalVoucher->company->name }}</td>
                                 @endrole
                                 <td><span class="badge {{ $journalVoucher->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $journalVoucher->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Journal Voucher View') || auth()->user()->hasPermission('Journal Voucher Update') || auth()->user()->hasPermission('Journal Voucher Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Journal Voucher View'))
-                                    <a class="me-3" href="{{ route('journal-vouchers.show', $journalVoucher->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Journal Voucher Update') && 
-                                        ($journalVoucher->is_approved == 0 || ($journalVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="me-3" href="{{ route('journal-vouchers.edit', $journalVoucher->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Journal Voucher Delete') && 
-                                        ($journalVoucher->is_approved == 0 || ($journalVoucher->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $journalVoucher->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $journalVoucher->id }}"
-                                        action="{{ route('journal-vouchers.destroy', $journalVoucher->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

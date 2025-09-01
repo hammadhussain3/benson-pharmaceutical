@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class GoodsReceivingItem extends Model
 {
@@ -19,14 +20,19 @@ class GoodsReceivingItem extends Model
 
             $allComplete = true;
             $anyReceived = false;
+            $totalRequiredQty = 0;
+            $totalReceivedQty = 0;
 
             foreach ($invoiceItems as $invItem) {
                 $requiredQty = $invItem->quantity;
+                $totalRequiredQty += $requiredQty;
 
                 $receivedQty = GoodsReceivingItem::whereHas('goodsReceiving', function ($q) use ($invoice) {
                     $q->where('invoice_id', $invoice->id);
                 })->where('raw_material_item_id', $invItem->raw_material_item_id)
                 ->sum('balance_receivable');
+
+                $totalReceivedQty += $receivedQty;
 
                 if ($receivedQty >= $requiredQty) {
                     $anyReceived = true;
@@ -38,11 +44,28 @@ class GoodsReceivingItem extends Model
                 }
             }
 
-            if ($allComplete) {
+            // Determine status based on GRN completion and due date
+            $currentDate = Carbon::now();
+            $requiredDate = Carbon::parse($invoice->required_date);
+            $isOverdue = $currentDate->gt($requiredDate);
+
+            if ($allComplete && $totalReceivedQty >= $totalRequiredQty) {
+                // If GRN for full qty is made – COMPLETED
                 $invoice->status = 'completed';
-            } elseif ($anyReceived) {
+            } elseif ($anyReceived && $totalReceivedQty > 0 && $totalReceivedQty < $totalRequiredQty) {
+                // If GRN for partial qty is made – PARTIALLY COMPLETE
                 $invoice->status = 'partial';
+            } elseif (!$anyReceived && $totalReceivedQty == 0) {
+                // If GRN is not made at all
+                if ($isOverdue) {
+                    // If GRN is not made at all and due date has passed – DELAY
+                    $invoice->status = 'delay';
+                } else {
+                    // If GRN is not made at all and due date hasn't passed – PENDING
+                    $invoice->status = 'pending';
+                }
             } else {
+                // Fallback to pending
                 $invoice->status = 'pending';
             }
 

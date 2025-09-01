@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header bg-light py-2">
+                <div class="card-header bg-white py-2">
                     <h4 class="card-title mb-0">{{ $requisition->is_general == '1' ? 'General' : 'Production' }}</h4>
                 </div>
                 <div class="card-body">
@@ -121,7 +121,7 @@
                                 <div class="card border-0 mb-0" id="item-group">
                                     @for ($i = 0; $i < count(old('items', $requisition->items)); $i++)
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                            <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
                                                 <h4 class="card-title mb-0">Item {{ $i + 1 }}</h4>
                                                 @if ($i > 0)
                                                     <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -258,7 +258,7 @@
         function addItem() {
             var html = `
                 <div class="item-set">
-                    <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0">Item ${ itemIndex + 1 }</h4>
                         <button type="button" onclick="removeItem(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                     </div>

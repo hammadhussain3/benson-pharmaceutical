@@ -110,9 +110,26 @@
        }
    
        .table-primary th {
-           background-color: #e3f2fd !important;
+           background-color: transparent !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
+       }
+       
+       /* Ensure timestamp container is visible in print */
+       #printTimestampContainer {
+           visibility: visible !important;
+           display: block !important;
+           page-break-inside: avoid !important;
+       }
+       
+       #printTimestamp {
+           visibility: visible !important;
+           display: block !important;
+           text-align: center !important;
+           margin-top: 20px !important;
+           font-size: 14px !important;
+           color: #666 !important;
+           page-break-inside: avoid !important;
        }
    }   
 </style>

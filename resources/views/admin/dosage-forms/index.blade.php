@@ -34,13 +34,14 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('Dosage Form Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Description</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Dosage Form View') || auth()->user()->hasPermission('Dosage Form Update') || auth()->user()->hasPermission('Dosage Form Delete'))
-                            <th>Action</th>
-                            @endif
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -48,36 +49,18 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('dosage-forms.show', $dosageForm->id) }}">{{ $dosageForm->name }}</a></td>
+                                @if(auth()->user()->hasPermission('Dosage Form Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('dosage-forms.edit', $dosageForm->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ \Illuminate\Support\Str::words($dosageForm->description, 4, '...') }}</td>
                                 @role('Superadmin')
                                 <td>{{ $dosageForm->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Dosage Form View') || auth()->user()->hasPermission('Dosage Form Update') || auth()->user()->hasPermission('Dosage Form Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Dosage Form View'))
-                                    <a class="me-3" href="{{ route('dosage-forms.show', $dosageForm->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Dosage Form Update'))
-                                    <a class="me-3" href="{{ route('dosage-forms.edit', $dosageForm->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Dosage Form Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $dosageForm->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $dosageForm->id }}"
-                                        action="{{ route('dosage-forms.destroy', $dosageForm->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
+                                
                             </tr>
                         @endforeach
                     </tbody>

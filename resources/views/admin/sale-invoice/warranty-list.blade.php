@@ -38,9 +38,6 @@
                             @role('Superadmin')
                                 <th>Company Id</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Sale Warranties View'))
-                                <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -59,15 +56,6 @@
                                 @role('Superadmin')
                                     <td>{{ $invoice->company->name }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Sale Warranties View'))
-                                    <td>
-                                        @if(auth()->user()->hasPermission('Sale Warranties View'))
-                                            <a class="me-3" href="{{ route('sale-warranties.show', $invoice->id) }}">
-                                                <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                            </a>
-                                        @endif
-                                    </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

@@ -34,6 +34,9 @@
                         <tr>
                             <th>Emp Code</th>
                             <th>Full Name</th>
+                            @if(auth()->user()->hasPermission('Employee Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Contact</th>
                             <th>Basic Pay</th>
                             <th>Allowances</th>
@@ -49,9 +52,7 @@
                             <th>Bank</th>
                             <th>Type</th>
                             <th>Status</th>
-                            @if(auth()->user()->hasPermission('Employee View') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
-                            <th>Action</th>
-                            @endif
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -59,6 +60,13 @@
                             <tr>
                                 <td><a class="link-primary" href="{{ route('employees.view', $employee->id) }}">{{ $employee->code }}</a></td>
                                 <td><a class="me-3" href="{{ route('employees.view', $employee->id) }}">{{ $employee->first_name }} {{ $employee->last_name }}</a></td>
+                                @if(auth()->user()->hasPermission('Employee Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('employees.edit', $employee->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>       
+                                </td>
+                                @endif
                                 <td>{{ $employee->email }}<br><small class="text-muted">{{ $employee->phone }}</small></td>
                                 <td>{{ number_format($employee->basic_pay, 2) }}</td>
                                 <td>{{ number_format($employee->allowances, 2) }}</td>
@@ -74,36 +82,10 @@
                                 <td>{{ $employee->bank->name ?? 'N/A' }}<br><span class="text-muted text-sm">{{ $employee->bank_account ?? 'N/A' }}</span></td>
                                 <td>{{ $employee->employee_type->type ?? 'N/A' }}</td>
                                 <td>
-                                    <span class="badges {{ $employee->is_active ? 'bg-lightgreen' : 'bg-lightred' }}">
+                                    <span class="badges {{ $employee->is_active ? 'bg-whitegreen' : 'bg-whitered' }}">
                                         {{ $employee->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-                                @if(auth()->user()->hasPermission('Employee View') || auth()->user()->hasPermission('Employee Update') || auth()->user()->hasPermission('Employee Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Employee View'))
-                                    <a class="me-3" href="{{ route('employees.view', $employee->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Employee Update'))
-                                    <a class="me-3" href="{{ route('employees.edit', $employee->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Employee Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $employee->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $employee->id }}"
-                                        action="{{ route('employees.destroy', $employee->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

@@ -34,13 +34,14 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('PackSize Update'))
+                            <th>Action</th>
+                            @endif
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
                             <th>Description</th>
-                            @if(auth()->user()->hasPermission('PackSize View') || auth()->user()->hasPermission('PackSize Update') || auth()->user()->hasPermission('PackSize Delete'))
-                            <th>Action</th>
-                            @endif
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -48,36 +49,18 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td> <a class="link-primary" href="{{ route('pack_size.view', $pack_size->id) }}">{{ $pack_size->name }}</a></td>
+                                @if(auth()->user()->hasPermission('PackSize Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('pack_size.edit', $pack_size->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 @role('Superadmin')
                                 <td>{{ $pack_size->company->name }}</td>
                                 @endrole
                                 <td>{{ $pack_size->description }}</td>
-                                @if(auth()->user()->hasPermission('PackSize View') || auth()->user()->hasPermission('PackSize Update') || auth()->user()->hasPermission('PackSize Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('PackSize View'))
-                                    <a class="me-3" href="{{ route('pack_size.view', $pack_size->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('PackSize Update'))
-                                    <a class="me-3" href="{{ route('pack_size.edit', $pack_size->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('PackSize Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $pack_size->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $pack_size->id }}"
-                                        action="{{ route('pack_size.destroy', $pack_size->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
+                                
                             </tr>
                         @endforeach
                     </tbody>

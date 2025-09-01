@@ -86,7 +86,7 @@
                                     @endphp
                                     @for ($i = 0; $i < $count; $i++)
                                         <div class="item-set">
-                                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                            <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
                                                 <h4 class="card-title mb-0">Item {{ $i + 1 }}</h4>
                                                 @if ($i > 0)
                                                     <button type="button" onclick="removeLastItem()" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
@@ -276,10 +276,50 @@
         const itemSets = document.querySelectorAll('#item-group .item-set');
         let itemIndex = itemSets.length;
         
+        // Function to restore select2 state and synchronize title fields on page load
+        function restoreFormState() {
+            // Initialize select2 for all dropdowns that don't already have it
+            $('.js-example-basic-single:not(.select2-hidden-accessible)').select2({});
+            
+            // For each raw material item dropdown that has a selected value, update the title field and populate related data
+            $('.raw_material_items_dropdown').each(function() {
+                const selectElement = this;
+                const selectedValue = $(this).val();
+                const titleInput = $(this).closest('.row').find('.rmi_title');
+                
+                if (selectedValue && titleInput.length > 0) {
+                    // Find the selected option text
+                    const selectedOption = $(this).find('option:selected');
+                    if (selectedOption.length > 0) {
+                        const optionText = selectedOption.text().trim();
+                        titleInput.val(optionText);
+                        
+                        // Populate related fields by calling the same functions that would be called on change
+                        if (typeof selectLastPurchaseRmi === 'function') {
+                            selectLastPurchaseRmi(selectedValue, selectElement);
+                        }
+                        if (typeof selectRmiDetailsT === 'function') {
+                            selectRmiDetailsT(selectedValue, selectElement);
+                        }
+                    }
+                }
+            });
+            
+            // Calculate totals after restoring all data
+            if (typeof calculatePurchaseInvoiceAmount === 'function') {
+                calculatePurchaseInvoiceAmount();
+            }
+        }
+        
+        // Call restoreFormState when document is ready
+        $(document).ready(function() {
+            restoreFormState();
+        });
+        
         function addItem() {
             var html = `
                 <div class="item-set">
-                    <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0">Item ${itemIndex + 1}</h4><button type="button" onclick="removeLastItem()" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                     </div>
                     <div class="card-body px-0 pb-0">
@@ -366,7 +406,20 @@
             const firstDropdownOptions = $(".raw_material_items_dropdown:first").children().clone();
             $(`#item-group .item-set:last .raw_material_items_dropdown`).append(firstDropdownOptions);
             itemIndex++;
-            $('.js-example-basic-single').select2({});
+            
+            // Initialize select2 for the new dropdown only
+            $(`#item-group .item-set:last .raw_material_items_dropdown`).select2({});
+            
+            // Update the title field for the newly added dropdown if it has a selected value
+            const newDropdown = $(`#item-group .item-set:last .raw_material_items_dropdown`);
+            const newTitleInput = $(`#item-group .item-set:last .rmi_title`);
+            if (newDropdown.val() && newTitleInput.length > 0) {
+                const selectedOption = newDropdown.find('option:selected');
+                if (selectedOption.length > 0) {
+                    const optionText = selectedOption.text().trim();
+                    newTitleInput.val(optionText);
+                }
+            }
         }
 
         function removeLastItem() {

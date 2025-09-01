@@ -82,7 +82,7 @@
                                 <td>{{ \Carbon\Carbon::parse($batch->start_date)->format('d M, Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($batch->end_date)->format('d M, Y') }}</td>
                                 <td>
-                                    <span class="badges {{ $batch->status == 'completed' ? 'bg-lightgreen' : 'bg-lightred' }}">
+                                    <span class="badges {{ $batch->status == 'completed' ? 'bg-whitegreen' : 'bg-whitered' }}">
                                         {{ $batch->status == 'completed' ? 'Completed' : 'In-Process' }}
                                     </span>
                                 </td>

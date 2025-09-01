@@ -34,13 +34,13 @@
                         <tr>
                             <th>#</th>
                             <th>Type</th>
+                            @if(auth()->user()->hasPermission('Employee Type Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Description</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Employee Type View') || auth()->user()->hasPermission('Employee Type Update') || auth()->user()->hasPermission('Employee Type Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -48,36 +48,17 @@
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td><a class="link-primary" href="{{ route('employee-types.show', $employeeType->id) }}">{{ $employeeType->type }}</a></td>
+                                @if(auth()->user()->hasPermission('Employee Type Update'))
+                                <td>
+                                    <a class="me-3" href="{{ route('employee-types.edit', $employeeType->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                </td>
+                                @endif
                                 <td>{{ $employeeType->description }}</td>
                                 @role('Superadmin')
                                 <td>{{ $employeeType->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Employee Type View') || auth()->user()->hasPermission('Employee Type Update') || auth()->user()->hasPermission('Employee Type Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Employee Type View'))
-                                    <a class="me-3" href="{{ route('employee-types.show', $employeeType->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Employee Type Update'))
-                                    <a class="me-3" href="{{ route('employee-types.edit', $employeeType->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Employee Type Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $employeeType->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $employeeType->id }}"
-                                        action="{{ route('employee-types.destroy', $employeeType->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

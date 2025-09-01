@@ -34,6 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>Code</th>
+                            @if(auth()->user()->hasPermission('Salaries Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Name</th>
                             <th>Month</th>
                             <th>Late/Early Out Deduction</th>
@@ -46,9 +49,6 @@
                             <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Salaries View') || auth()->user()->hasPermission('Salaries Update') || auth()->user()->hasPermission('Salaries Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -56,6 +56,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="me-3" href="{{ route('salary.sheet.show', ['employee_id' => $salarySlip->employee_id, 'month' => $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT)]) }}">{{ $salarySlip->employee->code }}</a></td>
+                                @if(auth()->user()->hasPermission('Salaries Update'))
+                                <td>
+                                    @if($salarySlip->is_approved == 0 || ($salarySlip->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    <a class="me-3" href="{{ route('salary_slips.edit', $salarySlip->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                    @endif
+                                </td>
+                                @endif
                                 <td>{{ $salarySlip->employee->first_name }} {{ $salarySlip->employee->last_name }}</td>
                                 <td>{{ DateTime::createFromFormat('!m', $salarySlip->month)->format('F') }} {{ $salarySlip->year }}</td>
                                 <td>{{ $salarySlip->late_in_early_out_deduction }}</td>
@@ -68,36 +77,7 @@
                                 <td>{{ $salarySlip->company->name }}</td>
                                 @endrole
                                 <td><span class="badge {{ $salarySlip->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $salarySlip->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Salaries View') || auth()->user()->hasPermission('Salaries Update') || auth()->user()->hasPermission('Salaries Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Salaries View'))
-                                    <a class="me-3" href="{{ route('salary.sheet.show', ['employee_id' => $salarySlip->employee_id, 'month' => $salarySlip->year . '-' . str_pad($salarySlip->month, 2, '0', STR_PAD_LEFT)]) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Salaries Update') && 
-                                        ($salarySlip->is_approved == 0 || ($salarySlip->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="me-3" href="{{ route('salary_slips.edit', $salarySlip->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Salaries Delete') && 
-                                        ($salarySlip->is_approved == 0 || ($salarySlip->is_approved == 1 && auth()->user()->hasPermission('Approved Document Delete')))
-                                    )
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $salarySlip->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $salarySlip->id }}"
-                                        action="{{ route('salary_slips.destroy', $salarySlip->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
+                                
                             </tr>
                         @endforeach
                     </tbody>

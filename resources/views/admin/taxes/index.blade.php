@@ -34,13 +34,13 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('Tax Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Rate</th>
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Tax View') || auth()->user()->hasPermission('Tax Update') || auth()->user()->hasPermission('Tax Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -48,36 +48,19 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('taxes.show', $tax->id) }}">{{ $tax->name }}</a></td>
-                                <td>{{ $tax->rate }}%</td>
-                                @role('Superadmin')
-                                <td>{{ $tax->company->name ?? 'N/A' }}</td>
-                                @endrole
-                                @if(auth()->user()->hasPermission('Tax View') || auth()->user()->hasPermission('Tax Update') || auth()->user()->hasPermission('Tax Delete'))
+                                @if(auth()->user()->hasPermission('Tax Update'))
                                 <td>
-                                    @if(auth()->user()->hasPermission('Tax View'))
-                                    <a class="me-3" href="{{ route('taxes.show', $tax->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
                                     @if(auth()->user()->hasPermission('Tax Update'))
                                     <a class="me-3" href="{{ route('taxes.edit', $tax->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Tax Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $tax->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $tax->id }}"
-                                        action="{{ route('taxes.destroy', $tax->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
                                 </td>
                                 @endif
+                                <td>{{ $tax->rate }}%</td>
+                                @role('Superadmin')
+                                <td>{{ $tax->company->name ?? 'N/A' }}</td>
+                                @endrole
                             </tr>
                         @endforeach
                     </tbody>

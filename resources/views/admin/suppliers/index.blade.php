@@ -34,6 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
+                            @if(auth()->user()->hasPermission('Supplier Update'))
+                            <th>Action</th>
+                            @endif
                             <th>DOC NO</th>
                             <th>Chart Of Accounts</th>
                             <th>Contact Person Name</th>
@@ -48,9 +51,6 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            @if(auth()->user()->hasPermission('Supplier View') || auth()->user()->hasPermission('Supplier Update') || auth()->user()->hasPermission('Supplier Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -58,6 +58,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('suppliers.show', $supplier->id) }}">{{ $supplier->name }}</a></td>
+                                @if(auth()->user()->hasPermission('Supplier Update'))
+                                <td>
+                                    @if(auth()->user()->hasPermission('Supplier Update'))
+                                    <a class="me-3" href="{{ route('suppliers.edit', $supplier->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                    @endif
+                                </td>
+                                @endif
                                 <td>{{ $supplier->code }}</td>
                                 <td>
                                     <span class="badge bg-primary">{{ $supplier->chart_of_account->particular ?? 'N/A' }}</span>
@@ -77,32 +86,6 @@
                                 @role('Superadmin')
                                 <td>{{ $supplier->company->name ?? 'N/A' }}</td>
                                 @endrole
-                                @if(auth()->user()->hasPermission('Supplier View') || auth()->user()->hasPermission('Supplier Update') || auth()->user()->hasPermission('Supplier Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Supplier View'))
-                                    <a class="me-3" href="{{ route('suppliers.show', $supplier->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Supplier Update'))
-                                    <a class="me-3" href="{{ route('suppliers.edit', $supplier->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Supplier Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $supplier->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $supplier->id }}"
-                                        action="{{ route('suppliers.destroy', $supplier->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

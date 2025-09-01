@@ -30,6 +30,7 @@
                     <tr>
                         <th>#</th>
                         <th>Employee Id</th>
+                        <th>Action</th>
                         <th>Name</th>
                         <th>Email</th>
                         @role('Superadmin')
@@ -38,7 +39,6 @@
                         <th>Branch</th>
                         <th>Department</th>
                         <th>Role</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,6 +53,11 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td><a class="link-primary" href="{{ route('users.view', $user->id) }}">{{ $user->employee->code ?? 'N/A' }}</a></td>
+                                            <td>
+                                                <a class="me-3" href="{{ route('users.edit', $user->id) }}">
+                                                    <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                                </a>
+                                            </td>
                                             <td>{{ $user->name ?? 'N/A' }}</td>
                                             <td>{{ $user->email ?? 'N/A' }}</td>
                                             @role('Superadmin')
@@ -68,27 +73,11 @@
                                                         </span>
                                                     @endif
                                                     @if($role->name != "Admin")
-                                                        <span class="badges bg-lightgreen mb-1">
+                                                        <span class="badges bg-whitegreen mb-1">
                                                             {{ $role->name }}
                                                         </span>
                                                     @endif
                                                 @endforeach
-                                            </td>
-                                            <td>
-                                                <a class="me-3" href="{{ route('users.view', $user->id) }}">
-                                                    <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                                </a>
-                                                <a class="me-3" href="{{ route('users.edit', $user->id) }}">
-                                                    <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                                </a>
-                                                <a class="confirm-text" href="javascript:void(0);" onclick="confirmDelete('{{ $user->id }}')">
-                                                    <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                                </a>
-                                                <form id="delete-form-{{ $user->id }}" action="{{ route('users.destroy', $user->id) }}"
-                                                    method="POST" style="display:none;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                </form>
                                             </td>
                                         </tr>
                     @endforeach

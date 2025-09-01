@@ -34,10 +34,12 @@
                         <tr>
                             <th>#</th>
                             <th>Designation Name</th>
+                            @if(auth()->user()->hasPermission('Designation Update'))
+                            <th>Action</th>
+                            @endif
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,35 +47,16 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="me-3" href="{{ route('designations.view', $designation->id) }}">{{ $designation->name }}</a></td>
-                                @role('Superadmin')
-                                <td>{{ $designation->company->name }}</td>
-                                @endrole
-                                @if(auth()->user()->hasPermission('Designation View') || auth()->user()->hasPermission('Designation Update') || auth()->user()->hasPermission('Designation Delete'))
+                                @if(auth()->user()->hasPermission('Designation Update'))
                                 <td>
-                                    @if(auth()->user()->hasPermission('Designation View'))
-                                    <a class="me-3" href="{{ route('designations.view', $designation->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Designation Update'))
                                     <a class="me-3" href="{{ route('designations.edit', $designation->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Designation Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $designation->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $designation->id }}"
-                                        action="{{ route('designations.destroy', $designation->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
                                 </td>
                                 @endif
+                                @role('Superadmin')
+                                <td>{{ $designation->company->name }}</td>
+                                @endrole
                             </tr>
                         @endforeach
                     </tbody>

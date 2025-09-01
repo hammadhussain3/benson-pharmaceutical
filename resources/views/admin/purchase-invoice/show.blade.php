@@ -289,7 +289,7 @@
         }
 
         .table-primary th {
-            background-color: #e3f2fd !important;
+            background-color: transparent !important;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
         }
@@ -299,7 +299,7 @@
         }
 
         .approved-target {
-            background-color: #e3f2fd !important;
+            background-color: transparent !important;
             -webkit-print-color-adjust: exact;
             color-adjust: exact;
         }
@@ -510,7 +510,7 @@
         let itemsTable = `
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px;">
                 <thead>
-                    <tr style="background-color: #f5f5f5;">
+                    <tr style="background-color: transparent;">
                         <th style="border: 1px solid #ddd; padding: 6px; text-align: center; font-weight: bold;">#</th>
                         <th style="border: 1px solid #ddd; padding: 6px; text-align: left; font-weight: bold;">Item Code</th>
                         <th style="border: 1px solid #ddd; padding: 6px; text-align: left; font-weight: bold;">Description</th>

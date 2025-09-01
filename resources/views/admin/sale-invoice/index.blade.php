@@ -34,6 +34,9 @@
                         <tr>
                             <th>#</th>  
                             <th>DOC NO</th>   
+                            @if(auth()->user()->hasPermission('Sale Invoice Update'))
+                                <th>Action</th>
+                            @endif
                             <th>Type</th>
                             <th>Party</th>
                             <th>Order Number</th>
@@ -46,9 +49,6 @@
                                 <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Sale Invoice View') || auth()->user()->hasPermission('Sale Invoice Update') || auth()->user()->hasPermission('Sale Invoice Delete'))
-                                <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -56,6 +56,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('sale-invoices.show', $invoice->id) }}">{{ $invoice->code }}</a></td>
+                                @if(auth()->user()->hasPermission('Sale Invoice Update'))
+                                    <td>
+                                        @if($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                            <a class="me-3" href="{{ route('sale-invoices.edit', $invoice->id) }}">
+                                                <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                            </a>
+                                        @endif
+                                    </td>
+                                @endif
                                 <td>{{ ucfirst(strtolower($invoice->type)) }} ({{ $invoice->prefix }})</td>
                                 <td>{{ $invoice->party->name }}</td>
                                 <td>{{ $invoice->order_number }}</td>
@@ -68,36 +77,6 @@
                                     <td>{{ $invoice->company->name }}</td>
                                 @endrole
                                 <td><span class="badge {{ $invoice->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $invoice->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Sale Invoice View') || auth()->user()->hasPermission('Sale Invoice Update') || auth()->user()->hasPermission('Sale Invoice Delete'))
-                                    <td>
-                                        @if(auth()->user()->hasPermission('Sale Invoice View'))
-                                            <a class="me-3" href="{{ route('sale-invoices.show', $invoice->id) }}">
-                                                <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                            </a>
-                                        @endif
-                                        @if(auth()->user()->hasPermission('Sale Invoice Update') && 
-                                            ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                        )
-                                            <a class="me-3" href="{{ route('sale-invoices.edit', $invoice->id) }}">
-                                                <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                            </a>
-                                        @endif
-                                        @if(auth()->user()->hasPermission('Sale Invoice Delete') && 
-                                            ($invoice->is_approved == 0 || ($invoice->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                        )
-                                            <a class="confirm-text" href="javascript:void(0);"
-                                                onclick="confirmDelete('{{ $invoice->id }}')">
-                                                <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                            </a>
-                                            <form id="delete-form-{{ $invoice->id }}"
-                                                action="{{ route('sale-invoices.destroy', $invoice->id) }}" method="POST"
-                                                style="display:none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-                                        @endif
-                                    </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

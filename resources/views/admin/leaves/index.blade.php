@@ -34,6 +34,7 @@
                         <tr>
                             <th>#</th>
                             <th>Employee Code</th>
+                            <th>Action</th>
                             <th>Employee</th>
                             @foreach ($leaveTypes as $leaveType)
                                 <th>{{ $leaveType->name }}</th>
@@ -42,8 +43,7 @@
                                 <th>Company</th>
                             @endrole
                             <th>Month</th>
-                            <th>Year</th>
-                            <th>Action</th>
+                            <th>Year</th>                  
                         </tr>
                     </thead>
                     <tbody>
@@ -68,7 +68,15 @@
                                         {{ $employee->code }}
                                     </a>
                                 </td>
+                                @if(auth()->user()->hasPermission('Leave Update'))
+                                    <td>     
+                                        <a class="me-3" href="{{ route('leaves.edit', $firstLeave->id) }}">
+                                            <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                        </a>
+                                    </td>
+                                @endif
                                 <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
+                                
                 
                                 @foreach ($leaveTypes as $leaveType)
                                     @php
@@ -85,33 +93,6 @@
                 
                                 <td>{{ $month }}</td>
                                 <td>{{ $year }}</td>
-                
-                                @if(auth()->user()->hasPermission('Leave View') || auth()->user()->hasPermission('Leave Update') || auth()->user()->hasPermission('Leave Delete'))
-                                    <td>
-                                        @if(auth()->user()->hasPermission('Leave View'))
-                                            <a class="me-3" href="{{ route('leaves.view', $firstLeave->id) }}">
-                                                <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                            </a>
-                                        @endif
-                                        @if(auth()->user()->hasPermission('Leave Update'))
-                                            <a class="me-3" href="{{ route('leaves.edit', $firstLeave->id) }}">
-                                                <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                            </a>
-                                        @endif
-                                        @if(auth()->user()->hasPermission('Leave Delete'))
-                                            <a class="confirm-text" href="javascript:void(0);"
-                                               onclick="confirmDelete('{{ $firstLeave->id }}')">
-                                                <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                            </a>
-                                            <form id="delete-form-{{ $firstLeave->id }}"
-                                                  action="{{ route('leaves.destroy', $firstLeave->id) }}" method="POST"
-                                                  style="display:none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-                                        @endif
-                                    </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

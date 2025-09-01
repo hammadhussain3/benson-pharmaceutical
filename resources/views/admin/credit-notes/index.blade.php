@@ -35,6 +35,9 @@
                         <tr>
                             <th>#</th>
                             <th>DOC NO</th>
+                            @if(auth()->user()->hasPermission('Credit Note Update'))
+                            <th>Action</th>
+                            @endif
                             <th>Party</th>
                             <th>Address</th>
                             <th>Contact Person</th>
@@ -45,9 +48,6 @@
                                 <th>Company</th>
                             @endrole
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Credit Note View') || auth()->user()->hasPermission('Credit Note Update') || auth()->user()->hasPermission('Credit Note Delete'))
-                            <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -55,6 +55,15 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td> <a class="link-primary" href="{{ route('credit-notes.show', $creditNote->id) }}">{{ $creditNote->code }}</a></td>
+                                @if(auth()->user()->hasPermission('Credit Note Update'))
+                                <td>
+                                    @if($creditNote->is_approved == 0 || ($creditNote->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
+                                    <a class="me-3" href="{{ route('credit-notes.edit', $creditNote->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>
+                                    @endif
+                                </td>
+                                @endif
                                 <td>{{ $creditNote->party->name }}</td>
                                 <td>{{ $creditNote->party->address }}</td>
                                 <td>{{ $creditNote->party->contact_person_name }}</td>
@@ -65,36 +74,6 @@
                                     <td>{{ $creditNote->company->name }}</td>
                                 @endrole
                                 <td><span class="badge {{ $creditNote->is_approved == 1 ? 'bg-success' : 'bg-danger' }}">{{ $creditNote->is_approved == 1 ? 'Yes' : 'No' }}</span></td>
-                                @if(auth()->user()->hasPermission('Credit Note View') || auth()->user()->hasPermission('Credit Note Update') || auth()->user()->hasPermission('Credit Note Delete'))
-                                <td>
-                                    @if(auth()->user()->hasPermission('Credit Note View'))
-                                    <a class="me-3" href="{{ route('credit-notes.show', $creditNote->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Credit Note Update') && 
-                                        ($creditNote->is_approved == 0 || ($creditNote->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="me-3" href="{{ route('credit-notes.edit', $creditNote->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Credit Note Delete') && 
-                                        ($creditNote->is_approved == 0 || ($creditNote->is_approved == 1 && auth()->user()->hasPermission('Approved Document Update')))
-                                    )
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $creditNote->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $creditNote->id }}"
-                                        action="{{ route('credit-notes.destroy', $creditNote->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

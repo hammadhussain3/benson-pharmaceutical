@@ -34,10 +34,10 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Permissions</th>
                             @if(auth()->user()->hasPermission('Roles View') || auth()->user()->hasPermission('Roles Update') || auth()->user()->hasPermission('Roles Delete'))
                             <th>Action</th>
                             @endif
+                            <th>Permissions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,6 +45,13 @@
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td><a class="link-primary" href="{{ route('roles.view', $role->id) }}">{{ $role->name }}</a></td>
+                                @if(auth()->user()->hasPermission('Roles Update'))                              
+                                <td>
+                                    <a class="me-3" href="{{ route('roles.edit', $role->id) }}">
+                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                    </a>   
+                                </td>
+                                @endif
                                 <td>
                                     @php
                                         $permissionsToShow = $role->permissions->take(4);
@@ -52,7 +59,7 @@
                                     @endphp
                                 
                                     @foreach ($permissionsToShow as $permission)
-                                        <span class="badges bg-lightgreen mb-1">
+                                        <span class="badges bg-whitegreen mb-1">
                                             {{ $permission->name }}
                                         </span>
                                     @endforeach
@@ -63,32 +70,6 @@
                                         </span>
                                     @endif
                                 </td>  
-                                @if(auth()->user()->hasPermission('Roles View') || auth()->user()->hasPermission('Roles Update') || auth()->user()->hasPermission('Roles Delete'))                              
-                                <td>
-                                    @if(auth()->user()->hasPermission('Roles View'))
-                                    <a class="me-3" href="{{ route('roles.view', $role->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Roles Update'))
-                                    <a class="me-3" href="{{ route('roles.edit', $role->id) }}">
-                                        <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Roles Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $role->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $role->id }}"
-                                        action="{{ route('roles.destroy', $role->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
-                                </td>
-                                @endif
                             </tr>
                         @endforeach
                     </tbody>

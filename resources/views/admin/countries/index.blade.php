@@ -33,9 +33,9 @@
                         <tr>
                             <th>#</th>
                             <th>Country Name</th>
+                            <th>Action</th>
                             <th>Currency</th>
                             @if(auth()->user()->hasPermission('Countries View') || auth()->user()->hasPermission('Countries Update') || auth()->user()->hasPermission('Countries Delete'))
-                            <th>Action</th>
                             @endif
                         </tr>
                     </thead>
@@ -44,33 +44,14 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a class="link-primary" href="{{ route('countries.view', $country->id) }}">{{ $country->name }}</a></td>
-                                <td>{{ $country->currency }}</td>
-                                @if(auth()->user()->hasPermission('Countries View') || auth()->user()->hasPermission('Countries Update') || auth()->user()->hasPermission('Countries Delete'))
+                                @if(auth()->user()->hasPermission('Countries Update'))
                                 <td>
-                                    @if(auth()->user()->hasPermission('Countries View'))
-                                    <a class="me-3" href="{{ route('countries.view', $country->id) }}">
-                                        <img src="{{ asset('assets/img/icons/eye.svg') }}" alt="View">
-                                    </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Countries Update'))
                                     <a class="me-3" href="{{ route('countries.edit', $country->id) }}">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
-                                    @endif
-                                    @if(auth()->user()->hasPermission('Countries Delete'))
-                                    <a class="confirm-text" href="javascript:void(0);"
-                                        onclick="confirmDelete('{{ $country->id }}')">
-                                        <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
-                                    </a>
-                                    <form id="delete-form-{{ $country->id }}"
-                                        action="{{ route('countries.destroy', $country->id) }}" method="POST"
-                                        style="display:none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    @endif
                                 </td>
                                 @endif
+                                <td>{{ $country->currency }}</td>
                             </tr>
                         @endforeach
                     </tbody>

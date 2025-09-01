@@ -1,0 +1,90 @@
+/* Print Styles for Streamline Reports */
+@media print {
+    @page {
+        margin: 0;
+        size: landscape;
+    }
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .card-body,
+    .card-body * {
+        visibility: visible;
+    }
+
+    .card-body {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    .table-primary th {
+        background-color: transparent !important;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+    
+    /* Apply the same working table styles */
+    table.table {
+        font-size: 10px !important;
+    }
+    
+    /* Ensure all columns are visible with proper sizing */
+    .table {
+        width: 100% !important;
+        table-layout: auto;
+    }
+    
+    .table th, .table td {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        padding: 4px 6px;
+    }
+    
+    /* Force table-responsive to show all content */
+    .table-responsive {
+        overflow: visible !important;
+        width: 100% !important;
+    }
+    
+    /* Ensure filters information is visible in print */
+    .filters-info {
+        visibility: visible !important;
+        display: block !important;
+    }
+    
+    .filter-tags .badge {
+        background-color: #e3f2fd !important;
+        color: #1976d2 !important;
+        border: 1px solid #bbdefb !important;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+    
+    /* Ensure timestamp container is visible in print */
+    #printTimestampContainer {
+        visibility: visible !important;
+        display: block !important;
+        page-break-inside: avoid !important;
+    }
+    
+    #printTimestamp {
+        visibility: visible !important;
+        display: block !important;
+        text-align: center !important;
+        margin-top: 20px !important;
+        font-size: 14px !important;
+        color: #666 !important;
+        page-break-inside: avoid !important;
+    }
+}
