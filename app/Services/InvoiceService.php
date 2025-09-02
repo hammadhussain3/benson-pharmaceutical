@@ -117,7 +117,7 @@ class InvoiceService
 
             $invoiceItem->received_quantity = $receivedQuantity;
             $invoiceItem->status = $receivedQuantity == 0 ? 'Pending' : ($invoiceItem->quantity == $receivedQuantity ? 'Completed' : 'Partial');
-            $invoiceItem->item_code = $invoiceItem->product->code ?? $invoiceItem->rawMaterialItem->code;
+            $invoiceItem->item_code = $invoiceItem->product->code ?? $invoiceItem->rawMaterialItem->code ?? 'N/A';
 
             if ($invoiceItem->status === 'Completed') {
                 return false;

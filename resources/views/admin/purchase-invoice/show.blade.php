@@ -41,6 +41,29 @@
                 <button class="btn btn-outline-secondary" disabled>&laquo; Previous</button>
             @endif
 
+            {{-- Jump to Specific PO Dropdown --}}
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="jumpToPODropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Jump to PO
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="jumpToPODropdown" style="max-height: 300px; overflow-y: auto; min-width: 300px;">
+                    <li class="px-3 py-2">
+                        <input type="text" class="form-control form-control-sm" id="poSearchInput" placeholder="Search PO code or date..." onkeyup="filterPOs()" oninput="filterPOs()">
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    @foreach($allPOs as $po)
+                        <li>
+                            <a class="dropdown-item po-item {{ $po->id == $invoice->id ? 'active fw-bold' : '' }}" 
+                               href="{{ route('purchase-invoices.show', $po->id) }}"
+                               data-po-code="{{ strtolower($po->code) }}"
+                               data-po-date="{{ $po->created_at->format('d/m/Y') }}">
+                                <span>{{ $po->code }}</span>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
             {{-- Next Button --}}
             @if($next)
                 <a href="{{ route('purchase-invoices.show', $next->id) }}" class="btn btn-outline-secondary">
@@ -348,6 +371,11 @@
             #export-button {
                 display: none !important;
             }
+            
+            /* Hide dropdown in print */
+            .dropdown {
+                display: none !important;
+            }
         }
     </style>
 <!-- html2pdf CDN -->
@@ -356,7 +384,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    // Pass invoice items to JavaScript
+    window.invoiceItems = {!! json_encode($invoice->items) !!};
+</script>
 
+<script>
 
     async function exportToPDF() {
         // Check if html2pdf is available
@@ -402,7 +434,7 @@
         // Use html2pdf library to generate PDF
         const opt = {
             margin: [10, 10, 10, 10],
-            filename: 'purchase-order-{{ $invoice->code }}-{{ optional($invoice->party)->name ?? 'vendor' }}.pdf',
+            filename: 'purchase-order-{{ $invoice->code }}-{{ optional($invoice->party)->name ?? "vendor" }}.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
                 scale: 2,
@@ -522,26 +554,23 @@
                 <tbody>
         `;
 
-        @foreach ($invoice->items as $item)
-            @php
-                $itemTotal = $item->quantity * $item->unit_price;
-            @endphp
+        // Add items to table
+        window.invoiceItems.forEach((item, index) => {
+            const itemTotal = item.quantity * item.unit_price;
             itemsTable += `
                 <tr>
-                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">{{ $loop->iteration }}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px;">{{ $item->code }}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">${index + 1}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px;">${item.code}</td>
                     <td style="border: 1px solid #ddd; padding: 6px;">
-                        {{ $item->title }}
-                        @if ($item->description)
-                            <br>{{ $item->description }}
-                        @endif
+                        ${item.title}
+                        ${item.description ? '<br>' + item.description : ''}
                     </td>
-                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">{{ $item->quantity }}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">{{ number_format($item->unit_price, 2) }}</td>
-                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">{{ number_format($itemTotal, 2) }}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">${item.quantity}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">${parseFloat(item.unit_price).toFixed(2)}</td>
+                    <td style="border: 1px solid #ddd; padding: 6px; text-align: center;">${parseFloat(itemTotal).toFixed(2)}</td>
                 </tr>
             `;
-        @endforeach
+        });
 
         itemsTable += `
                 </tbody>
@@ -644,6 +673,76 @@
                 newImg.src = img.src;
             });
         });
+    }
+
+    // Clear search when dropdown is closed
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdown = document.getElementById('jumpToPODropdown');
+        const searchInput = document.getElementById('poSearchInput');
+        
+        dropdown.addEventListener('hidden.bs.dropdown', function() {
+            searchInput.value = '';
+            filterPOs(); // Reset the filter
+        });
+    });
+
+    function filterPOs() {
+        console.log('filterPOs function called');
+        const searchInput = document.getElementById('poSearchInput');
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const poItems = document.querySelectorAll('.po-item');
+        
+        console.log('Search term:', searchTerm);
+        console.log('Found PO items:', poItems.length);
+        
+        if (searchTerm === '') {
+            // Show all items if search is empty
+            poItems.forEach(item => {
+                item.style.display = '';
+            });
+            console.log('Showing all items');
+            return;
+        }
+
+        let hasResults = false;
+        
+        poItems.forEach((item, index) => {
+            const poCode = item.dataset.poCode || '';
+            const poDate = item.dataset.poDate || '';
+            const itemText = item.textContent.toLowerCase();
+            
+            console.log(`Item ${index}:`, { poCode, poDate, itemText });
+            
+            const isMatch = poCode.includes(searchTerm) || 
+                           poDate.includes(searchTerm) || 
+                           itemText.includes(searchTerm);
+            
+            if (isMatch) {
+                item.style.display = '';
+                hasResults = true;
+                console.log(`Item ${index} matches, showing`);
+            } else {
+                item.style.display = 'none';
+                console.log(`Item ${index} doesn't match, hiding`);
+            }
+        });
+
+        console.log('Has results:', hasResults);
+
+        // Show/hide no results message
+        let noResultsMsg = document.querySelector('.no-results-msg');
+        if (!hasResults && searchTerm.length > 0) {
+            if (!noResultsMsg) {
+                noResultsMsg = document.createElement('li');
+                noResultsMsg.className = 'dropdown-item text-muted text-center no-results-msg';
+                noResultsMsg.textContent = 'No POs found matching your search';
+                document.querySelector('.dropdown-menu').appendChild(noResultsMsg);
+                console.log('Added no results message');
+            }
+        } else if (noResultsMsg) {
+            noResultsMsg.remove();
+            console.log('Removed no results message');
+        }
     }
 
 

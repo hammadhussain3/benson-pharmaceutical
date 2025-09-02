@@ -53,7 +53,7 @@
                         @foreach ($rawMaterialItems as $rawMaterialItem)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td><a class="link-primary" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">{{ $rawMaterialItem->code }}</a></td>
+                                <td><a class="link-primary" href="{{ route('raw-material-items.show', $rawMaterialItem->id) }}">{{ optional($rawMaterialItem->category)->prefix }}-{{ $rawMaterialItem->code }}</a></td>
                                 @if(auth()->user()->hasPermission('Raw Material Item Update'))
                                 <td>
                                     <a class="me-3" href="{{ route('raw-material-items.edit', $rawMaterialItem->id) }}">

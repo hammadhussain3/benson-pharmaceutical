@@ -35,6 +35,7 @@ use App\Http\Controllers\{
     ProductController,
     ProductVariationController,
     BatchController,
+    MasterFormulationController,
     PurchaseInvoiceController,
     SaleInvoiceController,
     RawMaterialItemController,
@@ -118,6 +119,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('product-variations', ProductVariationController::class);
     Route::resource('batches', BatchController::class);
+    Route::resource('master-formulations', MasterFormulationController::class);
     Route::resource('raw-material-items', RawMaterialItemController::class);
     Route::resource('stocks', StockController::class);
     Route::resource('purchase-requisitions', PurchaseRequisitionController::class);

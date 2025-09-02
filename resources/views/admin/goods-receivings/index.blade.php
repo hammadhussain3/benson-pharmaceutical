@@ -34,7 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>GRN NO.</th>
+                            @if(auth()->user()->hasPermission('Goods Receiving Update'))
                             <th>Action</th>
+                            @endif
                             <th>DOC NO.</th>
                             <th>Supplier</th>
                             @role('Superadmin')
@@ -46,8 +48,6 @@
                             <th>Total amount</th>
                             <th>Date</th>
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Goods Receiving View') || auth()->user()->hasPermission('Goods Receiving Update') || auth()->user()->hasPermission('Goods Receiving Delete'))
-                            @endif
                         </tr>
                     </thead>
                     <tbody>

@@ -96,7 +96,13 @@ class PurchaseInvoiceController extends Controller
             ->orderBy('id', 'asc')
             ->first();
 
-        return view('admin.purchase-invoice.show', compact('invoice', 'previous', 'next'));
+        // Get all purchase orders for the dropdown (ordered by creation date, newest first)
+        $allPOs = Invoice::where('type', 'purchase')
+            ->orderBy('created_at', 'desc')
+            ->select('id', 'code', 'created_at')
+            ->get();
+
+        return view('admin.purchase-invoice.show', compact('invoice', 'previous', 'next', 'allPOs'));
     }
 
     /**

@@ -36,7 +36,7 @@
                             @role('Superadmin')
                             <th>Company</th>
                             @endrole    
-                            @if(auth()->user()->hasPermission('Salary Tax Slabs Update'))
+                            @if(auth()->user()->hasPermission('Salary Tax Slabs Update') || auth()->user()->hasPermission('Salary Tax Slabs View'))
                             <th>Action</th>
                             @endif
                             <th>Slab Start</th>

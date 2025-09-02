@@ -34,7 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>Employee Code</th>
-                            <th>Action</th>
+                            @if(auth()->user()->hasPermission('Leave Update'))
+                                <th>Action</th>
+                            @endif
                             <th>Employee</th>
                             @foreach ($leaveTypes as $leaveType)
                                 <th>{{ $leaveType->name }}</th>

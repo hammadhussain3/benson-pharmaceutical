@@ -34,7 +34,9 @@
                         <tr>
                             <th>#</th>
                             <th>Doc. No</th>
+                            @if(auth()->user()->hasPermission('Purchase Requisition Update'))
                             <th>Action</th>
+                            @endif
                             <th>Required Date</th>
                             <th>Total Amount</th>
                             <th>Supplier</th>
@@ -44,8 +46,7 @@
                             <th>Date</th>
                             <th>Status</th>
                             <th>Is Approved</th>
-                            @if(auth()->user()->hasPermission('Purchase Requisition View') || auth()->user()->hasPermission('Purchase Requisition Update') || auth()->user()->hasPermission('Purchase Requisition Delete'))
-                            @endif
+                            
                         </tr>
                     </thead>
                     <tbody>

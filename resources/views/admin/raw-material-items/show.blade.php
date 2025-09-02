@@ -42,7 +42,7 @@
                         </div>
                         <div class="mb-3 col-md-6">
                             <label>Code</label>
-                            <input type="text" class="form-control" value="{{ $rawMaterialItem->code ?? 'N/A' }}" readonly>
+                            <input type="text" class="form-control" value="{{ optional($rawMaterialItem->category)->prefix }}-{{ $rawMaterialItem->code ?? 'N/A' }}" readonly>
                         </div>
                         <div class="mb-3 col-md-4">
                             <label>Name</label>

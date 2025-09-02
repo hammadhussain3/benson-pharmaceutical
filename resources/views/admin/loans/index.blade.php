@@ -16,7 +16,6 @@
         </div>
         @endif
     </div>
-
     <div class="card">
         <div class="card-body">
             <div class="table-top">
@@ -34,7 +33,9 @@
                         <tr>
                             <th>#</th>
                             <th>Employee</th>
-                            <th>Action</th>
+                            @if(auth()->user()->hasPermission('Loan Update'))
+                                <th>Action</th>
+                            @endif
                             <th>Amount</th>
                             <th>Payback Months</th>
                             <th>Remaining</th>
@@ -46,17 +47,17 @@
                     </thead>
                     <tbody>
                         @foreach ($loans as $loan)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td><a class="link-primary" href="{{ route('loans.view', $loan->id) }}">{{ $loan->employee->first_name }} {{ $loan->employee->last_name }}</a></td>
-                                @if(auth()->user()->hasPermission('Loan Update'))
-                                    <td>
-                                        <a class="me-3" href="{{ route('loans.edit', $loan->id) }}">
-                                            <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
-                                        </a>                     
-                                    </td>
-                                @endif
-                                <td>{{ number_format($loan->amount, 2) }}</td>
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td><a class="link-primary" href="{{ route('loans.view', $loan->id) }}">{{ $loan->employee->first_name }} {{ $loan->employee->last_name }}</a></td>
+                            @if(auth()->user()->hasPermission('Loan Update'))
+                            <td>
+                                <a class="me-3" href="{{ route('loans.edit', $loan->id) }}">
+                                    <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
+                                </a>                     
+                            </td>
+                            @endif
+                            <td>{{ number_format($loan->amount, 2) }}</td>
                                 <td>{{ $loan->payback_months }}</td>
                                 <td>{{ number_format($loan->remaining, 2) }}</td>
                                 @role('Superadmin')
@@ -64,10 +65,11 @@
                                 @endrole
                                 <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('F j, Y') }}</td>
                             </tr>
-                        @endforeach
+                            @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 @endsection
+

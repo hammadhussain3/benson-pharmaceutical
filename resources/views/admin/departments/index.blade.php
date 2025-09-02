@@ -34,7 +34,7 @@
                         <tr>
                             <th>#</th>
                             <th>Department Name</th>
-                            @if(auth()->user()->hasPermission('Departments View') || auth()->user()->hasPermission('Departments Update') || auth()->user()->hasPermission('Departments Delete'))
+                            @if(auth()->user()->hasPermission('Departments Update'))
                             <th>Action</th>
                             @endif
                             <th>Description</th>

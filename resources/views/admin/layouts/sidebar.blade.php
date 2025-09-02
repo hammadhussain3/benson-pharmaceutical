@@ -421,6 +421,7 @@
                         request()->is('finished-goods-receivings*') ||
                         request()->is('goods-receivings*') ||
                         request()->is('left-over-notes*') ||
+                        request()->is('master-formulations*') ||
                         request()->is('pack-forms*') ||
                         request()->is('pack_size*') ||
                         request()->is('packingtypes*') ||
@@ -492,6 +493,11 @@
                                 </a>
                             </li>
                         @endif
+                        <li>
+                            <a class="{{ request()->is('master-formulations*') ? 'active' : '' }}" href="{{ route('master-formulations.index') }}">
+                                Master Formulations
+                            </a>
+                        </li>
                         @if(auth()->user()->hasPermission('PackForm List'))
                             <li>
                                 <a class="{{ request()->is('pack-forms*') ? 'active' : '' }}" href="{{ route('pack-forms.index') }}">

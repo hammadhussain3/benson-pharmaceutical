@@ -151,6 +151,7 @@ class RawMaterialItemController extends Controller
         $rawMaterialItem = $this->rawMaterialItemService->getRawMaterialItemById($rawMaterialId);
 
         $rawMaterialItem->balance = Stock::currentBalanceForItem(null, $rawMaterialItem->id ?? null)['balance'] ?? 0;
+        $rawMaterialItem->code = $rawMaterialItem->category->prefix . '-' . $rawMaterialItem->code;
 
         $today = Carbon::today();
         $startDate = $today->copy()->subMonths(6);

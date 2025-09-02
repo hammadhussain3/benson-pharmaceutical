@@ -33,10 +33,11 @@
                         <tr>
                             <th>#</th>
                             <th>Country Name</th>
+                            @if(auth()->user()->hasPermission('Countries Update'))
                             <th>Action</th>
-                            <th>Currency</th>
-                            @if(auth()->user()->hasPermission('Countries View') || auth()->user()->hasPermission('Countries Update') || auth()->user()->hasPermission('Countries Delete'))
                             @endif
+                            <th>Currency</th>
+                            
                         </tr>
                     </thead>
                     <tbody>

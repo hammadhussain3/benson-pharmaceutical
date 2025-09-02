@@ -41,6 +41,26 @@
         <div class="card-body px-0 pb-0">
             <h5 class="text-center card-title mb-0">List of {{ $status == null ? 'All' : $status }} Purchase Order Appraisal</h5>
             <p class="text-center text-muted">From {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }} to {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</p>
+            
+            <!-- Filters Information for Print -->
+            <div class="filters-info text-center mb-3" style="font-size: 12px; color: #666;">
+                <strong>Filters Applied:</strong>
+                @if($status || $from_date || $to_date)
+                    <span class="filter-tags">
+                        @if($status)
+                            <span class="badge bg-primary me-1">Status: {{ $status }}</span>
+                        @endif
+                        @if($from_date)
+                            <span class="badge bg-info me-1">From: {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }}</span>
+                        @endif
+                        @if($to_date)
+                            <span class="badge bg-info me-1">To: {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</span>
+                        @endif
+                    </span>
+                @else
+                    <span class="text-muted">No filters applied</span>
+                @endif
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead class="table-primary">
@@ -74,6 +94,37 @@
             <div id="printTimestampContainer"></div>
         </div>
     </div>
+
+    <script>
+        function printWithTimestamp() {
+            // Add timestamp to footer before printing
+            const timestampContainer = document.getElementById('printTimestampContainer');
+            
+            if (timestampContainer) {
+                const timestampDiv = document.createElement('div');
+                timestampDiv.id = 'printTimestamp';
+                timestampDiv.style.cssText = 'text-align: center; margin-top: 20px; font-size: 14px; color: #666;';
+                timestampDiv.innerHTML = '<strong>Printed on:</strong> ' + new Date().toLocaleString('en-GB');
+                
+                // Clear any existing timestamp and add new one
+                timestampContainer.innerHTML = '';
+                timestampContainer.appendChild(timestampDiv);
+            }
+            
+            // Small delay to ensure DOM is updated before printing
+            setTimeout(() => {
+                // Print
+                window.print();
+                
+                // Remove timestamp after printing
+                setTimeout(() => {
+                    if (timestampContainer) {
+                        timestampContainer.innerHTML = '';
+                    }
+                }, 2000);
+            }, 100);
+        }
+    </script>
 @endsection
 
 <style>
@@ -94,7 +145,9 @@
        }
    
        .card-body,
-       .card-body * {
+       .card-body *,
+       #printTimestampContainer,
+       #printTimestamp {
            visibility: visible;
        }
    
@@ -107,6 +160,20 @@
    
        .table-primary th {
            background-color: transparent !important;
+           -webkit-print-color-adjust: exact;
+           color-adjust: exact;
+       }
+       
+       /* Ensure filters information is visible in print */
+       .filters-info {
+           visibility: visible !important;
+           display: block !important;
+       }
+       
+       .filter-tags .badge {
+           background-color: #e3f2fd !important;
+           color: #1976d2 !important;
+           border: 1px solid #bbdefb !important;
            -webkit-print-color-adjust: exact;
            color-adjust: exact;
        }
