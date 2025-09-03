@@ -10,11 +10,7 @@ class StoreIssueRequisitionService
 {
     public function getAll()
     {
-        if (auth()->user()->hasRole('Superadmin')) {
-            $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product_variation', 'batch', 'company'])->orderBy('created_at', 'asc')->get();
-        } else {
-            $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product_variation', 'batch', 'company'])->where('company_id', auth()->user()->employee->company_id)->orderBy('created_at', 'asc')->get();
-        }
+        $requisitions = StoreIssueRequisition::with(['chart_of_account', 'product_variation', 'batch', 'company'])->orderBy('created_at', 'asc')->get();
         return $requisitions;
     }
 
@@ -140,10 +136,6 @@ class StoreIssueRequisitionService
             ->join('raw_material_items', 'store_issue_requisition_items.raw_material_item_id', '=', 'raw_material_items.id')
             ->groupBy('raw_material_item_id', 'raw_material_items.name', 'raw_material_items.code', 'raw_material_items.unit')
             ->get();
-
-        if (!auth()->user()->hasRole('Superadmin')) {
-            $storeIssueRequisition->where('company_id', auth()->user()->employee->company_id);
-        }
 
         return $storeIssueRequisition;
     }

@@ -267,5 +267,24 @@
             }
         }
     }
+
+    // Auto-populate dependent dropdowns on load for non-Superadmin using hidden company
+    document.addEventListener('DOMContentLoaded', function () {
+        const hiddenCompanyInput = document.querySelector('input[name="company"]');
+        const selectCompanyInput = document.getElementById('company_id');
+        const companyId = hiddenCompanyInput ? hiddenCompanyInput.value : (selectCompanyInput ? selectCompanyInput.value : '');
+
+        if (companyId) {
+            if (typeof selectAllTypeOfProducts === 'function') {
+                selectAllTypeOfProducts(companyId);
+            }
+            if (typeof selectChartOfAccounts === 'function') {
+                selectChartOfAccounts(companyId);
+            }
+            if (typeof createStoreRequisitionCode === 'function') {
+                createStoreRequisitionCode(companyId);
+            }
+        }
+    });
 </script>
 @endsection
