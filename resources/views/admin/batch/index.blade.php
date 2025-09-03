@@ -38,6 +38,7 @@
                             @endif
                             <th>Batch Size</th>
                             <th>Brand</th>
+                            <th>Master Formulation</th>
                             <th>Chart Of Accounts</th>
                             <th>MFG date</th>
                             <th>EXP date</th>
@@ -71,6 +72,7 @@
                                 @endif
                                 <td>{{ $batch->batch_size }}</td>
                                 <td>{{ $batch->product->brand_name }}</td>
+                                <td>{{ $batch->masterFormulation->product_name ?? 'N/A' }}</td>
                                 <td>
                                     <span class="badge bg-primary">{{ $batch->chart_of_account->particular ?? 'N/A' }}</span>
                                     @if ($batch->sub_chart_of_account)

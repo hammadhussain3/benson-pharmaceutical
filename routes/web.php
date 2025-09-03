@@ -217,6 +217,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoices/{invoiceId}/supplier', [SupplierController::class, 'getSupplierByInvoice']);
     Route::get('/invoices/{invoiceId}/goods-receivings', [GoodsReceivingController::class, 'getGoodReceivingsByInvoice']);
     Route::get('/products/{productId}/product-variations', [ProductVariationController::class, 'getProductVariationsByProduct']);
+    Route::get('/products/{productId}/master-formulations', [MasterFormulationController::class, 'getMasterFormulationsByProduct']);
+    Route::get('/master-formulations/{id}/details', [MasterFormulationController::class, 'getDetails']);
     Route::get('/products/{productId}/batches', [BatchController::class, 'getBatchesByProductId']);
     Route::get('/store-requisitions/{requisitionId}/general-details', [StoreIssueRequisitionController::class, 'getGeneralStoreRequisitionDetailsById']);
     Route::get('/store-requisitions/{requisitionId}/production-details', [StoreIssueRequisitionController::class, 'getProductionStoreRequisitionDetailsById']);

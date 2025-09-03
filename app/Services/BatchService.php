@@ -9,15 +9,16 @@ use App\Models\ProductVariation;
 use App\Models\Stock;
 use App\Models\StoreIssueRequisitionItem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class BatchService
 {
     public function getAllBatches()
     {
         if (auth()->user()->hasRole('Superadmin')) {
-            $batches = Batch::orderBy('batch_no', 'asc')->get();
+            $batches = Batch::with(['product', 'masterFormulation', 'chart_of_account', 'sub_chart_of_account', 'company'])->orderBy('batch_no', 'asc')->get();
         } else {
-            $batches = Batch::where('company_id', auth()->user()->employee->company_id)->orderBy('batch_no', 'asc')->get();
+            $batches = Batch::with(['product', 'masterFormulation', 'chart_of_account', 'sub_chart_of_account', 'company'])->where('company_id', auth()->user()->employee->company_id)->orderBy('batch_no', 'asc')->get();
         }
         return $batches;
     }
@@ -25,6 +26,7 @@ class BatchService
     public function createBatch(array $data)
     {
         $data['product_id'] = $data['product'];
+        $data['master_formulation_id'] = $data['master_formulation_id'];
         $data['chart_of_account_id'] = $data['chart_of_account'];
         $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
@@ -45,6 +47,7 @@ class BatchService
     public function updateBatch(Batch $batch, array $data)
     {
         $data['product_id'] = $data['product'];
+        $data['master_formulation_id'] = $data['master_formulation_id'];
         $data['chart_of_account_id'] = $data['chart_of_account'];
         $data['sub_chart_of_account_id'] = $data['sub_chart_of_account'];
         $data['company_id'] = $data['company'];
@@ -67,7 +70,7 @@ class BatchService
 
     public function getBatchById($id)
     {
-        return Batch::findOrFail($id);
+        return Batch::with(['product', 'masterFormulation', 'chart_of_account', 'sub_chart_of_account', 'company', 'items.productVariation.dosageForm', 'items.productVariation.packingType', 'items.productVariation.packSize'])->findOrFail($id);
     }
 
     public function getBatchesReport()

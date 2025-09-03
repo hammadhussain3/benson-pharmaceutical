@@ -838,6 +838,109 @@ function selectProductVariations(productId) {
     }
 }
 
+function loadMasterFormulationProducts(productId, selectedId = null) {
+    // Populate all MF dropdowns
+    var mfSelects = Array.from(document.getElementsByClassName('mf_products_dropdown'));
+    if (mfSelects.length) {
+        mfSelects.forEach(function(s){ s.innerHTML = '<option value="">Select Master Formulation Product</option>'; });
+    }
+    
+    // Clear batch size when brand changes
+    var batchInput = document.getElementById('mf_batch_size');
+    if (batchInput) batchInput.value = '';
+
+    if (!productId) return;
+
+    fetch(`/products/${productId}/master-formulations`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error fetching master formulations');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.products && data.products.length > 0) {
+                // Cache for quick lookup
+                window.__mfById = {};
+                var buildOptions = function(selectEl){
+                    data.products.forEach(function(mf) {
+                        window.__mfById[mf.id] = mf;
+                        var option = document.createElement('option');
+                        option.value = mf.id;
+                        option.textContent = mf.product_name;
+                        selectEl.appendChild(option);
+                    });
+                };
+                if (mfSelects.length) mfSelects.forEach(buildOptions);
+                
+                // Set selected value if provided (for edit mode)
+                if (selectedId && mfSelects.length) {
+                    mfSelects.forEach(function(select) {
+                        select.value = selectedId;
+                        // Trigger change to populate batch size
+                        var event = new Event('change', { bubbles: true });
+                        select.dispatchEvent(event);
+                    });
+                }
+            }
+            if (window.$ && window.$.fn.select2) {
+                $('.mf_products_dropdown').trigger('change.select2');
+            }
+        })
+        .catch(error => console.error('Error fetching master formulations:', error));
+}
+
+// Auto-populate batch size on master formulation selection
+document.addEventListener('change', function(e) {
+    console.log('Change event fired on:', e.target);
+    if (e.target && e.target.classList && e.target.classList.contains('mf_products_dropdown')) {
+        console.log('Master formulation dropdown changed, value:', e.target.value);
+        var mfId = e.target.value;
+        if (!mfId) {
+            var batchInput = document.getElementById('mf_batch_size');
+            if (batchInput) batchInput.value = '';
+            // Don't clear main batch_size field anymore
+            return;
+        }
+        console.log('Making AJAX call to fetch master formulation details for ID:', mfId);
+        // Explicit AJAX call to get details
+        fetch(`/master-formulations/${mfId}/details`)
+            .then(resp => {
+                console.log('Response status:', resp.status);
+                if (!resp.ok) throw new Error('Failed to fetch MF details');
+                return resp.json();
+            })
+            .then(mf => {
+                console.log('Master formulation details received:', mf);
+                var batchInput = document.getElementById('mf_batch_size');
+                if (batchInput) batchInput.value = mf && mf.batch_size ? mf.batch_size : '';
+                // Don't populate main batch_size field anymore
+            })
+            .catch(err => console.error('Error fetching master formulation details:', err));
+    }
+});
+
+// Explicit jQuery handler for master_formulation_id change (Select2-safe)
+if (window.$) {
+    $(document).on('change', '#master_formulation_id', function() {
+        var mfId = this.value;
+        if (!mfId) {
+            var batchInput = document.getElementById('mf_batch_size');
+            if (batchInput) batchInput.value = '';
+            // Don't clear main batch_size field anymore
+            return;
+        }
+        fetch(`/master-formulations/${mfId}/details`)
+            .then(function(resp){ if(!resp.ok) throw new Error('Failed'); return resp.json(); })
+            .then(function(mf){
+                var batchInput = document.getElementById('mf_batch_size');
+                if (batchInput) batchInput.value = mf && mf.batch_size ? mf.batch_size : '';
+                // Don't populate main batch_size field anymore
+            })
+            .catch(function(err){ console.error('MF details fetch error:', err); });
+    });
+}
+
 function selectSingleFieldPVByCompany(batchId)
 {
     if (!batchId) return; // Exit if no company ID is provided

@@ -17,6 +17,7 @@ class BatchRequest extends FormRequest
         $id = $this->route('batch');
 
         return [
+            'master_formulation_id' => 'required|exists:master_formulations,id',
             'batch_no' => [
                 'required',
                 'string',

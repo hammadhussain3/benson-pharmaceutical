@@ -89,7 +89,7 @@
                             @elseif ($requisition->is_production == '1')
                                 <div class="mb-3 col-md-6">
                                     <label for="product_variation_id">Product</label>
-                                    <select class="js-example-basic-single select2" name="product_variation" id="product_variation_id" required onchange="selectBatches(this.value)">
+                                    <select class="js-example-basic-single select2" name="product_variation" id="product_variation_id" required>
                                         <option value="">Select Product</option>
                                         @php
                                             $batch = App\Models\Batch::findOrFail(old('batch', $requisition->batch_id));

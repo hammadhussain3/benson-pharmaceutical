@@ -74,7 +74,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="product_id">Brand Name<span class="text-danger">*</span></label>
-                                <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectProductVariations(this.value);">
+                                <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectProductVariations(this.value); loadMasterFormulationProducts(this.value);">
                                     <option value="">Select Brand</option>
                                     @if(old('product') || old('company') || !auth()->user()->hasRole('Superadmin'))
                                         @php
@@ -98,6 +98,36 @@
                                 <label for="batch_size">Batch Size<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="batch_size" id="batch_size"
                                     placeholder="Batch Size" required value="{{ old('batch_size') }}">
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <div class="card border-0 mb-0" id="mf-item-group">
+                                    @php
+                                        $mfCount = 1;
+                                    @endphp
+                                    @for ($m = 0; $m < $mfCount; $m++)
+                                        <div class="mf-item-set">
+                                            <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                                <h4 class="card-title mb-0">Master Formulation</h4>
+                                            </div>
+                                            <div class="card-body px-0 pb-0">
+                                                <div class="row">
+                                                    <div class="mb-3 col-md-8">
+                                                        <label for="master_formulation_id">Master Formulation Products</label>
+                                                        <select name="master_formulation_id" id="master_formulation_id" class="js-example-basic-single select2 mf_products_dropdown">
+                                                            <option value="">Select Master Formulation Product</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label for="mf_batch_size">Master Formulation Batch Size</label>
+                                                        <input type="text" class="form-control" id="mf_batch_size" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endfor
+                                </div>
+                                
                             </div>
                             <div class="col-md-12">
                                 <div class="card border-0 mb-0" id="item-group">
@@ -153,6 +183,8 @@
                                     <button type="button" onclick="addItem()" class="btn btn-primary">Add Item</button>
                                 </div>
                             </div>
+
+                            
                             
                             <div class="mb-3 col-md-6">
                                 <label for="description"><span class="text-danger">*</span>Manufactured Date</label>
@@ -200,6 +232,8 @@
         const productVariations = @json($productVariations->pluck('trade_price', 'id'));
         const itemSets = document.querySelectorAll('#item-group .item-set');
         let itemIndex = itemSets.length;
+        const mfItemSets = document.querySelectorAll('#mf-item-group .mf-item-set');
+        let mfItemIndex = mfItemSets.length;
         
         function addItem() {
             var html = `
@@ -255,5 +289,7 @@
 
             $(this).closest('.item-set').find('.trade_price').val(tradePrice);
         });
+
+        // Removed add/remove Master Formulation item functionality as per requirement
     </script>
 @endsection

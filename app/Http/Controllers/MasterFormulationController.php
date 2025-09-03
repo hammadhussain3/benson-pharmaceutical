@@ -7,6 +7,7 @@ use App\Http\Requests\MasterFormulationRequest;
 
 use App\Services\MasterFormulationService;
 use App\Services\ProductService;
+use App\Models\Product;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,11 @@ class MasterFormulationController extends Controller
     public function index()
     {
         $masterFormulations = $this->masterFormulationService->getAllMasterFormulations();
+        if (request()->ajax()) {
+            return response()->json([
+                'master_formulations' => $masterFormulations,
+            ]);
+        }
         return view('admin.master-formulations.index', compact('masterFormulations'));
     }
 
@@ -66,5 +72,30 @@ class MasterFormulationController extends Controller
     {
         $this->masterFormulationService->deleteMasterFormulation($masterFormulation);
         return redirect()->route('master-formulations.index')->with('success', 'Master Formulation deleted successfully.');
+    }
+
+    public function getMasterFormulationsByProduct($productId)
+    {
+        $product = Product::findOrFail($productId);
+        $brandName = $product->brand_name;
+
+        $items = MasterFormulation::where('brand_name', $brandName)
+            ->orderBy('product_name')
+            ->get(['id', 'product_name', 'batch_size']);
+
+        return response()->json([
+            'brand_name' => $brandName,
+            'products' => $items,
+        ]);
+    }
+
+    public function getDetails($id)
+    {
+        $mf = MasterFormulation::findOrFail($id, ['id', 'product_name', 'batch_size']);
+        return response()->json([
+            'id' => $mf->id,
+            'product_name' => $mf->product_name,
+            'batch_size' => $mf->batch_size,
+        ]);
     }
 }

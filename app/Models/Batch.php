@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Batch extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['batch_no', 'batch_size', 'product_id', 'mfg_date', 'exp_date', 'start_date', 'end_date', 'chart_of_account_id', 'sub_chart_of_account_id', 'status', 'company_id', 'created_by', 'updated_by'];
+    protected $fillable = ['batch_no', 'batch_size', 'product_id', 'master_formulation_id', 'mfg_date', 'exp_date', 'start_date', 'end_date', 'chart_of_account_id', 'sub_chart_of_account_id', 'status', 'company_id', 'created_by', 'updated_by'];
 
     protected $casts = [
         'mfg_date' => 'date',
@@ -23,11 +24,11 @@ class Batch extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->created_by = auth()->id();
+            $model->created_by = Auth::id();
         });
 
         static::updating(function ($model) {
-            $model->updated_by = auth()->id();
+            $model->updated_by = Auth::id();
         });
     }
 
@@ -35,6 +36,11 @@ class Batch extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function masterFormulation()
+    {
+        return $this->belongsTo(MasterFormulation::class);
     }
 
     public function company()

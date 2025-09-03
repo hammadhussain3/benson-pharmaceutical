@@ -72,7 +72,7 @@
                             </div>
                             <div class="mb-3 col-md-4">
                                 <label for="product_id">Brand<span class="text-danger">*</span></label>
-                                <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectProductVariations(this.value);">
+                                <select class="js-example-basic-single select2" name="product" id="product_id" required onchange="selectProductVariations(this.value); loadMasterFormulationProducts(this.value);">
                                     <option value="">Select Product</option>
                                     @php
                                         $seletedCompanyId = old('company', $batch->company_id) ?? auth()->user()->employee->company_id;
@@ -97,6 +97,30 @@
                                 <input type="text" class="form-control" name="batch_size" placeholder="Batch Size"
                                     value="{{ old('batch_size', $batch->batch_size) }}" required>
                                 <div class="invalid-feedback">Please provide an Batch Size.</div>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <div class="card border-0 mb-0" id="mf-item-group">
+                                    <div class="mf-item-set">
+                                        <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                            <h4 class="card-title mb-0">Master Formulation</h4>
+                                        </div>
+                                        <div class="card-body px-0 pb-0">
+                                            <div class="row">
+                                                <div class="mb-3 col-md-8">
+                                                    <label for="master_formulation_id">Master Formulation Products</label>
+                                                    <select name="master_formulation_id" id="master_formulation_id" class="js-example-basic-single select2 mf_products_dropdown">
+                                                        <option value="">Select Master Formulation Product</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 col-md-4">
+                                                    <label for="mf_batch_size">Master Formulation Batch Size</label>
+                                                    <input type="text" class="form-control" id="mf_batch_size" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-md-12">
@@ -203,6 +227,16 @@
         const productVariations = @json($productVariations->pluck('trade_price', 'id'));
         const itemSets = document.querySelectorAll('#item-group .item-set');
         let itemIndex = itemSets.length;
+        
+        // Load master formulation data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const productId = document.getElementById('product_id').value;
+            const masterFormulationId = {{ $batch->master_formulation_id ?? 'null' }};
+            
+            if (productId) {
+                loadMasterFormulationProducts(productId, masterFormulationId);
+            }
+        });
         
         function addItem() {
             var html = `
