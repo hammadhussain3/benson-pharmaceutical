@@ -11,9 +11,9 @@ class MasterFormulation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_id',
+        'brand_name',
+        'product_name',
         'batch_size',
-        'product_quantity',
         'created_by',
         'updated_by'
     ];
@@ -31,10 +31,7 @@ class MasterFormulation extends Model
         });
     }
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
+    // product relationship removed as we no longer bind to products
 
 
 

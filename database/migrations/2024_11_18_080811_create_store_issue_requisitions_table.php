@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('chart_of_account_id')->nullable();
             $table->integer('product_variation_id')->nullable();
             $table->unsignedBigInteger('batch_id')->nullable();
-            $table->string('dn_gp');
+            $table->string('dn_gp')->nullable();
             $table->boolean('is_approved')->default(false);
             $table->unsignedBigInteger('company_id');
             $table->integer('is_general');

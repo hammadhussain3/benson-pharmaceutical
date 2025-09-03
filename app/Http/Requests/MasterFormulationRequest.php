@@ -15,23 +15,25 @@ class MasterFormulationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product' => 'required|exists:products,id',
+            // brand_name is selected from dropdown of distinct names, but validated as string
+            'brand_name' => 'required|string|max:255',
+            'product_name' => 'required|string|max:255',
             'batch_size' => 'required|numeric|min:0.01',
-            'product_quantity' => 'required|numeric|min:0.01',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'product.required' => 'Product is required.',
-            'product.exists' => 'Selected product does not exist.',
+            'brand_name.required' => 'Brand is required.',
+            'brand_name.string' => 'Brand must be a string.',
+            'brand_name.max' => 'Brand may not be greater than 255 characters.',
+            'product_name.required' => 'Product name is required.',
+            'product_name.string' => 'Product name must be a string.',
+            'product_name.max' => 'Product name may not be greater than 255 characters.',
             'batch_size.required' => 'Batch size is required.',
             'batch_size.numeric' => 'Batch size must be a number.',
             'batch_size.min' => 'Batch size must be greater than 0.',
-            'product_quantity.required' => 'Product quantity is required.',
-            'product_quantity.numeric' => 'Product quantity must be a number.',
-            'product_quantity.min' => 'Product quantity must be greater than 0.',
         ];
     }
 }

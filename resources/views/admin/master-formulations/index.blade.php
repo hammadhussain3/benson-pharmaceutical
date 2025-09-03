@@ -30,10 +30,9 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Product</th>
+                            <th>Brand</th>
                             <th>Action</th>
                             <th>Batch Size</th>
-                            <th>Product Quantity</th>
                             <th>Created At</th>
 
                         </tr>
@@ -44,7 +43,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <a class="link-primary" href="{{ route('master-formulations.show', $masterFormulation->id) }}">
-                                        {{ $masterFormulation->product->brand_name }}
+                                        {{ $masterFormulation->brand_name }}
                                     </a>
                                 </td>
                                 <td>
@@ -54,12 +53,11 @@
                                     <a class="me-3" href="{{ route('master-formulations.edit', $masterFormulation->id) }}" title="Edit">
                                         <img src="{{ asset('assets/img/icons/edit.svg') }}" alt="Edit">
                                     </a>
-                                    <a class="confirm-text" href="javascript:void(0);" onclick="confirmDelete({{ $masterFormulation->id }})" title="Delete">
+                                    <a class="confirm-text" href="javascript:void(0);" onclick="confirmDelete('{{ $masterFormulation->id }}')" title="Delete">
                                         <img src="{{ asset('assets/img/icons/delete.svg') }}" alt="Delete">
                                     </a>
                                 </td>
                                 <td>{{ $masterFormulation->batch_size }}</td>
-                                <td>{{ $masterFormulation->product_quantity }}</td>
                                 <td>{{ $masterFormulation->created_at->format('d M, Y') }}</td>
                             </tr>
                         @endforeach

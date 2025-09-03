@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_categories', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('category_id');
-            $table->string('prefix', 100);
-            $table->text('description')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('sub_categories')) {
+            Schema::create('sub_categories', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('category_id');
+                $table->string('prefix', 100);
+                $table->text('description')->nullable();
+                $table->unsignedBigInteger('created_by')->nullable();
+                $table->unsignedBigInteger('updated_by')->nullable();
+                $table->timestamps();
 
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-        });
+                $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            });
+        }
     }
 
     /**

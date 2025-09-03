@@ -16,6 +16,27 @@ class ProductService
         return $product;
     }
 
+    public function getDistinctBrandNames()
+    {
+        if (auth()->user()->hasRole('Superadmin')) {
+            $brands = Product::select('brand_name')
+                ->whereNotNull('brand_name')
+                ->distinct()
+                ->orderBy('brand_name', 'asc')
+                ->get()
+                ->pluck('brand_name');
+        } else {
+            $brands = Product::select('brand_name')
+                ->where('company_id', auth()->user()->employee->company_id)
+                ->whereNotNull('brand_name')
+                ->distinct()
+                ->orderBy('brand_name', 'asc')
+                ->get()
+                ->pluck('brand_name');
+        }
+        return $brands;
+    }
+
     public function createProduct(array $data)
     {
         // $data['product_group_id'] = $data['product_group'];

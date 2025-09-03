@@ -31,9 +31,9 @@ class MasterFormulationController extends Controller
 
     public function create()
     {
-        $products = $this->productService->getAllProducts();
+        $brandNames = $this->productService->getDistinctBrandNames();
         
-        return view('admin.master-formulations.create', compact('products'));
+        return view('admin.master-formulations.create', compact('brandNames'));
     }
 
     public function store(MasterFormulationRequest $request)
@@ -51,9 +51,9 @@ class MasterFormulationController extends Controller
     public function edit($id)
     {
         $masterFormulation = $this->masterFormulationService->getMasterFormulationById($id);
-        $products = $this->productService->getAllProducts();
+        $brandNames = $this->productService->getDistinctBrandNames();
         
-        return view('admin.master-formulations.edit', compact('masterFormulation', 'products'));
+        return view('admin.master-formulations.edit', compact('masterFormulation', 'brandNames'));
     }
 
     public function update(MasterFormulationRequest $request, MasterFormulation $masterFormulation)

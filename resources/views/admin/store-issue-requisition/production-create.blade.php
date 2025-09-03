@@ -31,7 +31,6 @@
                         <input type="hidden" name="is_general" value="0">
                         <input type="hidden" name="is_production" value="1">
                         <div class="form-row row">
-                            @role('Superadmin')
                                 <div class="mb-3 col-md-12">
                                     <label for="company">Company</label>
                                     <select name="company" id="company_id" class="js-example-basic-single select2" required onchange="selectBatchesByCompany(this.value); selectRawMaterialItems(this.value); createStoreRequisitionCode(this.value);">
@@ -44,9 +43,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            @else
-                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
-                            @endrole
                             <div class="mb-3 col-md-6">
                                 <label for="code">Doc. No</label>
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $newRequisitionCode) }}">

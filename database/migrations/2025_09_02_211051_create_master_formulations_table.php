@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('master_formulations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->decimal('batch_size', 10, 2);
-            $table->decimal('product_quantity', 10, 2);
-            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('product_name')->nullable();
+            $table->string('brand_name')->nullable();
+            $table->bigInteger('batch_size')->nullable();
+            $table->foreignId('created_by')->nullable();
+            $table->foreignId('updated_by')->nullable();
             $table->timestamps();
         });
     }

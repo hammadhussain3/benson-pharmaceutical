@@ -9,7 +9,12 @@ class CompanyService
 {
     public function getAllCompanies()
     {
-        return Company::orderBy('name', 'asc')->get();
+        if (auth()->user()->hasRole('Superadmin')) {
+            $company = Company::orderBy('name', 'asc')->get();
+        } else {
+            $company = Company::where('id', auth()->user()->employee->company_id)->orderBy('name', 'asc')->get();
+        }
+        return $company;
     }
 
     public function createCompany(array $data)

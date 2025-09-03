@@ -26,7 +26,6 @@
                         <input type="hidden" name="is_general" value="{{ $requisition->is_general }}">
                         <input type="hidden" name="is_production" value="{{ $requisition->is_production }}">
                         <div class="form-row row">
-                            @role('Superadmin')
                                 <div class="mb-3 col-md-12">
                                     <label for="company">Company</label>
                                     <select name="company" id="company_id" class="js-example-basic-single select2" required 
@@ -46,9 +45,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            @else
-                                <input type="hidden" name="company" value="{{ auth()->user()->employee->company_id ?? 0 }}">
-                            @endrole
                             <div class="mb-3 {{ $requisition->is_general == '1' ? 'col-md-4' : 'col-md-6'; }}">
                                 <label for="code">Code</label>
                                 <input type="text" class="form-control" name="code" id="code" readonly value="{{ old('code', $requisition->code) }}">

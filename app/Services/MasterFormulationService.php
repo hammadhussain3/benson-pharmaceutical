@@ -9,7 +9,7 @@ class MasterFormulationService
 {
     public function getAllMasterFormulations()
     {
-        $masterFormulations = MasterFormulation::with(['product', 'creator', 'updater'])
+        $masterFormulations = MasterFormulation::with(['creator', 'updater'])
             ->orderBy('created_at', 'desc')
             ->get();
         return $masterFormulations;
@@ -17,18 +17,14 @@ class MasterFormulationService
 
     public function createMasterFormulation(array $data)
     {
-        $data['product_id'] = $data['product'];
-        
-        unset($data['product']);
+        // product is no longer provided; brand_name and product_name are stored as text
         
         return MasterFormulation::create($data);
     }
 
     public function updateMasterFormulation(MasterFormulation $masterFormulation, array $data)
     {
-        $data['product_id'] = $data['product'];
-        
-        unset($data['product']);
+        // Only brand_name, product_name, batch_size are updatable
         
         return $masterFormulation->update($data);
     }
@@ -40,6 +36,6 @@ class MasterFormulationService
 
     public function getMasterFormulationById($id)
     {
-        return MasterFormulation::with(['product', 'creator', 'updater'])->findOrFail($id);
+        return MasterFormulation::with(['creator', 'updater'])->findOrFail($id);
     }
 }

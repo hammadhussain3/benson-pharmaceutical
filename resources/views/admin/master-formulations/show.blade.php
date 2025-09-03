@@ -20,20 +20,20 @@
                     <div class="form-row row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">Product</label>
-                                <input type="text" class="form-control" value="{{ $masterFormulation->product->brand_name }}" readonly>
+                                <label class="form-label">Brand</label>
+                                <input type="text" class="form-control" value="{{ $masterFormulation->brand_name }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Product (manual)</label>
+                                <input type="text" class="form-control" value="{{ $masterFormulation->product_name }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Batch Size</label>
                                 <input type="text" class="form-control" value="{{ $masterFormulation->batch_size }}" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Product Quantity</label>
-                                <input type="text" class="form-control" value="{{ $masterFormulation->product_quantity }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
