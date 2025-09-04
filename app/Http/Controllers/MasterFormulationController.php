@@ -26,6 +26,9 @@ class MasterFormulationController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->hasPermission('Master Formulation List')) {
+            abort(403, 'Unauthorized action.');
+        }
         $masterFormulations = $this->masterFormulationService->getAllMasterFormulations();
         if (request()->ajax()) {
             return response()->json([
@@ -37,6 +40,9 @@ class MasterFormulationController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->hasPermission('Master Formulation Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $brandNames = $this->productService->getDistinctBrandNames();
         
         return view('admin.master-formulations.create', compact('brandNames'));
@@ -44,18 +50,27 @@ class MasterFormulationController extends Controller
 
     public function store(MasterFormulationRequest $request)
     {
+        if (!auth()->user()->hasPermission('Master Formulation Create')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->masterFormulationService->createMasterFormulation($request->validated());
         return redirect()->route('master-formulations.index')->with('success', 'Master Formulation created successfully.');
     }
 
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('Master Formulation View')) {
+            abort(403, 'Unauthorized action.');
+        }
         $masterFormulation = $this->masterFormulationService->getMasterFormulationById($id);
         return view('admin.master-formulations.show', compact('masterFormulation'));
     }
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('Master Formulation Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $masterFormulation = $this->masterFormulationService->getMasterFormulationById($id);
         $brandNames = $this->productService->getDistinctBrandNames();
         
@@ -64,12 +79,18 @@ class MasterFormulationController extends Controller
 
     public function update(MasterFormulationRequest $request, MasterFormulation $masterFormulation)
     {
+        if (!auth()->user()->hasPermission('Master Formulation Update')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->masterFormulationService->updateMasterFormulation($masterFormulation, $request->validated());
         return redirect()->route('master-formulations.index')->with('success', 'Master Formulation updated successfully.');
     }
 
     public function destroy(MasterFormulation $masterFormulation)
     {
+        if (!auth()->user()->hasPermission('Master Formulation Delete')) {
+            abort(403, 'Unauthorized action.');
+        }
         $this->masterFormulationService->deleteMasterFormulation($masterFormulation);
         return redirect()->route('master-formulations.index')->with('success', 'Master Formulation deleted successfully.');
     }

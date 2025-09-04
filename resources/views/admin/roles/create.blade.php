@@ -434,6 +434,14 @@
                                         <td><input class="form-check-input" type="checkbox" value="89" name="permissions[]" id="permissions"></td>
                                         <td><input class="form-check-input" type="checkbox" value="90" name="permissions[]" id="permissions"></td>
                                     </tr>
+                                    <tr>
+                                        <td>Master Formulation</td>
+                                        <td><input class="form-check-input" type="checkbox" value="236" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(236) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="237" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(237) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="238" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(238) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="239" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(239) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="240" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(240) ? 'checked' : '' }}></td>
+                                    </tr>
                                 </tbody>
                                 <thead>
                                     <th colspan="6" class="text-center">Approvals</th>
