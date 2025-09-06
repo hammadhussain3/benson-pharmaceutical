@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\MasterFormulation;
 use App\Http\Requests\MasterFormulationRequest;
-
+use App\Services\RawMaterialItemService;
 use App\Services\MasterFormulationService;
+
 use App\Services\ProductService;
 use App\Models\Product;
 
@@ -16,12 +17,15 @@ class MasterFormulationController extends Controller
 {
     protected $masterFormulationService;
     protected $productService;
+    protected $rawMaterialItemService;
     public function __construct(
         MasterFormulationService $masterFormulationService,
-        ProductService $productService
+        ProductService $productService,
+        RawMaterialItemService $rawMaterialItemService
     ) {
         $this->masterFormulationService = $masterFormulationService;
         $this->productService = $productService;
+        $this->rawMaterialItemService = $rawMaterialItemService;
     }
 
     public function index()
@@ -44,8 +48,8 @@ class MasterFormulationController extends Controller
             abort(403, 'Unauthorized action.');
         }
         $brandNames = $this->productService->getDistinctBrandNames();
-        
-        return view('admin.master-formulations.create', compact('brandNames'));
+        $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
+        return view('admin.master-formulations.create', compact('brandNames', 'rawMaterialItems'));
     }
 
     public function store(MasterFormulationRequest $request)
@@ -73,7 +77,7 @@ class MasterFormulationController extends Controller
         }
         $masterFormulation = $this->masterFormulationService->getMasterFormulationById($id);
         $brandNames = $this->productService->getDistinctBrandNames();
-        
+        $rawMaterialItems = $this->rawMaterialItemService->getAllRawMaterialItems();
         return view('admin.master-formulations.edit', compact('masterFormulation', 'brandNames'));
     }
 
@@ -112,11 +116,15 @@ class MasterFormulationController extends Controller
 
     public function getDetails($id)
     {
-        $mf = MasterFormulation::findOrFail($id, ['id', 'product_name', 'batch_size']);
+        $mf = MasterFormulation::findOrFail($id, ['id', 'product_name', 'batch_size', 'unit', 'code']);
         return response()->json([
             'id' => $mf->id,
             'product_name' => $mf->product_name,
             'batch_size' => $mf->batch_size,
+            'unit' => $mf->unit,
+            'code' = $mf->category && $item->category->prefix
+            ? $item->category->prefix . '-' . $item->code
+            : $item->code;
         ]);
     }
 }

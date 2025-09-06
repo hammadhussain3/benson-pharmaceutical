@@ -149,9 +149,16 @@ class RawMaterialItemController extends Controller
     public function getDetails($rawMaterialId)
     {
         $rawMaterialItem = $this->rawMaterialItemService->getRawMaterialItemById($rawMaterialId);
-
         $rawMaterialItem->balance = Stock::currentBalanceForItem(null, $rawMaterialItem->id ?? null)['balance'] ?? 0;
-        $rawMaterialItem->code = $rawMaterialItem->category->prefix . '-' . $rawMaterialItem->code;
+
+        $prefix = optional($rawMaterialItem->category)->prefix;
+
+    if ($prefix) {
+        $rawMaterialItem->code = $prefix . '-' . $rawMaterialItem->code;
+    } else {
+        $rawMaterialItem->code = $rawMaterialItem->code;
+    }
+
 
         $today = Carbon::today();
         $startDate = $today->copy()->subMonths(6);
@@ -224,5 +231,20 @@ class RawMaterialItemController extends Controller
             ->implode(', ');
 
         return response()->json(['rawMaterialItem' => $rawMaterialItem]);
+    }
+
+    public function getMaterialItemData($id)
+    {
+        $item = RawMaterialItem::with('category')->find($id);
+
+        if (!$item) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+        $code = $item->category && $item->category->prefix
+            ? $item->category->prefix . '-' . $item->code
+            : $item->code;
+        $unit = $item->unit ?? 'N/A';
+
+        return response()->json(['code' => $code, 'unit' => $unit]);
     }
 }

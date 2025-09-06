@@ -173,8 +173,8 @@ class InvoiceService
                 }
     
                 $invoiceItem->received_quantity = $receivedQuantity;
-                $invoiceItem->item_code = $invoiceItem->product->code ?? $invoiceItem->rawMaterialItem->code;
-                $invoiceItem->item_name = $invoiceItem->product->name ?? $invoiceItem->rawMaterialItem->name;
+                $invoiceItem->item_code = $invoiceItem->product->code ?? $invoiceItem->rawMaterialItem->code ?? 'N/A';
+                $invoiceItem->item_name = $invoiceItem->product->name ?? $invoiceItem->rawMaterialItem->name ?? 'N/A';
             });
         });
 

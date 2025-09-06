@@ -250,11 +250,11 @@ class PermissionSeeder extends Seeder
             ['id' => 233, 'name' => 'Purchase Invoice View', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 234, 'name' => 'Sale Warranties List', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 235, 'name' => 'Sale Warranties View', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 236, 'name' => 'Master Formulation List', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 237, 'name' => 'Master Formulation Create', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 238, 'name' => 'Master Formulation Update', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 239, 'name' => 'Master Formulation Delete', 'guard_name' => 'web', 'created_at' => now()],
-            ['id' => 240, 'name' => 'Master Formulation View', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 242, 'name' => 'Master Formulation List', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 243, 'name' => 'Master Formulation Create', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 244, 'name' => 'Master Formulation Update', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 245, 'name' => 'Master Formulation Delete', 'guard_name' => 'web', 'created_at' => now()],
+            ['id' => 246, 'name' => 'Master Formulation View', 'guard_name' => 'web', 'created_at' => now()],
             ['id' => 241, 'name' => 'Status Update', 'guard_name' => 'web', 'created_at' => now()],
         ]);
     }

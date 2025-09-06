@@ -436,11 +436,11 @@
                                     </tr>
                                     <tr>
                                         <td>Master Formulation</td>
-                                        <td><input class="form-check-input" type="checkbox" value="236" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(236) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="237" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(237) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="238" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(238) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="239" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(239) ? 'checked' : '' }}></td>
-                                        <td><input class="form-check-input" type="checkbox" value="240" name="permissions[]" id="permissions" {{ $role_has_permissions->pluck('permission_id')->contains(240) ? 'checked' : '' }}></td>
+                                        <td><input class="form-check-input" type="checkbox" value="242" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="243" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="244" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="245" name="permissions[]" id="permissions"></td>
+                                        <td><input class="form-check-input" type="checkbox" value="246" name="permissions[]" id="permissions"></td>
                                     </tr>
                                 </tbody>
                                 <thead>

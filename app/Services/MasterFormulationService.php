@@ -17,15 +17,11 @@ class MasterFormulationService
 
     public function createMasterFormulation(array $data)
     {
-        // product is no longer provided; brand_name and product_name are stored as text
-        
         return MasterFormulation::create($data);
     }
 
     public function updateMasterFormulation(MasterFormulation $masterFormulation, array $data)
     {
-        // Only brand_name, product_name, batch_size are updatable
-        
         return $masterFormulation->update($data);
     }
 

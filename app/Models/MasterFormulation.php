@@ -14,6 +14,7 @@ class MasterFormulation extends Model
         'brand_name',
         'product_name',
         'batch_size',
+        'raw_material_item_id',
         'created_by',
         'updated_by'
     ];
@@ -45,5 +46,9 @@ class MasterFormulation extends Model
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+    public function product()
+    {
+        return $this->belongsTo(RawMaterialItem::class,'raw_material_item_id');
     }
 }

@@ -50,6 +50,48 @@
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+                            
+
+                            <div class="mf-item-set">
+                                <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+                                    <h4 class="card-title mb-0">Master Formulation</h4>
+                                </div>
+                                <div class="card-body px-0 pb-0">
+                                    <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="raw_material_item_id">Raw Material Items<span class="text-danger">*</span></label>
+                                        <select class="js-example-basic-single select2" name="raw_material_item_id" id="raw_material_item_id" required>
+                                            <option value="">Select Raw Material</option>
+                                            @foreach ($rawMaterialItems as $rawMaterialItem)
+                                                <option value="{{ $rawMaterialItem->id }}" {{ old('raw_material_item_id') == $rawMaterialItem->id ? 'selected' : '' }}>{{ $rawMaterialItem->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('raw_material_item_id')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="code">Code<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="code" id="code"
+                                            placeholder="Code" required value="{{ old('code') }}" readonly>
+                                        @error('code')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="unit">Unit<span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="unit" id="unit"
+                                            placeholder="unit" required value="{{ old('unit') }}" readonly>
+                                        @error('unit')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
                         </div>
                         <button class="btn btn-primary" type="submit">Submit</button>
                         <a class="btn btn-secondary" href="{{ route('master-formulations.index') }}">Cancel</a>
@@ -58,4 +100,27 @@
             </div>
         </div>
     </div>
+    <script>
+        $('#raw_material_item_id').on('change', function(){
+            let itemId = $(this).val();
+            if(itemId){
+                $.ajax({
+                    url: '/raw-material-items/' + itemId + '/data',
+                    type: 'GET',
+                    success: function(response){
+                        if(response.code){
+                            $('#code').val(response.code);
+                            $('#unit').val(response.unit);
+                        }
+                    },
+                    error: function(){
+                        alert('Error fetching code');
+                    }
+                });
+            }
+        });
+
+    </script>
+        
+
 @endsection

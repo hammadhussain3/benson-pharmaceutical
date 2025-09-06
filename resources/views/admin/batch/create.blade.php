@@ -123,6 +123,24 @@
                                                         <input type="text" class="form-control" id="mf_batch_size" readonly>
                                                     </div>
                                                 </div>
+                                                <div class="row">
+                                                    <div class="mb-3 col-md-8">
+                                                        <label for="master_formulation_item">Master Formulation Item</label>
+                                                        <select name="master_formulation_item" id="master_formulation_item" class="js-example-basic-single select2 mf_products_dropdown" readonly>
+                                                            <option value="">Select Master Formulation Item</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3 col-md-4">
+                                                        <label for="code">Code</label>
+                                                        <input type="text" class="form-control" name="code" id="code" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="mb-3 col-md-4">
+                                                        <label for="unit">Unit</label>
+                                                        <input type="text" class="form-control" name="unit" id="unit" readonly>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     @endfor

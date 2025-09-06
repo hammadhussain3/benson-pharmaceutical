@@ -19,6 +19,7 @@ class MasterFormulationRequest extends FormRequest
             'brand_name' => 'required|string|max:255',
             'product_name' => 'required|string|max:255',
             'batch_size' => 'required|numeric|min:0.01',
+            'raw_material_item_id' => 'required|min:1',
         ];
     }
 
@@ -34,6 +35,7 @@ class MasterFormulationRequest extends FormRequest
             'batch_size.required' => 'Batch size is required.',
             'batch_size.numeric' => 'Batch size must be a number.',
             'batch_size.min' => 'Batch size must be greater than 0.',
+            'raw_material_items.required' => 'Raw material items are required.',
         ];
     }
 }

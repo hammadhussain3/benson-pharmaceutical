@@ -33,6 +33,9 @@
                             <th>Brand</th>
                             <th>Action</th>
                             <th>Batch Size</th>
+                            <th>Product</th>
+                            <th>Code</th>
+                            <th>Unit</th>
                             <th>Created At</th>
 
                         </tr>
@@ -58,6 +61,9 @@
                                     </a>
                                 </td>
                                 <td>{{ $masterFormulation->batch_size }}</td>
+                                <td>{{ $masterFormulation->product->name ?? 'N/A'}}</td>
+                                <td>{{ $masterFormulation->product->code ?? 'N/A'}} </td>
+                                <td>{{ $masterFormulation->product->unit ?? 'N/A'}}</td>
                                 <td>{{ $masterFormulation->created_at->format('d M, Y') }}</td>
                             </tr>
                         @endforeach

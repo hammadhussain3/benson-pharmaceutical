@@ -233,6 +233,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chart_of_accounts/{chartOfAccountId}/sub_chart_of_accounts', [SubChartOfAccountController::class, 'getSubcoaBycoa']);
     Route::get('/raw-material-items/{rawMaterialId}/last-purchase', [PurchaseInvoiceController::class, 'getLastPurchase']);
     Route::get('/raw-material-items/{rawMaterialId}/details', [RawMaterialItemController::class, 'getDetails']);
+    Route::get('/raw-material-items/{id}/data', [RawMaterialItemController::class, 'getMaterialItemData'])->name('raw-material-items.data');
 
     Route::get('salary-sheet', [SalarySheetController::class, 'index'])->name('salary.sheet.index');
     Route::get('salary-sheet/generate', [SalarySheetController::class, 'showSalarySheet'])->name('salary.sheet.show');
