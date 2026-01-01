@@ -553,9 +553,14 @@ class ReportController extends Controller
             ? $this->countryService->getCountryById($request->input('country')) 
             : $this->countryService->getAllCountries()->first();
 
-        $franchisers = Party::where('is_distributor', '1')
-            ->where('country_id', $country->id)
-            ->get();
+        $franchisers = Party::where('is_distributor', 1);
+
+        if ($country) {
+            $franchisers->where('country_id', $country->id);
+        }
+
+        $franchisers = $franchisers->get();
+            
 
         $from_date = $request->has('from_date') 
             ? $request->input('from_date') 

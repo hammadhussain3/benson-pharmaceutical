@@ -39,7 +39,7 @@
 
     <div class="card">
         <div class="card-body px-0 pb-0">
-            <h5 class="text-center card-title mb-0">Distributors Sales Report Amount Wise - {{ $country->name }}</h5>
+            <h5 class="text-center card-title mb-0">Distributors Sales Report Amount Wise - {{ $country->name ?? '' }}</h5>
             <p class="text-center text-muted">From {{ \Carbon\Carbon::create($from_date)->format('d M, Y') }} to {{ \Carbon\Carbon::create($to_date)->format('d M, Y') }}</p>
             <div class="table-responsive">
                 <table class="table table-striped">
